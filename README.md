@@ -7,4 +7,6 @@ These files have been made available online through a [Creative Commons Attribut
 
 Started 2013/10/04
 
+See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
+
 [Dexter Industries](http://www.dexterindustries.com)
