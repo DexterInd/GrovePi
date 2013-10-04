@@ -8,3 +8,8 @@ These files have been made available online through a [Creative Commons Attribut
 Started 2013/10/04
 
 [Dexter Industries](http://www.dexterindustries.com)
+
+Opening Files
+=======
+
+These files can be opened in [Eagle Cadsoft.](http://www.cadsoftusa.com/)  
