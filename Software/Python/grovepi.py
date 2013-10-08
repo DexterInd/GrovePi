@@ -1,5 +1,6 @@
 import smbus
 import time
+import math
 
 bus = smbus.SMBus(0)
 
@@ -40,3 +41,9 @@ def analogRead(pin):
 def analogWrite(pin,value):
 	bus.write_i2c_block_data(address,1,aWrite_cmd+[pin,value,0])
 	return 1
+
+def temp(pin):
+	a=analogRead(pin)
+	resistance=(float)(1023-a)*10000/a
+	t=(float)(1/(math.log(resistance/10000)/3975+1/298.15)-273.15)
+	return t
