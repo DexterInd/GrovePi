@@ -1,7 +1,5 @@
 #include <Wire.h>
-#include <Servo.h>
 
-Servo servo1;
 #define SLAVE_ADDRESS 0x04
 int number = 0;
 int state = 0;
@@ -28,9 +26,17 @@ void setup() {
 
 void loop()
 {
+  
+  //digitalWrite(4,1);
   if(index==4 && flag==0)
   {
-
+    /*for(i=0;i<4;i++)
+    {
+      Serial.print(" ");
+      Serial.print(cmd[i]);
+    }
+    Serial.println();
+    */
     flag=1;
     //Digital Read
     if(cmd[0]==1)
@@ -55,14 +61,6 @@ void loop()
     //Set up pinMode
     if(cmd[0]==5)
       pinMode(cmd[1],cmd[2]);
-      
-    //Attach Servo
-    if(cmd[0]=6)
-      servo1.attach(cmd[1]);
-      
-    //Rotate Servo
-    if(cmd[0]=7)
-      servo1.write(cmd[1]);
   }
 }
 
@@ -77,6 +75,7 @@ void receiveData(int byteCount)
         index=0;
       }
         cmd[index++] = Wire.read();
+        //Serial.print("data received: ");
     }
 }
 
@@ -84,8 +83,14 @@ void receiveData(int byteCount)
 void sendData()
 {
   if(cmd[0]==1)
+  {
+    //Serial.println("dr");
     Wire.write(val);
+  }
   if(cmd[0]==3)
+  {
+    //Serial.println("ar");
     Wire.write(b, 3);
+  }
 }
 
