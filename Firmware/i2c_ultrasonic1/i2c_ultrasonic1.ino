@@ -1,4 +1,6 @@
 #include <Wire.h>
+#include "MMA7660.h"
+MMA7660 acc;
 
 #define SLAVE_ADDRESS 0x04
 int number = 0;
@@ -8,9 +10,9 @@ int cmd[5];
 int index=0;
 int flag=0;
 int i;
-byte val=0,b[3];
+byte val=0,b[4];
 int aRead=0;
-
+byte accFlag=0;
 void setup() {
     //pinMode(13, OUTPUT);
     //Serial.begin(9600);         // start serial for output
@@ -72,6 +74,15 @@ void loop()
       //Serial.println(b[1]);
       //Serial.println(b[2]);
     }
+    if(cmd[0]==20)
+    {
+      if(accFlag==0)
+      {
+        acc.init();
+        accFlag=1;
+      }
+      acc.getXYZ(&b[1],&b[2],&b[3]);
+    }
   }
 }
 
@@ -99,5 +110,7 @@ void sendData()
   {
     Wire.write(b, 3);
   }
+  if(cmd[0]==20)
+    Wire.write(b, 4);
 }
 
