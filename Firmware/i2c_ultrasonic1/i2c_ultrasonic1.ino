@@ -12,7 +12,7 @@ byte val=0,b[3];
 int aRead=0;
 
 void setup() {
-    pinMode(13, OUTPUT);
+    //pinMode(13, OUTPUT);
     //Serial.begin(9600);         // start serial for output
 
     Wire.begin(SLAVE_ADDRESS);
@@ -23,20 +23,12 @@ void setup() {
     //Serial.println("Ready!");
     pinMode(4,OUTPUT);
 }
-
+int pin;
 void loop()
 {
-  
-  //digitalWrite(4,1);
+  long dur,RangeCm;
   if(index==4 && flag==0)
   {
-    /*for(i=0;i<4;i++)
-    {
-      Serial.print(" ");
-      Serial.print(cmd[i]);
-    }
-    Serial.println();
-    */
     flag=1;
     //Digital Read
     if(cmd[0]==1)
@@ -61,9 +53,27 @@ void loop()
     //Set up pinMode
     if(cmd[0]==5)
       pinMode(cmd[1],cmd[2]);
+    
+    //Ultrasonic Read
+    if(cmd[0]==7)
+    {
+      pin=cmd[1];
+      pinMode(pin, OUTPUT);
+      digitalWrite(pin, LOW);
+      delayMicroseconds(2);
+      digitalWrite(pin, HIGH);
+      delayMicroseconds(5);
+      digitalWrite(pin,LOW);
+      pinMode(pin,INPUT);
+      dur = pulseIn(pin,HIGH);
+      RangeCm = dur/29/2;
+      b[1]=RangeCm/256;
+      b[2]=RangeCm%256;
+      //Serial.println(b[1]);
+      //Serial.println(b[2]);
+    }
   }
 }
-
 
 void receiveData(int byteCount)
 {
@@ -75,7 +85,6 @@ void receiveData(int byteCount)
         index=0;
       }
         cmd[index++] = Wire.read();
-        //Serial.print("data received: ");
     }
 }
 
@@ -84,12 +93,10 @@ void sendData()
 {
   if(cmd[0]==1)
   {
-    //Serial.println("dr");
     Wire.write(val);
   }
-  if(cmd[0]==3)
+  if(cmd[0]==3 ||cmd[0]==7)
   {
-    //Serial.println("ar");
     Wire.write(b, 3);
   }
 }
