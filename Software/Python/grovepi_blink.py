@@ -11,11 +11,10 @@ grovepi.pinMode(4,"OUTPUT")
 time.sleep(1)
 #similar to loop() of Arduino
 while True:
-	#digitalWrite() on pin 4 with HIGH
+	#digitalWrite() on pin 4 with HIGH 
 	grovepi.digitalWrite(4,1)
 	time.sleep(1)
 	#digitalWrite() on pin 4 with LOW
 	grovepi.digitalWrite(4,0)
 	time.sleep(1)
-	
 	

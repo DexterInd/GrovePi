@@ -15,7 +15,7 @@ while True:
 	try:
 		i=grovepi.analogRead(2)
 		print i
-		grovepi.analogWrite(3,i/4)
+		grovepi.analogWrite(5,i/4)
 	except IOError:
 		print "Error"
 	
