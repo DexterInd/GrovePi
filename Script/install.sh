@@ -1,6 +1,20 @@
 #! /bin/bash
 
-echo "Hello"
+#! /bin/bash
+echo "  _____            _                               ";
+echo " |  __ \          | |                              ";
+echo " | |  | | _____  _| |_ ___ _ __                    ";
+echo " | |  | |/ _ \ \/ / __/ _ \ '__|                   ";
+echo " | |__| |  __/>  <| ||  __/ |                      ";
+echo " |_____/ \___/_/\_\\__\___|_| _        _           ";
+echo " |_   _|         | |         | |      (_)          ";
+echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___ ";
+echo "   | | | '_ \ / _\` | | | / __| __| '__| |/ _ \/ __|";
+echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \";
+echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/";
+echo "                                                   ";
+echo "                                                   ";
+echo " "
 printf "Welcome to GrovePi Installer.\nPlease ensure internet connectivity before running this script.\n
 NOTE: Raspberry Pi wil reboot after completion."
 echo "Must be running as Root user"
