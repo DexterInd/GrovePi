@@ -2,6 +2,7 @@ import smbus
 import time
 import grovepi
 # for RPI version 1, use "bus = smbus.SMBus(0)"
+# Attach GrovePi LED to port D4.
 bus = smbus.SMBus(0)
 
 # This is the address we setup in the Arduino Program
