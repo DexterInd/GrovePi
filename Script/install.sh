@@ -17,6 +17,8 @@ echo "                                                    ";
 echo " "
 printf "Welcome to GrovePi Installer.\nPlease ensure internet connectivity before running this script.\n
 NOTE: Raspberry Pi wil reboot after completion."
+printf "Special thanks to Joe Sanford at Tufts University.  This script was derived from his work.  Thank you Joe!"
+printf " "
 echo "Must be running as Root user"
 echo " "
 echo "Press ENTER to begin..."
