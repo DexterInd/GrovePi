@@ -1,0 +1,5 @@
+v 1.1
+13 Feb 2014
+	*DHT, ultrasonic, RTC code added
+	*Support for multiple modules for same type added (Not tested)
+	*Protocol made more robust

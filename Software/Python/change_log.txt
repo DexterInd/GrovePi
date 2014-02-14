@@ -1,0 +1,6 @@
+v1.1
+13 Feb 2014
+	*Support for DHT, ultrasonic and RTC added
+	*Exception handling added
+	*Default support for both Rev 1 and Rev 2 added
+	*Strict timing in dependent functions added to increase stability
