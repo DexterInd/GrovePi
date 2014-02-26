@@ -18,7 +18,7 @@ else
 	exit 0
 fi
 
-printf "\nDo you want to do I2C search for GrovePi or do you want to directly update the firmware?\n(I2C search recommended\nPress Y for I2C Search or N for direct upload [y,n]"
+printf "\nDo you want to do I2C search for GrovePi or do you want to directly update the firmware?\n(I2C search recommended.)\nPress Y for I2C Search or N for direct upload [y,n]"
 read -n1 input
 if [[ $input == "Y" || $input == "y" ]]; then
         #Revision in /proc/cpuinfo 
