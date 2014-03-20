@@ -56,12 +56,11 @@ func (grovePi *GrovePi) CloseDevice() {
 func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 	b := []byte{ANALOG_READ, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(6 * time.Millisecond)
 	if err != nil {
 		return 0, err
 	}
+	time.Sleep(100 * time.Millisecond)
 	grovePi.i2cDevice.ReadByte(1)
-	time.Sleep(1 * time.Millisecond)
 	val, err2 := grovePi.i2cDevice.Read(1, 4)
 	if err2 != nil {
 		return 0, err
@@ -74,12 +73,11 @@ func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
 	b := []byte{DIGITAL_READ, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(6 * time.Millisecond)
 	if err != nil {
 		return 0, err
 	}
-	val, err2 := grovePi.i2cDevice.ReadByte(1)
 	time.Sleep(100 * time.Millisecond)
+	val, err2 := grovePi.i2cDevice.ReadByte(1)
 	if err2 != nil {
 		return 0, err2
 	}
@@ -89,7 +87,7 @@ func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
 func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	b := []byte{DIGITAL_WRITE, pin, val, 0}
 	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(6 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	if err != nil {
 		return err
 	}
@@ -104,7 +102,7 @@ func (grovePi *GrovePi) PinMode(pin byte, mode string) error {
 		b = []byte{PIN_MODE, pin, 0, 0}
 	}
 	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(6 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	if err != nil {
 		return err
 	}

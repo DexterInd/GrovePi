@@ -2,4 +2,4 @@
 
 ## Introduction
 You will need to install mrmorphic hwio library
-	 get github.com/mrmorphic/hwio
+go get github.com/mrmorphic/hwio
