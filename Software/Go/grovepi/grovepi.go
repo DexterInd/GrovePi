@@ -109,9 +109,9 @@ func (grovePi *GrovePi) PinMode(pin byte, mode string) error {
 	return nil
 }
 
-func (grovePi *GrovePi) ReadDTH(pin byte) (float32, float32, error) {
+func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
 	b := []byte{DHT_READ, pin, 1, 0}
-	rawdata, err := grovePi.readDTHRawData(b)
+	rawdata, err := grovePi.readDHTRawData(b)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -126,7 +126,7 @@ func (grovePi *GrovePi) ReadDTH(pin byte) (float32, float32, error) {
 	return t, h, nil
 }
 
-func (grovePi *GrovePi) readDTHRawData(cmd []byte) ([]byte, error) {
+func (grovePi *GrovePi) readDHTRawData(cmd []byte) ([]byte, error) {
 
 	err := grovePi.i2cDevice.Write(1, cmd)
 	if err != nil {
