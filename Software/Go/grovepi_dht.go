@@ -11,7 +11,7 @@ func main() {
 	g = *grovepi.InitGrovePi(0x04)
 	for {
 		time.Sleep(2 * time.Second)
-		t, h, err := g.ReadDTH(grovepi.D4)
+		t, h, err := g.ReadDHT(grovepi.D4)
 		if err != nil {
 			fmt.Println(err)
 		}
