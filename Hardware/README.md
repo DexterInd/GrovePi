@@ -13,4 +13,4 @@ See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
 Opening Files
 =======
 
-These files can be opened in [Eagle Cadsoft.](http://www.cadsoftusa.com/)  
+These files can be opened in [Eagle Cadsoft.](http://www.cadsoftusa.com/)

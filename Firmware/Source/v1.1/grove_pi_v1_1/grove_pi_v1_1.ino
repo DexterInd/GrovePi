@@ -18,7 +18,7 @@ byte val=0,b[9],float_array[4];
 int aRead=0;
 byte accFlag=0,clkFlag=0;
 int8_t accv[3];
-void setup() 
+void setup()
 {
     Serial.begin(9600);         // start serial for output
     Wire.begin(SLAVE_ADDRESS);
@@ -39,27 +39,27 @@ void loop()
     //Digital Read
     if(cmd[0]==1)
       val=digitalRead(cmd[1]);
-      
+
     //Digital Write
     if(cmd[0]==2)
       digitalWrite(cmd[1],cmd[2]);
-      
+
     //Analog Read
-     if(cmd[0]==3)
-     {
+    if(cmd[0]==3)
+    {
       aRead=analogRead(cmd[1]);
       b[1]=aRead/256;
       b[2]=aRead%256;
-     }
-      
+    }
+
     //Set up Analog Write
     if(cmd[0]==4)
       analogWrite(cmd[1],cmd[2]);
-        
+
     //Set up pinMode
     if(cmd[0]==5)
       pinMode(cmd[1],cmd[2]);
-    
+
     //Ultrasonic Read
     if(cmd[0]==7)
     {
@@ -78,6 +78,7 @@ void loop()
       //Serial.println(b[1]);
       //Serial.println(b[2]);
     }
+
     //Accelerometer x,y,z, read
     if(cmd[0]==20)
     {
@@ -91,7 +92,8 @@ void loop()
       b[2]=accv[1];
       b[3]=accv[2];
     }
-    //RTC tine read
+
+    //RTC time read
     if(cmd[0]==30)
     {
       if(clkFlag==0)
@@ -100,8 +102,8 @@ void loop()
         //Set time the first time
         //clock.fillByYMD(2013,1,19);
         //clock.fillByHMS(15,28,30);//15:28 30"
-	//clock.fillDayOfWeek(SAT);//Saturday
-	//clock.setTime();//write time to the RTC chip
+        //clock.fillDayOfWeek(SAT);//Saturday
+        //clock.setTime();//write time to the RTC chip
         clkFlag=1;
       }
       clock.getTime();
@@ -112,8 +114,9 @@ void loop()
       b[5]=clock.dayOfMonth;
       b[6]=clock.year;
       b[7]=clock.dayOfMonth;
-      b[8]=clock.dayOfWeek;  
+      b[8]=clock.dayOfWeek;
     }
+
     //Grove temp and humidity sensor pro
     //40- Temperature
     if(cmd[0]==40)
@@ -142,14 +145,14 @@ void loop()
 
 void receiveData(int byteCount)
 {
-    while(Wire.available()) 
+    while(Wire.available())
     {
       if(Wire.available()==4)
-      { 
+      {
         flag=0;
         index=0;
       }
-        cmd[index++] = Wire.read();
+      cmd[index++] = Wire.read();
     }
 }
 
@@ -165,4 +168,3 @@ void sendData()
   if(cmd[0]==30||cmd[0]==40)
     Wire.write(b, 9);
 }
-

@@ -9,7 +9,7 @@ address = 0x04
 
 def writeNumber(value):
     bus.write_byte(address, value)
-    # bus.write_byte_data(address, 0, value) 
+    # bus.write_byte_data(address, 0, value)
     return -1
 
 def readNumber():
@@ -17,13 +17,9 @@ def readNumber():
     # number = bus.read_byte_data(address, 1)
     return number
 
-#grovepi.pinMode(7,"INPUT")
+# grovepi.pinMode(7,"INPUT")
 time.sleep(1)
-i=0
+i = 0
 while True:
-	
-	print grovepi.analogRead(0)
-	time.sleep(1)
-	
-	
-	
+    print grovepi.analogRead(0)
+    time.sleep(1)
