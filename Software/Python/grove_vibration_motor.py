@@ -21,5 +21,7 @@ while True:
         print 'stop'
         time.sleep(1)
 
+    except KeyboardInterrupt:
+        grovepi.digitalWrite(vibration_motor,0)
     except IOError:
         print "Error"
