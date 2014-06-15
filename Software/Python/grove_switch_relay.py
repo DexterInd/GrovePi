@@ -17,11 +17,13 @@ grovepi.pinMode(relay,"OUTPUT")
 while True:
     try:
         if grovepi.digitalRead(switch):
-            grovepi.digitalWrite(relay,1):
+            grovepi.digitalWrite(relay,1)
         else:
-            grovepi.digitalWrite(relay,0):
+            grovepi.digitalWrite(relay,0)
 
         time.sleep(.5)
 
+    except KeyboardInterrupt:
+        grovepi.digitalWrite(relay,0)
     except IOError:
         print "Error"

@@ -20,5 +20,7 @@ while True:
         grovepi.digitalWrite(led,0)
         time.sleep(1)
 
+    except KeyboardInterrupt:
+        grovepi.digitalWrite(led,0)
     except IOError:
         print "Error"

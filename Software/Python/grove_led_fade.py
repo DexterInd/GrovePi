@@ -29,5 +29,7 @@ while True:
         i = i + 20
         time.sleep(.5)
 
+    except KeyboardInterrupt:
+        grovepi.analogWrite(led,0)
     except IOError:
         print "Error"
