@@ -25,5 +25,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(relay,0)
+        break
     except IOError:
         print "Error"

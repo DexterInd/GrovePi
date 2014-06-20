@@ -23,5 +23,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(vibration_motor,0)
+        break
     except IOError:
         print "Error"
