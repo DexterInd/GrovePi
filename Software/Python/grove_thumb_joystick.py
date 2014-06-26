@@ -6,6 +6,12 @@ import grovepi
 
 # Connect the Thumb Joystick to analog port A0
 
+# GrovePi Port A0 uses Arduino pins 0 and 1
+# GrovePi Port A1 uses Arduino pins 1 and 2
+# Don't plug anything into port A1 that uses pin 1
+# Most Grove sensors only use 3 of their 4 pins, which is why the GrovePi shares Arduino pins between adjacent ports
+# If the sensor has a pin definition SIG,NC,VCC,GND, the second (white) pin is not connected to anything
+
 # Uses two pins - one for the X axis and one for the Y axis
 grovepi.pinMode(0,"INPUT")
 grovepi.pinMode(1,"INPUT")
