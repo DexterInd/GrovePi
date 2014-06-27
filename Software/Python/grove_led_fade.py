@@ -31,5 +31,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.analogWrite(led,0)
+        break
     except IOError:
         print "Error"

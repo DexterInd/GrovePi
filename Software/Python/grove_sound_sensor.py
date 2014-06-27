@@ -24,7 +24,7 @@ while True:
         print sensor_value
         
         # If loud, illuminate LED, otherwise dim
-        if sensor_value > threshold_value
+        if sensor_value > threshold_value:
             grovepi.digitalWrite(led,1)
         else:
             grovepi.digitalWrite(led,0)

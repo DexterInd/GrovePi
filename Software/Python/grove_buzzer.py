@@ -23,5 +23,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(buzzer,0)
+        break
     except IOError:
         print "Error"
