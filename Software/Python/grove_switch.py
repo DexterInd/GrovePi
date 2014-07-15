@@ -1,10 +1,11 @@
-# GrovePi + Switch
+# GrovePi + Grove Switch
 # http://www.seeedstudio.com/wiki/Grove_-_Switch(P)
 
 import time
 import grovepi
 
-# Connect the Switch to digital port D3
+# Connect the Grove Switch to digital port D3
+# SIG,NC,VCC,GND
 switch = 3
 
 grovepi.pinMode(switch,"INPUT")

@@ -4,8 +4,9 @@
 import time
 import grovepi
 
-# Connect the PIR Motion Sensor to digital port D8
+# Connect the Grove PIR Motion Sensor to digital port D8
 # There are also 2x potentiometers on the board for adjusting response speed and hold time
+# SIG,NC,VCC,GND
 pir_sensor = 8
 
 grovepi.pinMode(pir_sensor,"INPUT")

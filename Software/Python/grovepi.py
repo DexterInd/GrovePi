@@ -32,9 +32,9 @@ aRead_cmd=[3]	#analogRead() command format header
 aWrite_cmd=[4]	#analogWrite() command format header
 pMode_cmd=[5]	#pinMode() command format header
 uRead_cmd=[7]	#Ultrasonic read
-acc_xyz_cmd=[20]	#Accelerometer read
+acc_xyz_cmd=[20]	#Accelerometer (+/- 1.5g) read
 rtc_getTime_cmd=[30]	#RTC get time
-dht_temp_cmd=[40]	#DHT sensor temperature
+dht_temp_cmd=[40]	#DHT Pro sensor temperature
 
 #Function declarations of the various functions used for encoding and sending data from RPi to Arduino
 
@@ -62,7 +62,7 @@ def read_i2c_block(address):
 		print "IOError"
 		return -1
 
-#Arduberry Digital Read
+#Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(address,dRead_cmd+[pin,0,0])
 	time.sleep(.1)
@@ -74,7 +74,7 @@ def digitalWrite(pin,value):
 	write_i2c_block(address,dWrite_cmd+[pin,value,0])
 	return 1
 
-#Setting Up Pin mode on Arduberry
+#Setting Up Pin mode on Arduino
 def pinMode(pin,mode):
 	if mode == "OUTPUT":
 		write_i2c_block(address,pMode_cmd+[pin,1,0])
@@ -110,7 +110,7 @@ def ultrasonicRead(pin):
 	number = read_i2c_block(address) 
 	return (number[1]*256+number[2])
 
-#Read accelerometer XYZ value
+#Read Grove Accelerometer (+/- 1.5g) XYZ value
 def acc_xyz():
 	write_i2c_block(address,acc_xyz_cmd+[0,0,0])
 	time.sleep(.1)
@@ -123,7 +123,7 @@ def acc_xyz():
 	if number[3]>32:
 		number[3]=-(number[3]-224)
 	return (number[1],number[2],number[3])
-	
+
 #Read from Grove RTC
 def rtc_getTime():
 	write_i2c_block(address,rtc_getTime_cmd+[0,0,0])
@@ -132,10 +132,10 @@ def rtc_getTime():
 	number = read_i2c_block(address)
 	return number
 
-#Read and return Temperature and humidity from Grove DHT Pro
+#Read and return temperature and humidity from Grove DHT Pro
 def dht(pin,module_type):
 	write_i2c_block(address,dht_temp_cmd+[pin,module_type,0])
-	
+
 	#Delay necessary for proper reading fron DHT sensor
 	time.sleep(.6) 
 	try:
@@ -161,7 +161,7 @@ def dht(pin,module_type):
 		else:
 			h=h+h_val
 	t=round(struct.unpack('!f', h.decode('hex'))[0],2)#convert the temp back to float
-	
+
 	h=''
 	for element in reversed(number[5:9]):	#data is reversed 
 		hex_val=hex(element)	#Converted to hex

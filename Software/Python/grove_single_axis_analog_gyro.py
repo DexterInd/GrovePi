@@ -1,10 +1,11 @@
-# GrovePi + Single Axis Analog Gyro
+# GrovePi + Grove Single Axis Analog Gyro
 # http://www.seeedstudio.com/wiki/Grove_-_Single_Axis_Analog_Gyro
 
 import time
 import grovepi
 
-# Connect the Single Axis Analog Gyro to analog port A0
+# Connect the Grove Single Axis Analog Gyro to analog port A0
+# SIG,NC,VCC,GND
 sensor = 0
 
 grovepi.pinMode(sensor,"INPUT")
@@ -39,9 +40,9 @@ while True:
         sensor_value = grovepi.analogRead(sensor)
 
         # Calculate angular velocity (deg/s)
-        velocity = ((float)(sensor_value - reference_value) * 4930.0) / 1023.0 / 0.67;
+        velocity = ((float)(sensor_value - reference_value) * 4930.0) / 1023.0 / 0.67
 
-        print "velocity =", velocity
+        print "sensor_value =", sensor_value, " velocity =", velocity
         time.sleep(.5)
 
     except IOError:

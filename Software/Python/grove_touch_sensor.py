@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Touch Sensor to digital port D4
+# Connect the Grove Touch Sensor to digital port D4
+# SIG,NC,VCC,GND
 touch_sensor = 4
 
 grovepi.pinMode(touch_sensor,"INPUT")

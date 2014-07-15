@@ -1,4 +1,4 @@
-# GrovePi + 2-Coil Latching Relay
+# GrovePi + Grove 2-Coil Latching Relay
 # http://www.seeedstudio.com/wiki/Grove_-_2-Coil_Latching_Relay
 
 import time
@@ -6,7 +6,8 @@ import grovepi
 
 # Contrast to the ordinary relay, this latching relay does not need continuous power to keep the state, which makes it especially low power consumption
 
-# Connect the 2-Coil Latching Relay to digital port D4
+# Connect the Grove 2-Coil Latching Relay to digital port D4
+# SIG,NC,VCC,GND
 relay = 4
 
 grovepi.pinMode(relay,"OUTPUT")

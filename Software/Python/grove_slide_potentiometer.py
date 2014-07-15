@@ -1,13 +1,15 @@
-# GrovePi + Slide Potentiometer
+# GrovePi + Grove Slide Potentiometer
 # http://www.seeedstudio.com/wiki/Grove_-_Slide_Potentiometer
 
 import time
 import grovepi
 
-# Connect the Slide Potentiometer to analog port A0
+# Connect the Grove Slide Potentiometer to analog port A0
+# OUT,LED,VCC,GND
 slide = 0   # pin 1 (yellow wire)
 
-# The Slide Potentiometer has an onboard LED accessible as pin 2 on port A0
+# The device has an onboard LED accessible as pin 2 on port A0
+# OUT,LED,VCC,GND
 led = 1     # pin 2 (white wire)
 
 grovepi.pinMode(slide,"INPUT")
@@ -25,7 +27,7 @@ while True:
         else:
             grovepi.digitalWrite(led,0)
 
-        print sensor_value
+        print "sensor_value =", sensor_value
 
     except IOError:
         print "Error"

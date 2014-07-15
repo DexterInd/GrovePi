@@ -1,10 +1,11 @@
-# GrovePi + Dry Reed Relay
+# GrovePi + Grove Dry Reed Relay
 # http://www.seeedstudio.com/wiki/Grove_-_Dry-Reed_Relay
 
 import time
 import grovepi
 
-# Connect the Dry Reed Relay to digital port D4
+# Connect the Grove Dry Reed Relay to digital port D4
+# SIG,NC,VCC,GND
 relay = 4
 
 grovepi.pinMode(relay,"OUTPUT")

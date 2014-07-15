@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Electricity Sensor to analog port A0
+# Connect the Grove Electricity Sensor to analog port A0
+# SIG,NC,NC,GND
 sensor = 0
 
 grovepi.pinMode(sensor,"INPUT")
@@ -26,6 +27,7 @@ while True:
         # minimum_current = 1 / 1024 * grove_vcc / 800 * 2000000 / 1.414 = 8.6(mA)
         # Only for sinusoidal alternating current
 
+        print "sensor_value", sensor_value
         print "The amplitude of the current is", amplitude_current, "mA"
         print "The effective value of the current is", effective_value, "mA"
         time.sleep(1)

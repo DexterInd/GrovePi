@@ -13,7 +13,8 @@ import grovepi
 # If the LED switches off the sensor is calibrated
 # If not, adjust the potentiometer again
 
-# Connect the Infrared Reflective Sensor to digital port D4
+# Connect the Grove Infrared Reflective Sensor to digital port D4
+# SIG,NC,VCC,GND
 sensor = 4
 
 grovepi.pinMode(sensor,"INPUT")

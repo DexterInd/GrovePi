@@ -4,8 +4,9 @@
 import time
 import grovepi
 
-# Connect the Real Time Clock to any I2C port eg. I2C-1
+# Connect the Grove Real Time Clock to any I2C port eg. I2C-1
 # Can be found at I2C address 0x68
+# SCL,SDA,VCC,GND
 
 while True:
     try:

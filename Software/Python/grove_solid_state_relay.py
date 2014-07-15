@@ -1,4 +1,4 @@
-# GrovePi + Solid State Relay
+# GrovePi + Grove Solid State Relay
 # http://www.seeedstudio.com/wiki/Grove_-_Solid_State_Relay
 
 import time
@@ -8,7 +8,8 @@ import grovepi
 # If the output voltage is higher than 36V, ensure the relay is in the off state before you operate with the terminal screws.
 # The heatsink can get very hot during use.
 
-# Connect the Solid State Relay to digital port D4
+# Connect the Grove Solid State Relay to digital port D4
+# CTR,NC,VCC,GND
 relay = 4
 
 grovepi.pinMode(relay,"OUTPUT")

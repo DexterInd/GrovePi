@@ -15,7 +15,8 @@ import grovepi
 
 # The sensitivity can be adjusted by the onboard potentiometer
 
-# Connect the Gas Sensor to analog port A0
+# Connect the Grove Gas Sensor to analog port A0
+# SIG,NC,VCC,GND
 gas_sensor = 0
 
 grovepi.pinMode(gas_sensor,"INPUT")
@@ -26,9 +27,9 @@ while True:
         sensor_value = grovepi.analogRead(gas_sensor)
 
         # Calculate gas density - large value means more dense gas
-        density = (float)(sensor_value / 1024);
+        density = (float)(sensor_value / 1024)
 
-        print density
+        print "sensor_value =", sensor_value, " density =", density
         time.sleep(.5)
 
     except IOError:
