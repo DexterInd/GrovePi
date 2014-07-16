@@ -1,10 +1,11 @@
-# GrovePi + SPDT Relay(30A)
+# GrovePi + Grove SPDT Relay(30A)
 # http://www.seeedstudio.com/wiki/Grove_-_SPDT_Relay(30A)
 
 import time
 import grovepi
 
-# Connect the SPDT Relay to digital port D4
+# Connect the Grove SPDT Relay to digital port D4
+# SIG,NC,VCC,GND
 relay = 4
 
 grovepi.pinMode(relay,"OUTPUT")

@@ -6,7 +6,8 @@ import grovepi
 
 # The sensitivity can be adjusted by the onboard potentiometer
 
-# Connect the HCHO Sensor to analog port A0
+# Connect the Grove HCHO Sensor to analog port A0
+# SIG,NC,VCC,GND
 hcho_sensor = 0
 
 grovepi.pinMode(hcho_sensor,"INPUT")
@@ -20,9 +21,9 @@ while True:
         sensor_value = grovepi.analogRead(hcho_sensor)
 
         # Calculate voltage
-        voltage = (float)(sensor_value * grove_vcc / 1024);
+        voltage = (float)(sensor_value * grove_vcc / 1024)
 
-        print voltage
+        print "sensor_value =", sensor_value, " voltage =", voltage
         time.sleep(.5)
 
     except IOError:

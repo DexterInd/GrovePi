@@ -6,7 +6,8 @@ import grovepi
 
 # Wait 2 minutes for the sensor to heat-up
 
-# Connect the Air Quality Sensor to analog port A0
+# Connect the Grove Air Quality Sensor to analog port A0
+# SIG,NC,VCC,GND
 air_sensor = 0
 
 grovepi.pinMode(air_sensor,"INPUT")
@@ -14,16 +15,16 @@ grovepi.pinMode(air_sensor,"INPUT")
 while True:
     try:
         # Get sensor value
-        v = grovepi.analogRead(air_sensor)
+        sensor_value = grovepi.analogRead(air_sensor)
 
-        if v > 700:
+        if sensor_value > 700:
             print "High pollution"
-        elif v > 300:
+        elif sensor_value > 300:
             print "Low pollution"
         else:
             print "Air fresh"
 
-        print v
+        print "sensor_value =", sensor_value
         time.sleep(.5)
 
     except IOError:

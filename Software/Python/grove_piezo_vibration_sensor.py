@@ -1,4 +1,4 @@
-# GrovePi + Piezo Vibration Sensor
+# GrovePi + Grove Piezo Vibration Sensor
 # http://www.seeedstudio.com/wiki/Grove-_Piezo_Vibration_Sensor
 
 import time
@@ -6,7 +6,8 @@ import grovepi
 
 # The sensitivity can be adjusted by the onboard potentiometer
 
-# Connect the Piezo Vibration Sensor to analog port A0
+# Connect the Grove Piezo Vibration Sensor to analog port A0
+# OUT,NC,VCC,GND
 piezo = 0
 
 grovepi.pinMode(piezo,"INPUT")

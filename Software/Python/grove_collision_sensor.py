@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Collision Sensor to digital port D2
+# Connect the Grove Collision Sensor to digital port D2
+# SIG,NC,VCC,GND
 collision_sensor = 2
 
 grovepi.pinMode(collision_sensor,"INPUT")

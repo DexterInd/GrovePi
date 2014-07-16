@@ -1,14 +1,16 @@
-# GrovePi + Switch + Relay
+# GrovePi + Grove Switch + Grove Relay
 # http://www.seeedstudio.com/wiki/Grove_-_Switch(P)
 # http://www.seeedstudio.com/wiki/Grove_-_Relay
 
 import time
 import grovepi
 
-# Connect the Switch to digital port D3
+# Connect the Grove Switch to digital port D3
+# SIG,NC,VCC,GND
 switch = 3
 
-# Connect the Relay to digital port D4
+# Connect the Grove Relay to digital port D4
+# SIG,NC,VCC,GND
 relay = 4
 
 grovepi.pinMode(switch,"INPUT")

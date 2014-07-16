@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Water Sensor to digital port D2
+# Connect the Grove Water Sensor to digital port D2
+# SIG,NC,VCC,GND
 water_sensor = 2
 
 grovepi.pinMode(water_sensor,"INPUT")

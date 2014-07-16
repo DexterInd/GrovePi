@@ -1,12 +1,13 @@
 # Fade LED in
 
-# GrovePi + LED
+# GrovePi + Grove LED
 # http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 
 import time
 import grovepi
 
-# Connect the LED to digital port D5
+# Connect the Grove LED to digital port D5
+# SIG,NC,VCC,GND
 led = 5
 
 grovepi.pinMode(led,"OUTPUT")

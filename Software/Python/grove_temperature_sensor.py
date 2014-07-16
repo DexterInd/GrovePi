@@ -3,13 +3,14 @@
 
 import grovepi
 
-# Connect the Temperature Sensor to analog port A0
+# Connect the Grove Temperature Sensor to analog port A0
+# SIG,NC,VCC,GND
 sensor = 0
 
 while True:
     try:
         temp = grovepi.temp(sensor)
-        print temp
+        print "temp =", temp
 
     except IOError:
         print "Error"

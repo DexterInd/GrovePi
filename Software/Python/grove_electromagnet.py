@@ -6,7 +6,8 @@ import grovepi
 
 # The electromagnet can hold a 1KG weight
 
-# Connect the Electromagnet to digital port D4
+# Connect the Grove Electromagnet to digital port D4
+# SIG,NC,VCC,GND
 electromagnet = 4
 
 grovepi.pinMode(electromagnet,"OUTPUT")
