@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Magnetic Switch to digital port D3
+# Connect the Grove Magnetic Switch to digital port D3
+# SIG,NC,VCC,GND
 magnetic_switch = 3
 
 grovepi.pinMode(magnetic_switch,"INPUT")

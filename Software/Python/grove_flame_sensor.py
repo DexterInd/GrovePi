@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Flame Sensor to digital port D2
+# Connect the Grove Flame Sensor to digital port D2
+# SIG,NC,VCC,GND
 flame_sensor = 2
 
 grovepi.pinMode(flame_sensor,"INPUT")

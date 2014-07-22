@@ -1,14 +1,16 @@
-# GrovePi + Sound Sensor + LED
+# GrovePi + Grove Sound Sensor + Grove LED
 # http://www.seeedstudio.com/wiki/Grove_-_Sound_Sensor
 # http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 
 import time
 import grovepi
 
-# Connect the Sound Sensor to analog port A0
+# Connect the Grove Sound Sensor to analog port A0
+# SIG,NC,VCC,GND
 sound_sensor = 0
 
-# Connect the LED to digital port D5
+# Connect the Grove LED to digital port D5
+# SIG,NC,VCC,GND
 led = 5
 
 grovepi.pinMode(sound_sensor,"INPUT")
@@ -21,14 +23,14 @@ while True:
     try:
         # Read the sound level
         sensor_value = grovepi.analogRead(sound_sensor)
-        print sensor_value
-        
+
         # If loud, illuminate LED, otherwise dim
-        if sensor_value > threshold_value
+        if sensor_value > threshold_value:
             grovepi.digitalWrite(led,1)
         else:
             grovepi.digitalWrite(led,0)
 
+        print "sensor_value =", sensor_value
         time.sleep(.5)
 
     except IOError:

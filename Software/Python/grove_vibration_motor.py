@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Vibration Motor to digital port D8
+# Connect the Grove Vibration Motor to digital port D8
+# SIG,NC,VCC,GND
 vibration_motor = 8
 
 grovepi.pinMode(vibration_motor,"OUTPUT")
@@ -23,5 +24,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(vibration_motor,0)
+        break
     except IOError:
         print "Error"

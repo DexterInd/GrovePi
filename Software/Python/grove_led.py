@@ -1,10 +1,11 @@
-# GrovePi + LED
+# GrovePi + Grove LED
 # http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 
 import time
 import grovepi
 
-# Connect the LED to digital port D4
+# Connect the Grove LED to digital port D4
+# SIG,NC,VCC,GND
 led = 4
 
 grovepi.pinMode(led,"OUTPUT")
@@ -22,5 +23,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(led,0)
+        break
     except IOError:
         print "Error"

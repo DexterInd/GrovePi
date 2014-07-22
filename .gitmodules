@@ -1,0 +1,11 @@
+[submodule "Firmware/Source/v1.1/dependent_libraries/DHT_sensor_library"]
+	path = Firmware/Source/v1.1/dependent_libraries/DHT_sensor_library
+	url = https://github.com/karan259/DHT-sensor-library.git
+
+[submodule "Firmware/Source/v1.1/dependent_libraries/DigitalAccelerometer_MMA7660FC"]
+	path = Firmware/Source/v1.1/dependent_libraries/DigitalAccelerometer_MMA7660FC
+	url = https://github.com/Seeed-Studio/DigitalAccelerometer_MMA7660FC.git
+
+[submodule "Firmware/Source/v1.1/dependent_libraries/Grove_RTC"]
+	path = Firmware/Source/v1.1/dependent_libraries/Grove_RTC
+	url = https://github.com/Seeed-Studio/Grove_RTC.git

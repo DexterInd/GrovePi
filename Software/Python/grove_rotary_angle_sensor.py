@@ -1,14 +1,16 @@
-# GrovePi + Rotary Angle Sensor (Potentiometer) + LED
+# GrovePi + Grove Rotary Angle Sensor (Potentiometer) + Grove LED
 # http://www.seeedstudio.com/wiki/Grove_-_Rotary_Angle_Sensor
 # http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 
 import time
 import grovepi
 
-# Connect the Rotary Angle Sensor to analog port A0
+# Connect the Grove Rotary Angle Sensor to analog port A0
+# SIG,NC,VCC,GND
 potentiometer = 0
 
 # Connect the LED to digital port D5
+# SIG,NC,VCC,GND
 led = 5
 
 grovepi.pinMode(potentiometer,"INPUT")
@@ -30,16 +32,18 @@ while True:
         sensor_value = grovepi.analogRead(potentiometer)
 
         # Calculate voltage
-        voltage = (float)sensor_value * adc_ref / 1023;
+        voltage = round((float)(sensor_value) * adc_ref / 1023, 2)
 
         # Calculate rotation in degrees (0 to 300)
-        degrees = (voltage * full_angle) / grove_vcc;
+        degrees = round((voltage * full_angle) / grove_vcc, 2)
 
         # Calculate LED brightess (0 to 255) from degrees (0 to 300)
-        brightness = (degrees / full_angle) * 255
+        brightness = int(degrees / full_angle * 255)
 
         # Give PWM output to LED
         grovepi.analogWrite(led,brightness)
+
+        print "sensor_value =", sensor_value, " voltage =", voltage, " degrees =", degrees, " brightness =", brightness
 
     except IOError:
         print "Error"

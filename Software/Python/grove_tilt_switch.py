@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Tilt Switch to digital port D3
+# Connect the Grove Tilt Switch to digital port D3
+# SIG,NC,VCC,GND
 tilt_switch = 3
 
 grovepi.pinMode(tilt_switch,"INPUT")

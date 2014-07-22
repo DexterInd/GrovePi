@@ -4,7 +4,8 @@
 import time
 import grovepi
 
-# Connect the Buzzer to digital port D8
+# Connect the Grove Buzzer to digital port D8
+# SIG,NC,VCC,GND
 buzzer = 8
 
 grovepi.pinMode(buzzer,"OUTPUT")
@@ -23,5 +24,6 @@ while True:
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(buzzer,0)
+        break
     except IOError:
         print "Error"
