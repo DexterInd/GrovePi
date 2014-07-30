@@ -6,7 +6,7 @@
 # Connect the OLED to any I2C port eg. I2C-1
 # Can be found at I2C address 0x3c
 
-from grove_i2c_oled_96x96 import *
+from grove_oled import *
 
 oled_init()
 oled_clearDisplay()
