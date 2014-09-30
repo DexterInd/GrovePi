@@ -1,6 +1,7 @@
 #! /bin/bash
 
 #! /bin/bash
+echo -e "\E[32m"
 echo "  _____            _                                ";
 echo " |  __ \          | |                               ";
 echo " | |  | | _____  _| |_ ___ _ __                     ";
@@ -12,16 +13,42 @@ echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
 echo "   | | | '_ \ / _\` | | | / __| __| '__| |/ _ \/ __|";
 echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
 echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
-echo "                                                    ";
-echo "                                                    ";
+echo -e "\E[0m"
+echo "Welcome to GrovePi Installer."
 echo " "
-printf "Welcome to GrovePi Installer.\nPlease ensure internet connectivity before running this script.\n
-NOTE: Raspberry Pi wil reboot after completion."
-printf "Special thanks to Joe Sanford at Tufts University.  This script was derived from his work.  Thank you Joe!"
-printf " "
-echo "Must be running as Root user"
+echo "Requirements:"
+echo "1) Must be connected to the internet"
+echo "2) This script must be run as root user"
 echo " "
-echo "Press ENTER to begin..."
+echo "Steps:"
+echo "1) Installs package dependencies:"
+echo "   - python-pip       alternative Python package installer"
+echo "   - git              fast, scalable, distributed revision control system"
+echo "   - libi2c-dev       userspace I2C programming library development files"
+echo "   - python-serial    pyserial - module encapsulating access for the serial port"
+echo "   - python-rpi.gpio  Python GPIO module for Raspberry Pi"
+echo "   - i2c-tools        This Python module allows SMBus access through the I2C /dev"
+echo "   - python-smbus     Python bindings for Linux SMBus access through i2c-dev"
+echo "   - arduino          AVR development board IDE and built-in libraries"
+echo "   - minicom          friendly menu driven serial communication program"
+echo "2) Installs wiringPi in GrovePi/Script"
+echo "3) Removes I2C and SPI from modprobe blacklist /etc/modprobe.d/raspi-blacklist.conf"
+echo "4) Adds I2C-dev, i2c-bcm2708 and spi-dev to /etc/modules"
+echo "5) Installs gertboard avrdude_5.10-4_armhf.deb package"
+echo "6) Runs gertboard setup"
+echo "   - configures avrdude"
+echo "   - downloads gertboard known boards and programmers"
+echo "   - replaces avrsetup with gertboards version"
+echo "   - in /etc/inittab comments out lines containing AMA0"
+echo "   - in /boot/cmdline.txt removes: console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1"
+echo "   - in /usr/share/arduino/hardware/arduino creates backup of boards.txt"
+echo "   - in /usr/share/arduino/hardware/arduino creates backup of programmers.txt"
+echo " "
+echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
+echo " "
+echo "Raspberry Pi wil reboot after completion."
+echo " "
+echo -e "Press \E[32mENTER\E[0m to begin... or \E[91mctrl+c\E[0m to abort"
 read
 
 echo " "
