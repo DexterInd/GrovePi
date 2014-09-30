@@ -114,7 +114,11 @@ global _LUX
 
 
 # bus parameters
-I2C_SMBUS = smbus.SMBus(1)
+rev = GPIO.RPI_REVISION
+if rev == 2 or rev == 3:
+    I2C_SMBUS = smbus.SMBus(1)
+else:
+    I2C_SMBUS = smbus.SMBus(0)
 
 # Default I2C address
 I2C_ADDRESS = 0x29
