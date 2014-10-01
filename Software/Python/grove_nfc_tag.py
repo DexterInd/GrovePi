@@ -5,12 +5,17 @@
 # read the datasheet though
 
 import time,sys
+import RPi.GPIO as GPIO
+import smbus
 
 NFC_ADDR = 0x53
 
-import smbus
-
-bus=smbus.SMBus(1)
+# use the bus that matches your raspi version
+rev = GPIO.RPI_REVISION
+if rev == 2 or rev == 3:
+    bus = smbus.SMBus(1)
+else:
+    bus = smbus.SMBus(0)
     
 # read data from the NFC tag EEPROM (length bytes)
 def readNFCData(addr,length):
@@ -27,7 +32,7 @@ def writeNFCData(addr,data):
       time.sleep(0.01)
       addr+=1
 
-#example code
+# example code
 if __name__=="__main__":         
     print (readNFCData(0,16)) # read some data from address 0
     time.sleep(0.1)
