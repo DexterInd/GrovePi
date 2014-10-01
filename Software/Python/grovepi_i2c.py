@@ -1,8 +1,14 @@
 import smbus
 import time
 import grovepi
-# for RPI version 1, use "bus = smbus.SMBus(0)"
-bus = smbus.SMBus(1)
+import RPi.GPIO as GPIO
+
+# use the bus that matches your raspi version
+rev = GPIO.RPI_REVISION
+if rev == 2 or rev == 3:
+    bus = smbus.SMBus(1)
+else:
+    bus = smbus.SMBus(0)
 
 # This is the address we setup in the Arduino Program
 address = 0x04
@@ -21,9 +27,5 @@ def readNumber():
 time.sleep(1)
 i=0
 while True:
-	
-	print grovepi.analogRead(0)
-	time.sleep(1)
-	
-	
-	
+    print grovepi.analogRead(0)
+    time.sleep(1)
