@@ -7,13 +7,18 @@
 
 
 import time,sys
+import RPi.GPIO as GPIO
+import smbus
 
 DISPLAY_RGB_ADDR=0x62
 DISPLAY_TEXT_ADDR=0x3e
 
-import smbus
-
-bus=smbus.SMBus(1)
+# use the bus that matches your raspi version
+rev = GPIO.RPI_REVISION
+if rev == 2 or rev == 3:
+    bus = smbus.SMBus(1)
+else:
+    bus = smbus.SMBus(0)
 
 # set backlight to (R,G,B) (values from 0..255 for each)
 def setRGB(r,g,b):
