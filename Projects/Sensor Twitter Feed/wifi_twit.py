@@ -4,7 +4,7 @@
 # GrovePi + Sound Sensor + Light Sensor + Temperature Sensor + LED
 # http://www.seeedstudio.com/wiki/Grove_-_Sound_Sensor
 # http://www.seeedstudio.com/wiki/Grove_-_Light_Sensor
-# http://www.seeedstudio.com/wiki/Grove_-_Temperature_Sensor
+# http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro
 # http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 
 import twitter
@@ -14,8 +14,8 @@ import math
 
 # Connections
 sound_sensor = 0        # port A0
-light_sensor = 1        # port A1
-temperature_sensor = 2  # port A2
+light_sensor = 1        # port A1 
+temperature_sensor = 4  # port D4
 led = 3                 # port D3
 
 # Connect to Twitter
@@ -30,7 +30,8 @@ while True:
     # Error handling in case of problems communicating with the GrovePi
     try:
         # Get value from temperature sensor
-        t = grovepi.temp(temperature_sensor)
+        [temp,humidity] = grovepi.dht(temperature_sensor,1)
+        t=temp
 
         # Get value from light sensor
         light_intensity = grovepi.analogRead(light_sensor)
