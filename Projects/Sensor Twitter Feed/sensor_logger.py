@@ -8,25 +8,28 @@
 import time
 import grovepi
 import math
+import datetime
 
 # Connections 
-temperature_sensor = 0  # port A0
+temperature_sensor = 3  # port D3
 
-grovepi.pinMode(led,"OUTPUT")
+#grovepi.pinMode(led,"OUTPUT")
 
-last_sound = 0
+
 
 while True:
     # Error handling in case of problems communicating with the GrovePi
-    try:
         # Get value from temperature sensor
-        [temp,humidity] = grovepi.dht(temperature_sensor,1)
+        [temp,humidity] = grovepi.dht(temperature_sensor,0)
         t=temp
         h=humidity
         # Test
-        print ("Test Temp: %.2f, Hum: %d" %(t,h))
-        time.sleep(3)
-    except IOError:
-        print ("error")
-    except:
-        print ("Duplicate Tweet")
+        #print ("Test Temp: %.2f, Hum: %d" %(t,h))
+	
+	now = datetime.datetime.now()	
+
+	f = open("log.txt", "a")
+	f.write(now.isoformat() +  "Temp: %.2f, Hum: %d \n" %(t,h))
+	f.close()
+        time.sleep(15)
+
