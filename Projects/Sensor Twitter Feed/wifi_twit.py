@@ -27,6 +27,6 @@ while True:
         print ("Test Temp: %.2f, Hum: %d" %(t,h))
         time.sleep(3)
     except IOError:
-        print "Error"
+        print ("error")
     except:
-        print "Duplicate Tweet"
+        print ("Duplicate Tweet")
