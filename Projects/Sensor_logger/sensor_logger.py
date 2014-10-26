@@ -15,7 +15,13 @@ temperature_sensor = 3  # port D3
 
 #grovepi.pinMode(led,"OUTPUT")
 
-
+def openFile():
+	try:
+		f = open("log.txt", "a")
+		return f
+	except IOError:
+		print("File ERROR")
+		openFile()
 
 while True:
     # Error handling in case of problems communicating with the GrovePi
@@ -27,9 +33,10 @@ while True:
         #print ("Test Temp: %.2f, Hum: %d" %(t,h))
 	
 	now = datetime.datetime.now()	
-
-	f = open("log.txt", "a")
-	f.write(now.isoformat() +  "Temp: %.2f, Hum: %d \n" %(t,h))
+	f = openFile()
+	f.write(now.isoformat() + " || " +  "Temp: %.2f, Hum: %d \n" %(t,h))
 	f.close()
-        time.sleep(15)
+        time.sleep(60)
+
+
 
