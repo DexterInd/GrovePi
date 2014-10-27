@@ -41,5 +41,5 @@ while True:
             pass
         except:
             f = openFile()
-            f.write("ERROR")
+            f.write("ERROR \n")
             f.close()
