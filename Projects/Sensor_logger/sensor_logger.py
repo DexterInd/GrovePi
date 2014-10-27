@@ -10,7 +10,7 @@ import grovepi
 import math
 import datetime
 
-# Connections 
+# Connections
 temperature_sensor = 3  # port D3
 
 #grovepi.pinMode(led,"OUTPUT")
@@ -24,19 +24,22 @@ def openFile():
 		openFile()
 
 while True:
-    # Error handling in case of problems communicating with the GrovePi
-        # Get value from temperature sensor
-        [temp,humidity] = grovepi.dht(temperature_sensor,0)
-        t=temp
-        h=humidity
-        # Test
-        #print ("Test Temp: %.2f, Hum: %d" %(t,h))
-	
-	now = datetime.datetime.now()	
-	f = openFile()
-	f.write(now.isoformat() + " || " +  "Temp: %.2f, Hum: %d \n" %(t,h))
-	f.close()
-        time.sleep(60)
+        try:
+            [temp,humidity] = grovepi.dht(temperature_sensor,0)
+            t = temp
+            h = humidity
 
+            now = datetime.datetime.now()
 
+            f = openFile()
+            f.write(now.isoformat() + " || " +  "Temp: %.2f, Hum: %d \n" %(t,h))
+            f.close()
 
+            time.sleep(60)
+
+        except IOError:
+            pass
+        except:
+            f = openFile()
+            f.write("ERROR")
+            f.close()
