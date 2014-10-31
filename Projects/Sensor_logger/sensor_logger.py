@@ -11,7 +11,8 @@ import math
 import datetime
 
 # Connections
-temperature_sensor = 3  # port D3
+temperature_sensor_in = 3  # port D3
+temperature_sensor_out = 2 # port D2
 
 #grovepi.pinMode(led,"OUTPUT")
 
@@ -25,14 +26,17 @@ def openFile():
 
 while True:
         try:
-            [temp,humidity] = grovepi.dht(temperature_sensor,0)
-            t = temp
-            h = humidity
+            [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
+            t_in = temp
+            h_in = humidity
 
+            [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
+            t_out = temp
+            h_out = humidity
             now = datetime.datetime.now()
 
             f = openFile()
-            f.write(now.isoformat() + " || " +  "Temp: %.2f, Hum: %d \n" %(t,h))
+            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d" %(t_in,h_in,t_out,h_out))
             f.close()
 
             time.sleep(60)
