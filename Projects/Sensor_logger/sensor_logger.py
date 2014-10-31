@@ -1,9 +1,5 @@
 # Temperature levels with our Raspberry Pi
-# http://dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/sensor-twitter-feed/
 
-# GrovePi + Sound Sensor + Light Sensor + Temperature Sensor + LED
-# http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro
-# http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 
 import time
 import grovepi
@@ -13,14 +9,16 @@ import datetime
 # Connections
 temperature_sensor_in = 3  # port D3
 temperature_sensor_out = 2 # port D2
-sound_sensor = 0        # port A0
-light_sensor = 1        # port A1 
+light_sensor = 0        # port A1 
 
-#grovepi.pinMode(led,"OUTPUT")
+
 
 def openFile():
 	try:
-		f = open("log.txt", "a")
+		now = datetime.datetime.now()
+	
+		f = open("log_%d_%d_%d.txt" %(now.day,now.month.now.year), "a")
+		
 		return f
 	except IOError:
 		print("File ERROR")
@@ -38,12 +36,10 @@ while True:
     
             light_intensity = grovepi.analogRead(light_sensor)
 
-            sound_level = grovepi.analogRead(sound_sensor)
-
             now = datetime.datetime.now()
 
             f = openFile
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,last_sound))
+            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light_intensity))
             f.close()
 
             time.sleep(60)
