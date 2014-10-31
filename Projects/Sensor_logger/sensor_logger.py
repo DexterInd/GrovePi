@@ -52,5 +52,5 @@ while True:
             pass
         except:
             f = openFile()
-            f.write("ERROR \n")
+            f.write(now.isoformat() + "ERROR \n")
             f.close()
