@@ -33,10 +33,17 @@ while True:
             [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
             t_out = temp
             h_out = humidity
+
+            light_intensity = grovepi.analogRead(light_sensor)
+
+            sound_level = grovepi.analogRead(sound_sensor)
+            if sound_level > 0:
+                last_sound = sound_level
+
             now = datetime.datetime.now()
 
-            f = openFile()
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d \n" %(t_in,h_in,t_out,h_out))
+            f = openFile
+            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d Light: %d \n" %(t_in, h_in, t_out, h_out, last_sound, light_intensity))
             f.close()
 
             time.sleep(60)
