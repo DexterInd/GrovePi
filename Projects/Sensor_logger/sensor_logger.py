@@ -17,7 +17,7 @@ def openFile():
 	try:
 		now = datetime.datetime.now()
 	
-		f = open("log_%d_%d_%d.txt" %(now.day,now.month.now.year), "a")
+		f = open("log_%d_%d_%d.txt" %(now.day,now.month,now.year), "a")
 		
 		return f
 	except IOError:
