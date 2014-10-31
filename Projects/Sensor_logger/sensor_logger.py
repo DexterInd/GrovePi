@@ -45,7 +45,7 @@ while True:
             now = datetime.datetime.now()
 
             f = openFile
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d Light: %d \n" %(t_in, h_in, t_out, h_out, last_sound, light_intensity))
+            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d Light: %d \n" %(t_in, h_in, t_out, h_out, last_sound, light_intensity/10))
             f.close()
 
             time.sleep(60)
