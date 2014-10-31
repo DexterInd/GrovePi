@@ -13,6 +13,8 @@ import datetime
 # Connections
 temperature_sensor_in = 3  # port D3
 temperature_sensor_out = 2 # port D2
+sound_sensor = 0        # port A0
+light_sensor = 1        # port A1 
 
 #grovepi.pinMode(led,"OUTPUT")
 
