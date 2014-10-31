@@ -40,7 +40,7 @@ while True:
 
             f = openFile
             #f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light_intensity))
-			f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d \n" %(t_in,h_in,t_out,h_out,))
+			f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d \n" %(t_in,h_in,t_out,h_out))
             f.close()
 
             time.sleep(60)
