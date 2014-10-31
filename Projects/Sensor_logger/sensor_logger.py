@@ -9,7 +9,7 @@ import datetime
 # Connections
 temperature_sensor_in = 3  # port D3
 temperature_sensor_out = 2 # port D2
-light_sensor = 0        # port A1 
+#light_sensor = 0        # port A1 
 
 
 
@@ -34,12 +34,13 @@ while True:
             t_out = temp
             h_out = humidity
     
-            light_intensity = grovepi.analogRead(light_sensor)
+            #light_intensity = grovepi.analogRead(light_sensor)
 
             now = datetime.datetime.now()
 
             f = openFile
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light_intensity))
+            #f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light_intensity))
+			f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d \n" %(t_in,h_in,t_out,h_out,))
             f.close()
 
             time.sleep(60)
