@@ -12,6 +12,8 @@ temperature_sensor_out = 4  # port D4
 light_sensor = 0            # port A0 
 sound_sensor = 1            # port A1
 
+last_sound = 0
+
 def openFile():
 	try:
 		now = datetime.datetime.now()
