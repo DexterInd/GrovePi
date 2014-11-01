@@ -36,8 +36,8 @@ while True:
 	    light = grovepi.analogRead(light_sensor)
 
             sound_level = grovepi.analogRead(sound_sensor)
-                if sound_level > 0:
-                    last_sound = sound_level
+            if sound_level > 0:
+                last_sound = sound_level
 	
             now = datetime.datetime.now()
 
