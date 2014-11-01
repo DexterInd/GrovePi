@@ -9,7 +9,7 @@ sensor = 3
 
 while True:
     try:
-        [temp,humidity] = grovepi.dht(sensor,1)
+        [temp,humidity] = grovepi.dht(sensor,0)
         print "temp =", temp, " humidity =", humidity
 
     except IOError:
