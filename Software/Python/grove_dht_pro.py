@@ -5,7 +5,7 @@ import grovepi
 
 # Connect the Grove Temperature & Humidity Sensor Pro to digital port D4
 # SIG,NC,VCC,GND
-sensor = 4
+sensor = 3
 
 while True:
     try:
