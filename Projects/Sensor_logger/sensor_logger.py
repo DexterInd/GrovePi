@@ -7,10 +7,10 @@ import math
 import datetime
 
 # Connections
-temperature_sensor_in = 3  # port D3
-temperature_sensor_out = 4 # port D4
-light_sensor = 0        # port A0 
-
+temperature_sensor_in = 3   # port D3
+temperature_sensor_out = 4  # port D4
+light_sensor = 0            # port A0 
+sound_sensor = 1            # port A1
 
 def openFile():
 	try:
@@ -34,16 +34,20 @@ while True:
             h_out = humidity
     
 	    light = grovepi.analogRead(light_sensor)
+
+            sound_level = grovepi.analogRead(sound_sensor)
+                if sound_level > 0:
+                    last_sound = sound_level
 	
             now = datetime.datetime.now()
 
 	   # print(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d \n" %(t_in,h_in,t_out,h_out,light))
  
             f = openFile()
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d \n" %(t_in,h_in,t_out,h_out,light))
+            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_soun,last_sound))
 	    f.close()
 
-            time.sleep(10)
+            time.sleep(30)
 
         except IOError:
             pass
@@ -51,4 +55,4 @@ while True:
             f = openFile()
             f.write(now.isoformat() + "   ERROR \n")
             f.close()
-            time.sleep(30)
+            time.sleep(10)
