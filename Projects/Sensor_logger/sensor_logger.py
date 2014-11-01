@@ -1,6 +1,5 @@
-# Temperature levels with our Raspberry Pi
-
-
+# Temperature, Humidity, Sound, Light levels with our Raspberry Pi
+# Modified by Jan
 import time
 import grovepi
 import math
@@ -46,7 +45,7 @@ while True:
 	   # print(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d \n" %(t_in,h_in,t_out,h_out,light))
  
             f = openFile()
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_soun,last_sound))
+            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
 	    f.close()
 
             time.sleep(30)
