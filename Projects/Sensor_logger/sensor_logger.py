@@ -11,15 +11,41 @@ temperature_sensor_out = 4  # port D4
 light_sensor = 0            # port A0 
 sound_sensor = 1            # port A1
 
-last_sound = 0
+last_sound
 
-temp_in_max = -20
-temp_in_min = 40
+temp_in_max
+temp_in_min
 
-temp_out_max = -20
-temp_out_min = 40
+temp_out_max
+temp_out_min
 
-current_hour = 0
+current_hour
+
+def init():
+    try:
+        [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
+        temp_in_max = temp
+        temp_in_min = temp
+
+        [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
+        temp_out_max = temp
+        temp_out_min = temp
+
+        now = datetime.datetime.now()
+        current_hour = now.hour
+
+        last_sound  = grovepi.analogRead(sound_sensor)
+
+
+    except:
+        error("init")
+        init()
+
+def error(err_message):
+    f = openFile()
+    f.write(now.isoformat() + "   ERROR" + err_message + "\n")
+    f.close()
+
 
 def openFile():
 	try:
@@ -39,7 +65,9 @@ def writeAverage(log_file):
         if current_hour != now.hour:
             current_hour = now.hour
             log_file.write("HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))  
+            init()
 
+init()
 while True:
         try:
 		[temp,humidity] = grovepi.dht(temperature_sensor_in,0)
@@ -77,7 +105,7 @@ while True:
                 if current_hour != now.hour:
                     current_hour = now.hour
                     log_file.write("%d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))  
-
+                    init()
 
 		log_file.close()
 
@@ -86,7 +114,5 @@ while True:
         except IOError:
 		 pass
         except:
-		f = openFile()
-            	f.write(now.isoformat() + "   ERROR \n")
-            	f.close()
+        	error("Running")
             	time.sleep(10)
