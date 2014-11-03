@@ -36,7 +36,7 @@ def writeAverage():
 
         if current_hour != now.hour:
             current_hour = now.hour
-            f.write("||||| %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: .2f / .2f ||||| \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))  
+            f.write("%d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))  
 
 while True:
         try:
