@@ -32,13 +32,13 @@ def openFile():
 		print("File ERROR")
 		openFile()
 
-def writeAverage():
+def writeAverage(log_file):
         
         now = datetime.datetime.now()
         
         if current_hour != now.hour:
             current_hour = now.hour
-            f.write("%d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))  
+            log_file.write("%d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))  
 
 while True:
         try:
@@ -69,12 +69,12 @@ while True:
 	
             	now = datetime.datetime.now()
  
-            	f = openFile()
+            	log_file = openFile()
 			
-            	f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
-		writeAverage()
+            	log_file.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
+		writeAverage(log_file)
                 
-		f.close()
+		log_file.close()
 
         	time.sleep(30)
 
