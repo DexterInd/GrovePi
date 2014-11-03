@@ -19,7 +19,7 @@ temp_in_min = 0
 temp_out_max = 0
 temp_out_min = 0
 
-current_hour
+current_hour = 0
 
 def init():
     try:
