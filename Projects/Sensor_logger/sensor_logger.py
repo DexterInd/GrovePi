@@ -34,49 +34,48 @@ def openFile():
 
 while True:
         try:
-            [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
-            t_in = temp
-            h_in = humidity
+		[temp,humidity] = grovepi.dht(temperature_sensor_in,0)
+		t_in = temp
+		h_in = humidity
 			
-			if t_in > temp_in_max:
-				temp_in_max = t_in
-			elif t_in < temp_in_min
-				temp_in_min = t_in
+		if t_in > temp_in_max:
+			temp_in_max = t_in
+		elif t_in < temp_in_min:
+			temp_in_min = t_in
 
-				
-            [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
-            t_out = temp
-            h_out = humidity
+		[temp,humidity] = grovepi.dht(temperature_sensor_out,1)
+           	t_out = temp
+           	h_out = humidity
 			
-			if t_out > temp_out_max:
-				temp_out_max = t_out
-			elif t_out < temp_out_min:
-				temp_out_min = t_out
+		if t_out > temp_out_max:
+			temp_out_max = t_out
+		elif t_out < temp_out_min:
+			temp_out_min = t_out
 			
 			
-			light = grovepi.analogRead(light_sensor)
+		light = grovepi.analogRead(light_sensor)
 
-            sound_level = grovepi.analogRead(sound_sensor)
-            if sound_level > 0:
-                last_sound = sound_level
+        	sound_level = grovepi.analogRead(sound_sensor)
+		if sound_level > 0:
+	                last_sound = sound_level
 	
-            now = datetime.datetime.now()
+            	now = datetime.datetime.now()
  
-            f = openFile()
+            	f = openFile()
 			
-            f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
+            	f.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
 			
-			if current_hour != now.hour:
-				f.write( "||||| %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: .2f / .2f |||||" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))
-				current_hour = now.hour
-			f.close()
+		if current_hour != now.hour:
+			f.write( "||||| %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: .2f / .2f |||||" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max))	
+			current_hour = now.hour
+		f.close()
 
-            time.sleep(30)
+        	time.sleep(30)
 
         except IOError:
-            pass
+		 pass
         except:
-            f = openFile()
-            f.write(now.isoformat() + "   ERROR \n")
-            f.close()
-            time.sleep(10)
+		f = openFile()
+            	f.write(now.isoformat() + "   ERROR \n")
+            	f.close()
+            	time.sleep(10)
