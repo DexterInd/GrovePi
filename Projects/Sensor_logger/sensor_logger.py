@@ -32,7 +32,7 @@ def openFile():
 		print("File ERROR")
 		openFile()
 
-def writeAverage()
+def writeAverage():
 
         if current_hour != now.hour:
             current_hour = now.hour
