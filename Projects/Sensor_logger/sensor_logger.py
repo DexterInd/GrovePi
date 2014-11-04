@@ -2,7 +2,6 @@
 # Modified by Jan
 import time
 import grovepi
-import math
 import datetime
 import traceback
 
@@ -12,31 +11,41 @@ temperature_sensor_out = 4  # port D4
 light_sensor = 0            # port A0
 sound_sensor = 1            # port A1
 
-global last_sound
+global i_last_sound
 
-global temp_in_max
-global temp_in_min
+global f_f_temp_out_max
+global f_temp_in_min
 
-global temp_out_max
-global temp_out_min
+global f_temp_out_max
+global f_temp_out_min
 
-global current_hour
+global i_current_hour
 
 
 def init():
+    global i_last_sound
+
+    global f_f_temp_out_max
+    global f_temp_in_min
+
+    global f_temp_out_max
+    global f_temp_out_min
+
+    global i_current_hour
+    
     try:
         [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
-        temp_in_max = temp
-        temp_in_min = temp
+        f_f_temp_out_max = temp
+        f_temp_in_min = temp
 
         [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
-        temp_out_max = temp
-        temp_out_min = temp
+        f_temp_out_max = temp
+        f_temp_out_min = temp
 
-        now = datetime.datetime.now()
-        current_hour = now.hour
+        time_now = datetime.datetime.time_now()
+        i_current_hour = time_now.hour
 
-        last_sound  = grovepi.analogRead(sound_sensor)
+        i_last_sound  = grovepi.analogRead(sound_sensor)
 
 
     except:
@@ -44,76 +53,74 @@ def init():
         init()
 
 def error(err_message):
-	now = datetime.datetime.now()
+    time_now = datetime.datetime.time_now()
 	
-	f = openFile()
-	f.write(now.isoformat() + "   ERROR" + err_message + "\n")
-	f.close()
+    f = open_file()
+    f.write(time_now.isoformat() + "   ERROR" + err_message + "\n")
+    f.close()
 
 
-def openFile():
-	try:
-		now = datetime.datetime.now()
-		file = open("log_%d_%d_%d.txt" %(now.day,now.month,now.year), "a")
+def open_file():
+    try:
+        time_now = datetime.datetime.time_now()
+        file = open("log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year), "a")
 
-		return file
-	except IOError:
-		print("File ERROR")
-		openFile()
+        return file
+    except IOError:
+        print("File ERROR")
+        open_file()
 
 def writeMinMax(log_file):
+    global i_current_hour
 
-        now = datetime.datetime.now()
+        time_now = datetime.datetime.time_now()
 
-        if current_hour != now.hour:
-            current_hour = now.hour
-            log_file.write("HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max)) 
+        if i_current_hour != time_now.hour:
+            i_current_hour = time_now.hour
+            log_file.write("HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(i_current_hour,f_temp_in_min,f_f_temp_out_max,f_temp_out_min,f_temp_out_max)) 
             init()
-
-
-
 init()
 
 while True:
-        try:
-		[temp,humidity] = grovepi.dht(temperature_sensor_in,0)
-		t_in = temp
-		h_in = humidity
+    try:
+        [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
+        t_in = temp
+        h_in = humidity
 
-		if t_in > temp_in_max:
-			temp_in_max = t_in
-		elif t_in < temp_in_min:
-			temp_in_min = t_in
+        if t_in > f_f_temp_out_max:
+            f_f_temp_out_max = t_in
+        elif t_in < f_temp_in_min:
+            f_temp_in_min = t_in
 
-		[temp,humidity] = grovepi.dht(temperature_sensor_out,1)
-                t_out = temp
-                h_out = humidity
+        [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
+        t_out = temp
+        h_out = humidity
 
-		if t_out > temp_out_max:
-			temp_out_max = t_out
-		elif t_out < temp_out_min:
-			temp_out_min = t_out
+        if t_out > f_temp_out_max:
+            f_temp_out_max = t_out
+        elif t_out < f_temp_out_min:
+            f_temp_out_min = t_out
 	
-		light = grovepi.analogRead(light_sensor)
+        light = grovepi.analogRead(light_sensor)
 
-                sound_level = grovepi.analogRead(sound_sensor)
-		if sound_level > 0:
-                    last_sound = sound_level
+        sound_level = grovepi.analogRead(sound_sensor)
+        if sound_level > 0:
+                i_last_sound = sound_level
+                    
+        time_now = datetime.datetime.time_now()
 
-                now = datetime.datetime.now()
+        log_file = open_file()
 
-                log_file = openFile()
+        log_file.write(time_now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,i_last_sound))
+        writeMinMax(log_file)
+        
+        log_file.close()
 
-                log_file.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
-                writeMinMax(log_file)
-
-		log_file.close()
-
-                time.sleep(30)
+        time.sleep(30)
 
         except IOError:
-            	pass
+            pass
         except:
-            	error(" Running")
-		print(traceback.format_exc())
-            	time.sleep(10)
+            error(" Running")
+            print(traceback.format_exc())
+            time.sleep(10)
