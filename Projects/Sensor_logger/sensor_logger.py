@@ -21,6 +21,7 @@ global temp_out_min
 
 global current_hour
 
+
 def init():
     try:
         [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
@@ -42,9 +43,11 @@ def init():
         init()
 
 def error(err_message):
-    f = openFile()
-    f.write(now.isoformat() + "   ERROR" + err_message + "\n")
-    f.close()
+	now = datetime.datetime.now()
+	
+	f = openFile()
+	f.write(now.isoformat() + "   ERROR" + err_message + "\n")
+	f.close()
 
 
 def openFile():
