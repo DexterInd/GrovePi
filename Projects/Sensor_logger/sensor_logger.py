@@ -4,6 +4,7 @@ import time
 import grovepi
 import math
 import datetime
+import traceback
 
 # Connection
 temperature_sensor_in = 3   # port D3
@@ -39,7 +40,7 @@ def init():
 
 
     except:
-        error("init")
+        error(" init")
         init()
 
 def error(err_message):
@@ -111,7 +112,8 @@ while True:
                 time.sleep(30)
 
         except IOError:
-            pass
+            	pass
         except:
-            error("Running")
-            time.sleep(10)
+            	error(" Running")
+		print(traceback.format_exc())
+            	time.sleep(10)
