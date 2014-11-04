@@ -11,15 +11,15 @@ temperature_sensor_out = 4  # port D4
 light_sensor = 0            # port A0
 sound_sensor = 1            # port A1
 
-last_sound = 0
+global last_sound
 
-temp_in_max = 0
-temp_in_min = 0
+global temp_in_max
+global temp_in_min
 
-temp_out_max = 0
-temp_out_min = 0
+global temp_out_max
+global temp_out_min
 
-current_hour = 0
+global current_hour
 
 def init():
     try:
@@ -50,7 +50,6 @@ def error(err_message):
 def openFile():
 	try:
 		now = datetime.datetime.now()
-
 		file = open("log_%d_%d_%d.txt" %(now.day,now.month,now.year), "a")
 
 		return file
@@ -58,7 +57,7 @@ def openFile():
 		print("File ERROR")
 		openFile()
 
-def writeAverage(log_file):
+def writeMinMax(log_file):
 
         now = datetime.datetime.now()
 
@@ -102,12 +101,7 @@ while True:
                 log_file = openFile()
 
                 log_file.write(now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,last_sound))
-		# writeAverage(log_file)
-
-                if current_hour != now.hour:
-                    current_hour = now.hour
-                    log_file.write("%d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(current_hour,temp_in_min,temp_in_max,temp_out_min,temp_out_max)) 
-                    init()
+                writeMinMax(log_file)
 
 		log_file.close()
 
