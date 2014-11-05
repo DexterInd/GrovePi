@@ -31,6 +31,7 @@ def init():
     global f_temp_out_max
     global f_temp_out_min
 
+    global i_current_hour
 
     try:
         [temp,humidity] = grovepi.dht(temperature_sensor_in,0)
@@ -42,6 +43,8 @@ def init():
         f_temp_out_min = temp
 
         i_last_sound  = grovepi.analogRead(sound_sensor)
+
+	i_current_hour = datetime.datetime.now().hour
 
     except:
         error(" init")
@@ -84,8 +87,8 @@ while True:
         t_in = temp
         h_in = humidity
 
-        if t_in > f_f_temp_out_max:
-            f_f_temp_out_max = t_in
+        if t_in > f_temp_out_max:
+            f_temp_out_max = t_in
         elif t_in < f_temp_in_min:
             f_temp_in_min = t_in
 
