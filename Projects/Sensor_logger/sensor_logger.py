@@ -13,7 +13,7 @@ sound_sensor = 1			# port A1
 
 global i_last_sound
 
-global f_f_temp_out_max
+global f_temp_out_max
 global f_temp_in_min
 
 global f_temp_out_max
@@ -44,7 +44,7 @@ def init():
 
         i_last_sound  = grovepi.analogRead(sound_sensor)
 
-	i_current_hour = datetime.datetime.now().hour
+        i_current_hour = datetime.datetime.now().hour
 
     except:
         error(" init")
@@ -53,7 +53,7 @@ def init():
 def error(err_message):
     time_now = datetime.datetime.now()
 	
-    write_file("log_err_%d_%d_%d" %(time_now.day,time_now.month,time_now.year),
+    write_file("logs/log_err_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
                    time_now.isoformat() + "   ERROR" + err_message + "\n")
 
 
@@ -75,7 +75,7 @@ def writeMinMax():
 
     if i_current_hour != time_now.hour:
         i_current_hour = time_now.hour
-        write_file("log_%d_%d_%d" %(time_now.day,time_now.month,time_now.year),
+        write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
                    "HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(i_current_hour,f_temp_in_min,f_f_temp_out_max,f_temp_out_min,f_temp_out_max))
         init()
 
@@ -109,7 +109,7 @@ while True:
 					
         time_now = datetime.datetime.now()
 
-        write_file("log_%d_%d_%d" %(time_now.day,time_now.month,time_now.year),
+        write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
                               time_now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,i_last_sound))
 
         writeMinMax()
