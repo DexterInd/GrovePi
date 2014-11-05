@@ -44,7 +44,7 @@ def init():
 
         i_last_sound  = grovepi.analogRead(sound_sensor)
 
-    i_current_hour = datetime.datetime.now().hour
+        i_current_hour = datetime.datetime.now().hour
 
     except:
         error(" init")
