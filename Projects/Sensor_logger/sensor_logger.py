@@ -92,7 +92,6 @@ while True:
         elif t_in < f_temp_in_min:
             f_temp_in_min = t_in
         
-        print(grovepi.dht(temperute_sensor_out,1) + "\n" )
         [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
         t_out = temp
         h_out = humidity
@@ -111,7 +110,7 @@ while True:
         time_now = datetime.datetime.now()
 
         write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
-                              time_now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %d || OUT: Temp: %.2f, Hum: %d || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,i_last_sound))
+                              time_now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %.0f || OUT: Temp: %.2f, Hum: %.0f || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,i_last_sound))
 
         writeMinMax()
 		
