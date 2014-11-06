@@ -76,7 +76,7 @@ def writeMinMax():
     if i_current_hour != time_now.hour:
         i_current_hour = time_now.hour
         write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
-                   "HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(i_current_hour,f_temp_in_min,f_f_temp_out_max,f_temp_out_min,f_temp_out_max))
+                   "HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(i_current_hour,f_temp_in_min,f_temp_out_max,f_temp_out_min,f_temp_out_max))
         init()
 
 init()
@@ -91,7 +91,8 @@ while True:
             f_temp_out_max = t_in
         elif t_in < f_temp_in_min:
             f_temp_in_min = t_in
-
+        
+        print(grovepi.dht(temperute_sensor_out,1) + "\n" )
         [temp,humidity] = grovepi.dht(temperature_sensor_out,1)
         t_out = temp
         h_out = humidity
