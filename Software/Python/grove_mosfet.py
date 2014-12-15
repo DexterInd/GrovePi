@@ -8,9 +8,9 @@ import grovepi
 # There are two screw terminals on opposite sides of the board.
 # One side for power source and the other side for the device you want to control.
 
-# Connect the Grove MOSFET to analog port A0
+# Connect the Grove MOSFET to analog port D6
 # SIG,NC,VCC,GND
-mosfet = 0
+mosfet = 6
 
 grovepi.pinMode(mosfet,"OUTPUT")
 time.sleep(1)
