@@ -1,10 +1,10 @@
 # grovepi.py
-# v1.1
+# v1.2
 # This file provides the basic functions for using the GrovePi
 #
 # Karan Nayan
 # Initial Date: 13 Feb 2014
-# Last Updated: 13 Feb 2014
+# Last Updated: 29 Dec 2014
 # http://www.dexterindustries.com/
 #
 # These files have been made available online through
@@ -45,6 +45,15 @@ acc_xyz_cmd = [20]
 rtc_getTime_cmd = [30]
 # DHT Pro sensor temperature
 dht_temp_cmd = [40]
+
+# Grove LED Bar commands
+ledBarInit_cmd=[50]      # begin(unsigned char pinClock, unsigned char pinData, bool greenToRed)
+ledBarOrient_cmd=[51]    # setGreenToRed(bool greenToRed)
+ledBarLevel_cmd=[52]     # setLevel(unsigned char level)
+ledBarSetOne_cmd=[53]    # setLed(unsigned char led, bool state)
+ledBarToggleOne_cmd=[54] # toggleLed(unsigned char led)
+ledBarSet_cmd=[55]       # setBits(unsigned int bits)
+ledBarGet_cmd=[56]       # getBits()
 
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
@@ -208,3 +217,51 @@ def dht(pin, module_type):
 	# convert back to float
 	hum = round(struct.unpack('!f', h.decode('hex'))[0], 2)
 	return [t, hum]
+
+
+# Grove LED Bar - initialise
+# begin(unsigned char pinClock, unsigned char pinData, bool greenToRed)
+def ledbar_init(pin,orientation):
+	write_i2c_block(address,ledBarInit_cmd+[pin,0,0])
+	return 1
+
+# Grove LED Bar - set orientation
+# setGreenToRed(bool greenToRed)
+def ledbar_orientation(pin,orientation):
+	write_i2c_block(address,ledBarOrient_cmd+[pin,orientation,0])
+	return 1
+
+# Grove LED Bar - set level
+# setLevel(unsigned char level)
+def ledbar_setLevel(pin,level):
+	write_i2c_block(address,ledBarLevel_cmd+[pin,level,0])
+	return 1
+
+# Grove LED Bar - set single led
+# setLed(unsigned char led, bool state)
+def ledbar_setLed(pin,led,state):
+	write_i2c_block(address,ledBarSetOne_cmd+[pin,led,state])
+	return 1
+
+# Grove LED Bar - toggle single led
+# toggleLed(unsigned char led)
+def ledbar_toggleLed(pin,led):
+	write_i2c_block(address,ledBarToggleOne_cmd+[pin,led,0])
+	return 1
+
+# Grove LED Bar - set all leds
+# setBits(unsigned int bits)
+def ledbar_setBits(pin,state):
+	byte1 = state & 255
+	byte2 = state >> 8
+	write_i2c_block(address,ledBarSet_cmd+[pin,byte1,byte2])
+	return 1
+
+# Grove LED Bar - get current state
+# getBits()
+def ledbar_getBits(pin):
+	write_i2c_block(address,ledBarGet_cmd+[pin,0,0])
+	time.sleep(.2)
+	grovepi.read_i2c_byte(0x04)
+	block = grovepi.read_i2c_block(0x04)
+	return block[1] ^ (block[2] << 8)
