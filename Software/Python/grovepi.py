@@ -39,6 +39,8 @@ aWrite_cmd = [4]
 pMode_cmd = [5]
 # Ultrasonic read
 uRead_cmd = [7]
+# Get firmware version
+version_cmd = [8]
 # Accelerometer (+/- 1.5g) read
 acc_xyz_cmd = [20]
 # RTC get time
@@ -47,13 +49,13 @@ rtc_getTime_cmd = [30]
 dht_temp_cmd = [40]
 
 # Grove LED Bar commands
-ledBarInit_cmd=[50]      # begin(unsigned char pinClock, unsigned char pinData, bool greenToRed)
-ledBarOrient_cmd=[51]    # setGreenToRed(bool greenToRed)
-ledBarLevel_cmd=[52]     # setLevel(unsigned char level)
-ledBarSetOne_cmd=[53]    # setLed(unsigned char led, bool state)
-ledBarToggleOne_cmd=[54] # toggleLed(unsigned char led)
-ledBarSet_cmd=[55]       # setBits(unsigned int bits)
-ledBarGet_cmd=[56]       # getBits()
+ledBarInit_cmd = [50]      # begin(unsigned char pinClock, unsigned char pinData, bool greenToRed)
+ledBarOrient_cmd = [51]    # setGreenToRed(bool greenToRed)
+ledBarLevel_cmd = [52]     # setLevel(unsigned char level)
+ledBarSetOne_cmd = [53]    # setLed(unsigned char led, bool state)
+ledBarToggleOne_cmd = [54] # toggleLed(unsigned char led)
+ledBarSet_cmd = [55]       # setBits(unsigned int bits)
+ledBarGet_cmd = [56]       # getBits()
 
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
@@ -139,6 +141,15 @@ def ultrasonicRead(pin):
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return (number[1] * 256 + number[2])
+
+
+# Read the firmware version
+def version():
+	write_i2c_block(address, version_cmd + [0, 0, 0])
+	time.sleep(.1)
+	read_i2c_byte(address)
+	number = read_i2c_block(address)
+	return "%s.%s.%s" % (number[1], number[2], number[3])
 
 
 # Read Grove Accelerometer (+/- 1.5g) XYZ value

@@ -80,6 +80,13 @@ void loop()
       //Serial.println(b[1]);
       //Serial.println(b[2]);
     }
+    //Firmware version
+    if(cmd[0]==8)
+    {
+      b[1] = 1;
+      b[2] = 2;
+      b[3] = 0;
+    }
     //Accelerometer x,y,z, read
     if(cmd[0]==20)
     {
@@ -237,15 +244,13 @@ void receiveData(int byteCount)
 // callback for sending data
 void sendData()
 {
-  if(cmd[0]==1)
+  if(cmd[0] == 1)
     Wire.write(val);
-  if(cmd[0]==3 ||cmd[0]==7)
+  if(cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
     Wire.write(b, 3);
-  if(cmd[0]==20)
+  if(cmd[0] == 8 || cmd[0] == 20)
     Wire.write(b, 4);
-  if(cmd[0]==30||cmd[0]==40)
+  if(cmd[0] == 30 || cmd[0] == 40)
     Wire.write(b, 9);
-  if(cmd[0] == 56)
-    Wire.write(b, 3);
 }
 
