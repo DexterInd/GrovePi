@@ -1,5 +1,5 @@
 # grovepi.py
-# v1.2
+# v1.2.0
 # This file provides the basic functions for using the GrovePi
 #
 # Karan Nayan
