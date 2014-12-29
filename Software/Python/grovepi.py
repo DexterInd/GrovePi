@@ -262,6 +262,6 @@ def ledbar_setBits(pin,state):
 def ledbar_getBits(pin):
 	write_i2c_block(address,ledBarGet_cmd+[pin,0,0])
 	time.sleep(.2)
-	grovepi.read_i2c_byte(0x04)
-	block = grovepi.read_i2c_block(0x04)
+	read_i2c_byte(0x04)
+	block = read_i2c_block(0x04)
 	return block[1] ^ (block[2] << 8)
