@@ -14,20 +14,20 @@ time.sleep(1)
 i = 0
 
 # LED Bar methods
-# grovepi.ledbar_init(pin,orientation)
-# grovepi.ledbar_orientation(pin,orientation)
-# grovepi.ledbar_setLevel(pin,level)
-# grovepi.ledbar_setLed(pin,led,state)
-# grovepi.ledbar_toggleLed(pin,led)
-# grovepi.ledbar_setBits(pin,state)
-# grovepi.ledbar_getBits(pin)
+# grovepi.ledBar_init(pin,orientation)
+# grovepi.ledBar_orientation(pin,orientation)
+# grovepi.ledBar_setLevel(pin,level)
+# grovepi.ledBar_setLed(pin,led,state)
+# grovepi.ledBar_toggleLed(pin,led)
+# grovepi.ledBar_setBits(pin,state)
+# grovepi.ledBar_getBits(pin)
 
 while True:
     try:
         print "Test 1) Initialise - red to green"
         # ledbar_init(pin,orientation)
         # orientation: (0 = red to green, 1 = green to red)
-        grovepi.ledbar_init(ledbar, 0)
+        grovepi.ledBar_init(ledbar, 0)
         time.sleep(.5)
 
 
@@ -35,17 +35,17 @@ while True:
         # ledbar_setLevel(pin,level)
         # level: (0-10)
         for i in range(0,11):
-            grovepi.ledbar_setLevel(ledbar, i)
+            grovepi.ledBar_setLevel(ledbar, i)
             time.sleep(.2)
         time.sleep(.3)
 
-        grovepi.ledbar_setLevel(ledbar, 8)
+        grovepi.ledBar_setLevel(ledbar, 8)
         time.sleep(.5)
 
-        grovepi.ledbar_setLevel(ledbar, 2)
+        grovepi.ledBar_setLevel(ledbar, 2)
         time.sleep(.5)
 
-        grovepi.ledbar_setLevel(ledbar, 5)
+        grovepi.ledBar_setLevel(ledbar, 5)
         time.sleep(.5)
 
 
@@ -53,38 +53,38 @@ while True:
         # ledbar_setLed(pin,led,state)
         # led: which led (1-10)
         # state: off or on (0,1)
-        grovepi.ledbar_setLed(ledbar, 10, 1)
+        grovepi.ledBar_setLed(ledbar, 10, 1)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 9, 1)
+        grovepi.ledBar_setLed(ledbar, 9, 1)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 8, 1)
+        grovepi.ledBar_setLed(ledbar, 8, 1)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 1, 0)
+        grovepi.ledBar_setLed(ledbar, 1, 0)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 2, 0)
+        grovepi.ledBar_setLed(ledbar, 2, 0)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 3, 0)
+        grovepi.ledBar_setLed(ledbar, 3, 0)
         time.sleep(.5)
 
 
         print "Test 4) Toggle a single LED"
         # flip a single led - if it is currently on, it will become off and vice versa
         # ledbar_toggleLed(ledbar, led)
-        grovepi.ledbar_toggleLed(ledbar, 1)
+        grovepi.ledBar_toggleLed(ledbar, 1)
         time.sleep(.5)
 
-        grovepi.ledbar_toggleLed(ledbar, 2)
+        grovepi.ledBar_toggleLed(ledbar, 2)
         time.sleep(.5)
 
-        grovepi.ledbar_toggleLed(ledbar, 9)
+        grovepi.ledBar_toggleLed(ledbar, 9)
         time.sleep(.5)
 
-        grovepi.ledbar_toggleLed(ledbar, 10)
+        grovepi.ledBar_toggleLed(ledbar, 10)
         time.sleep(.5)
 
 
@@ -92,7 +92,7 @@ while True:
         # ledbar_setBits(ledbar, state)
         # state: (0-1023) or (0x00-0x3FF) or (0b0000000000-0b1111111111) or (int('0000000000',2)-int('1111111111',2))
         for i in range(0,32):
-            grovepi.ledbar_setBits(ledbar, i)
+            grovepi.ledBar_setBits(ledbar, i)
             time.sleep(.2)
         time.sleep(.3)
 
@@ -100,7 +100,7 @@ while True:
         print "Test 6) Get current state"
         # state = ledbar_getBits(ledbar)
         # state: (0-1023) a bit for each of the 10 LEDs
-        state = grovepi.ledbar_getBits(ledbar)
+        state = grovepi.ledBar_getBits(ledbar)
         print "with first 5 leds lit, the state should be 31 or 0x1F"
         print state
 
@@ -114,7 +114,7 @@ while True:
         print "Test 7) Set state - save the state we just modified"
         # ledbar_setBits(ledbar, state)
         # state: (0-1023) a bit for each of the 10 LEDs
-        grovepi.ledbar_setBits(ledbar, state)
+        grovepi.ledBar_setBits(ledbar, state)
         time.sleep(.5)
 
 
@@ -123,15 +123,15 @@ while True:
         # orientation: (0 = red to green, 1 = green to red)
         # when you reverse the led bar orientation, all methods know how to handle the new LED index
         # green to red
-        grovepi.ledbar_orientation(ledbar, 1)
+        grovepi.ledBar_orientation(ledbar, 1)
         time.sleep(.5)
 
         # red to green
-        grovepi.ledbar_orientation(ledbar, 0)
+        grovepi.ledBar_orientation(ledbar, 0)
         time.sleep(.5)
 
         # green to red
-        grovepi.ledbar_orientation(ledbar, 1)
+        grovepi.ledBar_orientation(ledbar, 1)
         time.sleep(.5)
 
 
@@ -140,7 +140,7 @@ while True:
         # level: (0-10)
         # note the red LED is now at index 10 instead of 1
         for i in range(0,11):
-            grovepi.ledbar_setLevel(ledbar, i)
+            grovepi.ledBar_setLevel(ledbar, i)
             time.sleep(.2)
         time.sleep(.3)
 
@@ -149,29 +149,29 @@ while True:
         # ledbar_setLed(pin,led,state)
         # led: which led (1-10)
         # state: off or on (0,1)
-        grovepi.ledbar_setLed(ledbar, 1, 0)
+        grovepi.ledBar_setLed(ledbar, 1, 0)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 3, 0)
+        grovepi.ledBar_setLed(ledbar, 3, 0)
         time.sleep(.5)
 
-        grovepi.ledbar_setLed(ledbar, 5, 0)
+        grovepi.ledBar_setLed(ledbar, 5, 0)
         time.sleep(.5)
 
 
         print "Test 11) Toggle a single LED, again"
         # ledbar_toggleLed(ledbar, led)
-        grovepi.ledbar_toggleLed(ledbar, 2)
+        grovepi.ledBar_toggleLed(ledbar, 2)
         time.sleep(.5)
 
-        grovepi.ledbar_toggleLed(ledbar, 4)
+        grovepi.ledBar_toggleLed(ledbar, 4)
         time.sleep(.5)
 
 
         print "Test 12) Get state"
         # state = ledbar_getBits(ledbar)
         # state: (0-1023) a bit for each of the 10 LEDs
-        state = grovepi.ledbar_getBits(ledbar)
+        state = grovepi.ledBar_getBits(ledbar)
 
         # the last 5 LEDs are lit, so the state should be 992 or 0x3E0
 
@@ -183,37 +183,37 @@ while True:
         print "Test 13) Set state, again"
         # ledbar_setBits(ledbar, state)
         # state: (0-1023) a bit for each of the 10 LEDs
-        grovepi.ledbar_setBits(ledbar, state)
+        grovepi.ledBar_setBits(ledbar, state)
         time.sleep(.5)
 
 
         print "Test 14) Step"
         # step through all 10 LEDs
         for i in range(0,11):
-            grovepi.ledbar_setLevel(ledbar, i)
+            grovepi.ledBar_setLevel(ledbar, i)
             time.sleep(.2)
         time.sleep(.3)
 
 
         print "Test 15) Bounce"
         # switch on the first two LEDs
-        grovepi.ledbar_setLevel(ledbar, 2)
+        grovepi.ledBar_setLevel(ledbar, 2)
 
         # get the current state (which is 0x3)
-        state = grovepi.ledbar_getBits(ledbar)
+        state = grovepi.ledBar_getBits(ledbar)
 
         # bounce to the right
         for i in range(0,9):
             # bit shift left and update
             state <<= 1;
-            grovepi.ledbar_setBits(ledbar, state)
+            grovepi.ledBar_setBits(ledbar, state)
             time.sleep(.2)
 
         # bounce to the left
         for i in range(0,9):
             # bit shift right and update
             state >>= 1;
-            grovepi.ledbar_setBits(ledbar, state)
+            grovepi.ledBar_setBits(ledbar, state)
             time.sleep(.2)
         time.sleep(.3)
 
@@ -221,7 +221,7 @@ while True:
         print "Test 16) Random"
         for i in range(0,21):
             state = random.randint(0,1023)
-            grovepi.ledbar_setBits(ledbar, state)
+            grovepi.ledBar_setBits(ledbar, state)
             time.sleep(.2)
         time.sleep(.3)
 
@@ -230,25 +230,25 @@ while True:
         # set every 2nd LED on - 341 or 0x155
         state = 341
         for i in range(0,5):
-            grovepi.ledbar_setBits(ledbar, state)
+            grovepi.ledBar_setBits(ledbar, state)
             time.sleep(.2)
 
             # bitwise XOR all 10 LEDs on with the current state
             state = 0x3FF ^ state
 
-            grovepi.ledbar_setBits(ledbar, state)
+            grovepi.ledBar_setBits(ledbar, state)
             time.sleep(.2)
         time.sleep(.3)
 
 
         print "Test 18) Walk through all possible combinations"
         for i in range(0,1024):
-            grovepi.ledbar_setBits(ledbar, i)
+            grovepi.ledBar_setBits(ledbar, i)
             time.sleep(.1)
         time.sleep(.4)
 
     except KeyboardInterrupt:
-        grovepi.ledbar_setBits(ledbar, 0)
+        grovepi.ledBar_setBits(ledbar, 0)
         break
     except IOError:
         print "Error"

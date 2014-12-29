@@ -1,10 +1,10 @@
 # grovepi.py
-# v1.2.0
+# v1.2.1
 # This file provides the basic functions for using the GrovePi
 #
 # Karan Nayan
 # Initial Date: 13 Feb 2014
-# Last Updated: 29 Dec 2014
+# Last Updated: 30 Dec 2014
 # http://www.dexterindustries.com/
 #
 # These files have been made available online through
@@ -49,13 +49,45 @@ rtc_getTime_cmd = [30]
 dht_temp_cmd = [40]
 
 # Grove LED Bar commands
-ledBarInit_cmd = [50]      # begin(unsigned char pinClock, unsigned char pinData, bool greenToRed)
-ledBarOrient_cmd = [51]    # setGreenToRed(bool greenToRed)
-ledBarLevel_cmd = [52]     # setLevel(unsigned char level)
-ledBarSetOne_cmd = [53]    # setLed(unsigned char led, bool state)
-ledBarToggleOne_cmd = [54] # toggleLed(unsigned char led)
-ledBarSet_cmd = [55]       # setBits(unsigned int bits)
-ledBarGet_cmd = [56]       # getBits()
+# Initialise
+ledBarInit_cmd = [50]
+# Set orientation
+ledBarOrient_cmd = [51]
+# Set level
+ledBarLevel_cmd = [52]
+# Set single LED
+ledBarSetOne_cmd = [53]
+# Toggle single LED
+ledBarToggleOne_cmd = [54]
+# Set all LEDs
+ledBarSet_cmd = [55]
+# Get current state
+ledBarGet_cmd = [56]
+
+# Grove 4 Digit Display commands
+# Initialise
+fourDigitInit_cmd = [70]
+# Set brightness, not visible until next cmd
+fourDigitBrightness_cmd = [71]
+# Set numeric value without leading zeros
+fourDigitValue_cmd = [72]
+# Set numeric value with leading zeros
+fourDigitValueZeros_cmd = [73]
+# Set individual digit
+fourDigitIndividualDigit_cmd = [74]
+# Set individual leds of a segment
+fourDigitIndividualLeds_cmd = [75]
+# Set left and right values with colon
+fourDigitScore_cmd = [76]
+# Analog read for n seconds
+fourDigitAnalogRead_cmd = [77]
+# Entire display on
+fourDigitAllOn_cmd = [78]
+# Entire display off
+fourDigitAllOff_cmd = [79]
+
+# This allows us to be more specific about which commands contain unused bytes
+unused = 0
 
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
@@ -90,7 +122,7 @@ def read_i2c_block(address):
 
 # Arduino Digital Read
 def digitalRead(pin):
-	write_i2c_block(address, dRead_cmd + [pin, 0, 0])
+	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
 	time.sleep(.1)
 	n = read_i2c_byte(address)
 	return n
@@ -98,22 +130,22 @@ def digitalRead(pin):
 
 # Arduino Digital Write
 def digitalWrite(pin, value):
-	write_i2c_block(address, dWrite_cmd + [pin, value, 0])
+	write_i2c_block(address, dWrite_cmd + [pin, value, unused])
 	return 1
 
 
 # Setting Up Pin mode on Arduino
 def pinMode(pin, mode):
 	if mode == "OUTPUT":
-		write_i2c_block(address, pMode_cmd + [pin, 1, 0])
+		write_i2c_block(address, pMode_cmd + [pin, 1, unused])
 	elif mode == "INPUT":
-		write_i2c_block(address, pMode_cmd + [pin, 0, 0])
+		write_i2c_block(address, pMode_cmd + [pin, 0, unused])
 	return 1
 
 
 # Read analog value from Pin
 def analogRead(pin):
-	bus.write_i2c_block_data(address, 1, aRead_cmd + [pin, 0, 0])
+	bus.write_i2c_block_data(address, 1, aRead_cmd + [pin, unused, unused])
 	time.sleep(.1)
 	bus.read_byte(address)
 	number = bus.read_i2c_block_data(address, 1)
@@ -122,7 +154,7 @@ def analogRead(pin):
 
 # Write PWM
 def analogWrite(pin, value):
-	write_i2c_block(address, aWrite_cmd + [pin, value, 0])
+	write_i2c_block(address, aWrite_cmd + [pin, value, unused])
 	return 1
 
 
@@ -136,7 +168,7 @@ def temp(pin):
 
 # Read value from Grove Ultrasonic
 def ultrasonicRead(pin):
-	write_i2c_block(address, uRead_cmd + [pin, 0, 0])
+	write_i2c_block(address, uRead_cmd + [pin, unused, unused])
 	time.sleep(.2)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
@@ -145,7 +177,7 @@ def ultrasonicRead(pin):
 
 # Read the firmware version
 def version():
-	write_i2c_block(address, version_cmd + [0, 0, 0])
+	write_i2c_block(address, version_cmd + [unused, unused, unused])
 	time.sleep(.1)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
@@ -154,7 +186,7 @@ def version():
 
 # Read Grove Accelerometer (+/- 1.5g) XYZ value
 def acc_xyz():
-	write_i2c_block(address, acc_xyz_cmd + [0, 0, 0])
+	write_i2c_block(address, acc_xyz_cmd + [unused, unused, unused])
 	time.sleep(.1)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
@@ -169,7 +201,7 @@ def acc_xyz():
 
 # Read from Grove RTC
 def rtc_getTime():
-	write_i2c_block(address, rtc_getTime_cmd + [0, 0, 0])
+	write_i2c_block(address, rtc_getTime_cmd + [unused, unused, unused])
 	time.sleep(.1)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
@@ -178,7 +210,7 @@ def rtc_getTime():
 
 # Read and return temperature and humidity from Grove DHT Pro
 def dht(pin, module_type):
-	write_i2c_block(address, dht_temp_cmd + [pin, module_type, 0])
+	write_i2c_block(address, dht_temp_cmd + [pin, module_type, unused])
 
 	# Delay necessary for proper reading fron DHT sensor
 	time.sleep(.6)
@@ -231,48 +263,122 @@ def dht(pin, module_type):
 
 
 # Grove LED Bar - initialise
-# begin(unsigned char pinClock, unsigned char pinData, bool greenToRed)
-def ledbar_init(pin,orientation):
-	write_i2c_block(address,ledBarInit_cmd+[pin,0,0])
+# orientation: (0 = red to green, 1 = green to red)
+def ledBar_init(pin, orientation):
+	write_i2c_block(address, ledBarInit_cmd + [pin, orientation, unused])
 	return 1
 
 # Grove LED Bar - set orientation
-# setGreenToRed(bool greenToRed)
-def ledbar_orientation(pin,orientation):
-	write_i2c_block(address,ledBarOrient_cmd+[pin,orientation,0])
+# orientation: (0 = red to green,  1 = green to red)
+def ledBar_orientation(pin, orientation):
+	write_i2c_block(address, ledBarOrient_cmd + [pin, orientation, unused])
 	return 1
 
 # Grove LED Bar - set level
-# setLevel(unsigned char level)
-def ledbar_setLevel(pin,level):
-	write_i2c_block(address,ledBarLevel_cmd+[pin,level,0])
+# level: (0-10)
+def ledBar_setLevel(pin, level):
+	write_i2c_block(address, ledBarLevel_cmd + [pin, level, unused])
 	return 1
 
 # Grove LED Bar - set single led
-# setLed(unsigned char led, bool state)
-def ledbar_setLed(pin,led,state):
-	write_i2c_block(address,ledBarSetOne_cmd+[pin,led,state])
+# led: which led (1-10)
+# state: off or on (0-1)
+def ledBar_setLed(pin, led, state):
+	write_i2c_block(address, ledBarSetOne_cmd + [pin, led, state])
 	return 1
 
 # Grove LED Bar - toggle single led
-# toggleLed(unsigned char led)
-def ledbar_toggleLed(pin,led):
-	write_i2c_block(address,ledBarToggleOne_cmd+[pin,led,0])
+# led: which led (1-10)
+def ledBar_toggleLed(pin, led):
+	write_i2c_block(address, ledBarToggleOne_cmd + [pin, led, unused])
 	return 1
 
 # Grove LED Bar - set all leds
-# setBits(unsigned int bits)
-def ledbar_setBits(pin,state):
+# state: (0-1023) or (0x00-0x3FF) or (0b0000000000-0b1111111111) or (int('0000000000',2)-int('1111111111',2))
+def ledBar_setBits(pin, state):
 	byte1 = state & 255
 	byte2 = state >> 8
-	write_i2c_block(address,ledBarSet_cmd+[pin,byte1,byte2])
+	write_i2c_block(address, ledBarSet_cmd + [pin, byte1, byte2])
 	return 1
 
 # Grove LED Bar - get current state
-# getBits()
-def ledbar_getBits(pin):
-	write_i2c_block(address,ledBarGet_cmd+[pin,0,0])
+# state: (0-1023) a bit for each of the 10 LEDs
+def ledBar_getBits(pin):
+	write_i2c_block(address, ledBarGet_cmd + [pin, unused, unused])
 	time.sleep(.2)
 	read_i2c_byte(0x04)
 	block = read_i2c_block(0x04)
 	return block[1] ^ (block[2] << 8)
+
+
+# Grove 4 Digit Display - initialise
+def fourDigit_init(pin):
+	write_i2c_block(address, fourDigitInit_cmd + [pin, unused, unused])
+	return 1
+
+# Grove 4 Digit Display - set numeric value with or without leading zeros
+# value: (0-65535) or (0000-FFFF)
+def fourDigit_number(pin, value, leading_zero):
+	# split the value into two bytes so we can render 0000-FFFF on the display
+	byte1 = value & 255
+	byte2 = value >> 8
+	# separate commands to overcome current 4 bytes per command limitation
+	if (leading_zero):
+		write_i2c_block(address, fourDigitValue_cmd + [pin, byte1, byte2])
+	else:
+		write_i2c_block(address, fourDigitValueZeros_cmd + [pin, byte1, byte2])
+	time.sleep(.05)
+	return 1
+
+# Grove 4 Digit Display - set brightness
+# brightness: (0-7)
+def fourDigit_brightness(pin, brightness):
+	# not actually visible until next command is executed
+	write_i2c_block(address, fourDigitBrightness_cmd + [pin, brightness, unused])
+	time.sleep(.05)
+	return 1
+
+# Grove 4 Digit Display - set individual segment (0-9,A-F)
+# segment: (0-3)
+# value: (0-15) or (0-F)
+def fourDigit_digit(pin, segment, value):
+	write_i2c_block(address, fourDigitIndividualDigit_cmd + [pin, segment, value])
+	time.sleep(.05)
+	return 1
+
+# Grove 4 Digit Display - set 7 individual leds of a segment
+# segment: (0-3)
+# leds: (0-255) or (0-0xFF) one bit per led, segment 2 is special, 8th bit is the colon
+def fourDigit_segment(pin, segment, leds):
+	write_i2c_block(address, fourDigitIndividualLeds_cmd + [pin, segment, leds])
+	time.sleep(.05)
+	return 1
+
+# Grove 4 Digit Display - set left and right values (0-99), with leading zeros and a colon
+# left: (0-255) or (0-FF)
+# right: (0-255) or (0-FF)
+# colon will be lit
+def fourDigit_score(pin, left, right):
+	write_i2c_block(address, fourDigitScore_cmd + [pin, left, right])
+	time.sleep(.05)
+	return 1
+
+# Grove 4 Digit Display - display analogRead value for n seconds, 4 samples per second
+# analog: analog pin to read
+# duration: analog read for this many seconds
+def fourDigit_monitor(pin, analog, duration):
+	write_i2c_block(address, fourDigitAnalogRead_cmd + [pin, analog, duration])
+	time.sleep(duration + .05)
+	return 1
+
+# Grove 4 Digit Display - turn entire display on (88:88)
+def fourDigit_on(pin):
+	write_i2c_block(address, fourDigitAllOn_cmd + [pin, unused, unused])
+	time.sleep(.05)
+	return 1
+
+# Grove 4 Digit Display - turn entire display off
+def fourDigit_off(pin):
+	write_i2c_block(address, fourDigitAllOff_cmd + [pin, unused, unused])
+	time.sleep(.05)
+	return 1
