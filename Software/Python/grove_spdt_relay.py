@@ -8,6 +8,10 @@ import grovepi
 # SIG,NC,VCC,GND
 relay = 4
 
+# Relay is both normally open and normally closed.
+# When the coil is energised, they will both flip.
+# LED will illuminate when normally open is closed (and normally closed is open).
+
 grovepi.pinMode(relay,"OUTPUT")
 
 while True:

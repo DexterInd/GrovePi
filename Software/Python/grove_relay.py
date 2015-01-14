@@ -8,6 +8,8 @@ import grovepi
 # SIG,NC,VCC,GND
 relay = 4
 
+# Relay is normally open. LED will illuminate when closed and you will hear a definitive click sound
+
 grovepi.pinMode(relay,"OUTPUT")
 
 while True:
