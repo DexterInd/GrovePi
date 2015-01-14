@@ -1,14 +1,14 @@
-# GrovePi + Grove Dry Reed Relay
-# http://www.seeedstudio.com/wiki/Grove_-_Dry-Reed_Relay
+# GrovePi + Grove Relay
+# http://www.seeedstudio.com/wiki/Grove_-_Relay
 
 import time
 import grovepi
 
-# Connect the Grove Dry Reed Relay to digital port D4
+# Connect the Grove Relay to digital port D4
 # SIG,NC,VCC,GND
 relay = 4
 
-# Relay is normally open. LED will illuminate when closed and there is no clicking sound
+# Relay is normally open. LED will illuminate when closed and you will hear a definitive click sound
 
 grovepi.pinMode(relay,"OUTPUT")
 
