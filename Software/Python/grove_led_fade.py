@@ -10,6 +10,12 @@ import grovepi
 # SIG,NC,VCC,GND
 led = 5
 
+# Digital ports that support Pulse Width Modulation (PWM)
+# D3, D5, D6
+
+# Digital ports that do not support PWM
+# D2, D4, D7, D8
+
 grovepi.pinMode(led,"OUTPUT")
 time.sleep(1)
 i = 0
