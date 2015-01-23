@@ -88,7 +88,7 @@ void loop()
     {
       b[1] = 1;
       b[2] = 2;
-      b[3] = 1;
+      b[3] = 2;
     }
     //Accelerometer x,y,z, read
     if(cmd[0]==20)
