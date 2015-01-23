@@ -1,10 +1,10 @@
 # grovepi.py
-# v1.2.1
+# v1.2.2
 # This file provides the basic functions for using the GrovePi
 #
 # Karan Nayan
 # Initial Date: 13 Feb 2014
-# Last Updated: 30 Dec 2014
+# Last Updated: 22 Jan 2015
 # http://www.dexterindustries.com/
 #
 # These files have been made available online through
