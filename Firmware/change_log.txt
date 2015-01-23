@@ -3,3 +3,17 @@ v 1.1
 	*DHT, ultrasonic, RTC code added
 	*Support for multiple modules for same type added (Not tested)
 	*Protocol made more robust
+
+v 1.2.0
+29 Dec 2014
+	*Grove LED Bar added
+	*Firmware version made available
+
+v 1.2.1
+30 Dec 2014
+	*Grove 4 Digit Display added
+
+v 1.2.2
+22 Jan 2015
+	*Grove Chainable RGB LED added
+	*Ability to persist a RGB color in memory for later use
