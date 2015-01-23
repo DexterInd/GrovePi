@@ -38,10 +38,10 @@ Binary sketch size: 14,504 bytes (of a 32,256 byte maximum)
 | 4 digit display analog read         | 77    | pin      | analog pin  | seconds      | Display analog read for n seconds, 4 samples per second |
 | 4 digit display on                  | 78    | pin      | _unused_    | _unused_     | Turn the entire display on                              |
 | 4 digit display off                 | 79    | pin      | _unused_    | _unused_     | Turn the entire display off                             |
-| Store RGB color                     | 90    | red      | green       | blue         | Stores a color for later use                            |
+| Store RGB color                     | 90    | red      | green       | blue         | Store a color for later use                             |
 | Chainable RGB init                  | 91    | pin      | num leds    | _unused_     | Initialise a chain of one or more RGB LEDs              |
-| Chainable RGB test pattern          | 92    | pin      | num leds    | test color   | Sets all LEDs to W, R, G, B, C, M, Y, K                 |
-| Chainable RGB set LEDs with pattern | 93    | pin      | pattern     | which led    | Set color using pattern: 0 this LED only, 1: all except this, 2: this and inwards, 3: this and outwards |
+| Chainable RGB test pattern          | 92    | pin      | num leds    | test color   | Set all LEDs to white, red, green, blue, cyan, magenta, yellow or black using a combination of 3 RGB bits |
+| Chainable RGB set LEDs with pattern | 93    | pin      | pattern     | which led    | Set color using pattern: 0 this LED only, 1: all except this, 2: this and all inwards, 3: this and all outwards |
 | Chainable RGB set LEDs with modulo  | 94    | pin      | offset      | divisor      | Set color on all LEDs >= offset when mod remainder is 0 |
 | Chainable RGB set level             | 95    | pin      | level       | reverse      | Set color on all LEDs <= level, outwards unless reverse |
 
@@ -53,3 +53,4 @@ Binary sketch size: 14,504 bytes (of a 32,256 byte maximum)
 * [DS1307](https://github.com/Seeed-Studio/RTC_DS1307)
 * [Grove_LED_bar](https://github.com/Seeed-Studio/Grove_LED_Bar)
 * [TM1637](https://github.com/mcauser/TM1637-led-driver-7-segment)
+* [Chainable_RGB_LED](https://github.com/mcauser/Grove-Chainable-RGB-LED)
