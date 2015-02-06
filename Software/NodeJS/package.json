@@ -1,0 +1,30 @@
+{
+  "name": "node-grovepi",
+  "description": "JavaScript's GrovePi library.",
+  "homepage": "",
+  "keywords": [
+    "grovepi",
+    "robot",
+    "gpio",
+    "i2c"
+  ],
+  "author": "Marcello Barile <marcello.barile@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/marcellobarile/GrovePi.git"
+  },
+  "main": "grovepi.js",
+  "version": "1.0.0",
+  "devDependencies": {
+    "i2c": "0.1.6",
+    "sleep": "1.2.0",
+    "buffertools": "2.1.2",
+    "async": "0.9.0",
+    "npmlog": "1.1.0"
+  },
+  "files": [
+    "grovepi.js",
+    "grovepi.commands.js",
+    "LICENSE"
+  ]
+}
