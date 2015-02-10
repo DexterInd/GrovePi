@@ -795,7 +795,7 @@ var self = module.exports = {
       /*
       self.queue.add({
         'funcName' : 'storeColor',
-        'pin'      : pin,
+        'pin'      : -1,
         'args'     : [].slice.call(arguments)
       })
       */
