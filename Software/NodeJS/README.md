@@ -13,22 +13,15 @@ These files have been made available online through a [Creative Commons Attribut
 ## Quick start
 
 Before to start you should install Node.js on your RaspberryPi and clone the repo on your local environment. 
-Be sure to have npm installed and then you can proceed installing the dependencies.
+Be sure to have npm installed and then you can proceed installing the package.
 
 Go inside your Node.js application folder and type
 ```bash
-$ npm install i2c 
-$ npm install sleep
-$ npm install buffertools
-$ npm install async
-$ npm install npmlog
+$ npm install node-grovepi
 ```
-
-There is no npm module available yet for the GrovePi Node.js library but you can copy/paste the grovepi.js and grovepi.commands.js inside your project's folder,
-then you can include it as usual:
-
+Now you can include the module inside your application as usual:
 ```javascript
-var grovepi = require(YOUR_LIB_DIRECTORY + '/grovepi')
+var grovepi = require('node-grovepi')
 ```
 
 Once the module has been loaded you can start using it in two ways:
