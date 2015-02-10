@@ -59,6 +59,20 @@ module.exports = {
   // Entire display off
   , fourDigitAllOff                             : [79]
 
+  // Grove Chainable RGB LED commands
+  // Store color for later use
+  , storeColor                                  : [90]
+  // Initialise
+  , chainableRgbLedInit                         : [91]
+  // Initialise and test with a simple color
+  , chainableRgbLedTest                         : [92]
+  // Set one or more leds to the stored color by pattern
+  , chainableRgbLedSetPattern                   : [93]
+  // Set one or more leds to the stored color by modulo
+  , chainableRgbLedSetModulo                    : [94]
+  // Sets leds similar to a bar graph, reversible
+  , chainableRgbLedSetLevel                     : [95]
+
   // This allows us to be more specific about which commands contain unused bytes
   , unused                                      : 0
 };

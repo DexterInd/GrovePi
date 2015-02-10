@@ -790,6 +790,126 @@ var self = module.exports = {
     return self
   },
 
+  storeColor: function(red, green, blue, callback) {
+    if (isBoardBusy) {
+      /*
+      self.queue.add({
+        'funcName' : 'storeColor',
+        'pin'      : pin,
+        'args'     : [].slice.call(arguments)
+      })
+      */
+      return self
+    }
+    isBoardBusy = true
+
+    self.write_i2c_block(cmd.storeColor.concat([red, green, blue]))
+    self.utils.wait(500)
+    callback(trueRet)
+
+    return self
+  },
+
+  chainableRgbLed_init: function(pin, numLeds, callback) {
+    if (isBoardBusy) {
+      /*
+      self.queue.add({
+        'funcName' : 'chainableRgbLed_init',
+        'pin'      : pin,
+        'args'     : [].slice.call(arguments)
+      })
+      */
+      return self
+    }
+    isBoardBusy = true
+
+    self.write_i2c_block(cmd.chainableRgbLedInit.concat([pin, numLeds, cmd.unused]))
+    self.utils.wait(500)
+    callback(trueRet)
+
+    return self
+  },
+
+  chainableRgbLed_test: function(pin, numLeds, testColor, callback) {
+    if (isBoardBusy) {
+      /*
+      self.queue.add({
+        'funcName' : 'chainableRgbLed_test',
+        'pin'      : pin,
+        'args'     : [].slice.call(arguments)
+      })
+      */
+      return self
+    }
+    isBoardBusy = true
+
+    self.write_i2c_block(cmd.chainableRgbLedTest.concat([pin, numLeds, testColor]))
+    self.utils.wait(500)
+    callback(trueRet)
+
+    return self
+  },
+
+  chainableRgbLed_pattern: function(pin, pattern, whichLed, callback) {
+    if (isBoardBusy) {
+      /*
+      self.queue.add({
+        'funcName' : 'chainableRgbLed_pattern',
+        'pin'      : pin,
+        'args'     : [].slice.call(arguments)
+      })
+      */
+      return self
+    }
+    isBoardBusy = true
+
+    self.write_i2c_block(cmd.chainableRgbLedSetPattern.concat([pin, pattern, whichLed]))
+    self.utils.wait(500)
+    callback(trueRet)
+
+    return self
+  },
+
+  chainableRgbLed_modulo: function(pin, offset, divisor, callback) {
+    if (isBoardBusy) {
+      /*
+      self.queue.add({
+        'funcName' : 'chainableRgbLed_modulo',
+        'pin'      : pin,
+        'args'     : [].slice.call(arguments)
+      })
+      */
+      return self
+    }
+    isBoardBusy = true
+
+    self.write_i2c_block(cmd.chainableRgbLedSetModulo.concat([pin, offset, divisor]))
+    self.utils.wait(500)
+    callback(trueRet)
+
+    return self
+  },
+
+  chainableRgbLed_setLevel: function(pin, level, reverse, callback) {
+    if (isBoardBusy) {
+      /*
+      self.queue.add({
+        'funcName' : 'chainableRgbLed_setLevel',
+        'pin'      : pin,
+        'args'     : [].slice.call(arguments)
+      })
+      */
+      return self
+    }
+    isBoardBusy = true
+
+    self.write_i2c_block(cmd.chainableRgbLedSetLevel.concat([pin, level, reverse]))
+    self.utils.wait(500)
+    callback(trueRet)
+
+    return self
+  },
+
   /*
    *
    * Utils functions
