@@ -649,7 +649,7 @@ var self = module.exports = {
     return self
   },
 
-  fourDigit_brightness: function(ping, brightness, callback) {
+  fourDigit_brightness: function(pin, brightness, callback) {
     if (isBoardBusy) {
       /*
       self.queue.add({
