@@ -49,10 +49,10 @@ var self = module.exports = {
       isHalt = false
       device = i2c1Path
     } else {
-      var err = new Error('ERROR: GrovePI could not determine your i2c device')
+      var err = new Error('GrovePI could not determine your i2c device')
       isHalt = true
+      self.utils.debug(err)
       if (typeof opts.onError == 'function') {
-        self.utils.debug(err)
         opts.onError(err)
       }
     }
@@ -117,7 +117,7 @@ var self = module.exports = {
     return bus.readByte(function(err, res) {
       isBoardBusy = false
 
-      if (err) {
+      if (err != null) {
         self.utils.debug(err)
         return falseRet
       } else {
@@ -142,7 +142,7 @@ var self = module.exports = {
     return bus.readBytes(i2cCmd, len, function(err, res) {
       isBoardBusy = false
 
-      if (err) {
+      if (err != null) {
         self.utils.debug(err)
         return falseRet
       } else {
@@ -203,7 +203,6 @@ var self = module.exports = {
     bus.writeBytes(i2cCmd, cmd.aRead.concat([pin, cmd.unused, cmd.unused]), function onBusRes(err) {
       if (err != null) {
         callback(falseRet)
-        isBoardBusy = false
         self.utils.debug(err)
         return
       }
@@ -211,7 +210,6 @@ var self = module.exports = {
       bus.readByte(function onReadByte(err, res) {
         if (err != null) {
           callback(falseRet)
-          isBoardBusy = false
           self.utils.debug(err)
           return
         }
@@ -220,7 +218,6 @@ var self = module.exports = {
           if (err) {
             self.utils.debug(err)
             callback(falseRet)
-            isBoardBusy = false
             return falseRet
           }
 
