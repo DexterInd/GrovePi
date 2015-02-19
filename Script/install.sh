@@ -1,6 +1,4 @@
 #! /bin/bash
-
-#! /bin/bash
 echo -e "\E[32m"
 echo "  _____            _                                ";
 echo " |  __ \          | |                               ";
@@ -111,6 +109,13 @@ else
 	echo spi-dev >> /etc/modules
 	echo "spi-dev added"
 fi
+
+echo " "
+echo "Making I2C changes in /boot/config.txt . . ."
+echo "================================================"
+
+echo dtparam=i2c1=on >> /boot/config.txt
+echo dtparam=i2c_arm=on >> /boot/config.txt
 
 #Adding ARDUINO setup files
 echo " "
