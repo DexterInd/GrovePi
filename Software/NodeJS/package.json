@@ -14,7 +14,7 @@
     "url": "git://github.com/marcellobarile/GrovePi.git"
   },
   "main": "grovepi.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
     "i2c": "0.1.6",
     "sleep": "1.2.0",
