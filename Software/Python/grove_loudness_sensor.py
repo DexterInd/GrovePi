@@ -8,8 +8,6 @@ import grovepi
 # SIG,NC,VCC,GND
 loudness_sensor = 0
 
-grovepi.pinMode(loudness_sensor,"INPUT")
-
 while True:
     try:
         # Read the sound level
