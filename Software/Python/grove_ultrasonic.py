@@ -10,7 +10,7 @@ ultrasonic_ranger = 4
 while True:
     try:
         # Read distance value from Ultrasonic
-        print ultrasonicRead(ultrasonic_ranger)
+        print grovepi.ultrasonicRead(ultrasonic_ranger)
 
     except TypeError:
         print "Error"
