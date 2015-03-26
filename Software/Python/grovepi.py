@@ -1,16 +1,22 @@
-# grovepi.py
+#!/usr/bin/env python
+#
+# GrovePi Python library
 # v1.2.2
+#
 # This file provides the basic functions for using the GrovePi
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
 #
 # Karan Nayan
 # Initial Date: 13 Feb 2014
 # Last Updated: 22 Jan 2015
 # http://www.dexterindustries.com/
-#
-# These files have been made available online through
-# a Creative Commons Attribution-ShareAlike 3.0  license.
-# (http://creativecommons.org/licenses/by-sa/3.0/)
-###############################################################################
+
 import smbus
 import time
 import math

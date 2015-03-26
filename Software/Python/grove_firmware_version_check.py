@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the analog read command to read analog sensor values
+# GrovePi Example for checking the firmware for the GrovePi
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -8,18 +8,14 @@
 #
 # LICENSE: 
 # These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
-import time
+#
+# NOTE: If you get a version of 255.255.255, they try running the script again, if the issue still persists then you are using an old deprecated firmware
 import grovepi
 
-#Sensor connected to A0 Port 
-sensor = 1
-grovepi.pinMode(sensor,"INPUT")
-while True:
-    try:
-        sensor_value = grovepi.analogRead(sensor)
+try:
+    print "GrovePi has firmware version:", grovepi.version()
 
-        print "sensor_value =", sensor_value
-        time.sleep(.5)
-
-    except IOError:
-        print "Error"
+except KeyboardInterrupt:
+    print "KeyboardInterrupt"
+except IOError:
+    print "Error"

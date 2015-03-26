@@ -1,11 +1,18 @@
-# grove_i2c_oled_96x96.py
+#!/usr/bin/env python
+#
+# GrovePi library for the basic functions of Grove 96x96 OLED (http://www.seeedstudio.com/depot/Grove-OLED-Display-096-p-824.html)
 # v1.0
-# This library is for the basic functions of Grove 96x96 OLED
-# http://www.seeedstudio.com/depot/Grove-OLED-Display-096-p-824.html
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#
 # Karan Nayan
 # Initial Date: 5 Mar 2014
 # Last Updated: 5 Mar 2014
-# http://www.dexterindustries.com/
 #
 # Based on the Arduino library "SeeedGrayOLED.cpp - SSD1327 Gray OLED Driver Library"
 # Seeed Technology Inc.
@@ -24,7 +31,7 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#########################################################################
+
 import smbus
 import time
 import math

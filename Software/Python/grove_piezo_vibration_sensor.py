@@ -1,10 +1,18 @@
-# GrovePi + Grove Piezo Vibration Sensor
-# http://www.seeedstudio.com/wiki/Grove-_Piezo_Vibration_Sensor
+#!/usr/bin/env python
+#
+# GrovePi Example for using the Grove Piezo Vibration Sensor (http://www.seeedstudio.com/wiki/Grove-_Piezo_Vibration_Sensor)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#
+# NOTE: The sensitivity can be adjusted by the onboard potentiometer
 
 import time
 import grovepi
-
-# The sensitivity can be adjusted by the onboard potentiometer
 
 # Connect the Grove Piezo Vibration Sensor to analog port A0
 # OUT,NC,VCC,GND

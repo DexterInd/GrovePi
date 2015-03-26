@@ -1,7 +1,15 @@
-# GrovePi + Grove 4 Digit Display
-# http://www.seeedstudio.com/wiki/Grove_-_4-Digit_Display
-
-# 4x red 7 segment display with colon and 8 luminance levels, but no decimal points
+#!/usr/bin/env python
+#
+# GrovePi Example for using the Grove 4 Digit Display ( http://www.seeedstudio.com/wiki/Grove_-_4-Digit_Display)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#
+# NOTE: 4x red 7 segment display with colon and 8 luminance levels, but no decimal points
 
 import time
 import grovepi

@@ -1,17 +1,19 @@
 #!/usr/bin/env python
-########################################################################                                                                  
-# This example is for reading the data from the Grove GPS Module http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130
 #
-# http://www.dexterindustries.com/GrovePi                                                               
+# GrovePi Example for using the Grove GPS Module http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#                                                           
 # History
 # ------------------------------------------------
 # Author     Date      		Comments
 # Karan      21 Aug 14 		Initial Authoring
-# 			                                                         
-# These files have been made available online through a Creative Commons Attribution-ShareAlike 3.0  license.
-# (http://creativecommons.org/licenses/by-sa/3.0/)           
-#
-########################################################################
+
 import serial, time
 import smbus
 import math

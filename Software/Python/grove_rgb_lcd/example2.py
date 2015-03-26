@@ -1,7 +1,14 @@
-# GrovePi + Grove - LCD RGB Backlight
-# http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight
+#!/usr/bin/env python
 #
-# Example for using the Grove I2C color LCD
+# GrovePi Example for using the Grove - LCD RGB Backlight (http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+
 from grove_rgb_lcd import *
 
 import random
