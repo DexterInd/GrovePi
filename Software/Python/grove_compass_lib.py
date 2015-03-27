@@ -1,19 +1,22 @@
-#!/usr/bin/python
-########################################################################              
-# This library is for using the Grove Compass module witht he GrovePi                              
-# http://www.dexterindustries.com/GrovePi/        
-# Compass module: http://www.seeedstudio.com/depot/Grove-3Axis-Digital-Compass-p-759.html
-#                                                       
+#!/usr/bin/env python
+#
+# GrovePi Library for using the Grove Compass module HCM5883 (http://www.seeedstudio.com/depot/Grove-3Axis-Digital-Compass-p-759.html)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#                                               
 # History
 # ------------------------------------------------
 # Author     Date      		Comments
 # Karan      22 July 14  	Initial Authoring
-# 			                                                             
-# These files have been made available online through a Creative Commons Attribution-ShareAlike 3.0  license.
-# (http://creativecommons.org/licenses/by-sa/3.0/)           
-#
+# 	
+# NOTE:		                                                              
 # Refer to the datasheet to add additional functionality https://www.seeedstudio.com/wiki/images/4/42/HMC5883.pdf
-########################################################################
+
 import smbus
 import time
 import math

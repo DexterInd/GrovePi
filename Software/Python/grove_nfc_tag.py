@@ -1,8 +1,18 @@
-# GrovePi + Grove NFC Tag module
-# http://www.seeedstudio.com/wiki/Grove_%EF%BC%8D_NFC
-# Only currently supports basic reading and writing bytes to the onboard EEPROM, 
-# no support for locking or anything clever, that stuff shouldn't be too hard to add if you
-# read the datasheet though
+#!/usr/bin/env python
+#
+# GrovePi Example for using the Grove NFC Tag module (http://www.seeedstudio.com/wiki/Grove_%EF%BC%8D_NFC)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#
+# NOTE:
+#	Only currently supports basic reading and writing bytes to the onboard EEPROM, 
+#	no support for locking or anything clever, that stuff shouldn't be too hard to add if you
+#	read the datasheet though
 
 import time,sys
 import RPi.GPIO as GPIO

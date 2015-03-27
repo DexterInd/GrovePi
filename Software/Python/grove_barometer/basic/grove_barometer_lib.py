@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # #######################################################################
 # This library is for using the Grove Barometer module with he GrovePi
 # http://www.dexterindustries.com/GrovePi/

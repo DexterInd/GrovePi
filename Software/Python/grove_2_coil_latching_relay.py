@@ -1,10 +1,17 @@
-# GrovePi + Grove 2-Coil Latching Relay
-# http://www.seeedstudio.com/wiki/Grove_-_2-Coil_Latching_Relay
-
+#!/usr/bin/env python
+#
+# GrovePi Example for using a Grove 2-Coil Latching Relay(http://www.seeedstudio.com/wiki/Grove_-_2-Coil_Latching_Relay)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+#
+# NOTE: Contrast to the ordinary relay, this latching relay does not need continuous power to keep the state, which makes it especially low power consumption
 import time
 import grovepi
-
-# Contrast to the ordinary relay, this latching relay does not need continuous power to keep the state, which makes it especially low power consumption
 
 # Connect the Grove 2-Coil Latching Relay to digital port D4
 # SIG,NC,VCC,GND
