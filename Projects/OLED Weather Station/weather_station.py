@@ -7,6 +7,8 @@
 from grovepi import *
 from grove_oled import *
 
+import threading
+
 dht_sensor_port = 7		# Connect the DHt sensor to port 7
 
 #Start and initialize the OLED
@@ -27,7 +29,33 @@ def get_outside_weather(location = 'Bucharest,ro'):
 	weather = observation.get_weather()
 
 	return weather 
-	
+
+def update_outside_weather():
+	# This uses OpenWeatherMap via the PyOWM module; pywom module needs to be installed via pip, see https://github.com/csparpa/pyowm
+	weather = get_outside_weather() # by default location is Bucharest,ro; change it to your own
+
+	oled_setTextXY(5,1)
+	oled_putString("OUTSIDE")
+
+	oled_setTextXY(7,0)
+	oled_putString("Temp:")
+	oled_putString(str(weather.get_temperature("celsius")['temp']) + "C")
+
+	oled_setTextXY(8,0)
+	oled_putString("Hum :")
+	oled_putString(str(weather.get_humidity()) + "%")
+
+	oled_setTextXY(9,0)
+	oled_putString("Rain:")
+
+	rain = weather.get_rain()
+	if len(rain) > 0:
+		pass
+	else:
+		oled_putString("0%")
+
+	print "Weather: ", weather.get_temperature("celsius")
+	print "Humidity: ", weather.get_humidity()
 
 while True:
 	try:
@@ -36,7 +64,10 @@ while True:
 		t = str(temp)
 		h = str(hum)
 		
-		oled_setTextXY(0,1)			#Print "WEATHER" at line 1
+		#outside_thread = threading.Thread(target=update_outside_weather)
+		#outside_thread.start()		
+
+		oled_setTextXY(0,1)			#Print "INSIDE" at line 1
 		oled_putString("INSIDE")
 		
 		oled_setTextXY(2,0)			#Print "TEMP" and the temperature in line 3
@@ -47,26 +78,11 @@ while True:
 		oled_putString("Hum :")
 		oled_putString(h+"%")
 		
-		# This uses OpenWeatherMap via the PyOWM module; pywom module needs to be installed via pip, see https://github.com/csparpa/pyowm
-		weather = get_outside_weather() # by default location is Bucharest,ro; change it to your own
-		
-		print "Weather: ", weather.get_temperature("celsius")
-		print "Humidity: ", weather.get_humidity()
-
-		oled_setTextXY(5,1)
-		oled_putString("OUTSIDE")
-
-		oled_setTextXY(7,0)
-		oled_putString("Temp:")
-		oled_putString(str(weather.get_temperature("celsius")['temp']) + "C")
-		
-		oled_setTextXY(8,0)
-		oled_putString("Hum :")
-		oled_putString(str(weather.get_humidity()) + "%")
-
-		oled_setTextXY(9,0)
-		oled_putString("Rain :")
-		oled_putString(str(weather.get_rain()))
+		#outside_thread.join()
+		update_outside_weather()
 
 	except (IOError,TypeError,Exception) as e:
-		print "Error"
+		print "Error:" + str(e)
+	finally:
+		#outside_thread.join()
+		pass
