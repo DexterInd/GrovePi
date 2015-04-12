@@ -1,21 +1,29 @@
-# grovepi.py
+#!/usr/bin/env python
+#
+# GrovePi Python library
 # v1.2.2
+#
 # This file provides the basic functions for using the GrovePi
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+# LICENSE: 
+# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
 #
 # Karan Nayan
 # Initial Date: 13 Feb 2014
-# Last Updated: 22 Jan 2015
+# Last Updated: 01 Apr 2015
 # http://www.dexterindustries.com/
-#
-# These files have been made available online through
-# a Creative Commons Attribution-ShareAlike 3.0  license.
-# (http://creativecommons.org/licenses/by-sa/3.0/)
-###############################################################################
+
 import smbus
 import time
 import math
 import RPi.GPIO as GPIO
 import struct
+
+debug =0
 
 rev = GPIO.RPI_REVISION
 if rev == 2 or rev == 3:
@@ -112,7 +120,8 @@ def write_i2c_block(address, block):
 	try:
 		return bus.write_i2c_block_data(address, 1, block)
 	except IOError:
-		print "IOError"
+		if debug:
+			print "IOError"
 		return -1
 
 
@@ -121,7 +130,8 @@ def read_i2c_byte(address):
 	try:
 		return bus.read_byte(address)
 	except IOError:
-		print "IOError"
+		if debug:
+			print "IOError"
 		return -1
 
 
@@ -130,7 +140,8 @@ def read_i2c_block(address):
 	try:
 		return bus.read_i2c_block_data(address, 1)
 	except IOError:
-		print "IOError"
+		if debug:
+			print "IOError"
 		return -1
 
 
@@ -239,9 +250,9 @@ def dht(pin, module_type):
 		read_i2c_byte(address)
 		number = read_i2c_block(address)
 		if number == -1:
-			return -1
+			return [-1,-1]
 	except (TypeError, IndexError):
-		return -1
+		return [-1,-1]
 	# data returned in IEEE format as a float in 4 bytes
 	f = 0
 	# data is reversed
@@ -281,7 +292,6 @@ def dht(pin, module_type):
 	# convert back to float
 	hum = round(struct.unpack('!f', h.decode('hex'))[0], 2)
 	return [t, hum]
-
 
 # Grove LED Bar - initialise
 # orientation: (0 = red to green, 1 = green to red)

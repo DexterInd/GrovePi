@@ -5,10 +5,10 @@
 
 import setuptools
 setuptools.setup(
-	name="grovepi",
+	name="grovepi7",
 	description="Drivers and examples for using the GrovePi in Python",
 	author="Dexter Industries",
 	url="http://www.dexterindustries.com/GrovePi/",
-	py_modules=['grovepi'],
+	py_modules=['grovepi7'],
 	#install_requires=open('requirements.txt').readlines(),
 )
