@@ -248,6 +248,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -270,12 +271,13 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
 
     self.analogRead(pin, function onTemp(res) {
-      var resistance = (1023-a) * 10000 / a
+      var resistance = (1023-res) * 10000 / res
         , number = 1 / (Math.log(resistance / 10000) / 3975 + 1 / 298.15) - 273.15
 
       callback(number)
@@ -293,6 +295,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -315,6 +318,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -341,6 +345,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -363,6 +368,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -385,6 +391,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -393,10 +400,10 @@ var self = module.exports = {
     self.analogRead(pin, function onLightRead(res) {
       var number = parseInt(res)
         , resistance = -1
-      if (number <= 0)
+      if (number <= 0) {
         resistance = 0
-      else {
-        resistance = Number(parseFloat(1023 - number) * 10 / number).toFixed(2)
+      } else {
+        resistance = +(Number(parseFloat((1023 - number) * 10 / number)).toFixed(2))
       }
       callback(resistance)
     })
@@ -413,6 +420,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -442,16 +450,16 @@ var self = module.exports = {
 
     h = '0x' + tempBuf.toString('hex')
     temp = (h & 0x7fffff | 0x800000) * 1.0 / Math.pow(2,23) * Math.pow(2,  ((h>>23 & 0xff) - 127))
-    temp = Number(parseFloat(temp - 0.5).toFixed(2))
+    temp = +(Number(parseFloat(temp - 0.5).toFixed(2)))
     if (scale == self.FAHRENHEIT) {
       temp = self.utils.convertCtoF(temp)
     }
 
     h = '0x' + humBuf.toString('hex')
     hum = (h & 0x7fffff | 0x800000) * 1.0 / Math.pow(2,23) * Math.pow(2,  ((h>>23 & 0xff) - 127))
-    hum = Number(parseFloat(hum - 2).toFixed(2))
+    hum = +(Number(parseFloat(hum - 2).toFixed(2)))
 
-    heatIndex = Number(parseFloat(self.utils.computeHeatIndex(temp, hum, scale)).toFixed(2))
+    heatIndex = +(Number(parseFloat(self.utils.computeHeatIndex(temp, hum, scale)).toFixed(2)))
     // From: https://github.com/adafruit/DHT-sensor-library/blob/master/DHT.cpp
 
     callback([temp, hum, heatIndex])
@@ -468,6 +476,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -487,6 +496,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -506,6 +516,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -525,6 +536,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -544,6 +556,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -563,6 +576,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -585,6 +599,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -607,6 +622,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -626,6 +642,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -655,6 +672,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -676,6 +694,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -696,6 +715,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -716,6 +736,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -736,6 +757,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -756,6 +778,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -776,6 +799,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -796,6 +820,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -816,6 +841,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -856,6 +882,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -876,6 +903,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
@@ -896,6 +924,7 @@ var self = module.exports = {
         'args'     : [].slice.call(arguments)
       })
       */
+      callback(falseRet)
       return self
     }
     isBoardBusy = true
