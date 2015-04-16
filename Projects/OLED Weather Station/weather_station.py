@@ -89,8 +89,8 @@ while True:
         #outside_thread.join()
         update_outside_weather()
 
-        button = digitalRead(button)
-        if button == 1:
+        buttonOut = digitalRead(button)
+        if buttonOut == 1:
             oled_clearDisplay()
             time.sleep(.1)
 
