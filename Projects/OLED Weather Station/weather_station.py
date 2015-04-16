@@ -5,6 +5,7 @@ from grove_oled import *
 
 #import threading
 import time, sys
+from subprocess import call
 
 dht_sensor_port = 7        # Connect the DHt sensor to port 7
 
@@ -95,8 +96,8 @@ while True:
 
             oled_setTextXY(0, 1)
             oled_putString("GOODBYE!")
-            sys.exit(0)
-
+            #sys.exit(0)
+            call(["halt"])  # we already have sudo?
     except (IOError, TypeError, Exception) as e:
         print(("Error:" + str(e)))
     finally:
