@@ -4,17 +4,22 @@ from grovepi import *
 from grove_oled import *
 
 #import threading
-import time, sys
+import time
+import sys
 from subprocess import call
 
 dht_sensor_port = 7        # Connect the DHt sensor to port 7
 
-#Start and initialize the OLED
-oled_init()
-oled_clearDisplay()
-oled_setNormalDisplay()
-oled_setVerticalMode()
-time.sleep(.1)
+
+# Start and initialize the OLED
+def oled_reset():
+    oled_init()
+    oled_clearDisplay()
+    oled_setNormalDisplay()
+    oled_setVerticalMode()
+    time.sleep(.1)
+
+oled_reset()
 
 # Button on D3 port
 button = 3
@@ -91,13 +96,13 @@ while True:
 
         buttonOut = digitalRead(button)
         if buttonOut == 1:
-            oled_clearDisplay()
-            time.sleep(.1)
+            oled_reset()
 
             oled_setTextXY(0, 1)
             oled_putString("GOODBYE!")
-            #sys.exit(0)
-            call(["halt"])  # we already have sudo?
+
+            call(["halt"])  # we already have sudo, right?
+            sys.exit(0)
     except (IOError, TypeError, Exception) as e:
         print(("Error:" + str(e)))
     finally:
