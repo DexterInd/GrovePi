@@ -3,7 +3,8 @@
 from grovepi import *
 from grove_oled import *
 
-import threading
+#import threading
+import time, sys
 
 dht_sensor_port = 7        # Connect the DHt sensor to port 7
 
@@ -13,6 +14,10 @@ oled_clearDisplay()
 oled_setNormalDisplay()
 oled_setVerticalMode()
 time.sleep(.1)
+
+# Button on D3 port
+button = 3
+pinMode(button, "INPUT")
 
 
 def get_outside_weather(location='Bucharest,ro'):
@@ -82,6 +87,15 @@ while True:
 
         #outside_thread.join()
         update_outside_weather()
+
+        button = digitalRead(button)
+        if button == 1:
+            oled_clearDisplay()
+            time.sleep(.1)
+
+            oled_setTextXY(0, 1)
+            oled_putString("GOODBYE!")
+            sys.exit(0)
 
     except (IOError, TypeError, Exception) as e:
         print(("Error:" + str(e)))
