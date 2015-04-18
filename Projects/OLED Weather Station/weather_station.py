@@ -62,9 +62,11 @@ def update_outside_weather():
 
     rain = weather.get_rain()
     if len(rain) > 0:
-        pass
+        vol_rain = rain['3h']
+	print rain
+	oled_putString(str(vol_rain))
     else:
-        oled_putString("0%")
+        oled_putString("0")
 
     print(("Weather: ", weather.get_temperature("celsius")))
     print(("Humidity: ", weather.get_humidity()))
