@@ -42,7 +42,7 @@ def poll_shutdown_button():
         sleep(.2)
 
 
-def get_outside_weather(location='Bucharest,ro'):
+def get_outside_weather(location="Bucharest,ro""):
     import pyowm  # Do a 'sudo pip install pyowm' to get this module
 
     owm = pyowm.OWM()
@@ -66,15 +66,15 @@ def update_outside_weather():
     oled_putString("OUTSIDE")
 
     oled_setTextXY(7, 0)
-    oled_putString("Temp:")
+    oled_putString("Temp: ")
     oled_putString(str(weather.get_temperature("celsius")['temp']) + "°C")
 
     oled_setTextXY(8, 0)
-    oled_putString("Hum :")
+    oled_putString("Hum: ")
     oled_putString(str(weather.get_humidity()) + "%")
 
     oled_setTextXY(9, 0)
-    oled_putString("Rain(3h):")
+    oled_putString("Rain(3h): ")
 
     rain = weather.get_rain()
     if len(rain) > 0:
@@ -115,11 +115,11 @@ while True:
         oled_putString("INSIDE")
 
         oled_setTextXY(2, 0)       # Print "TEMP" and the temperature on line 3
-        oled_putString("Temp:")
+        oled_putString("Temp: ")
         oled_putString(t + "°C")
 
         oled_setTextXY(3, 0)       # Print "HUM :" and the humidity on line 4
-        oled_putString("Hum :")
+        oled_putString("Hum: ")
         oled_putString(h + "%")
 
         #outside_thread.join()
