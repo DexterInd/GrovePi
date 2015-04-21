@@ -67,7 +67,7 @@ def update_outside_weather():
 
     oled_setTextXY(7, 0)
     oled_putString("Temp:")
-    oled_putString(str(weather.get_temperature("celsius")['temp']) + "C")
+    oled_putString(str(weather.get_temperature("celsius")['temp']) + "°C")
 
     oled_setTextXY(8, 0)
     oled_putString("Hum :")
@@ -114,11 +114,11 @@ while True:
         oled_setTextXY(0, 1)       # Print "INSIDE" at line 1
         oled_putString("INSIDE")
 
-        oled_setTextXY(2, 0)       # Print "TEMP" and the temperature in line 3
+        oled_setTextXY(2, 0)       # Print "TEMP" and the temperature on line 3
         oled_putString("Temp:")
-        oled_putString(t + "C")
+        oled_putString(t + "°C")
 
-        oled_setTextXY(3, 0)       # Print "HUM :" and the humidity in line 4
+        oled_setTextXY(3, 0)       # Print "HUM :" and the humidity on line 4
         oled_putString("Hum :")
         oled_putString(h + "%")
 
