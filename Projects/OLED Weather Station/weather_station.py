@@ -3,7 +3,7 @@
 from grovepi import *
 from grove_oled import *
 
-#import threading
+import threading
 import time
 import sys
 from subprocess import call
@@ -24,6 +24,22 @@ oled_reset()
 # Button on D3 port
 button = 3
 pinMode(button, "INPUT")
+
+# Are in shutdown mode?
+shutdown = False
+
+
+def poll_shutdown_button():
+    global shutdown
+
+    while True:
+        buttonOut = digitalRead(button)
+        if buttonOut == 1:
+            shutdown = True
+
+            call(["shutdown -r now"])  # we already have sudo, right?
+            sys.exit(0)
+        sleep(.2)
 
 
 def get_outside_weather(location='Bucharest,ro'):
@@ -58,21 +74,34 @@ def update_outside_weather():
     oled_putString(str(weather.get_humidity()) + "%")
 
     oled_setTextXY(9, 0)
-    oled_putString("Rain:")
+    oled_putString("Rain(3h):")
 
     rain = weather.get_rain()
     if len(rain) > 0:
         vol_rain = rain['3h']
-	print rain
-	oled_putString(str(vol_rain))
+        print(rain)
+        oled_putString(str(vol_rain) + "mm")
     else:
-        oled_putString("0")
+        oled_putString("0mm")
 
     print(("Weather: ", weather.get_temperature("celsius")))
     print(("Humidity: ", weather.get_humidity()))
 
+try:
+    buttonThread = threading.Thread(target=poll_shutdown_button)
+    buttonThread.start()
+except:
+    print("Now THAT is unexpected: could not start the button thread")
+
 while True:
     try:
+        if shutdown:
+            oled_reset()
+
+            oled_setTextXY(0, 1)
+            oled_putString("GOODBYE!")
+            break
+
         # Get the temperature and Humidity from the DHT sensor
         [temp, hum] = dht(dht_sensor_port, 1)
         print(("Temp =", temp, "C\tHumidity =", hum, "%"))
@@ -96,15 +125,6 @@ while True:
         #outside_thread.join()
         update_outside_weather()
 
-        buttonOut = digitalRead(button)
-        if buttonOut == 1:
-            oled_reset()
-
-            oled_setTextXY(0, 1)
-            oled_putString("GOODBYE!")
-
-            call(["halt"])  # we already have sudo, right?
-            sys.exit(0)
     except (IOError, TypeError, Exception) as e:
         print(("Error:" + str(e)))
     finally:
