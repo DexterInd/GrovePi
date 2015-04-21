@@ -125,6 +125,8 @@ while True:
         #outside_thread.join()
         update_outside_weather()
 
+        sleep(1)  # Let's not totally kill the CPU here
+
     except (IOError, TypeError, Exception) as e:
         print(("Error:" + str(e)))
     finally:
