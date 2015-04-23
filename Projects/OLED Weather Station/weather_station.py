@@ -55,15 +55,20 @@ def get_outside_weather(location="Bucharest,ro"):
     global owm
     while weather_thread_running:
         #forecast = owm.daily_forecast(location)
+        try:
+            observation = owm.weather_at_place(location)
+            weather = observation.get_weather()
 
-        observation = owm.weather_at_place(location)
-        weather = observation.get_weather()
-
-        global weather_data
-        weather_data = {}
-        weather_data['temp'] = str(weather.get_temperature("celsius")['temp'])
-        weather_data['hum'] = str(weather.get_humidity())
-        weather_data['rain'] = weather.get_rain()
+            global weather_data
+            weather_data = {}
+            weather_data['temp'] = \
+                    str(weather.get_temperature("celsius")['temp'])
+            weather_data['hum'] = str(weather.get_humidity())
+            weather_data['rain'] = weather.get_rain()
+        except KeyboardInterrupt:
+            return
+        except Exception as e:
+            print(("OWM Error" + str(e)))
 
 
 def update_outside_weather():
@@ -145,7 +150,7 @@ def main_loop():
             print("Exiting...")
             weather_thread_running = False  # kill thread
             sys.exit(0)
-        except (IOError, TypeError, HTTPException) as e:
+        except (IOError, TypeError) as e:
             print(("Error:" + str(e)))
         finally:
             pass
