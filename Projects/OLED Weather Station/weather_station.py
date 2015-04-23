@@ -33,12 +33,10 @@ def poll_shutdown_button():
     global shutdown
 
     buttonOut = digitalRead(button)
+    	
     if buttonOut == 1:
         shutdown = True
-
-        call(["shutdown -r now"])  # we already have sudo, right?
-        sys.exit(0)
-
+ 
 import pyowm  # Do a 'sudo pip install pyowm' to get this module
 weather_data = None
 weather_thread_running = True
@@ -111,13 +109,17 @@ def main_loop():
     while True:
         try:
             poll_shutdown_button()
-
+         
             if shutdown:
                 oled_reset()
 
                 oled_setTextXY(0, 1)
                 oled_putString("GOODBYE!")
-                break
+                
+                weather_thread_running = False
+                owmThread.join()
+                call("shutdown -h now")
+		sys.exit(0)
 
             # Get the temperature and Humidity from the DHT sensor
             [temp, hum] = dht(dht_sensor_port, 1)
