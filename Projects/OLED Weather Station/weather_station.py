@@ -78,15 +78,15 @@ def update_outside_weather():
     oled_putString("OUTSIDE")
 
     oled_setTextXY(7, 0)
-    oled_putString("Temp: ")
+    oled_putString("Temp:")
     oled_putString(weather_data['temp'] + "C")
 
     oled_setTextXY(8, 0)
-    oled_putString("Hum: ")
+    oled_putString("Hum:")
     oled_putString(weather_data['hum'] + "%")
 
     oled_setTextXY(9, 0)
-    oled_putString("Rain(3h): ")
+    oled_putString("Rain(3h):")
 
     rain = weather_data['rain']
     if len(rain) > 0:
@@ -132,11 +132,11 @@ def main_loop():
             oled_putString("INSIDE")
 
             oled_setTextXY(2, 0)   # Print "TEMP" and the temperature on line 3
-            oled_putString("Temp: ")
+            oled_putString("Temp:")
             oled_putString(t + "C")
 
             oled_setTextXY(3, 0)   # Print "HUM :" and the humidity on line 4
-            oled_putString("Hum: ")
+            oled_putString("Hum:")
             oled_putString(h + "%")
 
             #outside_thread.join()
