@@ -32,14 +32,12 @@ shutdown = False
 def poll_shutdown_button():
     global shutdown
 
-    while True:
-        buttonOut = digitalRead(button)
-        if buttonOut == 1:
-            shutdown = True
+    buttonOut = digitalRead(button)
+    if buttonOut == 1:
+        shutdown = True
 
-            call(["shutdown -r now"])  # we already have sudo, right?
-            sys.exit(0)
-        time.sleep(.2)
+        call(["shutdown -r now"])  # we already have sudo, right?
+        sys.exit(0)
 
 import pyowm  # Do a 'sudo pip install pyowm' to get this module
 weather_data = None
