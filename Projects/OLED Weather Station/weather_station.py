@@ -1,3 +1,4 @@
+# coding=utf-8
 # Adapted from home_temp_hum_display.py
 
 from grovepi import *
@@ -39,10 +40,10 @@ def poll_shutdown_button():
 
             call(["shutdown -r now"])  # we already have sudo, right?
             sys.exit(0)
-        sleep(.2)
+        time.sleep(.2)
 
 
-def get_outside_weather(location="Bucharest,ro""):
+def get_outside_weather(location="Bucharest,ro"):
     import pyowm  # Do a 'sudo pip install pyowm' to get this module
 
     owm = pyowm.OWM()
@@ -125,7 +126,7 @@ while True:
         #outside_thread.join()
         update_outside_weather()
 
-        sleep(1)  # Let's not totally kill the CPU here
+        time.sleep(1)  # Let's not totally kill the CPU here
 
     except (IOError, TypeError, Exception) as e:
         print(("Error:" + str(e)))
