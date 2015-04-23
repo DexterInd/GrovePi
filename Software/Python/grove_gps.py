@@ -36,6 +36,7 @@ class GPS:
 			GPS.inp=ser.readline()
 			if GPS.inp[:6] =='$GPGGA': # GGA data , packet 1, has all the data we need
 				break
+			time.sleep(0.1)     #without the cmd program will crach
 		try:
 			ind=GPS.inp.index('$GPGGA',5,len(GPS.inp))	#Sometimes multiple GPS data packets come into the stream. Take the data only after the last '$GPGGA' is seen
 			GPS.inp=GPS.inp[ind:]
