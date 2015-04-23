@@ -77,8 +77,8 @@ def update_outside_weather():
     oled_putString(weather_data['temp'] + "C")
 
     oled_setTextXY(8, 0)
-    oled_putString("Hum: " + weather_data['hum'])
-    oled_putString(+ "%")
+    oled_putString("Hum: ")
+    oled_putString(weather_data['hum'] + "%")
 
     oled_setTextXY(9, 0)
     oled_putString("Rain(3h): ")
