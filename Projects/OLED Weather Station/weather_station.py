@@ -41,8 +41,10 @@ def poll_shutdown_button():
             sys.exit(0)
         time.sleep(.2)
 
+import pyowm  # Do a 'sudo pip install pyowm' to get this module
 weather_data = None
 weather_thread_running = True
+owm = pyowm.OWM()
 
 
 # by default location is Bucharest,ro; change it to your own
@@ -50,11 +52,9 @@ def get_outside_weather(location="Bucharest,ro"):
     # This uses OpenWeatherMap via the PyOWM module;
     # pywom module needs to be installed via pip,
     # see https://github.com/csparpa/pyowm
-    import pyowm  # Do a 'sudo pip install pyowm' to get this module
-
-    owm = pyowm.OWM()
 
     global weather_thread_running
+    global owm
     while weather_thread_running:
         #forecast = owm.daily_forecast(location)
 
