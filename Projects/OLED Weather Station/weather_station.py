@@ -1,4 +1,3 @@
-# coding=utf-8
 # Adapted from home_temp_hum_display.py
 
 from grovepi import *
@@ -68,7 +67,7 @@ def update_outside_weather():
 
     oled_setTextXY(7, 0)
     oled_putString("Temp: ")
-    oled_putString(str(weather.get_temperature("celsius")['temp']) + "°C")
+    oled_putString(str(weather.get_temperature("celsius")['temp']) + "C")
 
     oled_setTextXY(8, 0)
     oled_putString("Hum: ")
@@ -117,7 +116,7 @@ while True:
 
         oled_setTextXY(2, 0)       # Print "TEMP" and the temperature on line 3
         oled_putString("Temp: ")
-        oled_putString(t + "°C")
+        oled_putString(t + "C")
 
         oled_setTextXY(3, 0)       # Print "HUM :" and the humidity on line 4
         oled_putString("Hum: ")
