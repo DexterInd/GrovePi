@@ -65,11 +65,11 @@ def get_outside_weather(location="Bucharest,ro"):
                     str(weather.get_temperature("celsius")['temp'])
             weather_data['hum'] = str(weather.get_humidity())
             weather_data['rain'] = weather.get_rain()
-        except KeyboardInterrupt:
-            return
         except Exception as e:
             print(("OWM Error" + str(e)))
-
+	    break
+	finally:
+	    break
 
 def update_outside_weather():
     global weather_data
@@ -149,6 +149,7 @@ def main_loop():
             global weather_thread_running
             print("Exiting...")
             weather_thread_running = False  # kill thread
+            owmThread.join()
             sys.exit(0)
         except (IOError, TypeError) as e:
             print(("Error:" + str(e)))
