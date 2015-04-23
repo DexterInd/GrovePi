@@ -41,42 +41,51 @@ def poll_shutdown_button():
             sys.exit(0)
         time.sleep(.2)
 
+weather_data = None
+weather_thread_running = True
 
+
+# by default location is Bucharest,ro; change it to your own
 def get_outside_weather(location="Bucharest,ro"):
+    # This uses OpenWeatherMap via the PyOWM module;
+    # pywom module needs to be installed via pip,
+    # see https://github.com/csparpa/pyowm
     import pyowm  # Do a 'sudo pip install pyowm' to get this module
 
     owm = pyowm.OWM()
 
-    #forecast = owm.daily_forecast(location)
+    global weather_thread_running
+    while weather_thread_running:
+        #forecast = owm.daily_forecast(location)
 
-    observation = owm.weather_at_place(location)
-    weather = observation.get_weather()
+        observation = owm.weather_at_place(location)
+        weather = observation.get_weather()
 
-    return weather
+        global weather_data
+        weather_data = {}
+        weather_data['temp'] = str(weather.get_temperature("celsius")['temp'])
+        weather_data['hum'] = str(weather.get_humidity())
+        weather_data['rain'] = weather.get_rain()
 
 
 def update_outside_weather():
-    # This uses OpenWeatherMap via the PyOWM module;
-    # pywom module needs to be installed via pip,
-    # see https://github.com/csparpa/pyowm
-    weather = get_outside_weather()
-    # by default location is Bucharest,ro; change it to your own
+    global weather_data
 
     oled_setTextXY(5, 1)
     oled_putString("OUTSIDE")
 
     oled_setTextXY(7, 0)
     oled_putString("Temp: ")
-    oled_putString(str(weather.get_temperature("celsius")['temp']) + "C")
+    oled_putString(weather_data['temp'] + "C")
 
     oled_setTextXY(8, 0)
-    oled_putString("Hum: ")
-    oled_putString(str(weather.get_humidity()) + "%")
+    oled_putString("Hum: " + weather_data['hum'])
+    oled_putString(+ "%")
 
     oled_setTextXY(9, 0)
     oled_putString("Rain(3h): ")
 
-    rain = weather.get_rain()
+    rain = weather_data['rain']
     if len(rain) > 0:
         vol_rain = rain['3h']
         print(rain)
@@ -87,48 +96,61 @@ def update_outside_weather():
     print(("Weather: ", weather.get_temperature("celsius")))
     print(("Humidity: ", weather.get_humidity()))
 
-try:
-    buttonThread = threading.Thread(target=poll_shutdown_button)
-    buttonThread.start()
-except:
-    print("Now THAT is unexpected: could not start the button thread")
 
-while True:
+def main_loop():
     try:
-        if shutdown:
-            oled_reset()
+        owmThread = threading.Thread(target=get_outside_weather)
+        owmThread.start()
+    except:
+        print("Now THAT is unexpected: could not start the button thread")
 
-            oled_setTextXY(0, 1)
-            oled_putString("GOODBYE!")
+    print("Starting loop. Do a CTRL+C to halt")
+    while True:
+        try:
+            poll_shutdown_button()
+
+            if shutdown:
+                oled_reset()
+
+                oled_setTextXY(0, 1)
+                oled_putString("GOODBYE!")
+                break
+
+            # Get the temperature and Humidity from the DHT sensor
+            [temp, hum] = dht(dht_sensor_port, 1)
+            print(("Temp =", temp, "C\tHumidity =", hum, "%"))
+            t = str(temp)
+            h = str(hum)
+
+            #outside_thread = threading.Thread(target=update_outside_weather)
+            #outside_thread.start()
+
+            oled_setTextXY(0, 1)       # Print "INSIDE" at line 1
+            oled_putString("INSIDE")
+
+            oled_setTextXY(2, 0)   # Print "TEMP" and the temperature on line 3
+            oled_putString("Temp: ")
+            oled_putString(t + "C")
+
+            oled_setTextXY(3, 0)   # Print "HUM :" and the humidity on line 4
+            oled_putString("Hum: ")
+            oled_putString(h + "%")
+
+            #outside_thread.join()
+            global weather_data
+            if weather_data:
+                update_outside_weather()
+
+            time.sleep(.5)  # Let's not totally kill the CPU here
+        except KeyboardInterrupt:
+            global weather_thread_running
+            weather_thread_running = False  # kill thread
             break
+        except (IOError, TypeError, Exception) as e:
+            print(("Error:" + str(e)))
+        finally:
+            pass
 
-        # Get the temperature and Humidity from the DHT sensor
-        [temp, hum] = dht(dht_sensor_port, 1)
-        print(("Temp =", temp, "C\tHumidity =", hum, "%"))
-        t = str(temp)
-        h = str(hum)
 
-        #outside_thread = threading.Thread(target=update_outside_weather)
-        #outside_thread.start()
-
-        oled_setTextXY(0, 1)       # Print "INSIDE" at line 1
-        oled_putString("INSIDE")
-
-        oled_setTextXY(2, 0)       # Print "TEMP" and the temperature on line 3
-        oled_putString("Temp: ")
-        oled_putString(t + "C")
-
-        oled_setTextXY(3, 0)       # Print "HUM :" and the humidity on line 4
-        oled_putString("Hum: ")
-        oled_putString(h + "%")
-
-        #outside_thread.join()
-        update_outside_weather()
-
-        time.sleep(1)  # Let's not totally kill the CPU here
-
-    except (IOError, TypeError, Exception) as e:
-        print(("Error:" + str(e)))
-    finally:
-        #outside_thread.join()
-        pass
+if __name__ == '__main__':
+    main_loop()
