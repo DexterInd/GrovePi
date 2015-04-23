@@ -91,8 +91,8 @@ def update_outside_weather():
     else:
         oled_putString("0mm")
 
-    print(("Weather: ", weather.get_temperature("celsius")))
-    print(("Humidity: ", weather.get_humidity()))
+    print(("Weather: ", weather_data['temp']))
+    print(("Humidity: ", weather_data['hum']))
 
 
 def main_loop():
@@ -142,9 +142,10 @@ def main_loop():
             time.sleep(.5)  # Let's not totally kill the CPU here
         except KeyboardInterrupt:
             global weather_thread_running
+            print("Exiting...")
             weather_thread_running = False  # kill thread
-            break
-        except (IOError, TypeError, Exception) as e:
+            sys.exit(0)
+        except (IOError, TypeError, HTTPException) as e:
             print(("Error:" + str(e)))
         finally:
             pass
