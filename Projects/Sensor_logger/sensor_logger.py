@@ -65,7 +65,7 @@ def write_file(str_log_name ,str_log_write):
         file.close()
 
     except IOError:
-        #print("File ERROR")
+        print("File ERROR")
         write_file(str_log_name ,str_log_write)
 
 def writeMinMax():
@@ -78,6 +78,15 @@ def writeMinMax():
         write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
                    "HOUR: %d MIN / MAX TEMPS: ||| IN: %.2f / %.2f ||| OUT: %.2f / %.2f \n" %(i_current_hour,f_temp_in_min,f_temp_out_max,f_temp_out_min,f_temp_out_max))
         init()
+
+def writeSingleValues(temp_in, temp_out ,hum_in ,hum_out ,light ,last_sound):
+    write_file("values/temp_in.txt", "%.2f" %(temp_in))
+    write_file("values/temp_out.txt", "%.2f" %(temp_out))
+    write_file("values/hum_in.txt", "%d" %(hum_in))
+    write_file("values/hum_out.txt", "%d" %(hum_out))
+    write_file("values/light.txt", "%d" %(light))
+    write_file("values/last_sound.txt", "%d" %(last_sound))
+
 
 init()
 
@@ -111,6 +120,8 @@ while True:
 
         write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
                               time_now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %.0f || OUT: Temp: %.2f, Hum: %.0f || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,i_last_sound))
+ 
+        writeSingleValues(t_in, t_out, h_in, h_out, light, last_sound)
 
         writeMinMax()
 		
