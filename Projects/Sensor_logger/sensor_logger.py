@@ -24,7 +24,6 @@ global i_current_hour
 
 def init():
     global i_last_sound
-
     global f_temp_out_max
     global f_temp_in_min
 
@@ -68,9 +67,20 @@ def write_file(str_log_name ,str_log_write):
         print("File ERROR")
         write_file(str_log_name ,str_log_write)
 
+def write_val_file(str_log_name ,str_log_write):
+      try:
+
+        file = open(str_log_name, "w")
+        file.write(str_log_write)
+        file.close()
+
+      except IOError:
+        print("Value File ERROR")
+        write_file(str_log_name ,str_log_write)
+
+
 def writeMinMax():
     global i_current_hour
-
     time_now = datetime.datetime.now()
 
     if i_current_hour != time_now.hour:
@@ -80,12 +90,12 @@ def writeMinMax():
         init()
 
 def writeSingleValues(temp_in, temp_out ,hum_in ,hum_out ,light ,last_sound):
-    write_file("values/temp_in.txt", "%.2f" %(temp_in))
-    write_file("values/temp_out.txt", "%.2f" %(temp_out))
-    write_file("values/hum_in.txt", "%d" %(hum_in))
-    write_file("values/hum_out.txt", "%d" %(hum_out))
-    write_file("values/light.txt", "%d" %(light))
-    write_file("values/last_sound.txt", "%d" %(last_sound))
+    write_val_file("values/temp_in", "%.2f" %(temp_in))
+    write_val_file("values/temp_out", "%.2f" %(temp_out))
+    write_val_file("values/hum_in", "%d" %(hum_in))
+    write_val_file("values/hum_out", "%d" %(hum_out))
+    write_val_file("values/light", "%d" %(light))
+    write_val_file("values/last_sound", "%d" %(last_sound))
 
 
 init()
@@ -112,6 +122,7 @@ while True:
 	
         light = grovepi.analogRead(light_sensor)
 
+
         sound_level = grovepi.analogRead(sound_sensor)
         if sound_level > 0:
             i_last_sound = sound_level
@@ -120,8 +131,8 @@ while True:
 
         write_file("logs/log_%d_%d_%d.txt" %(time_now.day,time_now.month,time_now.year),
                               time_now.isoformat() + " || IN: " +  "Temp: %.2f, Hum: %.0f || OUT: Temp: %.2f, Hum: %.0f || Light: %d || Sound: %d \n" %(t_in,h_in,t_out,h_out,light,i_last_sound))
- 
-        writeSingleValues(t_in, t_out, h_in, h_out, light, last_sound)
+	 
+        writeSingleValues(t_in, t_out, h_in, h_out, light, i_last_sound)
 
         writeMinMax()
 		
