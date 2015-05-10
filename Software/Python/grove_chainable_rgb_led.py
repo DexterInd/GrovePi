@@ -21,7 +21,7 @@ pin = 7
 # First LED input socket connected to GrovePi, output socket connected to second LED input and so on
 numleds = 10     #If you only plug 1 LED, change 10 to 1
 
-grovepi.pinMode(chain,"OUTPUT")
+grovepi.pinMode(pin,"OUTPUT")
 time.sleep(1)
 
 # Chainable RGB LED methods
