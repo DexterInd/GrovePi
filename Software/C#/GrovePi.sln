@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrovePi", "GrovePi\GrovePi.csproj", "{A667742A-B887-4B46-8EC1-C671E8BEC5E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Driver", "Driver\Driver.csproj", "{6D24EAD0-AF01-4870-B042-FC782A973C46}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Release|ARM = Release|ARM
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Debug|ARM.Build.0 = Debug|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Release|ARM.ActiveCfg = Release|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Release|ARM.Build.0 = Release|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|ARM.ActiveCfg = Debug|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|ARM.Build.0 = Debug|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|ARM.Deploy.0 = Debug|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|ARM.ActiveCfg = Release|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|ARM.Build.0 = Release|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|ARM.Deploy.0 = Release|ARM
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
