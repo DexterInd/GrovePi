@@ -10,7 +10,7 @@ util.inherits(AnalogSensor, Sensor);
 AnalogSensor.prototype = new AnalogSensor()
 
 AnalogSensor.prototype.read = function(length) {
-  if (typeof len == 'undefined')
+  if (typeof length == 'undefined')
     length = this.board.BYTESLEN
 
   var writeRet = this.board.writeBytes(commands.aRead.concat([this.pin, commands.unused, commands.unused]))

@@ -5,8 +5,6 @@ var log         = require('npmlog')
 var sleep       = require('sleep')
 var fs          = require('fs')
 var bufferTools = require('buffertools').extend()
-var sleep       = require('sleep')
-var log         = require('npmlog')
 var commands    = require('./commands')
 
 var I2CCMD    = 1
@@ -39,9 +37,11 @@ function GrovePi(opts) {
   else
     this.debugMode = debugMode
 
+  // TODO: Dispatch an error event instead
   if (typeof opts.onError == 'function')
     onError = opts.onError
 
+  // TODO: Dispatch a init event instead
   if (typeof opts.onInit == 'function')
     onInit = opts.onInit
 
@@ -179,9 +179,9 @@ GrovePi.prototype.version = function() {
   if (write) {
     this.wait(100)
     this.readByte()
-    var number = this.readBytes()
-    if (typeof number == 'object')
-      return (number[1] + '.' + number[2] + '.' + number[3])
+    var bytes = this.readBytes()
+    if (typeof bytes == 'object')
+      return (bytes[1] + '.' + bytes[2] + '.' + bytes[3])
     else
       return false
   } else {

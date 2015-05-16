@@ -23,7 +23,7 @@ var isEqual = function(a, b) {
   }
 }
 
-util.inherits(Sensor, EventEmitter);
+util.inherits(Sensor, EventEmitter)
 
 Sensor.prototype.read = function() {}
 Sensor.prototype.write = function() {}
