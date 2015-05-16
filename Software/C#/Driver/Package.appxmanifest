@@ -9,14 +9,14 @@
 
   <Identity
     Name="GrovePi"
-    Publisher="CN=JonathanRobson"
+    Publisher="CN=JonathanRobson/PaulBinder"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ff75bed8-52f0-4a6c-bde0-ae9c4afb4f44" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Driver</DisplayName>
-    <PublisherDisplayName>Jonathan Robson</PublisherDisplayName>
+    <PublisherDisplayName>Jonathan Robson and Paul Binder</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
