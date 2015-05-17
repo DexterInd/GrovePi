@@ -16,6 +16,7 @@ namespace GrovePi
     {
         IGrovePi BuildGrovePi();
         IGrovePi BuildGrovePi(int address);
+        IRelay BuildRelay(Pin pin);
         ILed BuildLed(Pin pin);
         ITemperatureAndHumiditySensor BuildTemperatureAndHumiditySensor(Pin pin, Model model);
         IUltrasonicRangerSensor BuildUltraSonicSensor(Pin pin);
@@ -51,6 +52,11 @@ namespace GrovePi
         public IGrovePi BuildGrovePi(int address)
         {
             return BuildGrovePiImpl(address);
+        }
+
+        public IRelay BuildRelay(Pin pin)
+        {
+            return DoBuild(x => new Relay(x, pin));
         }
 
         public ILed BuildLed(Pin pin)
