@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.Devices.I2c;
 
 namespace GrovePi.I2CDevices
@@ -48,6 +49,7 @@ namespace GrovePi.I2CDevices
         public IRgbLcdDisplay SetText(string text)
         {
             TextDirectAccess.Write(new[] {TextCommandAddress, ClearDisplayCommandAddress});
+            WaitForMilliseconds(50);
             TextDirectAccess.Write(new[] {TextCommandAddress, (byte)(DisplayOnCommandAddress | NoCursorCommandAddress)});
             TextDirectAccess.Write(new[] {TextCommandAddress, TwoLinesCommandAddress});
 
@@ -71,6 +73,11 @@ namespace GrovePi.I2CDevices
             }
 
             return this;
+        }
+
+        private static async void WaitForMilliseconds(int milliseconds)
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(milliseconds));
         }
     }
 }
