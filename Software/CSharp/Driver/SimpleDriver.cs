@@ -21,7 +21,7 @@ namespace Driver
             //    .BuildUltraSonicSensor(Pin.DigitalPin2)
             //    .MeasureInCentimeters();
 
-            _deviceFactory.RgbLcdDisplay().SetBacklightRgb(0, 255, 0).SetText("Hello World");
+            //_deviceFactory.RgbLcdDisplay().SetBacklightRgb(0, 255, 0).SetText("Hello World");
 
             //_deviceFactory.BuildBuzzer(Pin.DigitalPin2).ChangeState(SensorStatus.On);
 
