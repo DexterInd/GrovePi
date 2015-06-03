@@ -42,6 +42,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\Delay.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DeviceFactory.cs" />
     <Compile Include="GrovePi.cs" />

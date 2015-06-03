@@ -14,22 +14,22 @@ namespace GrovePi
 
     public interface IBuildGroveDevices
     {
-        IGrovePi BuildGrovePi();
-        IGrovePi BuildGrovePi(int address);
-        IRelay BuildRelay(Pin pin);
-        ILed BuildLed(Pin pin);
-        ITemperatureAndHumiditySensor BuildTemperatureAndHumiditySensor(Pin pin, Model model);
-        IUltrasonicRangerSensor BuildUltraSonicSensor(Pin pin);
-        IAccelerometerSensor BuildAccelerometerSensor(Pin pin);
-        IRealTimeClock BuildRealTimeClock(Pin pin);
+        IGrovePi GrovePi();
+        IGrovePi GrovePi(int address);
+        IRelay Relay(Pin pin);
+        ILed Led(Pin pin);
+        ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model);
+        IUltrasonicRangerSensor UltraSonicSensor(Pin pin);
+        IAccelerometerSensor AccelerometerSensor(Pin pin);
+        IRealTimeClock RealTimeClock(Pin pin);
         ILedBar BuildLedBar(Pin pin);
-        IFourDigitDisplay BuildFourDigitDisplay(Pin pin);
+        IFourDigitDisplay FourDigitDisplay(Pin pin);
         IChainableRgbLed ChainableRgbLed(Pin pin);
-        IRotaryAngleSensor BuildRotaryAngleSensor(Pin pin);
-        IBuzzer BuildBuzzer(Pin pin);
-        ISoundSensor BuildSoundSensor(Pin pin);
-        ILightSensor BuildLightSensor(Pin pin);
-        IButtonSensor BuildButtonSensor(Pin pin);
+        IRotaryAngleSensor RotaryAngleSensor(Pin pin);
+        IBuzzer Buzzer(Pin pin);
+        ISoundSensor SoundSensor(Pin pin);
+        ILightSensor LightSensor(Pin pin);
+        IButtonSensor ButtonSensor(Pin pin);
         IRgbLcdDisplay RgbLcdDisplay();
         IRgbLcdDisplay RgbLcdDisplay(int rgbAddress, int textAddress);
         
@@ -44,57 +44,57 @@ namespace GrovePi
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
 
-        public IGrovePi BuildGrovePi()
+        public IGrovePi GrovePi()
         {
             return BuildGrovePiImpl(GrovePiAddress);
         }
 
-        public IGrovePi BuildGrovePi(int address)
+        public IGrovePi GrovePi(int address)
         {
             return BuildGrovePiImpl(address);
         }
 
-        public IRelay BuildRelay(Pin pin)
+        public IRelay Relay(Pin pin)
         {
             return DoBuild(x => new Relay(x, pin));
         }
 
-        public ILed BuildLed(Pin pin)
+        public ILed Led(Pin pin)
         {
             return DoBuild(x => new Led(x, pin));
         }
 
-        public ITemperatureAndHumiditySensor BuildTemperatureAndHumiditySensor(Pin pin, Model model)
+        public ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model)
         {
             return DoBuild(x => new TemperatureAndHumiditySensor(x, pin, model));
         }
 
-        public IUltrasonicRangerSensor BuildUltraSonicSensor(Pin pin)
+        public IUltrasonicRangerSensor UltraSonicSensor(Pin pin)
         {
             return DoBuild(x => new UltrasonicRangerSensor(x, pin));
         }
 
-        public IAccelerometerSensor BuildAccelerometerSensor(Pin pin)
+        public IAccelerometerSensor AccelerometerSensor(Pin pin)
         {
             return DoBuild(x => new AccelerometerSensor(x, pin));
         }
 
-        public IRealTimeClock BuildRealTimeClock(Pin pin)
+        public IRealTimeClock RealTimeClock(Pin pin)
         {
             return DoBuild(x => new RealTimeClock(x, pin));
         }
 
-        public IRotaryAngleSensor BuildRotaryAngleSensor(Pin pin)
+        public IRotaryAngleSensor RotaryAngleSensor(Pin pin)
         {
             return DoBuild(x => new RotaryAngleSensor(x, pin));
         }
 
-        public IBuzzer BuildBuzzer(Pin pin)
+        public IBuzzer Buzzer(Pin pin)
         {
             return DoBuild(x => new Buzzer(x, pin));
         }
 
-        public ISoundSensor BuildSoundSensor(Pin pin)
+        public ISoundSensor SoundSensor(Pin pin)
         {
             return DoBuild(x => new SoundSensor(x, pin));
         }
@@ -104,7 +104,7 @@ namespace GrovePi
             return DoBuild(x => new LedBar(x, pin));
         }
 
-        public IFourDigitDisplay BuildFourDigitDisplay(Pin pin)
+        public IFourDigitDisplay FourDigitDisplay(Pin pin)
         {
             return DoBuild(x => new FourDigitDisplay(x, pin));
         }
@@ -114,7 +114,7 @@ namespace GrovePi
             return DoBuild(x => new ChainableRgbLed(x, pin));
         }
 
-        public ILightSensor BuildLightSensor(Pin pin)
+        public ILightSensor LightSensor(Pin pin)
         {
             return DoBuild(x => new LightSensor(x, pin));
         }
@@ -129,7 +129,7 @@ namespace GrovePi
             return BuildRgbLcdDisplayImpl(DisplayRgbI2CAddress, DisplayTextI2CAddress);
         }
 
-        public IButtonSensor BuildButtonSensor(Pin pin)
+        public IButtonSensor ButtonSensor(Pin pin)
         {
             return DoBuild(x => new ButtonSensor(x, pin));
         }
@@ -142,7 +142,7 @@ namespace GrovePi
 
         private GrovePi BuildGrovePiImpl(int address)
         {
-            if (null != _device)
+            if (_device != null)
             {
                 return _device;
             }

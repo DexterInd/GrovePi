@@ -17,24 +17,22 @@ namespace Driver
         {
             //**Samples using the device factor. Un comment as needed**
 
-            //var distance = _deviceFactory
-            //    .BuildUltraSonicSensor(Pin.DigitalPin2)
-            //    .MeasureInCentimeters();
+            var distance = _deviceFactory
+                .UltraSonicSensor(Pin.DigitalPin2)
+                .MeasureInCentimeters();
+            _deviceFactory.RgbLcdDisplay().SetText("Hello World").SetBacklightRgb(0, 255, 255);
+            _deviceFactory.Buzzer(Pin.DigitalPin2).ChangeState(SensorStatus.On);
 
-            //_deviceFactory.RgbLcdDisplay().SetBacklightRgb(0, 255, 0).SetText("Hello World");
+            var tempInCelcius = _deviceFactory
+    .TemperatureAndHumiditySensor(Pin.DigitalPin2, Model.OnePointTwo)
+    .TemperatureInCelcius();
 
-            //_deviceFactory.BuildBuzzer(Pin.DigitalPin2).ChangeState(SensorStatus.On);
-
-            //        var tempInCelcius = _deviceFactory
-            //.BuildTemperatureAndHumiditySensor(Pin.DigitalPin2, Model.OnePointTwo)
-            //.TemperatureInCelcius();
-
-            //var level = _deviceFactory.BuildLightSensor(Pin.DigitalPin3)
-            //    .SensorValue();
-            //_deviceFactory
-            //    .BuildBuzzer(Pin.DigitalPin4)
-            //    .ChangeState(SensorStatus.On)
-            //    .ChangeState(SensorStatus.Off);
+            var level = _deviceFactory.LightSensor(Pin.DigitalPin3)
+                .SensorValue();
+            _deviceFactory
+                .Buzzer(Pin.DigitalPin4)
+                .ChangeState(SensorStatus.On)
+                .ChangeState(SensorStatus.Off);
         }
     }
 }
