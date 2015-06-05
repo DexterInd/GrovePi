@@ -14,6 +14,7 @@ module.exports.GrovePi = {
     , DHTDigital: require('./sensors/DHTDigitalSensor')
     , FourDigitDigital: require('./sensors/fourDigitDigitalSensor')
     , LedBarDigital: require('./sensors/ledBarDigitalSensor')
+    , LightAnalog: require('./sensors/lightAnalogSensor')
     , RTCI2C: require('./sensors/rtcI2cSensor')
     , TemperatureAnalog: require('./sensors/temperatureAnalogSensor')
     , UltrasonicDigital: require('./sensors/ultrasonicDigitalSensor')
