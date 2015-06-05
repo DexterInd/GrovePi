@@ -39,8 +39,9 @@ Sensor.prototype.stopStream = function() {
   if (typeof streamInterval != 'undefined' && typeof streamInterval.clearInterval == 'function')
     streamInterval.clearInterval()
 }
-Sensor.prototype.watch = function() {
+Sensor.prototype.watch = function(delay) {
   var self = this
+  var delay = typeof delay == 'undefined' ? watchDelay : delay
   self.stopWatch()
   watchInterval = setInterval(function onInterval() {
     var res = self.read()
@@ -50,7 +51,7 @@ Sensor.prototype.watch = function() {
 
     if (!isEqual(self.currentValue, self.lastValue))
       self.emit('change', self.currentValue)
-  }, watchDelay)
+  }, delay)
 }
 Sensor.prototype.stopWatch = function() {
   if (typeof watchInterval != 'undefined' && typeof watchInterval.clearInterval == 'function')
