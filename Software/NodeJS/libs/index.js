@@ -18,5 +18,6 @@ module.exports.GrovePi = {
     , RTCI2C: require('./sensors/rtcI2cSensor')
     , TemperatureAnalog: require('./sensors/temperatureAnalogSensor')
     , UltrasonicDigital: require('./sensors/ultrasonicDigitalSensor')
+    , IRReceiver: require('./sensors/IRReceiverSensor')
   }
 }

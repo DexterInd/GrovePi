@@ -73,6 +73,12 @@ module.exports = {
   // Sets leds similar to a bar graph, reversible
   , chainableRgbLedSetLevel                     : [95]
 
+  // Grove IR sensor
+  // Read the button from IR sensor
+  , irRead                                      : [21]
+  // Set pin for the IR reciever
+  , irRecvPin                                   : [22]
+
   // This allows us to be more specific about which commands contain unused bytes
   , unused                                      : 0
 };
