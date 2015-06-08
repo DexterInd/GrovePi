@@ -1,7 +1,8 @@
 ## **GrovePi: The Raspberry Pi Meets Grove Sensors**
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  Create your Internet of Things devices and inventions without the need for soldering!
 ![Picture](GrovePi_Plus_By_Dexter_Industries_For_the_Raspberry_Pi.JPG)
+
 There are over 2 million Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
 
 We brought Grove and Raspberry Pi together in a simple and affordable way. Grove sensors allow you to interact and monitor the world. Raspberry Pi lets you store and process data, and bring the real world to the Raspberry Pi and the web.  
