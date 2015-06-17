@@ -15,6 +15,13 @@ namespace GrovePi.Sensors
             Pin = pin;
         }
 
+        internal Sensor(IGrovePi device, Pin pin)
+        {
+            if (device == null) throw new ArgumentNullException(nameof(device));
+            Device = device;
+            Pin = pin;
+        }
+
         public SensorStatus CurrentState => (SensorStatus) Device.DigitalRead(Pin);
 
         public TSensorType ChangeState(SensorStatus newState)

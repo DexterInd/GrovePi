@@ -14,7 +14,7 @@
 #
 # Karan Nayan
 # Initial Date: 13 Feb 2014
-# Last Updated: 01 Apr 2015
+# Last Updated: 01 June 2015
 # http://www.dexterindustries.com/
 
 import smbus
@@ -108,6 +108,11 @@ chainableRgbLedSetModulo_cmd = [94]
 # sets leds similar to a bar graph, reversible
 chainableRgbLedSetLevel_cmd = [95]
 
+# Read the button from IR sensor
+ir_read_cmd=[21]
+# Set pin for the IR reciever
+ir_recv_pin_cmd=[22]
+
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -123,7 +128,6 @@ def write_i2c_block(address, block):
 		if debug:
 			print "IOError"
 		return -1
-
 
 # Read I2C byte
 def read_i2c_byte(address):
@@ -144,14 +148,12 @@ def read_i2c_block(address):
 			print "IOError"
 		return -1
 
-
 # Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
 	time.sleep(.1)
 	n = read_i2c_byte(address)
 	return n
-
 
 # Arduino Digital Write
 def digitalWrite(pin, value):
@@ -462,3 +464,19 @@ def chainableRgbLed_setLevel(pin, level, reverse):
 	write_i2c_block(address, chainableRgbLedSetLevel_cmd + [pin, level, reverse])
 	time.sleep(.05)
 	return 1
+
+# Grove - Infrared Receiver- get the commands received from the Grove IR sensor
+def ir_read_signal():
+	try:
+		write_i2c_block(address,ir_read_cmd+[unused,unused,unused])
+		time.sleep(.1)
+		data_back= bus.read_i2c_block_data(address, 1)[0:21]
+		if data_back[1]<>255:
+			return data_back
+		return [-1]*21
+	except IOError:
+		return [-1]*21
+		
+# Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
+def ir_recv_pin(pin):
+	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])

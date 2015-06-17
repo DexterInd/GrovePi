@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.Devices.I2c;
+using GrovePi.Common;
 
 namespace GrovePi.I2CDevices
 {
@@ -48,7 +49,8 @@ namespace GrovePi.I2CDevices
         public IRgbLcdDisplay SetText(string text)
         {
             TextDirectAccess.Write(new[] {TextCommandAddress, ClearDisplayCommandAddress});
-            TextDirectAccess.Write(new[] {TextCommandAddress, DisplayOnCommandAddress, NoCursorCommandAddress});
+            Delay.Milliseconds(50);
+            TextDirectAccess.Write(new[] {TextCommandAddress, (byte)(DisplayOnCommandAddress | NoCursorCommandAddress)});
             TextDirectAccess.Write(new[] {TextCommandAddress, TwoLinesCommandAddress});
 
             var count = 0;
@@ -67,7 +69,7 @@ namespace GrovePi.I2CDevices
                         continue;
                 }
                 count += 1;
-                TextDirectAccess.Write(new[] {TextCommandAddress, SetCharacterCommandAddress, (byte) c});
+                TextDirectAccess.Write(new[] {SetCharacterCommandAddress, (byte) c});
             }
 
             return this;
