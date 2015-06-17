@@ -1,29 +1,27 @@
 {
     "name": "node-grovepi",
+    "version": "2.0.0",
     "description": "GrovePi library for Node.js",
-    "homepage": "https://github.com/marcellobarile/GrovePi",
     "keywords": ["grovepi", "robot", "gpio", "i2c"],
-    "author": "Marcello Barile <marcello.barile@gmail.com>",
+    "dependencies": {
+        "async": "0.9.*",
+        "buffertools": "2.1.*",
+        "i2c-bus": "0.11.*",
+        "npmlog": "1.2.*",
+        "sleep": "2.0.*"
+    },
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/marcellobarile/GrovePi.git"
     },
-    "main": "grovepi.js",
-    "version": "1.0.4",
-    "engines": {
-        "node": ">=0.10 <0.12"
-    }
-    "dependencies": {
-        "i2c": "0.1.6",
-        "sleep": "1.2.0",
-        "buffertools": "2.1.2",
-        "async": "0.9.0",
-        "npmlog": "1.1.0",
-        "fs": "*"
-    },
-    "files": ["grovepi.js", "grovepi.commands.js", "LICENSE"],
+    "author": "Marcello Barile <marcello.barile@gmail.com> (http://www.barile.eu)",
     "license": "Creative Commons Attribution-ShareAlike 3.0",
     "bugs": {
         "url": "https://github.com/marcellobarile/GrovePi/issues"
-    }
+    },
+    "homepage": "https://github.com/marcellobarile/GrovePi"
 }
