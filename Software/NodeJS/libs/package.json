@@ -1,6 +1,6 @@
 {
     "name": "node-grovepi",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "GrovePi library for Node.js",
     "keywords": ["grovepi", "robot", "gpio", "i2c"],
     "dependencies": {

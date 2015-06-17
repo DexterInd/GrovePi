@@ -81,6 +81,11 @@ function customAccelerationReading() {
 }
 ```
 
+When you are ready to go you should call the init method
+```javascript
+board.init()
+```
+
 Each sensor/component has 3 methods to get access to the data:
 - **read()** - Read data from the sensor/component
 - **stream(delay, callback)** - Start a stream with the sensor/component, each N milliseconds (delay) sends data to the callback. You can use stopStream() to close the connection.
