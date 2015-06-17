@@ -55,7 +55,7 @@ var board = new Board({
         lightSensor.watch()
       }
     }
-  }
+  })
 ```
 
 If there is no class for your sensors or components then you can write your own functions for them:
