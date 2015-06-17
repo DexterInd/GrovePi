@@ -15,13 +15,13 @@ import grovepi
 # Connect first LED in Chainable RGB LED chain to digital port D7
 # In: CI,DI,VCC,GND
 # Out: CO,DO,VCC,GND
-chain = 7
+pin = 7
 
 # I have 10 LEDs connected in series with the first connected to the GrovePi and the last not connected
 # First LED input socket connected to GrovePi, output socket connected to second LED input and so on
-numleds = 10
+numleds = 10     #If you only plug 1 LED, change 10 to 1
 
-grovepi.pinMode(chain,"OUTPUT")
+grovepi.pinMode(pin,"OUTPUT")
 time.sleep(1)
 
 # Chainable RGB LED methods
@@ -374,6 +374,5 @@ try:
 except KeyboardInterrupt:
     # reset (all off)
     grovepi.chainableRgbLed_test(pin, numleds, testColorBlack)
-    break
 except IOError:
     print "Error"
