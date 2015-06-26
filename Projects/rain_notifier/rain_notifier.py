@@ -131,5 +131,5 @@ try:
 
 
 except KeyboardInterrupt:
-    digitalWrite(clearled,0)
+    clear_led(0)
     digitalWrite(rainled,0)
