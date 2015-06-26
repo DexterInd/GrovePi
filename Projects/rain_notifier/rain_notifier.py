@@ -8,11 +8,11 @@
 #
 # Enter your zip code (or Postal Code) on the following line
 # (leave the name 'zip' as is, even if you have a postal code. )
-zip = 'h8y1j9'
+zip = 'YOUR_ZIP_CODE'
 
 # once you have gotten an API Key from Wunderground (see tutorial), pleave provide it here
 # Wunderground API Key
-api_key = '33410eaca9fa47eb'
+api_key = 'YOUR_WUNDERGROUND_API_KEY'
 
 # if you wish to use two LEDs, provide the port number of the second LED
 # The second LED is the one that will show there's no rain in the weather prediction
