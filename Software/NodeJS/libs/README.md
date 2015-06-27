@@ -94,4 +94,4 @@ Each sensor/component has 3 methods to get access to the data:
 And 1 method to write data:
 - **write(value)** - Write a value on the sensor/component
 
-You'll find a more complex example in the "basicTest.js" file under the "tests" folder.
+You'll find a more complex example in the "basicTest.js" file under the "tests" folder of the repository.
