@@ -7,13 +7,13 @@ Scan for open wifi networks!  This is a portable wifi hotspot finder.  See our p
 ### How Does it Work?
 The GrovePi board slips over the Raspberry Pi.  Connect the Grove Sensors to the GrovePi board.  
 
-Software Setup Notes:
- 	* This example uses https://wifi.readthedocs.org/en/latest/wifi_command.html.  Install with pip install wifi
- 	* Wifi dongle must be on wlan0 ; Check this with the command "ifconfig" on the command line.
-Hardware Setup Notes:
- 	* Buzzer goes on port 8 of the GrovePi.
- 	* LED Goes on port 4 of the GrovePi.
- 	* The LCD goes on I2C-1.  Check this with the command "sudo i2cdetect -y 1"
+####Software Setup Notes:
+  * This example uses https://wifi.readthedocs.org/en/latest/wifi_command.html.  Install with pip install wifi
+  * Wifi dongle must be on wlan0 ; Check this with the command "ifconfig" on the command line.
+####Hardware Setup Notes:
+  * Buzzer goes on port 8 of the GrovePi.
+  * LED Goes on port 4 of the GrovePi.
+  * The LCD goes on I2C-1.  Check this with the command "sudo i2cdetect -y 1"
 
 The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 
