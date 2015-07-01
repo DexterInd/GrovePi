@@ -8,7 +8,7 @@
 #
 # Enter your zip code (or Postal Code) on the following line
 # (leave the name 'zip' as is, even if you have a postal code. )
-zip = 'YOUR_ZIP_CODE'
+zipcode = 'YOUR_ZIP_CODE'
 
 # once you have gotten an API Key from Wunderground (see tutorial), pleave provide it here
 # Wunderground API Key
@@ -48,6 +48,8 @@ import urllib2
 import json
 from grovepi import *
 import time
+import sys
+import my_rain_notifier
 
 def clear_led(status):
     """ change clear sky LED status """
@@ -70,7 +72,7 @@ def assign_rain(status, blink):
         # Light the RAIN LED on the umbrella
         # check if it needs to be blinking
         if blink == True:
-            led_blink() # no sleep required here
+            led_blink(DELAY) # no sleep required here
         else:
             digitalWrite(rainled,1)
             time.sleep(DELAY)
@@ -82,16 +84,16 @@ def assign_rain(status, blink):
         clear_led(1)
         time.sleep(DELAY)
 
-def led_blink():
+def led_blink(blinkdelay):
     """ forces the rain LED to blink
 
     rain LED will blink at a rate of 0.2 secs on, and 0.2 secs off
-    it will blink for a duration set by DELAY
+    it will blink for a duration set by blinkdelay
     no additional sleep() is required as it's incorporated in the blinking
     """
     count = 0.0
     blinkrate = 0.2
-    while count < float(DELAY):
+    while count < float(blinkdelay):
         digitalWrite(rainled,1)
         time.sleep(blinkrate)   
         digitalWrite(rainled,0)
@@ -106,6 +108,18 @@ def led_blink():
 url='http://api.wunderground.com/api/'+api_key+'/geolookup/conditions/q/'+zip+'.json'
 
 pinMode(rainled,"OUTPUT")
+
+
+if len(sys.argv) > 1 and sys.argv[1] == 'test':
+    try:
+        clear_led(1)
+        led_blink(5)
+        clear_led(0)
+    except KeyboardInterrupt:
+        digitalWrite(clearled,0)
+        digitalWrite(rainled,0)
+    quit()
+
 if clearled > -1:
     pinMode(clearled,"OUTPUT")
 
