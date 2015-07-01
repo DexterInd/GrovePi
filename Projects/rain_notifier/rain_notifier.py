@@ -49,7 +49,7 @@ import json
 from grovepi import *
 import time
 import sys
-import my_rain_notifier
+
 
 def clear_led(status):
     """ change clear sky LED status """
@@ -92,7 +92,7 @@ def led_blink(blinkdelay):
     no additional sleep() is required as it's incorporated in the blinking
     """
     count = 0.0
-    blinkrate = 0.2
+    blinkrate = 0.4
     while count < float(blinkdelay):
         digitalWrite(rainled,1)
         time.sleep(blinkrate)   
