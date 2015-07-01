@@ -50,7 +50,6 @@ from grovepi import *
 import time
 import sys
 
-
 def clear_led(status):
     """ change clear sky LED status """
     if clearled > -1:
