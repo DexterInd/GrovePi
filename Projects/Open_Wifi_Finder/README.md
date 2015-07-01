@@ -24,21 +24,29 @@ First, the files in this directory are copied into the home directory.
  
 Make a script "start.sh" and put a command to start the wifi_finder.py script.
  
- ```sudo nano start.sh```
+```
+sudo nano start.sh
+```
  
 The contents of start.sh are going to be:
  
-```#!/bin/bash
-sudo python /home/pi/wifi_finder.py```
+```
+#!/bin/bash
+sudo python /home/pi/wifi_finder.py
+```
 
 And then open up rc.local
 
-```sudo nano /etc/rc.local```
+```
+sudo nano /etc/rc.local
+```
 
 and add the last few lines of this file should be:
 
-```sudo sh /home/pi/start.sh
-exit 0```
+```
+sudo sh /home/pi/start.sh
+exit 0
+```
 
 Then that's it!  Reboot and test!
  
