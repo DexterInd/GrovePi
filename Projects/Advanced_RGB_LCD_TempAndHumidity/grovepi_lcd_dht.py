@@ -1,8 +1,8 @@
 # grovepi_lcd_dht.py
 #
-# This is an project for using the Grove OLED Display and the Grove DHT Sensor from the GrovePi starter kit
+# This is an project for using the Grove RGB_LED Display and the Grove DHT Sensor from the GrovePi starter kit
 # 
-# In this project, the Temperature and humidity from the DHT sensor is printed on the DHT sensor
+# In this project, the Temperature and humidity from the DHT sensor is printed on the RGB_LCD Display
 import decimal
 from grovepi import *
 from grove_rgb_lcd import *
