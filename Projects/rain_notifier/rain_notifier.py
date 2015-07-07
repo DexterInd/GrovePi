@@ -65,7 +65,6 @@ import json
 from grovepi import *
 import time
 import sys
-from my_rain_notifier import *
 
 
 def clear_led(status):
@@ -127,6 +126,8 @@ url = 'http://api.wunderground.com/api/' + api_key
 url = url + '/geolookup/conditions/q/' + zipcode + '.json'
 
 pinMode(rainled, "OUTPUT")
+if clearled > -1:
+    pinMode(clearled, "OUTPUT")
 
 
 if len(sys.argv) > 1 and sys.argv[1] == 'test':
@@ -139,8 +140,6 @@ if len(sys.argv) > 1 and sys.argv[1] == 'test':
         digitalWrite(rainled, 0)
     quit()
 
-if clearled > -1:
-    pinMode(clearled, "OUTPUT")
 
 try:
     while True:
