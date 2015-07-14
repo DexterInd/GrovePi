@@ -52,8 +52,8 @@ read
 echo " "
 echo "Check for internet connectivity..."
 echo "=================================="
-wget -q --tries=2 --timeout=20 http://google.com
-if [[ $? -eq 0 ]];then
+wget -q --tries=2 --timeout=100 http://google.com
+if [ $? -eq 0 ];then
 	echo "Connected"
 else
 	echo "Unable to Connect, try again !!!"
