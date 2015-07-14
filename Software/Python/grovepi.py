@@ -22,8 +22,14 @@ import time
 import math
 import RPi.GPIO as GPIO
 import struct
+import sys
 
 debug =0
+
+if sys.version_info<(3,0):
+	p_version=2
+else:
+	p_version=3
 
 rev = GPIO.RPI_REVISION
 if rev == 2 or rev == 3:
@@ -126,7 +132,7 @@ def write_i2c_block(address, block):
 		return bus.write_i2c_block_data(address, 1, block)
 	except IOError:
 		if debug:
-			print "IOError"
+			print ("IOError")
 		return -1
 
 # Read I2C byte
@@ -135,7 +141,7 @@ def read_i2c_byte(address):
 		return bus.read_byte(address)
 	except IOError:
 		if debug:
-			print "IOError"
+			print ("IOError")
 		return -1
 
 
@@ -145,7 +151,7 @@ def read_i2c_block(address):
 		return bus.read_i2c_block_data(address, 1)
 	except IOError:
 		if debug:
-			print "IOError"
+			print ("IOError")
 		return -1
 
 # Arduino Digital Read
@@ -252,47 +258,30 @@ def dht(pin, module_type):
 		read_i2c_byte(address)
 		number = read_i2c_block(address)
 		if number == -1:
-			return [-1,-1]
+			return -1
 	except (TypeError, IndexError):
-		return [-1,-1]
+		return -1
 	# data returned in IEEE format as a float in 4 bytes
-	f = 0
-	# data is reversed
-	for element in reversed(number[1:5]):
-		# Converted to hex
-		hex_val = hex(element)
-		#print hex_val
-		try:
-			h_val = hex_val[2] + hex_val[3]
-		except IndexError:
-			h_val = '0' + hex_val[2]
-		# Convert to char array
-		if f == 0:
-			h = h_val
-			f = 1
-		else:
-			h = h + h_val
-	# convert the temp back to float
-	t = round(struct.unpack('!f', h.decode('hex'))[0], 2)
+	
+	if p_version==2:
+		h=''
+		for element in (number[1:5]):
+			h+=chr(element)
+			
+		t_val=struct.unpack('f', h)
+		t = round(t_val[0], 2)
 
-	h = ''
-	# data is reversed
-	for element in reversed(number[5:9]):
-		# Converted to hex
-		hex_val = hex(element)
-		# Print hex_val
-		try:
-			h_val = hex_val[2] + hex_val[3]
-		except IndexError:
-			h_val = '0' + hex_val[2]
-		# Convert to char array
-		if f == 0:
-			h = h_val
-			f = 1
-		else:
-			h = h + h_val
-	# convert back to float
-	hum = round(struct.unpack('!f', h.decode('hex'))[0], 2)
+		h = ''
+		for element in (number[5:9]):
+			h+=chr(element)
+		
+		hum_val=struct.unpack('f',h)
+		hum = round(hum_val[0], 2)
+	else:
+		t_val=bytearray(number[1:5])
+		h_val=bytearray(number[5:9])
+		t=round(struct.unpack('f',t_val)[0],2)
+		hum=round(struct.unpack('f',h_val)[0],2)
 	return [t, hum]
 
 # Grove LED Bar - initialise
@@ -471,7 +460,7 @@ def ir_read_signal():
 		write_i2c_block(address,ir_read_cmd+[unused,unused,unused])
 		time.sleep(.1)
 		data_back= bus.read_i2c_block_data(address, 1)[0:21]
-		if data_back[1]<>255:
+		if (data_back[1]!=255):
 			return data_back
 		return [-1]*21
 	except IOError:
