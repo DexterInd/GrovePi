@@ -31,8 +31,8 @@ while True:
         # Calculate voltage
         voltage = (float)(sensor_value * grove_vcc / 1024)
 
-        print "sensor_value =", sensor_value, " voltage =", voltage
+        print ("sensor_value =", sensor_value, " voltage =", voltage)
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

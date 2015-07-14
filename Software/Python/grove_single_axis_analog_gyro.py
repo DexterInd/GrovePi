@@ -19,7 +19,7 @@ sensor = 0
 grovepi.pinMode(sensor,"INPUT")
 
 # calibration
-print "calibrating..."
+print ("calibrating...")
 sum = 0
 errors = 0
 for x in range(0, 100):
@@ -29,17 +29,17 @@ for x in range(0, 100):
         sum += v
         #time.sleep(.05)
     except IOError:
-        print "Error"
+        print ("Error")
         errors += 1
 
 if errors == 100:
-    print "unable to calibrate"
+    print ("unable to calibrate")
     raise SystemExit
 
 reference_value = sum / (100 - errors)
 
-print "finished calibrating"
-print "reference_value =", reference_value
+print ("finished calibrating")
+print ("reference_value =", reference_value)
 
 # ready
 while True:
@@ -50,8 +50,8 @@ while True:
         # Calculate angular velocity (deg/s)
         velocity = ((float)(sensor_value - reference_value) * 4930.0) / 1023.0 / 0.67
 
-        print "sensor_value =", sensor_value, " velocity =", velocity
+        print ("sensor_value =", sensor_value, " velocity =", velocity)
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+       print ("Error")

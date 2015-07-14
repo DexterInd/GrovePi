@@ -33,7 +33,7 @@ while True:
             i = 0
 
         # Current brightness
-        print i
+        print (i)
 
         # Give PWM output to LED
         grovepi.analogWrite(led,i)
@@ -46,4 +46,4 @@ while True:
         grovepi.analogWrite(led,0)
         break
     except IOError:
-        print "Error"
+        print ("Error")

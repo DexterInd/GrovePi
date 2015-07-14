@@ -38,11 +38,11 @@ time.sleep(.5)
 
 while True:
     try:
-        print "Test 1) Initialise"
+        print ("Test 1) Initialise")
         grovepi.fourDigit_init(display)
         time.sleep(.5)
 
-        print "Test 2) Set brightness"
+        print ("Test 2) Set brightness")
         for i in range(0,8):
             grovepi.fourDigit_brightness(display,i)
             time.sleep(.2)
@@ -52,7 +52,7 @@ while True:
         grovepi.fourDigit_brightness(display,0)
         time.sleep(.5)
 
-        print "Test 3) Set number without leading zeros"
+        print ("Test 3) Set number without leading zeros")
         leading_zero = 0
         grovepi.fourDigit_number(display,1,leading_zero)
         time.sleep(.5)
@@ -63,7 +63,7 @@ while True:
         grovepi.fourDigit_number(display,1234,leading_zero)
         time.sleep(.5)
 
-        print "Test 4) Set number with leading zeros"
+        print ("Test 4) Set number with leading zeros")
         leading_zero = 1
         grovepi.fourDigit_number(display,5,leading_zero)
         time.sleep(.5)
@@ -74,14 +74,14 @@ while True:
         grovepi.fourDigit_number(display,5678,leading_zero)
         time.sleep(.5)
 
-        print "Test 5) Set individual digit"
+        print ("Test 5) Set individual digit")
         grovepi.fourDigit_digit(display,0,2)
         grovepi.fourDigit_digit(display,1,6)
         grovepi.fourDigit_digit(display,2,9)
         grovepi.fourDigit_digit(display,3,15) # 15 = F
         time.sleep(.5)
 
-        print "Test 6) Set individual segment"
+        print ("Test 6) Set individual segment")
         grovepi.fourDigit_segment(display,0,118) # 118 = H
         grovepi.fourDigit_segment(display,1,121) # 121 = E
         grovepi.fourDigit_segment(display,2,118) # 118 = H
@@ -94,7 +94,7 @@ while True:
         grovepi.fourDigit_segment(display,3,56) # 56 = L
         time.sleep(.5)
 
-        print "Test 7) Set score"
+        print ("Test 7) Set score")
         grovepi.fourDigit_score(display,0,0)
         time.sleep(.2)
         grovepi.fourDigit_score(display,1,0)
@@ -110,20 +110,20 @@ while True:
         grovepi.fourDigit_score(display,1,5)
         time.sleep(.5)
 
-        print "Test 8) Set time"
+        print ("Test 8) Set time")
         grovepi.fourDigit_score(display,12,59)
         time.sleep(.5)
 
-        print "Test 9) Monitor analog pin"
+        print ("Test 9) Monitor analog pin")
         seconds = 10
         grovepi.fourDigit_monitor(display,sensor,seconds)
         time.sleep(.5)
 
-        print "Test 10) Switch all on"
+        print ("Test 10) Switch all on")
         grovepi.fourDigit_on(display)
         time.sleep(.5)
 
-        print "Test 11) Switch all off"
+        print ("Test 11) Switch all off")
         grovepi.fourDigit_off(display)
         time.sleep(.5)
 
@@ -131,4 +131,4 @@ while True:
         grovepi.fourDigit_off(display)
         break
     except IOError:
-        print "Error"
+        print ("Error")

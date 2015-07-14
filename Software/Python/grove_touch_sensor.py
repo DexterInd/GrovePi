@@ -20,8 +20,8 @@ grovepi.pinMode(touch_sensor,"INPUT")
 
 while True:
     try:
-        print grovepi.digitalRead(touch_sensor)
+        print (grovepi.digitalRead(touch_sensor))
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

@@ -22,16 +22,16 @@ while True:
     try:
         # Start vibrating for 1 second
         grovepi.digitalWrite(vibration_motor,1)
-        print 'start'
+        print ('start')
         time.sleep(1)
 
         # Stop vibrating for 1 second, then repeat
         grovepi.digitalWrite(vibration_motor,0)
-        print 'stop'
+        print ('stop')
         time.sleep(1)
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(vibration_motor,0)
         break
     except IOError:
-        print "Error"
+        print ("Error")

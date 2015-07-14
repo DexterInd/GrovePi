@@ -15,7 +15,7 @@ import time
 import grovepi
 
 grovepi.ir_recv_pin(9)
-print "Press any button on the remote to see the data"
+print ("Press any button on the remote to see the data")
 while True:
 	ir_data_back=grovepi.ir_read_signal()
 	if ir_data_back[0]==-1:		#IO Error
@@ -23,5 +23,5 @@ while True:
 	elif ir_data_back[0]==0:	#Old signal
 		pass
 	else:
-		print ir_data_back[1:]		#Current signal from IR remote
+		print (ir_data_back[1:])		#Current signal from IR remote
 	time.sleep(.1)

@@ -12,6 +12,6 @@
 from grove_barometer_lib
 b = grove_barometer_lib.barometer()
 while True():
-	print "Temp:",b.temperature," Pressure:",b.pressure," Altitude:",b.altitude
+	print ("Temp:",b.temperature," Pressure:",b.pressure," Altitude:",b.altitude)
 	b.update()
 	time.sleep(.1)

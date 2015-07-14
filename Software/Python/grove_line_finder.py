@@ -22,11 +22,11 @@ while True:
     try:
         # Return HIGH when black line is detected, and LOW when white line is detected
         if grovepi.digitalRead(line_finder) == 1:
-            print "black line detected"
+            print ("black line detected")
         else:
-            print "white line detected"
+            print ("white line detected")
 
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")
