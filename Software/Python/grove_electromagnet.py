@@ -25,16 +25,16 @@ while True:
     try:
         # Switch on electromagnet
         grovepi.digitalWrite(electromagnet,1)
-        print "on"
+        print ("on")
         time.sleep(2)
 
         # Switch off electromagnet
         grovepi.digitalWrite(electromagnet,0)
-        print "off"
+        print ("off")
         time.sleep(2)
 
     except KeyboardInterrupt:
         grovepi.digitalWrite(electromagnet,0)
         break
     except IOError:
-        print "Error"
+        print ("Error")

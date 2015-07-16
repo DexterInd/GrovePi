@@ -30,4 +30,4 @@ while True:
         digitalWrite(led,0)
         break
     except IOError:				# Print "Error" if communication error encountered
-        print "Error"
+        print ("Error")

@@ -18,8 +18,8 @@ import grovepi
 
 while True:
     try:
-        print grovepi.rtc_getTime()
+        print (grovepi.rtc_getTime())
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

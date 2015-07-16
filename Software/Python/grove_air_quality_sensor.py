@@ -26,14 +26,14 @@ while True:
         sensor_value = grovepi.analogRead(air_sensor)
 
         if sensor_value > 700:
-            print "High pollution"
+            print ("High pollution")
         elif sensor_value > 300:
-            print "Low pollution"
+            print ("Low pollution")
         else:
-            print "Air fresh"
+            print ("Air fresh")
 
-        print "sensor_value =", sensor_value
+        print ("sensor_value =", sensor_value)
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

@@ -18,7 +18,7 @@ sensor = 4
 while True:
     try:
         [temp,humidity] = grovepi.dht(sensor,1)
-        print "temp =", temp, " humidity =", humidity
+        print ("temp =", temp, " humidity =", humidity)
 
     except IOError:
-        print "Error"
+        print ("Error")

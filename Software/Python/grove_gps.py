@@ -81,14 +81,14 @@ while True:
 		if long_ew == "W":
 			long = -long
 			
-		print "Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew
+		print ("Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew)
 		s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"	
 		f.write(s)	#Save to file
 		time.sleep(2)
 	except IndexError:
-		print "Unable to read"
+		print ("Unable to read")
 	except KeyboardInterrupt:
 		f.close()
-		print "Exiting"
+		print ("Exiting")
 		sys.exit(0)
 	

@@ -20,8 +20,8 @@ grovepi.pinMode(magnetic_switch,"INPUT")
 
 while True:
     try:
-        print grovepi.digitalRead(magnetic_switch)
+        print (grovepi.digitalRead(magnetic_switch))
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

@@ -80,56 +80,56 @@ try:
     time.sleep(.5)
 
 
-    print "Test 2a) Test Patterns - black"
+    print ("Test 2a) Test Patterns - black")
 
     # test pattern 0 - black (all off)
     grovepi.chainableRgbLed_test(pin, numleds, testColorBlack)
     time.sleep(1)
 
 
-    print "Test 2b) Test Patterns - blue"
+    print ("Test 2b) Test Patterns - blue")
 
     # test pattern 1 blue
     grovepi.chainableRgbLed_test(pin, numleds, testColorBlue)
     time.sleep(1)
 
 
-    print "Test 2c) Test Patterns - green"
+    print ("Test 2c) Test Patterns - green")
 
     # test pattern 2 green
     grovepi.chainableRgbLed_test(pin, numleds, testColorGreen)
     time.sleep(1)
 
 
-    print "Test 2d) Test Patterns - cyan"
+    print ("Test 2d) Test Patterns - cyan")
 
     # test pattern 3 cyan
     grovepi.chainableRgbLed_test(pin, numleds, testColorCyan)
     time.sleep(1)
 
 
-    print "Test 2e) Test Patterns - red"
+    print ("Test 2e) Test Patterns - red")
 
     # test pattern 4 red
     grovepi.chainableRgbLed_test(pin, numleds, testColorRed)
     time.sleep(1)
 
 
-    print "Test 2f) Test Patterns - magenta"
+    print ("Test 2f) Test Patterns - magenta")
 
     # test pattern 5 magenta
     grovepi.chainableRgbLed_test(pin, numleds, testColorMagenta)
     time.sleep(1)
 
 
-    print "Test 2g) Test Patterns - yellow"
+    print ("Test 2g) Test Patterns - yellow")
 
     # test pattern 6 yellow
     grovepi.chainableRgbLed_test(pin, numleds, testColorYellow)
     time.sleep(1)
 
 
-    print "Test 2h) Test Patterns - white"
+    print ("Test 2h) Test Patterns - white")
 
     # test pattern 7 white
     grovepi.chainableRgbLed_test(pin, numleds, testColorWhite)
@@ -144,7 +144,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 3a) Set using pattern - this led only"
+    print ("Test 3a) Set using pattern - this led only")
 
     # change color to red
     grovepi.storeColor(255,0,0)
@@ -162,7 +162,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 3b) Set using pattern - all leds except this"
+    print ("Test 3b) Set using pattern - all leds except this")
 
     # change color to blue
     grovepi.storeColor(0,0,255)
@@ -180,7 +180,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 3c) Set using pattern - this led and inwards"
+    print ("Test 3c) Set using pattern - this led and inwards")
 
     # change color to green
     grovepi.storeColor(0,255,0)
@@ -198,7 +198,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 3d) Set using pattern - this led and outwards"
+    print ("Test 3d) Set using pattern - this led and outwards")
 
     # change color to green
     grovepi.storeColor(0,255,0)
@@ -216,7 +216,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 4a) Set using modulo - all leds"
+    print ("Test 4a) Set using modulo - all leds")
 
     # change color to black (fully off)
     grovepi.storeColor(0,0,0)
@@ -244,7 +244,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 4b) Set using modulo - every 2"
+    print ("Test 4b) Set using modulo - every 2")
 
     # change color to red
     grovepi.storeColor(255,0,0)
@@ -258,7 +258,7 @@ try:
     time.sleep(2)
 
 
-    print "Test 4c) Set using modulo - every 2, offset 1"
+    print ("Test 4c) Set using modulo - every 2, offset 1")
 
     # change color to green
     grovepi.storeColor(0,255,0)
@@ -276,7 +276,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 4d) Set using modulo - every 3, offset 0"
+    print ("Test 4d) Set using modulo - every 3, offset 0")
 
     # change color to red
     grovepi.storeColor(255,0,0)
@@ -310,7 +310,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 4e) Set using modulo - every 3, offset 1"
+    print ("Test 4e) Set using modulo - every 3, offset 1")
 
     # change color to yellow
     grovepi.storeColor(255,255,0)
@@ -324,7 +324,7 @@ try:
     time.sleep(2)
 
 
-    print "Test 4f) Set using modulo - every 3, offset 2"
+    print ("Test 4f) Set using modulo - every 3, offset 2")
 
     # change color to magenta
     grovepi.storeColor(255,0,255)
@@ -342,7 +342,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 5a) Set level 6"
+    print ("Test 5a) Set level 6")
 
     # change color to green
     grovepi.storeColor(0,255,0)
@@ -360,7 +360,7 @@ try:
     time.sleep(.5)
 
 
-    print "Test 5b) Set level 7 - reverse"
+    print ("Test 5b) Set level 7 - reverse")
 
     # change color to red
     grovepi.storeColor(255,0,0)
@@ -375,4 +375,4 @@ except KeyboardInterrupt:
     # reset (all off)
     grovepi.chainableRgbLed_test(pin, numleds, testColorBlack)
 except IOError:
-    print "Error"
+    print ("Error")

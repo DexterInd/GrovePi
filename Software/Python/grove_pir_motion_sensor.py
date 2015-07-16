@@ -36,12 +36,12 @@ while True:
     try:
         # Sense motion, usually human, within the target range
         if grovepi.digitalRead(pir_sensor):
-            print 'Motion Detected'
+            print ('Motion Detected')
         else:
-            print '-'
+            print ('-')
         
         # if your hold time is less than this, you might not see as many detections
         time.sleep(.2)
 
     except IOError:
-        print "Error"
+        print ("Error")

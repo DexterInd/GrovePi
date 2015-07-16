@@ -38,5 +38,5 @@ def readNumber():
 time.sleep(1)
 i=0
 while True:
-    print grovepi.analogRead(0)
+    print (grovepi.analogRead(0))
     time.sleep(1)

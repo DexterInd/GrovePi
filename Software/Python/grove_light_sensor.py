@@ -44,8 +44,8 @@ while True:
             # Send LOW to switch off LED
             grovepi.digitalWrite(led,0)
 
-        print "sensor_value =", sensor_value, " resistance =", resistance
+        print ("sensor_value =", sensor_value, " resistance =", resistance)
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

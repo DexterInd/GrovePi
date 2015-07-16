@@ -31,11 +31,11 @@ while True:
         # Sensor returns LOW and onboard LED lights up when the
         # received infrared light intensity exceeds the calibrated level
         if grovepi.digitalRead(sensor) == 0:
-            print "found something"
+            print ("found something")
         else:
-            print "nothing"
+            print ("nothing")
 
         time.sleep(.5)
 
     except IOError:
-        print "Error"
+        print ("Error")

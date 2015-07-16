@@ -40,4 +40,4 @@ while True:
         grovepi.digitalWrite(relay,0)
         break
     except IOError:
-        print "Error"
+        print ("Error")
