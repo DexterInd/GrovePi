@@ -133,6 +133,10 @@ chmod +x setup.sh
 sudo ./setup.sh
 
 echo " "
+echo "Install smbus for python"
+sudo apt-get install python-smbus
+
+echo " "
 echo "Restarting"
 echo "3"
 sleep 1
