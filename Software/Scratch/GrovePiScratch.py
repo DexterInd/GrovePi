@@ -40,11 +40,11 @@ en_debug=1
 try:
     s = scratch.Scratch()
     if s.connected:
-        print "Connected to Scratch successfully"
+        print "GrovePi Scratch: Connected to Scratch successfully"
 	#else:
     #sys.exit(0)
 except scratch.ScratchError:
-    print "Scratch is either not opened or remote sensor connections aren't enabled"
+    print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled"
     #sys.exit(0)
 
 class myThread (threading.Thread):     
@@ -74,7 +74,7 @@ def match_sensors(msg,lst):
 try:
     s.broadcast('READY')
 except NameError:
-	print "Unable to Broadcast"
+	print "GrovePi Scratch: Unable to Broadcast"
 while True:
     try:
 		m = s.receive()
@@ -231,19 +231,19 @@ while True:
 					
     except KeyboardInterrupt:
         running= False
-        print "Disconnected from Scratch"
+        print "GrovePi Scratch: Disconnected from Scratch"
         break
     except (scratch.scratch.ScratchConnectionError,NameError) as e:
 		while True:
 			#thread1.join(0)
-			print "Scratch connection error, Retrying"
+			print "GrovePi Scratch: Scratch connection error, Retrying"
 			time.sleep(5)
 			try:
 				s = scratch.Scratch()
 				s.broadcast('READY')
-				print "Connected to Scratch successfully"
+				print "GrovePi Scratch: Connected to Scratch successfully"
 				break;
 			except scratch.ScratchError:
-				print "Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
+				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
     except:
-		print "Error"	
+		print "GrovePi Scratch: Error"	
