@@ -1,6 +1,6 @@
 {
     "name": "node-grovepi",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "GrovePi library for Node.js",
     "keywords": ["grovepi", "robot", "gpio", "i2c"],
     "dependencies": {
@@ -19,7 +19,7 @@
         "url": "git://github.com/marcellobarile/GrovePi.git"
     },
     "author": "Marcello Barile <marcello.barile@gmail.com> (http://www.barile.eu)",
-    "license": "Creative Commons Attribution-ShareAlike 3.0",
+    "license": "GNU General Public License 3.0",
     "bugs": {
         "url": "https://github.com/marcellobarile/GrovePi/issues"
     },
