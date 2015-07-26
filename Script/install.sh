@@ -52,8 +52,8 @@ read
 echo " "
 echo "Check for internet connectivity..."
 echo "=================================="
-wget -q --tries=2 --timeout=20 http://google.com
-if [[ $? -eq 0 ]];then
+wget -q --tries=2 --timeout=100 http://google.com
+if [ $? -eq 0 ];then
 	echo "Connected"
 else
 	echo "Unable to Connect, try again !!!"
@@ -131,6 +131,10 @@ cd /tmp
 wget http://project-downloads.drogon.net/gertboard/setup.sh
 chmod +x setup.sh
 sudo ./setup.sh
+
+echo " "
+echo "Install smbus for python"
+sudo apt-get install python-smbus
 
 echo " "
 echo "Restarting"

@@ -9,9 +9,25 @@
 #
 # Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
-# LICENSE: 
-# These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
-#
+'''
+## License
+ GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
+ Copyright (C) 2015  Dexter Industries
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+'''
+
 # Karan Nayan
 # Initial Date: 13 Feb 2014
 # Last Updated: 01 June 2015
@@ -22,8 +38,14 @@ import time
 import math
 import RPi.GPIO as GPIO
 import struct
+import sys
 
 debug =0
+
+if sys.version_info<(3,0):
+	p_version=2
+else:
+	p_version=3
 
 rev = GPIO.RPI_REVISION
 if rev == 2 or rev == 3:
@@ -126,7 +148,7 @@ def write_i2c_block(address, block):
 		return bus.write_i2c_block_data(address, 1, block)
 	except IOError:
 		if debug:
-			print "IOError"
+			print ("IOError")
 		return -1
 
 # Read I2C byte
@@ -135,7 +157,7 @@ def read_i2c_byte(address):
 		return bus.read_byte(address)
 	except IOError:
 		if debug:
-			print "IOError"
+			print ("IOError")
 		return -1
 
 
@@ -145,7 +167,7 @@ def read_i2c_block(address):
 		return bus.read_i2c_block_data(address, 1)
 	except IOError:
 		if debug:
-			print "IOError"
+			print ("IOError")
 		return -1
 
 # Arduino Digital Read
@@ -252,47 +274,30 @@ def dht(pin, module_type):
 		read_i2c_byte(address)
 		number = read_i2c_block(address)
 		if number == -1:
-			return [-1,-1]
+			return -1
 	except (TypeError, IndexError):
-		return [-1,-1]
+		return -1
 	# data returned in IEEE format as a float in 4 bytes
-	f = 0
-	# data is reversed
-	for element in reversed(number[1:5]):
-		# Converted to hex
-		hex_val = hex(element)
-		#print hex_val
-		try:
-			h_val = hex_val[2] + hex_val[3]
-		except IndexError:
-			h_val = '0' + hex_val[2]
-		# Convert to char array
-		if f == 0:
-			h = h_val
-			f = 1
-		else:
-			h = h + h_val
-	# convert the temp back to float
-	t = round(struct.unpack('!f', h.decode('hex'))[0], 2)
+	
+	if p_version==2:
+		h=''
+		for element in (number[1:5]):
+			h+=chr(element)
+			
+		t_val=struct.unpack('f', h)
+		t = round(t_val[0], 2)
 
-	h = ''
-	# data is reversed
-	for element in reversed(number[5:9]):
-		# Converted to hex
-		hex_val = hex(element)
-		# Print hex_val
-		try:
-			h_val = hex_val[2] + hex_val[3]
-		except IndexError:
-			h_val = '0' + hex_val[2]
-		# Convert to char array
-		if f == 0:
-			h = h_val
-			f = 1
-		else:
-			h = h + h_val
-	# convert back to float
-	hum = round(struct.unpack('!f', h.decode('hex'))[0], 2)
+		h = ''
+		for element in (number[5:9]):
+			h+=chr(element)
+		
+		hum_val=struct.unpack('f',h)
+		hum = round(hum_val[0], 2)
+	else:
+		t_val=bytearray(number[1:5])
+		h_val=bytearray(number[5:9])
+		t=round(struct.unpack('f',t_val)[0],2)
+		hum=round(struct.unpack('f',h_val)[0],2)
 	return [t, hum]
 
 # Grove LED Bar - initialise
@@ -471,7 +476,7 @@ def ir_read_signal():
 		write_i2c_block(address,ir_read_cmd+[unused,unused,unused])
 		time.sleep(.1)
 		data_back= bus.read_i2c_block_data(address, 1)[0:21]
-		if data_back[1]<>255:
+		if (data_back[1]!=255):
 			return data_back
 		return [-1]*21
 	except IOError:
