@@ -8,7 +8,7 @@
         "buffertools": "2.1.*",
         "i2c-bus": "0.11.*",
         "npmlog": "1.2.*",
-        "sleep": "2.0.*"
+        "sleep": "3.0.*"
     },
     "main": "index.js",
     "scripts": {
@@ -19,7 +19,7 @@
         "url": "git://github.com/marcellobarile/GrovePi.git"
     },
     "author": "Marcello Barile <marcello.barile@gmail.com> (http://www.barile.eu)",
-    "license": "GNU General Public License 3.0",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/marcellobarile/GrovePi/issues"
     },
