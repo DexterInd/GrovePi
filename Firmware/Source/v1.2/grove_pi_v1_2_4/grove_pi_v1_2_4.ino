@@ -139,7 +139,7 @@ void loop()
     {
       b[1] = 1;
       b[2] = 2;
-      b[3] = 3;
+      b[3] = 4;
     }
     //Accelerometer x,y,z, read
     else if(cmd[0]==20)
