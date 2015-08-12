@@ -38,7 +38,7 @@ THE SOFTWARE.
 #
 # The Python program acts as the Bridge between Scratch & GrovePi and must be running for the Scratch program to run.
 ##############################################################################################################
-
+'''
 import scratch,sys,threading,math
 import grovepi
 import time
