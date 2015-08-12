@@ -79,6 +79,8 @@ pMode_cmd = [5]
 uRead_cmd = [7]
 # Get firmware version
 version_cmd = [8]
+# GPS Arduino
+gps_location_cmd = [11]
 # Accelerometer (+/- 1.5g) read
 acc_xyz_cmd = [20]
 # RTC get time
@@ -143,10 +145,6 @@ ir_read_cmd=[21]
 # Set pin for the IR reciever
 ir_recv_pin_cmd=[22]
 
-dus_sensor_read_cmd=[10]
-encoder_read_cmd=[11]
-flow_read_cmd=[12]
-flow_disable_cmd=[13]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -251,6 +249,55 @@ def version():
 	number = read_i2c_block(address)
 	return "%s.%s.%s" % (number[1], number[2], number[3])
 
+def gps_arduino():
+	write_i2c_block(address, gps_location_cmd + [unused, unused, unused])
+	time.sleep(1)
+
+	read_i2c_byte(address)
+	number = read_i2c_block(address)
+	try:
+		read_i2c_byte(address)
+		number = read_i2c_block(address)
+		if number == -1:
+			return -1
+	except (TypeError, IndexError):
+		return -1
+
+	h=''
+	for element in (number[1:5]):
+		h+=chr(element)
+	lat_val=struct.unpack('f', h)
+	lat = round(lat_val[0], 6)
+	print lat
+
+	h=''
+	for element in (number[5:9]):
+		h+=chr(element)
+	lng_val=struct.unpack('f', h)
+	lng = round(lng_val[0], 6)
+	print lng
+
+	h=''
+	for element in (number[9:13]):
+		h+=chr(element)
+	alt_val=struct.unpack('f', h)
+	alt = round(alt_val[0], 6)
+	print alt
+
+	h=''
+	for element in (number[13:15]):
+		h+=chr(element)
+	year_val=struct.unpack('h', h)
+	year = year_val[0]
+
+	month = number[15]
+	day =  number[16]
+	hour = number[17]
+	minute = number[18]
+	second = number[19]
+	ms = number[20]
+
+	return (lat, lng, alt, year, month, day, hour, minute, second, ms)
 
 # Read Grove Accelerometer (+/- 1.5g) XYZ value
 def acc_xyz():
@@ -497,42 +544,3 @@ def ir_read_signal():
 # Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
 def ir_recv_pin(pin):
 	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
-	
-def dustSensorRead(run_in_bk=1):
-	write_i2c_block(address, dus_sensor_read_cmd + [run_in_bk, unused, unused])
-	time.sleep(.2)
-	#read_i2c_byte(address)
-	#number = read_i2c_block(address)
-	#return (number[1] * 256 + number[2])
-	data_back= bus.read_i2c_block_data(address, 1)[0:4]
-	#print data_back[:4]
-	if data_back[0]!=255:
-		conc=(data_back[3]*256*256+data_back[2]*256+data_back[1])/100.0 
-		return [data_back[0],conc]
-	else:
-		return [-1,-1]
-	print data_back
-	
-def encoderRead(run_in_bk=1):
-	write_i2c_block(address, encoder_read_cmd + [run_in_bk, unused, unused])
-	time.sleep(.2)
-	data_back= bus.read_i2c_block_data(address, 1)[0:2]
-	#print data_back
-	if data_back[0]!=255:
-		return [data_back[0],data_back[1]]
-	else:
-		return [-1,-1]
-		
-def flowDisable():
-	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
-	time.sleep(.2)
-	
-def flowRead(run_in_bk=1):
-	write_i2c_block(address, flow_read_cmd + [run_in_bk, unused, unused])
-	time.sleep(.2)
-	data_back= bus.read_i2c_block_data(address, 1)[0:3]
-	#print data_back
-	if data_back[0]!=255:
-		return [data_back[0],data_back[2]*256+data_back[1]]
-	else:
-		return [-1,-1]

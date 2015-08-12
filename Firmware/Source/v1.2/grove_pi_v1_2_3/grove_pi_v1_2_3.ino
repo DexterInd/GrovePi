@@ -6,6 +6,7 @@
 #include "TM1637.h"
 #include "ChainableLED.h"
 #include "IRSendRev.h"
+#include "TinyGPS.h"
 
 MMA7660 acc;
 DS1307 clock;
@@ -13,6 +14,7 @@ DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];   // 7 instances for D2-D8
+TinyGPSPlus gps;
 
 #define SLAVE_ADDRESS 0x04
 
@@ -29,7 +31,7 @@ int8_t accv[3];
 byte rgb[] = { 0, 0, 0 };
 void setup()
 {
-    // Serial.begin(38400);         // start serial for output
+    Serial.begin(9600);         // start serial for output
     Wire.begin(SLAVE_ADDRESS);
 
     Wire.onReceive(receiveData);
@@ -103,6 +105,7 @@ void loop()
       //Serial.println(b[1]);
       //Serial.println(b[2]);
     }
+    
     //Firmware version
     if(cmd[0]==8)
     {
@@ -110,6 +113,39 @@ void loop()
       b[2] = 2;
       b[3] = 3;
     }
+    
+    //GPS running on Arduino Serial port
+    if(cmd[0]==11)
+    {
+      if (gps.location.isValid()) {
+        float lat = gps.location.lat() ;
+        float lng = gps.location.lng() ;
+        float alt = gps.altitude.meters();
+        byte *b1=(byte*)&lat;
+        byte *b2=(byte*)&lng;
+        byte *b3=(byte*)&alt;
+        for(j=0;j<4;j++)
+          b[j+1]=b1[j];
+        for(j=4;j<8;j++)
+          b[j+1]=b2[j-4];
+        for(j=8;j<12;j++)
+          b[j+1]=b2[j-8];
+      }
+      if(gps.time.isValid())
+      {
+        int year = gps.date.year();
+        byte *b4=(byte*)&year;
+        b[13]=b4[0];
+        b[14]=b4[1];
+        b[15]=gps.date.month();
+        b[16]=gps.date.day();
+        b[17]=gps.time.hour();
+        b[18]=gps.time.minute();
+        b[19]=gps.time.second();
+        b[20]=gps.time.centisecond();
+      }
+    }
+    
     //Accelerometer x,y,z, read
     if(cmd[0]==20)
     {
@@ -502,7 +538,16 @@ void loop()
     }
 
     // end Grove Chainable RGB LED 
+    
+    // GPS background polling
+    if(Serial.available() > 0) {
+      gps.encode(Serial.read());   
+    }
+    
+    
   }
+  
+
 }
 
 void receiveData(int byteCount)
@@ -527,6 +572,8 @@ void sendData()
     Wire.write(b, 3);
   if(cmd[0] == 8 || cmd[0] == 20)
     Wire.write(b, 4);
+  if(cmd[0] == 11)
+    Wire.write(b, 21);
   if(cmd[0] == 30 || cmd[0] == 40)
     Wire.write(b, 9);
   if(cmd[0]==21)
