@@ -1,4 +1,4 @@
-This is a Python 2.7 script wich can be used to get readings from the Grove Digital Barometic Sensor connected to the GrovePi on a Raspberry Pi.
+This is a Python 2.7 script wich can be used to get readings from the Grove Digital Barometic Sensor(BMP085) (http://www.seeedstudio.com/depot/Grove-Barometer-Sensor-p-1199.html) connected to the GrovePi on a Raspberry Pi.
 
 The script Grove_Barometic_Sensor.py containes a class BMP085 (this is the actual sensor-chip on the device). All functions are inside this class and can be called from other scripts if you set the following code in the script:
 	from Grove_Barometic_Sensor import BMP085
