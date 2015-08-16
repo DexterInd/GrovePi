@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 # USAGE
 #
-# Connect the grove encoder to Port 2 on the GrovePi. The encoder only works on that port
+# Connect the grove encoder to D2 on the GrovePi.
 # You can send'run_in_bk=1' as a parameter, e.g. grovepi.encoderRead(run_in_bk=1) to run the encoder code in the background on the GrovePi. This allows you to use other functions such as digitalRead to run with the encoder read running in the background
 #
 # the fist byte is 1 for a new value and 0 for old values
