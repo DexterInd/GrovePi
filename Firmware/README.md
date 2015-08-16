@@ -6,7 +6,11 @@ GrovePi is an open source platform for connecting Grove Sensors to the Raspberry
 See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
 [Dexter Industries](http://www.dexterindustries.com)
 
+<<<<<<< HEAD
 
+=======
+'''
+>>>>>>> origin/master
 ## License
 
 The MIT License (MIT)
@@ -30,4 +34,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<<<<<<< HEAD
 THE SOFTWARE.
+=======
+'''
+>>>>>>> origin/master

@@ -11,21 +11,29 @@
 #
 '''
 ## License
- GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
- Copyright (C) 2015  Dexter Industries
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+The MIT License (MIT)
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Copyright (C) 2015  Dexter Industries
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 '''
 
 # Karan Nayan
@@ -135,6 +143,10 @@ ir_read_cmd=[21]
 # Set pin for the IR reciever
 ir_recv_pin_cmd=[22]
 
+dus_sensor_read_cmd=[10]
+encoder_read_cmd=[11]
+flow_read_cmd=[12]
+flow_disable_cmd=[13]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -485,3 +497,42 @@ def ir_read_signal():
 # Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
 def ir_recv_pin(pin):
 	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
+	
+def dustSensorRead(run_in_bk=1):
+	write_i2c_block(address, dus_sensor_read_cmd + [run_in_bk, unused, unused])
+	time.sleep(.2)
+	#read_i2c_byte(address)
+	#number = read_i2c_block(address)
+	#return (number[1] * 256 + number[2])
+	data_back= bus.read_i2c_block_data(address, 1)[0:4]
+	#print data_back[:4]
+	if data_back[0]!=255:
+		conc=(data_back[3]*256*256+data_back[2]*256+data_back[1])/100.0 
+		return [data_back[0],conc]
+	else:
+		return [-1,-1]
+	print data_back
+	
+def encoderRead(run_in_bk=1):
+	write_i2c_block(address, encoder_read_cmd + [run_in_bk, unused, unused])
+	time.sleep(.2)
+	data_back= bus.read_i2c_block_data(address, 1)[0:2]
+	#print data_back
+	if data_back[0]!=255:
+		return [data_back[0],data_back[1]]
+	else:
+		return [-1,-1]
+		
+def flowDisable():
+	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def flowRead(run_in_bk=1):
+	write_i2c_block(address, flow_read_cmd + [run_in_bk, unused, unused])
+	time.sleep(.2)
+	data_back= bus.read_i2c_block_data(address, 1)[0:3]
+	#print data_back
+	if data_back[0]!=255:
+		return [data_back[0],data_back[2]*256+data_back[1]]
+	else:
+		return [-1,-1]

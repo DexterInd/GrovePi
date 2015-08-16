@@ -3,7 +3,7 @@
 import smbus
 import RPi.GPIO as GPIO
 #import grovepi
-from grove_i2c_barometic_sensor import BMP085
+from grove_i2c_barometic_sensor_BMP180 import BMP085
 
 # ===========================================================================
 # Example Code
