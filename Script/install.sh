@@ -141,11 +141,13 @@ echo "Install smbus for python"
 sudo apt-get install python-smbus
 
 echo " "
-echo "Restarting"
-echo "3"
-sleep 1
-echo "2"
-sleep 1
-echo "1"
-sleep 1
-shutdown -r now
+echo "Please restart to implement changes!"
+echo "  _____  ______  _____ _______       _____ _______ "
+echo " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
+echo " | |__) | |__  | (___    | |  /  \  | |__) | | |   "
+echo " |  _  /|  __|  \___ \   | | / /\ \ |  _  /  | |   "
+echo " | | \ \| |____ ____) |  | |/ ____ \| | \ \  | |   "
+echo " |_|  \_\______|_____/   |_/_/    \_\_|  \_\ |_|   "
+echo " "
+echo "Please restart to implement changes!"
+echo "To Restart type sudo reboot"
