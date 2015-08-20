@@ -47,7 +47,8 @@ echo " "
 echo "Raspberry Pi wil reboot after completion."
 echo " "
 echo -e "Press \E[32mENTER\E[0m to begin... or \E[91mctrl+c\E[0m to abort"
-read
+# read
+sleep 5
 
 echo " "
 echo "Check for internet connectivity..."
