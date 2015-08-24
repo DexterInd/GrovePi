@@ -232,7 +232,27 @@ while True:
 			if en_debug:
 				print msg
 				print "Analog Reading: " + str(a_read)		
-				
+		elif msg.lower()=="READ_IR".lower():
+			print "READ_IR!" 
+			if en_ir_sensor==0:
+				import lirc
+				sockid = lirc.init("keyes", blocking = False)
+				en_ir_sensor=1
+			try:
+				read_ir= lirc.nextcode()  # press 1 
+				if len(read_ir) !=0:
+					print read_ir[0]
+			except:
+				if en_debug:
+					e = sys.exc_info()[1]
+					print "Error reading IR sensor: " + str(read_ir)
+			if en_debug:
+				print "IR Recv Reading: " + str(read_ir)
+			if en_gpg:
+				if len(read_ir) !=0:
+					s.sensorupdate({'read_ir':read_ir[0]})		
+				else:
+					s.sensorupdate({'read_ir':""})
 		else:
 			if en_debug:
 				print "m",msg
