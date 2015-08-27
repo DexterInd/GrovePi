@@ -253,6 +253,25 @@ while True:
 					s.sensorupdate({'read_ir':read_ir[0]})		
 				else:
 					s.sensorupdate({'read_ir':""})
+					
+		elif msg.lower()=="TAKE_PICTURE".lower():
+			print "TAKE_PICTURE!" 
+			try:
+				from subprocess import call
+				import datetime
+				cmd_start="raspistill -o /home/pi/Desktop/img_"
+				cmd_end=".jpg -w 640 -h 480 -t 1"
+				dt=str(datetime.datetime.now())
+				dt=dt.replace(' ','_',10)
+				call ([cmd_start+dt+cmd_end], shell=True)
+				print "Picture Taken"
+			except:
+				if en_debug:
+					e = sys.exc_info()[1]
+					print "Error taking picture"
+				s.sensorupdate({'camera':"Error"})	
+			s.sensorupdate({'camera':"Picture Taken"})	
+					
 		else:
 			if en_debug:
 				print "m",msg
