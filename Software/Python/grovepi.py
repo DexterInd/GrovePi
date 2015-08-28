@@ -180,7 +180,7 @@ def read_i2c_block(address):
 	except IOError:
 		if debug:
 			print ("IOError")
-		return -1
+		raise
 
 # Arduino Digital Read
 def digitalRead(pin):
