@@ -4,8 +4,13 @@ GrovePi
 GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
 
 ## Compiling
-
 The best way to compile the firmware on the GrovePi is to use Ino.  You can see more about [ino](http://inotool.org).
+Make a new file directory, preferably on the Desktop or in the ~ directory. 
+Change directory into the new directory.
+run "ino init -t grovepi"
+Move the source code, including dependencies, into the /src directory that was automatically created.
+
+The hex files are located in the .build/uno directory.  Specifically it should generate a file called firmware.hex
 
 ## Uploading
 
