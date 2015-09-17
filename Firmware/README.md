@@ -7,15 +7,27 @@ GrovePi is an open source platform for connecting Grove Sensors to the Raspberry
 The best way to compile the firmware on the GrovePi is to use Ino.  You can see more about [ino](http://inotool.org).
 Make a new file directory, preferably on the Desktop or in the ~ directory. 
 Change directory into the new directory.
-run "ino init -t grovepi"
+run **ino init -t grovepi**
+
 Move the source code, including dependencies, into the /src directory that was automatically created.
 
-The hex files are located in the .build/uno directory.  Specifically it should generate a file called firmware.hex
+The hex files are located in the **.build/uno directory**.  Specifically it should generate a file called firmware.hex
 
 ## Uploading
 
 You can upload the firmware you've compiled using the following command:
-avrdude -c gpio -p m328p -U flash:w:.build/uno/firmware.hex
+**avrdude -c gpio -p m328p -U flash:w:.build/uno/firmware.hex**
+
+## Updating the firmware on your GrovePi
+If you don;t want to compile and upload, you can also run the firmware update script to update the firmware on your GrovePi to the latest version.
+
+First make the firmware update script executable:
+
+**sudo chmod +x firmware_update.sh**
+
+then run it:
+
+**sudo ./firmware_update.sh**
 
 ## Learn More
 
