@@ -147,6 +147,8 @@ dus_sensor_read_cmd=[10]
 dust_sensor_en_cmd=[14]
 dust_sensor_dis_cmd=[15]
 encoder_read_cmd=[11] 
+encoder_en_cmd=[16]
+encoder_dis_cmd=[17]
 flow_read_cmd=[12]
 flow_disable_cmd=[13]
 
@@ -525,8 +527,16 @@ def dustSensorRead():
 		return [-1,-1]
 	print data_back
 	
-def encoderRead(run_in_bk=1):
-	write_i2c_block(address, encoder_read_cmd + [run_in_bk, unused, unused])
+def encoder_en():
+	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def encoder_dis():
+	write_i2c_block(address, encoder_dis_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def encoderRead():
+	write_i2c_block(address, encoder_read_cmd + [unused, unused, unused])
 	time.sleep(.2)
 	data_back= bus.read_i2c_block_data(address, 1)[0:2]
 	#print data_back

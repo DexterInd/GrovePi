@@ -43,11 +43,15 @@ THE SOFTWARE.
 
 import time
 import grovepi
+import atexit
+
+atexit.register(grovepi.encoder_dis)
 
 print "Reading from the encoder"
+grovepi.encoder_en()
 while True:
     try:
-		[new_val,encoder_val] = grovepi.encoderRead(run_in_bk=1)
+		[new_val,encoder_val] = grovepi.encoderRead()
 		if new_val:
 			print encoder_val
 		time.sleep(.5) 
