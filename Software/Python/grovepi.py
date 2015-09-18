@@ -151,7 +151,7 @@ encoder_en_cmd=[16]
 encoder_dis_cmd=[17]
 flow_read_cmd=[12]
 flow_disable_cmd=[13]
-
+flow_en_cmd=[18]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -549,8 +549,12 @@ def flowDisable():
 	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
 	time.sleep(.2)
 	
-def flowRead(run_in_bk=1):
-	write_i2c_block(address, flow_read_cmd + [run_in_bk, unused, unused])
+def flowEnable():
+	write_i2c_block(address, flow_en_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def flowRead():
+	write_i2c_block(address, flow_read_cmd + [unused, unused, unused])
 	time.sleep(.2)
 	data_back= bus.read_i2c_block_data(address, 1)[0:3]
 	#print data_back
