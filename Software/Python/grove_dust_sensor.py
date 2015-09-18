@@ -43,14 +43,18 @@ THE SOFTWARE.
 
 import time
 import grovepi
+import atexit
+
+atexit.register(grovepi.dust_sensor_dis)
 
 print "Reading from the dust sensor"
+grovepi.dust_sensor_en()
 while True:
     try:
-		[new_val,conc] = grovepi.dustSensorRead()
+		[new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
 		if new_val:
-			print conc
-		time.sleep(.5) 
+			print lowpulseoccupancy
+		time.sleep(5) 
 
     except IOError:
         print ("Error")

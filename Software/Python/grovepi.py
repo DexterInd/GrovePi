@@ -144,9 +144,12 @@ ir_read_cmd=[21]
 ir_recv_pin_cmd=[22]
 
 dus_sensor_read_cmd=[10]
-encoder_read_cmd=[11]
+dust_sensor_en_cmd=[14]
+dust_sensor_dis_cmd=[15]
+encoder_read_cmd=[11] 
 flow_read_cmd=[12]
 flow_disable_cmd=[13]
+
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -498,8 +501,16 @@ def ir_read_signal():
 def ir_recv_pin(pin):
 	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
 	
-def dustSensorRead(run_in_bk=1):
-	write_i2c_block(address, dus_sensor_read_cmd + [run_in_bk, unused, unused])
+def dust_sensor_en():
+	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def dust_sensor_dis():
+	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def dustSensorRead():
+	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
 	time.sleep(.2)
 	#read_i2c_byte(address)
 	#number = read_i2c_block(address)
@@ -507,8 +518,9 @@ def dustSensorRead(run_in_bk=1):
 	data_back= bus.read_i2c_block_data(address, 1)[0:4]
 	#print data_back[:4]
 	if data_back[0]!=255:
-		conc=(data_back[3]*256*256+data_back[2]*256+data_back[1])/100.0 
-		return [data_back[0],conc]
+		lowpulseoccupancy=(data_back[3]*256*256+data_back[2]*256+data_back[1])
+		#print [data_back[0],lowpulseoccupancy]
+		return [data_back[0],lowpulseoccupancy]
 	else:
 		return [-1,-1]
 	print data_back
