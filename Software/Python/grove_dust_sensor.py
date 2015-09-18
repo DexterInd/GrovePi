@@ -36,7 +36,7 @@ THE SOFTWARE.
 # USAGE
 #
 # Connect the dust sensor to Port 8 on the GrovePi. The dust sensor only works on that port
-# The dust sensor takes 30 seconds to update the new values, so you can send the 'run_in_bk=1' as a parameter to the read, e.g. grovepi.dustSensorRead(run_in_bk=1) to run the dust sensor code in the background. This basically allows the dust sensor to keep running in the background and you can read from it once every 30 seconds
+# The dust sensor takes 30 seconds to update the new values
 #
 # the fist byte is 1 for a new value and 0 for old values
 # second byte is the concentration in pcs/0.01cf
