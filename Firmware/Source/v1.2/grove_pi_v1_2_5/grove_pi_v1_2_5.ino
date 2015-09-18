@@ -27,7 +27,8 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define encoder_dis_cmd			17
 
 #define flow_read_cmd           12
-#define flow_disable_cmd        13
+#define flow_en_cmd				18
+#define flow_dis_cmd       		13
 
 int cmd[5];
 int index=0;
@@ -54,13 +55,13 @@ int l_status;
 //Encoder variable
 int index_LED;
 byte enc_val[2];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background 
-int enc_frist_time=1,enc_run_bk=0;   //Flag for first time setup
+int enc_run_bk=0;   //Flag for first time setup
 
 //Flow sensor variables
 volatile int NbTopsFan; //measuring the rising edges of the signal
 int Calc;                               
 int hallsensor = 2;    //The pin location of the sensor
-int flow_frist_time=1,flow_run_bk=0;
+int flow_run_bk=0;
 long flow_read_start;
 byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background 
 
@@ -536,12 +537,6 @@ void loop()
         }
       }
     }
-    else if(cmd[0]==flow_disable_cmd)
-    {
-        detachInterrupt(0);
-        flow_frist_time=1;
-        cmd[0]=0;
-    }
     else if(cmd[0]==dust_sensor_en_cmd)
 	{
 		attachInterrupt(0,readPulseDust,CHANGE);
@@ -578,13 +573,21 @@ void loop()
 		encoder.Timer_disable();
 		enc_run_bk=0;
 	}
-	// else if(cmd[0]==encoder_read_cmd)
-	// {
-		// if(run_once==1)
-		// {
-			// run_once==1;
-		// }
-	// }
+	else if(cmd[0]==flow_en_cmd)
+	{
+		pinMode(2, INPUT); 
+		attachInterrupt(0, rpm, RISING);
+		NbTopsFan = 0;
+		flow_read_start=millis();
+		flow_run_bk=1;
+		cmd[0]=0;
+	}
+	else if(cmd[0]==flow_dis_cmd)
+    {
+		flow_run_bk=0;
+        detachInterrupt(0);
+        cmd[0]=0;
+    }
   }
     //Dust sensor can run in background so has a dedicated if condition
     if(dust_run_bk)
@@ -595,7 +598,6 @@ void loop()
 			latest_dust_val=lowpulseoccupancy;
 			lowpulseoccupancy=0;
 			starttime=millis();
-			
 		}
     }
 
@@ -623,19 +625,8 @@ void loop()
         }
     }
 
-    if(cmd[0]==flow_read_cmd || flow_run_bk)
+    if(flow_run_bk)
     {
-        if(cmd[0]==flow_read_cmd)
-            flow_run_bk=cmd[1];
-        if(flow_frist_time)
-        {
-            pinMode(2, INPUT); 
-            attachInterrupt(0, rpm, RISING);
-            NbTopsFan = 0;
-            flow_read_start=millis();
-            flow_frist_time=0;
-        }
-
         if(millis()-flow_read_start>2000)
         {
             Calc = (NbTopsFan * 30 / 73);
@@ -646,7 +637,6 @@ void loop()
             flow_read_start=millis();
         }
     }
-  
 }
 
 void receiveData(int byteCount)
@@ -695,6 +685,7 @@ void sendData()
   {
     Wire.write(flow_val,3);     
     flow_val[0]=0;
+	cmd[0]=0;
   }
 }
 
