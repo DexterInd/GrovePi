@@ -21,7 +21,11 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define dust_sensor_read_cmd    10
 #define dust_sensor_en_cmd		14
 #define dust_sensor_dis_cmd		15
+
 #define encoder_read_cmd        11
+#define encoder_en_cmd			16
+#define encoder_dis_cmd			17
+
 #define flow_read_cmd           12
 #define flow_disable_cmd        13
 
@@ -560,11 +564,27 @@ void loop()
 		latest_dust_val=latest_dust_val/256;
 		b[2]=latest_dust_val%256;
 		b[3]=latest_dust_val/256;
-		
 		run_once=0;
 		}
-
 	}
+	else if(cmd[0]==encoder_en_cmd)
+	{
+		encoder.Timer_init(); 
+		enc_run_bk=1;
+		cmd[0]=0;
+	}
+	else if(cmd[0]==encoder_dis_cmd)
+	{
+		encoder.Timer_disable();
+		enc_run_bk=0;
+	}
+	// else if(cmd[0]==encoder_read_cmd)
+	// {
+		// if(run_once==1)
+		// {
+			// run_once==1;
+		// }
+	// }
   }
     //Dust sensor can run in background so has a dedicated if condition
     if(dust_run_bk)
@@ -579,16 +599,8 @@ void loop()
 		}
     }
 
-    if(cmd[0]==encoder_read_cmd || enc_run_bk)
+    if(enc_run_bk)
     {
-        if(cmd[0]==encoder_read_cmd)
-            enc_run_bk=cmd[1];
-        if(enc_frist_time)
-        {
-            encoder.Timer_init();    
-            enc_frist_time=0;
-        }
-        
         if (encoder.rotate_flag ==1)
         {
             if (encoder.direct==1)
@@ -596,7 +608,6 @@ void loop()
                 index_LED++;
                 if (index_LED>24)
                 index_LED=0;
-                //Serial.println(index_LED);
                 enc_val[0]=1;
                 enc_val[1]=index_LED;
             }
@@ -605,7 +616,6 @@ void loop()
                 index_LED--;
                 if(index_LED<0)
                 index_LED=24;
-                //Serial.println(index_LED);
                 enc_val[0]=1;
                 enc_val[1]=index_LED;
             }
@@ -679,6 +689,7 @@ void sendData()
   {
     Wire.write(enc_val,2);     
     enc_val[0]=0;
+	cmd[0]=0;
   }
   if(cmd[0]==flow_read_cmd)
   {

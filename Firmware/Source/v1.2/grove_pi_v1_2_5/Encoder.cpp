@@ -39,6 +39,10 @@ void Encoder::Timer_init(void)
     Timer1.attachInterrupt(timerIsr); // attach the service routine here
     sei();
 }
+void Encoder::Timer_disable(void)
+{
+    Timer1.detachInterrupt();
+}
 
 ISR(PCINT2_vect)
 {

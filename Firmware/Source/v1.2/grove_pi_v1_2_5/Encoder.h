@@ -28,6 +28,7 @@ class Encoder
   public:
   Encoder();
   void Timer_init(void);
+  void Timer_disable(void);
   char direct;
  //char direct_b;
   char rotate_flag;
