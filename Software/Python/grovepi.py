@@ -215,6 +215,7 @@ def analogRead(pin):
 	time.sleep(.1)
 	bus.read_byte(address)
 	number = bus.read_i2c_block_data(address, 1)
+	time.sleep(.1)
 	return number[1] * 256 + number[2]
 
 
@@ -290,6 +291,7 @@ def dht(pin, module_type):
 	try:
 		read_i2c_byte(address)
 		number = read_i2c_block(address)
+		time.sleep(.1)
 		if number == -1:
 			return -1
 	except (TypeError, IndexError):
