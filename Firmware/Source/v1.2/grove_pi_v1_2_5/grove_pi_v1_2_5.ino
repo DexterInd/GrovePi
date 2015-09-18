@@ -34,7 +34,7 @@ int cmd[5];
 int index=0;
 int flag=0;
 int i;
-byte val=0,b[21],float_array[4];
+byte val=0,b[21],float_array[4],dht_b[21];
 unsigned char dta[21];
 int length;
 int aRead=0;
@@ -187,24 +187,28 @@ void loop()
     //40- Temperature
     else if(cmd[0]==40)
     {
-      if(cmd[2]==0)
-        dht.begin(cmd[1],DHT11);
-      else if(cmd[2]==1)
-        dht.begin(cmd[1],DHT22);
-      else if(cmd[2]==2)
-        dht.begin(cmd[1],DHT21);
-      else if(cmd[2]==3)
-        dht.begin(cmd[1],AM2301);
-      float t= dht.readTemperature();
-      float h= dht.readHumidity();
-      //Serial.print(t);
-      //Serial.print("#");
-      byte *b1=(byte*)&t;
-      byte *b2=(byte*)&h;
-      for(j=0;j<4;j++)
-        b[j+1]=b1[j];
-      for(j=4;j<8;j++)
-        b[j+1]=b2[j-4];
+		if(run_once)
+		{
+			if(cmd[2]==0)
+			dht.begin(cmd[1],DHT11);
+			else if(cmd[2]==1)
+			dht.begin(cmd[1],DHT22);
+			else if(cmd[2]==2)
+			dht.begin(cmd[1],DHT21);
+			else if(cmd[2]==3)
+			dht.begin(cmd[1],AM2301);
+			float t= dht.readTemperature();
+			float h= dht.readHumidity();
+			//Serial.print(t);
+			//Serial.print("#");
+			byte *b1=(byte*)&t;
+			byte *b2=(byte*)&h;
+			for(j=0;j<4;j++)
+			dht_b[j+1]=b1[j];
+			for(j=4;j<8;j++)
+			dht_b[j+1]=b2[j-4];
+			run_once=0;
+		}
     }
 
     // Grove LED Bar
@@ -662,8 +666,11 @@ void sendData()
     Wire.write(b, 3);
   if(cmd[0] == 8 || cmd[0] == 20)
     Wire.write(b, 4);
-  if(cmd[0] == 30 || cmd[0] == 40)
+  if(cmd[0] == 30) 
     Wire.write(b, 9);
+  if(cmd[0] == 40) 
+    Wire.write(dht_b, 9);
+  
   if(cmd[0]==21)
   {
     Wire.write(b,21);     
@@ -687,6 +694,7 @@ void sendData()
     flow_val[0]=0;
 	cmd[0]=0;
   }
+  
 }
 
 //ISR for the flow sensor
