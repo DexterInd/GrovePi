@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove 1/4'' Flow Sensor(http://www.seeedstudio.com/depot/G14-Water-Flow-Sensor-p-1345.html) with the GrovePi
+# GrovePi Example for using the Grove Dust sensor(http://www.seeedstudio.com/depot/Grove-Dust-Sensor-p-1050.html) with the GrovePi
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -33,31 +33,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-# USAGE
-#
-# Connect the Flow meter to Port 2 on the GrovePi. The flow meter only works on that port
-
-# You can send 'run_in_bk=1' as a parameter, e.g. grovepi.flowRead(run_in_bk=1) to run the flow meter code in the background on the GrovePi. This allows you to use other functions such as digitalRead to run with the flow meter read running in the background
-#
-# the fist byte is 1 for a new value and 0 for old values
-# second byte is flow rate in L/hour
-#
-# Since the flow meter uses interrupts, it is better to disable it once you are done using it
-# The flow sensor readings are updated once every 2 seconds on the firmware
 import time
 import grovepi
-
 import atexit
-atexit.register(grovepi.flowDisable())
 
-print "Reading from the Flow meter"
-grovepi.flowEnable()
+atexit.register(grovepi.dust_sensor_dis)
+
+grovepi.dust_sensor_en()
+
 while True:
     try:
-		[new_val,flow_val] = grovepi.flowRead()
-		if new_val:
-			print flow_val
-		time.sleep(.5) 
+		[new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
+		[temp,humidity] = grovepi.dht(4,1)
+		a0 = grovepi.analogRead(0)
+		a1 = grovepi.analogRead(1)
+		a2 = grovepi.analogRead(2)
+		print new_val,lowpulseoccupancy,"temp =", temp, " humidity =", humidity,"a0",a0,"a1",a1,"a2",a2
 
-    except IOError:
+    except:
         print ("Error")
+	
+		

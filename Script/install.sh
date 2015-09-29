@@ -123,6 +123,8 @@ echo "================================================"
 echo dtparam=i2c1=on >> /boot/config.txt
 echo dtparam=i2c_arm=on >> /boot/config.txt
 
+sudo adduser pi i2c
+
 #Adding ARDUINO setup files
 echo " "
 echo "Making changes to Arduino . . ."

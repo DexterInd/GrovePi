@@ -3,8 +3,8 @@
 # author:  Jonathan Williamson
 # license: BSD, see LICENSE.txt included in this package
 # 
-# This is an example to show you how to use our ADXL345 Python library
-# http://shop.pimoroni.com/products/adafruit-triple-axis-accelerometer
+# This is an example to show you how to the Grove +-16g Accelerometer
+# http://www.seeedstudio.com/depot/Grove-3Axis-Digital-Accelerometer16g-p-1156.html
 
 from adxl345 import ADXL345
   

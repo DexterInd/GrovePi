@@ -36,18 +36,20 @@ THE SOFTWARE.
 # USAGE
 #
 # Connect the grove encoder to D2 on the GrovePi.
-# You can send'run_in_bk=1' as a parameter, e.g. grovepi.encoderRead(run_in_bk=1) to run the encoder code in the background on the GrovePi. This allows you to use other functions such as digitalRead to run with the encoder read running in the background
-#
 # the fist byte is 1 for a new value and 0 for old values
 # second byte is encoder positon from 1 to 24
 
 import time
 import grovepi
+import atexit
+
+atexit.register(grovepi.encoder_dis)
 
 print "Reading from the encoder"
+grovepi.encoder_en()
 while True:
     try:
-		[new_val,encoder_val] = grovepi.encoderRead(run_in_bk=1)
+		[new_val,encoder_val] = grovepi.encoderRead()
 		if new_val:
 			print encoder_val
 		time.sleep(.5) 
