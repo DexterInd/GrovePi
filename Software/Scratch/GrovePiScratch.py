@@ -92,7 +92,8 @@ while True:
 			m = s.receive()
 
 		msg = m[1]
-		print msg
+        if en_debug :
+            print msg
 		if msg == 'SETUP' :
 			print "Setting up sensors done"
 		elif msg == 'START' :
