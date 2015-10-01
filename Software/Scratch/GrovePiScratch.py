@@ -92,8 +92,8 @@ while True:
 			m = s.receive()
 
 		msg = m[1]
-		if en_debug :
-			print msg
+		if en_debug:
+			print "Rx:",msg
 		if msg == 'SETUP' :
 			print "Setting up sensors done"
 		elif msg == 'START' :
@@ -146,8 +146,8 @@ while True:
 				d_read=grovepi.digitalRead(port)
 				s.sensorupdate({sens:d_read})
 			if en_debug:
-				print msg
-				print sens +'op:'+ str(d_read)
+				print msg,
+				print sens +' output:'+ str(d_read)
 				
 		elif msg[:16].lower()=="digitalWriteHigh".lower():
 			if en_grovepi:
@@ -275,8 +275,7 @@ while True:
 					
 		else:
 			if en_debug:
-				print "m",msg
-				print "Wrong Command"
+				print "Ignoring: ",msg
 					
     except KeyboardInterrupt:
         running= False
