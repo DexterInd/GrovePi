@@ -23,3 +23,10 @@ Put a button in port 2 and another one in port 3.
 Press the first button (in port 2). Dex will wave
 Press the second button (in port 3). Dex will rotate. 
 
+## 4. LCD screen :
+
+Put LCD screen in any of the I2C ports
+Clicking on any of the six coloured circles will change the background colour of the LCD screen (and change the colour of the sunglasses)
+Clicking on any of the four text buttons in the corners will display that text (and have Dex say the selected text)
+Clicking on Dex will have Dex ask you your name, and then display it on the LCD screen
+
