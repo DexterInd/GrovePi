@@ -142,6 +142,7 @@ while True:
 				s_no=match_sensors(msg,digitalInp)
 				sens=digitalInp[s_no]
 				port=int(msg[len(sens):])
+				sens += str(port)
 				grovepi.pinMode(port,"INPUT")
 				d_read=grovepi.digitalRead(port)
 				s.sensorupdate({sens:d_read})
