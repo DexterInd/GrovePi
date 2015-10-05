@@ -220,9 +220,23 @@ while True:
 		
 		elif msg[:3].lower()=="lcd".lower():
 			if en_grovepi:
+				if en_debug:
+					print msg[:3], msg[3:6],msg[6:]
 				import grove_rgb_lcd 
-				grove_rgb_lcd.setRGB(0,128,0)
-				grove_rgb_lcd.setText(msg[3:])
+				if msg[3:6].lower() == "col".lower():
+					rgb = []
+					for i in range(0,6,2): 
+						rgb.append(int(msg[6:][i:i+2],16))  # convert from one hex string to three ints
+					if en_debug:
+						print "colours are:",rgb[0],rgb[1],rgb[2]
+					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
+				elif msg[3:6].lower() == "txt".lower():
+					txt = msg[6:]
+					print txt
+					print "play with me\nplease"
+					grove_rgb_lcd.setText(txt)
+				else:
+					pass
 			if en_debug:
 				print msg
 			
@@ -295,4 +309,5 @@ while True:
 			except scratch.ScratchError:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
     except:
-		print "GrovePi Scratch: Error"	
+		e = sys.exc_info()[0]
+		print "GrovePi Scratch: Error %s" % e	
