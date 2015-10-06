@@ -92,8 +92,8 @@ while True:
 			m = s.receive()
 
 		msg = m[1]
-		if en_debug :
-			print msg
+		if en_debug:
+			print "Rx:",msg
 		if msg == 'SETUP' :
 			print "Setting up sensors done"
 		elif msg == 'START' :
@@ -142,12 +142,13 @@ while True:
 				s_no=match_sensors(msg,digitalInp)
 				sens=digitalInp[s_no]
 				port=int(msg[len(sens):])
+				sens += str(port)
 				grovepi.pinMode(port,"INPUT")
 				d_read=grovepi.digitalRead(port)
 				s.sensorupdate({sens:d_read})
 			if en_debug:
-				print msg
-				print sens +'op:'+ str(d_read)
+				print msg,
+				print sens +' output:'+ str(d_read)
 				
 		elif msg[:16].lower()=="digitalWriteHigh".lower():
 			if en_grovepi:
@@ -219,9 +220,23 @@ while True:
 		
 		elif msg[:3].lower()=="lcd".lower():
 			if en_grovepi:
+				if en_debug:
+					print msg[:3], msg[3:6],msg[6:]
 				import grove_rgb_lcd 
-				grove_rgb_lcd.setRGB(0,128,0)
-				grove_rgb_lcd.setText(msg[3:])
+				if msg[3:6].lower() == "col".lower():
+					rgb = []
+					for i in range(0,6,2): 
+						rgb.append(int(msg[6:][i:i+2],16))  # convert from one hex string to three ints
+					if en_debug:
+						print "colours are:",rgb[0],rgb[1],rgb[2]
+					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
+				elif msg[3:6].lower() == "txt".lower():
+					txt = msg[6:]
+					print txt
+					print "play with me\nplease"
+					grove_rgb_lcd.setText(txt)
+				else:
+					pass
 			if en_debug:
 				print msg
 			
@@ -275,8 +290,7 @@ while True:
 					
 		else:
 			if en_debug:
-				print "m",msg
-				print "Wrong Command"
+				print "Ignoring: ",msg
 					
     except KeyboardInterrupt:
         running= False
@@ -295,4 +309,5 @@ while True:
 			except scratch.ScratchError:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
     except:
-		print "GrovePi Scratch: Error"	
+		e = sys.exc_info()[0]
+		print "GrovePi Scratch: Error %s" % e	
