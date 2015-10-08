@@ -2,8 +2,13 @@
 #echo Checking for dependencies 
 #echo troubleshooting_script_v1 #> error_log.txt
 echo ""
+echo Check space left #>> error_log.txt
+echo ================ #>>error_log.txt
+df -h
+
+echo ""
 echo Check for dependencies #>> error_log.txt
-echo ====================== #>>error_log.txt
+echo ======================
 dpkg-query -W -f='${Package} ${Version} ${Status}\n' python #>> error_log.txt
 dpkg-query -W -f='${Package} ${Version} ${Status}\n' python-pip #>> error_log.txt
 dpkg-query -W -f='${Package} ${Version} ${Status}\n' git #>> error_log.txt
