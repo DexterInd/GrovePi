@@ -23,14 +23,14 @@ echo 6. Exit
 
 read -n1 -p "Select and option:" doit 
 case $doit in  
-  1) sudo ./software_status.sh | tee log.txt ;;
-  2) sudo ./avrdude_test.sh 1>&1| tee log.txt ;;
-  3) sudo ./i2c_test1.sh | tee log.txt ;;
-  4) sudo ./firmware_version_test.sh | sudo tee log.txt ;;
-  5) sudo ./software_status.sh | tee log.txt ;
+  1) sudo ./software_status.sh 2>&1| tee log.txt ;;
+  2) sudo ./avrdude_test.sh 2>&1| tee log.txt ;;
+  3) sudo ./i2c_test1.sh 2>&1| tee log.txt ;;
+  4) sudo ./firmware_version_test.sh 2>&1| sudo tee log.txt ;;
+  5) sudo ./software_status.sh 2>&1| tee log.txt ;
 	 sudo ./avrdude_test.sh 2>&1| tee -a log.txt ;
-	 sudo ./i2c_test1.sh | tee -a log.txt  ;
-	 sudo ./firmware_version_test.sh | tee -a log.txt  ;;
+	 sudo ./i2c_test1.sh 2>&1| tee -a log.txt  ;
+	 sudo ./firmware_version_test.sh 2>&1| tee -a log.txt  ;;
   *) echo Exiting ;; 
 esac
 
