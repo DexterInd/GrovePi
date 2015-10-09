@@ -13,8 +13,7 @@ echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
 echo "                                                    ";
 echo "                                                    ";
 echo " "
-printf "WELCOME TO IR RECEIVER SETUP FOR THE GOPIGO.\nPlease ensure internet connectivity before running this script.\nNOTE: Reboot Raspberry Pi after completion.\nPress ENTER to begin..."
-read
+printf "WELCOME TO IR RECEIVER SETUP FOR THE GOPIGO.\nPlease ensure internet connectivity before running this script.\nNOTE: Reboot Raspberry Pi after completion.\n"
 
 echo " "
 echo "Check for internet connectivity..."
@@ -52,73 +51,37 @@ else
 	echo "Lib dev added"
 fi
 
-while true ; do
-	echo ""
-	echo "Check the hardware version of the IR receiver printed on the IR receiver module"
-	echo "->Press 1 if the version is 1.0 or below"
-	echo "->Press 2 if the version is 1.1 or above"
-	printf "\nInput: "
-	read INPUT
-	# v1.0 and back have the IR receiver connected to white wire and v1.1 and v1.2 have it connected to the Yellow wire, so the GPIO changes
-	if [ $INPUT -eq 1 ] ; then
-		if grep -q "lirc_rpi gpio_in_pin=15" /etc/modules; then
-			echo "Lib Rpi GPIO already present"
-			
-		elif grep -q "lirc_rpi gpio_in_pin=14" /etc/modules; then
-			sed -e s/"lirc_rpi gpio_in_pin=14"//g -i /etc/modules
-			sudo echo "lirc_rpi gpio_in_pin=15" >> /etc/modules
-			echo "Lib Rpi GPIO changed from pin 14 to 15"
-			
-		else
-			sudo echo "lirc_rpi gpio_in_pin=15" >> /etc/modules
-			echo "Lib Rpi GPIO added"
-		fi
 
-		if grep -q "dtoverlay=lirc-rpi,gpio_in_pin=15" /boot/config.txt; then
-			echo "LIRC for Kernel 3.18 already present"
-			
-		elif grep -q "dtoverlay=lirc-rpi,gpio_in_pin=14" /boot/config.txt; then
-			sed -e s/"dtoverlay=lirc-rpi,gpio_in_pin=14"//g -i /boot/config.txt
-			sudo echo "dtoverlay=lirc-rpi,gpio_in_pin=15" >> /boot/config.txt
-			echo "LIRC for Kernel 3.18 changed from pin 14 to 15"
-			
-		else
-			sudo echo "dtoverlay=lirc-rpi,gpio_in_pin=15" >> /boot/config.txt
-			echo "LIRC for Kernel 3.18 added"
-		fi
-		break
-		
-	elif [ $INPUT -eq 2 ] ; then
-		if grep -q "lirc_rpi gpio_in_pin=14" /etc/modules; then
-			echo "Lib Rpi GPIO already present"
-			
-		elif grep -q "lirc_rpi gpio_in_pin=15" /etc/modules; then
-			sed -e s/"lirc_rpi gpio_in_pin=15"//g -i /etc/modules
-			sudo echo "lirc_rpi gpio_in_pin=14" >> /etc/modules
-			echo "Lib Rpi GPIO changed from pin 15 to 14"
-			
-		else
-			sudo echo "lirc_rpi gpio_in_pin=14" >> /etc/modules
-			echo "Lib Rpi GPIO added"
-		fi
+echo "Check Lib Rpi GPIO"
+if grep -q "lirc_rpi gpio_in_pin=14" /etc/modules; then
+	echo "Lib Rpi GPIO already present"
 
-		if grep -q "dtoverlay=lirc-rpi,gpio_in_pin=14" /boot/config.txt; then
-			echo "LIRC for Kernel 3.18 already present"
-			
-		elif grep -q "dtoverlay=lirc-rpi,gpio_in_pin=15" /boot/config.txt; then
-			sed -e s/"dtoverlay=lirc-rpi,gpio_in_pin=15"//g -i /boot/config.txt
-			sudo echo "dtoverlay=lirc-rpi,gpio_in_pin=14" >> /boot/config.txt
-			echo "LIRC for Kernel 3.18 changed from pin 15 to 14"
-			
-		else
-			sudo echo "dtoverlay=lirc-rpi,gpio_in_pin=14" >> /boot/config.txt
-			echo "LIRC for Kernel 3.18 added"
-		fi
-		break
-	else
-        echo "Invalid choice"
-	fi
-done
+echo "Check Pin 15"
+elif grep -q "lirc_rpi gpio_in_pin=15" /etc/modules; then
+	sed -e s/"lirc_rpi gpio_in_pin=15"//g -i /etc/modules
+	sudo echo "lirc_rpi gpio_in_pin=14" >> /etc/modules
+	echo "Lib Rpi GPIO changed from pin 15 to 14"
+	
+else
+	sudo echo "lirc_rpi gpio_in_pin=14" >> /etc/modules
+	echo "Lib Rpi GPIO added"
+fi
+
+echo "Check Kernel Version."
+if grep -q "dtoverlay=lirc-rpi,gpio_in_pin=14" /boot/config.txt; then
+	echo "LIRC for Kernel 3.18 already present"
+echo "Check Kernel pin 15"
+	elif grep -q "dtoverlay=lirc-rpi,gpio_in_pin=15" /boot/config.txt; then
+	sed -e s/"dtoverlay=lirc-rpi,gpio_in_pin=15"//g -i /boot/config.txt
+	sudo echo "dtoverlay=lirc-rpi,gpio_in_pin=14" >> /boot/config.txt
+	echo "LIRC for Kernel 3.18 changed from pin 15 to 14"
+	
+else
+	sudo echo "dtoverlay=lirc-rpi,gpio_in_pin=14" >> /boot/config.txt
+	echo "LIRC for Kernel 3.18 added"
+fi
+
+
 
 echo " "
 echo "Please restart the Raspberry Pi for the changes to take effect"
