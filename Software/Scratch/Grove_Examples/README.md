@@ -1,7 +1,7 @@
 Scratch examples for GrovePi
 ============================
 
-These are simple examples meant to illustrate the GrovePi features you can access through Scratch. 
+These are simple examples meant to illustrate how you can access GrovePi features through Scratch. 
 
 ## 1. Simple LED: led_on_port_7 :
 
