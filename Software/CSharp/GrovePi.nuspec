@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>GrovePi</id>
+        <version>1.0.4</version>
+        <title>GrovePi for Windows IoT</title>
+        <authors>Jonathan Robson,Exadon</authors>
+        <owners>Jonathan Robson</owners>
+        <licenseUrl>http://opensource.org/licenses/MS-PL</licenseUrl>
+        <projectUrl>https://github.com/robsonj/GrovePi</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>GrovePi IoT C# library</description>
+        <summary>Windows IoT C# library to support GrovePi RaspberryPi 2 sensors</summary>
+        <releaseNotes>Added Delay for LCD screen to function correctly</releaseNotes>
+        <language />
+        <tags>iot, grovepi, windows, arm</tags>
+    </metadata>
+    <files>
+        <file src="lib\GrovePi.dll" target="lib\GrovePi.dll" />
+        <file src="lib\GrovePi.pdb" target="lib\GrovePi.pdb" />
+        <file src="lib\GrovePi.pri" target="lib\GrovePi.pri" />
+    </files>
+</package>
