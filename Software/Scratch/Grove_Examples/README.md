@@ -39,3 +39,8 @@ Clicking on any of the four text buttons in the corners will display that text (
 
 Clicking on Dex will have Dex ask you your name, and then display it on the LCD screen
 
+## 5. Rotary sensor:
+
+Plug the rotary sensor into port A0
+
+Click on the Green flag and use the rotary sensor to move Dex left to right
