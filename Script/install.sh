@@ -124,6 +124,7 @@ echo dtparam=i2c1=on >> /boot/config.txt
 echo dtparam=i2c_arm=on >> /boot/config.txt
 
 sudo adduser pi i2c
+sudo chmod +x /home/pi/Desktop/GrovePi/Software/Scratch/GrovePi_Scratch_Scripts/*.sh
 
 #Adding ARDUINO setup files
 echo " "
