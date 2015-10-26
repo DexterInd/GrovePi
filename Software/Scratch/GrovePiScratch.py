@@ -163,6 +163,18 @@ while True:
 				grovepi.digitalWrite(port,0)
 			if en_debug:
 				print msg
+
+		elif match_sensors(msg,pwm) >=0:
+			if en_grovepi:
+				s_no=match_sensors(msg,pwm)
+				sens=pwm[s_no]
+				l=len(sens)
+				port=int(msg[l:l+1])
+				power=int(msg[l+1:])
+				grovepi.pinMode(port,"OUTPUT")
+				grovepi.analogWrite(port,power)
+			if en_debug:
+				print msg
 		
 		elif match_sensors(msg,digitalOp) >=0:
 			if en_grovepi:
@@ -176,18 +188,6 @@ while True:
 					grovepi.digitalWrite(port,1)
 				else:
 					grovepi.digitalWrite(port,0)
-			if en_debug:
-				print msg
-		
-		elif match_sensors(msg,pwm) >=0:
-			if en_grovepi:
-				s_no=match_sensors(msg,pwm)
-				sens=pwm[s_no]
-				l=len(sens)
-				port=int(msg[l:l+1])
-				power=int(msg[l+1:])
-				grovepi.pinMode(port,"OUTPUT")
-				grovepi.analogWrite(port,power)
 			if en_debug:
 				print msg
 		
