@@ -9,6 +9,3 @@
 [submodule "Firmware/Source/v1.1/dependent_libraries/Grove_RTC"]
 	path = Firmware/Source/v1.1/dependent_libraries/Grove_RTC
 	url = https://github.com/Seeed-Studio/Grove_RTC.git
-[submodule "Software/CSharp/GrovePi"]
-	path = Software/CSharp/GrovePi
-	url = https://github.com/robsonj/GrovePi.git
