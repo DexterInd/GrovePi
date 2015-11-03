@@ -145,6 +145,11 @@ echo "Install smbus for python"
 sudo apt-get install python-smbus
 
 echo " "
+echo "Making libraries global . . ."
+echo "============================="
+sudo cp /home/pi/Desktop/GrovePi/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
+
+echo " "
 echo "Please restart to implement changes!"
 echo "  _____  ______  _____ _______       _____ _______ "
 echo " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
