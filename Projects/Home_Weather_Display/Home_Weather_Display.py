@@ -41,7 +41,7 @@ from grovepi import *
 from grove_rgb_lcd import *
 
 dht_sensor_port = 7		# Connect the DHt sensor to port 7
-dht_sensor_type = 1             # change this depending on your sensor type - see header comment
+dht_sensor_type = 0             # change this depending on your sensor type - see header comment
 
 while True:
 	try:
