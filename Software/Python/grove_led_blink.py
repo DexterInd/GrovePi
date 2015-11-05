@@ -50,12 +50,12 @@ while True:
     try:
         #Blink the LED
         digitalWrite(led,1)		# Send HIGH to switch on LED
-		print "LED ON!"
+        print "LED ON!"
         time.sleep(1)
 
         digitalWrite(led,0)		# Send LOW to switch off LED
         print "LED OFF!"
-		time.sleep(1)
+        time.sleep(1)
 
     except KeyboardInterrupt:	# Turn LED off before stopping
         digitalWrite(led,0)
