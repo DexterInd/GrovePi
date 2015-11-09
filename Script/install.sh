@@ -145,6 +145,11 @@ echo "Install smbus for python"
 sudo apt-get install python-smbus
 
 echo " "
+echo "Making libraries global . . ."
+echo "============================="
+sudo cp /home/pi/Desktop/GrovePi/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
+
+echo " "
 echo "Please restart to implement changes!"
 echo "  _____  ______  _____ _______       _____ _______ "
 echo " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
@@ -155,3 +160,20 @@ echo " |_|  \_\______|_____/   |_/_/    \_\_|  \_\ |_|   "
 echo " "
 echo "Please restart to implement changes!"
 echo "To Restart type sudo reboot"
+
+echo "To finish changes, we will reboot the Pi."
+echo "Pi must reboot for changes and updates to take effect."
+echo "If you need to abort the reboot, press Ctrl+C.  Otherwise, reboot!"
+echo "Rebooting in 5 seconds!"
+sleep 1
+echo "Rebooting in 4 seconds!"
+sleep 1
+echo "Rebooting in 3 seconds!"
+sleep 1
+echo "Rebooting in 2 seconds!"
+sleep 1
+echo "Rebooting in 1 seconds!"
+sleep 1
+echo "Rebooting now!  Your Pi wake up with a freshly updated Raspberry Pi!"
+sleep 1
+sudo reboot
