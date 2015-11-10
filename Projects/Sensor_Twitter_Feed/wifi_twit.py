@@ -56,7 +56,7 @@ while True:
     # Error handling in case of problems communicating with the GrovePi
     try:
         # Get value from temperature sensor
-        [temp,humidity] = grovepi.dht(temperature_sensor,1)
+        [temp,humidity] = grovepi.dht(temperature_sensor,0)
         t=temp
 
         # Get value from light sensor
