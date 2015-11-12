@@ -1,43 +1,55 @@
 ## **GrovePi Projects Readme**
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  Create your Internet of Things devices and inventions without the need for soldering!
-![Picture](GrovePi_Plus_By_Dexter_Industries_For_the_Raspberry_Pi.JPG)
 
-There are over 2 million Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
+### Advanced_RGB_LCD_TempAndHumidity
+Changes the color of the RGB color LCD depending on the temperature. (Works with the GrovePi starter kit)
 
-We brought Grove and Raspberry Pi together in a simple and affordable way. Grove sensors allow you to interact and monitor the world. Raspberry Pi lets you store and process data, and bring the real world to the Raspberry Pi and the web.  
-The GrovePi brings both Grove Sensors and the popular Raspberry Pi together in a simple, elegant, and open source design.
+### Button_And_Buzzer 
+The buzzer makes a sound when the button is pressed. (Works with the GrovePi starter kit)
 
-### How Does it Work?
-The GrovePi board slips over the Raspberry Pi.  Connect the Grove Sensors to the GrovePi board.  Upload your program.  Begin taking in the worlds data!
+### home_temp_humi_display
+Shows the temperature and humidity on Grove I2C OLED.
 
-### Raspberry Pi Compatibility
-The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, and 2.
+### Home_Weather_Display
+Shows the temperature and humidity on Grove RGB LCD. (Works with the GrovePi starter kit)
 
-### Getting Started
-Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/). 
-We have an extensive library that covers most Grove sensors. You can find it on the Github repo.  You won’t need to hack much at all with our library: get started coding in Python and C now! 
+### IOT
+Plots the data from various grove sensors on Xively. (Works with the GrovePi starter kit)
 
-### Want to use a sensor not in the library yet?  
-Ask us in the [forums](http://www.dexterindustries.com/forum/?forum=grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://www.dexterindustries.com/forum/?forum=grovepi).
+### LED Fade
+Changed the brightness of a LED from the value read from a potentiometer.(Works with the GrovePi starter kit)
 
-### Programming the GrovePi
-The GrovePi can be programmed in Python, C, C#, Go, and NodeJS on the Raspberry Pi.  Simply start with one of our [example projects](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/) or [example code](https://github.com/DexterInd/GrovePi/tree/master/Software).  
-The GrovePi uses an Arduino to interface between the Raspberry Pi and the Grove Sensors, and comes programmed with a standard firmware.  The firmware can be rewritten from the Raspberry Pi.  
+### OLED_Weather Display
+Fetch the live weather data from the internet and print on the OLED display
 
-### Getting Help
-Need help? We [have a forum here where you can ask questions or make suggestions](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/).
+### OLED_Weather Station
+Get weather data from the internet and the DHT sensor and print on the OLED
 
-### Getting Ideas
-Need an idea to get started?  [We have a few project examples to get your creative juices flowing](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/).
+### Open_Wifi_Finder
+Finds open WiFi networks and prints on the Grove RGB LCD. (Works with the GrovePi starter kit)
 
-### Getting Into It
-Want to hack it open or make your own from scratch? With full hardware and software designs, you can remix and duplicate to your hearts content.
+### rain_notifier
+Get rain data from the internet and blink a LED if it'g going to rain. (Works with the GrovePi starter kit)
+
+### Sensor_Twitter_Feed
+Get Sensor data from GrovePi sensors and post the data on twitter. (Works with the GrovePi starter kit)
+
+### tilt_buzzer
+Turn the buzzer on/off deping on the values read from the accelerometer
+
+### Ultrasonic_And_Relay
+Read the ultrasonic ranger and turn the relay on/off depending on the values read
+
+### Whos_at_the_Door
+Checks if someone is at the door, if there is someone then it takes a photo and mails it
+
+### CO2_sensor
+Read the data from the CO2 Sensor and print it in the terminal
 
 See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
 
 ## License
-
+.
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
