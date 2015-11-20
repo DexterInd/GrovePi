@@ -74,17 +74,6 @@ digitalInp=['button']
 digitalOp=['led','relay']
 pwm=['LEDPower','buzzer','analogWrite']
 
-def populate_broadcasts():
-	# quite a few msgs are hardcoded later down in the code and are not pre-populated
-	for b in analog_sensors:
-		s.broadcast(b)
-	for b in digitalInp:
-		s.broadcast(b)
-	for b in digitalOp:
-		s.broadcast(b)
-	for b in pwm:
-		s.broadcast(b)
-
 def match_sensors(msg,lst):
 	for i,e in enumerate(lst):
 		if msg[:len(e)].lower()==e.lower():
@@ -93,7 +82,6 @@ def match_sensors(msg,lst):
 	
 try:
 	s.broadcast('READY')
-	populate_broadcasts()
 except NameError:
 	print "GrovePi Scratch: Unable to Broadcast"
 
@@ -316,7 +304,6 @@ while True:
 			try:
 				s = scratch.Scratch()
 				s.broadcast('READY')
-				populate_broadcasts()
 				print "GrovePi Scratch: Connected to Scratch successfully"
 				break;
 			except scratch.ScratchError:
