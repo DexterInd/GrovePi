@@ -232,8 +232,6 @@ while True:
 					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
 				elif msg[3:6].lower() == "txt".lower():
 					txt = msg[6:]
-					print txt
-					print "play with me\nplease"
 					grove_rgb_lcd.setText(txt)
 				else:
 					pass
