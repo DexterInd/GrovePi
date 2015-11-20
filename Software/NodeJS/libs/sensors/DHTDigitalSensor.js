@@ -14,11 +14,11 @@ function convertFtoC(temp) {
 }
 function getHeatIndex(temp, hum, scale) {
   // http://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml
-  if (typeof scale == 'undefined' || scale == DHTDigitalSensor.CELSIUS) {
-    temp = convertCtoF(temp)
-  }
+  var needsConversion = typeof scale == 'undefined' || scale == DHTDigitalSensor.CELSIUS
 
-  return  -42.379 +
+  temp = needsConversion ? convertCtoF(temp) : temp
+
+  var hi = -42.379 +
            2.04901523  * temp +
            10.14333127 * hum +
           -0.22475541  * temp * hum +
@@ -27,6 +27,8 @@ function getHeatIndex(temp, hum, scale) {
            0.00122874  * Math.pow(temp, 2) * hum +
            0.00085282  * temp * Math.pow(hum, 2) +
           -0.00000199  * Math.pow(temp, 2) * Math.pow(hum, 2)
+
+  return needsConversion ? convertFtoC(hi) : hi
 }
 
 DHTDigitalSensor.prototype = new DigitalSensor()
