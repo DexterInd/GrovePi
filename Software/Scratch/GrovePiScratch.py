@@ -38,7 +38,7 @@ THE SOFTWARE.
 #
 # The Python program acts as the Bridge between Scratch & GrovePi and must be running for the Scratch program to run.
 ##############################################################################################################
-
+'''
 import scratch,sys,threading,math
 import grovepi
 import time
@@ -92,7 +92,8 @@ while True:
 			m = s.receive()
 
 		msg = m[1]
-		print msg
+		if en_debug:
+			print "Rx:",msg
 		if msg == 'SETUP' :
 			print "Setting up sensors done"
 		elif msg == 'START' :
@@ -141,12 +142,13 @@ while True:
 				s_no=match_sensors(msg,digitalInp)
 				sens=digitalInp[s_no]
 				port=int(msg[len(sens):])
+				sens += str(port)
 				grovepi.pinMode(port,"INPUT")
 				d_read=grovepi.digitalRead(port)
 				s.sensorupdate({sens:d_read})
 			if en_debug:
-				print msg
-				print sens +'op:'+ str(d_read)
+				print msg,
+				print sens +' output:'+ str(d_read)
 				
 		elif msg[:16].lower()=="digitalWriteHigh".lower():
 			if en_grovepi:
@@ -159,6 +161,18 @@ while True:
 			if en_grovepi:
 				port=int(msg[15:])
 				grovepi.digitalWrite(port,0)
+			if en_debug:
+				print msg
+
+		elif match_sensors(msg,pwm) >=0:
+			if en_grovepi:
+				s_no=match_sensors(msg,pwm)
+				sens=pwm[s_no]
+				l=len(sens)
+				port=int(msg[l:l+1])
+				power=int(msg[l+1:])
+				grovepi.pinMode(port,"OUTPUT")
+				grovepi.analogWrite(port,power)
 			if en_debug:
 				print msg
 		
@@ -174,18 +188,6 @@ while True:
 					grovepi.digitalWrite(port,1)
 				else:
 					grovepi.digitalWrite(port,0)
-			if en_debug:
-				print msg
-		
-		elif match_sensors(msg,pwm) >=0:
-			if en_grovepi:
-				s_no=match_sensors(msg,pwm)
-				sens=pwm[s_no]
-				l=len(sens)
-				port=int(msg[l:l+1])
-				power=int(msg[l+1:])
-				grovepi.pinMode(port,"OUTPUT")
-				grovepi.analogWrite(port,power)
 			if en_debug:
 				print msg
 		
@@ -218,9 +220,23 @@ while True:
 		
 		elif msg[:3].lower()=="lcd".lower():
 			if en_grovepi:
+				if en_debug:
+					print msg[:3], msg[3:6],msg[6:]
 				import grove_rgb_lcd 
-				grove_rgb_lcd.setRGB(0,128,0)
-				grove_rgb_lcd.setText(msg[3:])
+				if msg[3:6].lower() == "col".lower():
+					rgb = []
+					for i in range(0,6,2): 
+						rgb.append(int(msg[6:][i:i+2],16))  # convert from one hex string to three ints
+					if en_debug:
+						print "colours are:",rgb[0],rgb[1],rgb[2]
+					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
+				elif msg[3:6].lower() == "txt".lower():
+					txt = msg[6:]
+					print txt
+					print "play with me\nplease"
+					grove_rgb_lcd.setText(txt)
+				else:
+					pass
 			if en_debug:
 				print msg
 			
@@ -232,11 +248,49 @@ while True:
 			if en_debug:
 				print msg
 				print "Analog Reading: " + str(a_read)		
-				
+		elif msg.lower()=="READ_IR".lower():
+			print "READ_IR!" 
+			if en_ir_sensor==0:
+				import lirc
+				sockid = lirc.init("keyes", blocking = False)
+				en_ir_sensor=1
+			try:
+				read_ir= lirc.nextcode()  # press 1 
+				if len(read_ir) !=0:
+					print read_ir[0]
+			except:
+				if en_debug:
+					e = sys.exc_info()[1]
+					print "Error reading IR sensor: " + str(read_ir)
+			if en_debug:
+				print "IR Recv Reading: " + str(read_ir)
+			if en_gpg:
+				if len(read_ir) !=0:
+					s.sensorupdate({'read_ir':read_ir[0]})		
+				else:
+					s.sensorupdate({'read_ir':""})
+					
+		elif msg.lower()=="TAKE_PICTURE".lower():
+			print "TAKE_PICTURE!" 
+			try:
+				from subprocess import call
+				import datetime
+				cmd_start="raspistill -o /home/pi/Desktop/img_"
+				cmd_end=".jpg -w 640 -h 480 -t 1"
+				dt=str(datetime.datetime.now())
+				dt=dt.replace(' ','_',10)
+				call ([cmd_start+dt+cmd_end], shell=True)
+				print "Picture Taken"
+			except:
+				if en_debug:
+					e = sys.exc_info()[1]
+					print "Error taking picture"
+				s.sensorupdate({'camera':"Error"})	
+			s.sensorupdate({'camera':"Picture Taken"})	
+					
 		else:
 			if en_debug:
-				print "m",msg
-				print "Wrong Command"
+				print "Ignoring: ",msg
 					
     except KeyboardInterrupt:
         running= False
@@ -255,4 +309,5 @@ while True:
 			except scratch.ScratchError:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
     except:
-		print "GrovePi Scratch: Error"	
+		e = sys.exc_info()[0]
+		print "GrovePi Scratch: Error %s" % e	

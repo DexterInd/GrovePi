@@ -47,7 +47,8 @@ echo " "
 echo "Raspberry Pi wil reboot after completion."
 echo " "
 echo -e "Press \E[32mENTER\E[0m to begin... or \E[91mctrl+c\E[0m to abort"
-read
+# read
+sleep 5
 
 echo " "
 echo "Check for internet connectivity..."
@@ -122,6 +123,9 @@ echo "================================================"
 echo dtparam=i2c1=on >> /boot/config.txt
 echo dtparam=i2c_arm=on >> /boot/config.txt
 
+sudo adduser pi i2c
+sudo chmod +x /home/pi/Desktop/GrovePi/Software/Scratch/GrovePi_Scratch_Scripts/*.sh
+
 #Adding ARDUINO setup files
 echo " "
 echo "Making changes to Arduino . . ."
@@ -141,11 +145,35 @@ echo "Install smbus for python"
 sudo apt-get install python-smbus
 
 echo " "
-echo "Restarting"
-echo "3"
+echo "Making libraries global . . ."
+echo "============================="
+sudo cp /home/pi/Desktop/GrovePi/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
+
+echo " "
+echo "Please restart to implement changes!"
+echo "  _____  ______  _____ _______       _____ _______ "
+echo " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
+echo " | |__) | |__  | (___    | |  /  \  | |__) | | |   "
+echo " |  _  /|  __|  \___ \   | | / /\ \ |  _  /  | |   "
+echo " | | \ \| |____ ____) |  | |/ ____ \| | \ \  | |   "
+echo " |_|  \_\______|_____/   |_/_/    \_\_|  \_\ |_|   "
+echo " "
+echo "Please restart to implement changes!"
+echo "To Restart type sudo reboot"
+
+echo "To finish changes, we will reboot the Pi."
+echo "Pi must reboot for changes and updates to take effect."
+echo "If you need to abort the reboot, press Ctrl+C.  Otherwise, reboot!"
+echo "Rebooting in 5 seconds!"
 sleep 1
-echo "2"
+echo "Rebooting in 4 seconds!"
 sleep 1
-echo "1"
+echo "Rebooting in 3 seconds!"
 sleep 1
-shutdown -r now
+echo "Rebooting in 2 seconds!"
+sleep 1
+echo "Rebooting in 1 seconds!"
+sleep 1
+echo "Rebooting now!  Your Pi wake up with a freshly updated Raspberry Pi!"
+sleep 1
+sudo reboot

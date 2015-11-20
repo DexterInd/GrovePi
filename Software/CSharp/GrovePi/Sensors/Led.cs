@@ -4,6 +4,7 @@
     {
         SensorStatus CurrentState { get; }
         ILed ChangeState(SensorStatus newState);
+        void AnalogWrite(byte value);
     }
 
     internal class Led : Sensor<ILed>, ILed

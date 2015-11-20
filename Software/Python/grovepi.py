@@ -143,6 +143,15 @@ ir_read_cmd=[21]
 # Set pin for the IR reciever
 ir_recv_pin_cmd=[22]
 
+dus_sensor_read_cmd=[10]
+dust_sensor_en_cmd=[14]
+dust_sensor_dis_cmd=[15]
+encoder_read_cmd=[11] 
+encoder_en_cmd=[16]
+encoder_dis_cmd=[17]
+flow_read_cmd=[12]
+flow_disable_cmd=[13]
+flow_en_cmd=[18]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -206,6 +215,7 @@ def analogRead(pin):
 	time.sleep(.1)
 	bus.read_byte(address)
 	number = bus.read_i2c_block_data(address, 1)
+	time.sleep(.1)
 	return number[1] * 256 + number[2]
 
 
@@ -281,6 +291,7 @@ def dht(pin, module_type):
 	try:
 		read_i2c_byte(address)
 		number = read_i2c_block(address)
+		time.sleep(.1)
 		if number == -1:
 			return -1
 	except (TypeError, IndexError):
@@ -493,3 +504,63 @@ def ir_read_signal():
 # Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
 def ir_recv_pin(pin):
 	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
+	
+def dust_sensor_en():
+	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def dust_sensor_dis():
+	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def dustSensorRead():
+	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	#read_i2c_byte(address)
+	#number = read_i2c_block(address)
+	#return (number[1] * 256 + number[2])
+	data_back= bus.read_i2c_block_data(address, 1)[0:4]
+	#print data_back[:4]
+	if data_back[0]!=255:
+		lowpulseoccupancy=(data_back[3]*256*256+data_back[2]*256+data_back[1])
+		#print [data_back[0],lowpulseoccupancy]
+		return [data_back[0],lowpulseoccupancy]
+	else:
+		return [-1,-1]
+	print data_back
+	
+def encoder_en():
+	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def encoder_dis():
+	write_i2c_block(address, encoder_dis_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def encoderRead():
+	write_i2c_block(address, encoder_read_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	data_back= bus.read_i2c_block_data(address, 1)[0:2]
+	#print data_back
+	if data_back[0]!=255:
+		return [data_back[0],data_back[1]]
+	else:
+		return [-1,-1]
+		
+def flowDisable():
+	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def flowEnable():
+	write_i2c_block(address, flow_en_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	
+def flowRead():
+	write_i2c_block(address, flow_read_cmd + [unused, unused, unused])
+	time.sleep(.2)
+	data_back= bus.read_i2c_block_data(address, 1)[0:3]
+	#print data_back
+	if data_back[0]!=255:
+		return [data_back[0],data_back[2]*256+data_back[1]]
+	else:
+		return [-1,-1]
