@@ -38,15 +38,19 @@ import time
 import grovepi
 
 # Connect the Grove Button to Analog Port 0.
-button = 0
-buzzer = 8
+button = 14		# This is the A0 pin.
+buzzer = 8		# This is the D8 pin.
 
 grovepi.pinMode(button,"INPUT")
 
+print "GrovePi Basic Hardware Test."
+print "Setup:  Connect the button sensor to port A0.  Connect a Grove LED to port D8."
+print "Press the button and the buzzer will buzz!"
+
 while True:
     try:
-		butt_val = grovepi.digitalRead(button)
-        print (butt_val)
+		butt_val = grovepi.digitalRead(button)	# Each time we go through the loop, we read A0.
+		print (butt_val)						# Print the value of A0.
 		if butt_val > 0:
 			grovepi.digitalWrite(buzzer,1)
 			print ('start')

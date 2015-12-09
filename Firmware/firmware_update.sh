@@ -1,6 +1,11 @@
 #! /bin/bash
 echo "Updating the GrovePi firmware"
 echo "============================="
+echo " "
+echo " Run this program: "
+echo " sudo ./firmware_update.sh"
+echo " "
+echo "============================="
 
 read -n1 -p "Do you want to update the firmware? [y,n]" input
 if [[ $input == "Y" || $input == "y" ]]; then
