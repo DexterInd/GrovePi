@@ -54,10 +54,10 @@ light_threshold = 500
 blink_delay = 1
 
 # how long should the wreath be on after sunset (in hours)
-hours_after_sunset = 1
+hours_after_sunset = 5
 
 # how long should the wreath sleep till sunrise (in hours)
-hours_of_sleep = 1
+hours_of_sleep = 6
 
 # initial status
 lights_on = False
