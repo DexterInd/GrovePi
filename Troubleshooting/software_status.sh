@@ -86,3 +86,9 @@ ls /dev | grep 'i2c' #>>error_log.txt
 ls /dev | grep 'spi' #>>error_log.txt
 ls /dev | grep 'ttyAMA' #>>error_log.txt
 echo "" #>>error_log.txt
+
+echo "USB device status"
+echo =================
+lsusb
+echo ""
+lsusb -t

@@ -37,7 +37,7 @@ import time
 import grovepi
 
 #Sensor connected to A0 Port 
-sensor = 1
+sensor = 14		# Pin 14 is A0 Port.
 grovepi.pinMode(sensor,"INPUT")
 while True:
     try:

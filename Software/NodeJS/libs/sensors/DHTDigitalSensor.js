@@ -13,12 +13,12 @@ function convertFtoC(temp) {
   return (temp - 32) * 5 / 9
 }
 function getHeatIndex(temp, hum, scale) {
-  // http://www.hpc.ncep.noaa.gov/html/heatindex_equation.shtml
-  if (typeof scale == 'undefined' || scale == this.CELSIUS) {
-    temp = convertCtoF(temp)
-  }
+  // http://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml
+  var needsConversion = typeof scale == 'undefined' || scale == DHTDigitalSensor.CELSIUS
 
-  return  -42.379 +
+  temp = needsConversion ? convertCtoF(temp) : temp
+
+  var hi = -42.379 +
            2.04901523  * temp +
            10.14333127 * hum +
           -0.22475541  * temp * hum +
@@ -27,6 +27,8 @@ function getHeatIndex(temp, hum, scale) {
            0.00122874  * Math.pow(temp, 2) * hum +
            0.00085282  * temp * Math.pow(hum, 2) +
           -0.00000199  * Math.pow(temp, 2) * Math.pow(hum, 2)
+
+  return needsConversion ? convertFtoC(hi) : hi
 }
 
 DHTDigitalSensor.prototype = new DigitalSensor()
@@ -54,7 +56,7 @@ DHTDigitalSensor.prototype.read = function() {
       hex = '0x' + tempBytes.toString('hex')
       var temp = (hex & 0x7fffff | 0x800000) * 1.0 / Math.pow(2, 23) * Math.pow(2, ((hex >> 23 & 0xff) - 127))
       temp = +(Number(parseFloat(temp - 0.5).toFixed(2)))
-      if (this.scale == this.FAHRENHEIT) {
+      if (this.scale == DHTDigitalSensor.FAHRENHEIT) {
         temp = convertCtoF(temp)
       }
 
