@@ -47,16 +47,46 @@ pir_sensor = 8
 light_sensor = 0
 
 # how dark must it be before the lights turn on
+# you may want to adjust this if you have a street lamp or a porch light nearby
 light_threshold = 500
 
 # delay when blinking lights. Currently on for 1 second, off for 1 second
 blink_delay = 1
 
+# how long should the wreath be on after sunset (in hours)
+hours_after_sunset = 5
+
+# how long should the wreath sleep till sunrise (in hours)
+hours_of_sleep = 6
+
 # initial status
 lights_on = False
+start_sleeptime = time.time()
 
+def sleeptime():
+    """ 
+    Calculates if it's time for the wreath to turn off for the night, and go to sleep 
+    Contains a rather long sleep time (technically the whole night)
+    """
+    global lights_on
+    now = time.time()
+    go_to_sleep_time = start_sleeptime + (hours_after_sunset*60*60)
+    # print now, start_sleeptime, "(", now-start_sleeptime,")", go_to_sleep_time, "(",go_to_sleep_time-now,")"
+    if now >= go_to_sleep_time:
+        print "Sleep time!!!"
+        print "Will wake up in ", hours_of_sleep, " hours" 
+        grovepi.digitalWrite(relay,0)
+        lights_on = False
+        for i in range(60):
+            time.sleep(hours_of_sleep * 60  ) # long sleep time!!!
+        print "Wake up!"
 
 def blink(in_time):
+    """
+    blinks the wreath lights a certain number of times
+    variable blink_delay determines how quick or slow the blink is
+    in_time determines how many times the lights will blink
+    """
     for i in range(in_time):
         grovepi.digitalWrite(relay,1)
         time.sleep(blink_delay)
@@ -65,29 +95,40 @@ def blink(in_time):
     if lights_on == True:
         grovepi.digitalWrite(relay,1)
 
+
+
 grovepi.pinMode(relay,"OUTPUT")
 grovepi.pinMode(pir_sensor,"INPUT")
 grovepi.pinMode(light_sensor,"INPUT")
 
-
+##########################
+# main loop
+##########################
 while True:
     try:
-        blinky = grovepi.digitalRead(pir_sensor)
-        if blinky:
+        # if the lights are on, test whether it's time for a long nappy
+        if lights_on==True:
+            sleeptime() # test included in this function call.
+
+        if grovepi.digitalRead(pir_sensor):
             # switch on for 5 seconds
             print ("blink on")
             blink(5)
             print ("blink off")
 
         light_sensor_value = grovepi.analogRead(light_sensor)
+
+        # is it getting dark?
         if light_sensor_value < light_threshold:
             # turn lights on
             if lights_on == False:
                 lights_on = True
-                print "turning lights on", light_sensor_value
+                start_sleeptime = time.time()
+                print "turning lights on " 
                 grovepi.digitalWrite(relay,1)
         
-        else:
+        # is it getting light?
+        else: 
             # turn lights off
             if lights_on == True:
                 lights_on = False
@@ -99,6 +140,7 @@ while True:
         grovepi.digitalWrite(relay,0)
         break
     except IOError as e:
-        print ("I/O error({0}): {1}".format(e.errno, e.strerror))
+        pass
+    #    print ("I/O error({0}): {1}".format(e.errno, e.strerror))
 
-    time.sleep(1)
+    time.sleep(2)
