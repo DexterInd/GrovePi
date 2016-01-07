@@ -6,6 +6,11 @@
 #
 # Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
+# History
+# ------------------------------------------------
+# Author	Date      		Comments
+# 						  	Initial Authoring
+# Karan		7 Jan 16		Library updated to add a function to update the text without erasing the screen
 '''
 ## License
 
@@ -87,7 +92,28 @@ def setText(text):
         count += 1
         bus.write_byte_data(DISPLAY_TEXT_ADDR,0x40,ord(c))
 
-
+#Update the display without erasing the display
+def setText_norefresh(text):
+    textCommand(0x02) # return home
+    time.sleep(.05)
+	
+    textCommand(0x08 | 0x04) # display on, no cursor
+    textCommand(0x28) # 2 lines
+    time.sleep(.05)
+    count = 0
+    row = 0
+    for c in text:
+        if c == '\n' or count == 16:
+            count = 0
+            row += 1
+            if row == 2:
+                break
+            textCommand(0xc0)
+            if c == '\n':
+                continue
+        count += 1
+        bus.write_byte_data(DISPLAY_TEXT_ADDR,0x40,ord(c))
+		
 # example code
 if __name__=="__main__":
     setText("Hello world\nThis is an LCD test")
