@@ -1,17 +1,13 @@
-GrovePi C library
-v0.1
-
-This library provides the basic functions for using the GrovePi in C.
-
-To compile use:
-gcc programe_name.c grovepi.c -Wall
-e.g.: gcc grovepi_analog_read.c grovepi.c -Wall
-
-and then run the executable:
-./a.out
-
-###
-License
+#!/usr/bin/env python
+#
+# GrovePi Example for using the Grove - CO2 Sensor(http://www.seeedstudio.com/depot/Grove-CO2-Sensor-p-1863.html)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+'''
+## License
 
 The MIT License (MIT)
 
@@ -35,3 +31,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+'''
+
+# Connect the CO2 sensor to the RPISER port on the GrovePi
+import grove_co2_lib
+import time
+
+co2= grove_co2_lib.CO2()
+
+while True:
+	[ppm,temp]= co2.read()
+	print "CO2 Conc: %d ppm\t Temp: %d C" %(ppm,temp)
+	time.sleep(1)
+	

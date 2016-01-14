@@ -1,17 +1,13 @@
-GrovePi C library
-v0.1
-
-This library provides the basic functions for using the GrovePi in C.
-
-To compile use:
-gcc programe_name.c grovepi.c -Wall
-e.g.: gcc grovepi_analog_read.c grovepi.c -Wall
-
-and then run the executable:
-./a.out
-
-###
-License
+#!/usr/bin/env python
+#
+# GrovePi Example for using the Grove - LCD RGB Backlight without erasing the screen(http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
+#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#
+'''
+## License
 
 The MIT License (MIT)
 
@@ -35,3 +31,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+'''
+from grove_rgb_lcd import *
+import time
+
+setRGB(0,255,0)
+buf=list("Grove -Update without erase")
+setText("".join(buf))
+time.sleep(1)
+
+for i in range(len(buf)):
+	buf[i]="."
+	setText_norefresh("".join(buf))
+	time.sleep(.1)
