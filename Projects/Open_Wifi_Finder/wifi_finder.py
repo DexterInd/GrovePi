@@ -49,8 +49,8 @@ from grove_rgb_lcd import *
 
 ## Connections
 # LCD Goes on I2C-1
-buzzer = 8		# Connect the Grove Buzzer to digital port D8
-led = 4			# Connect the Grove LED to digital port D4
+buzzer = 2		# Connect the Grove Buzzer to digital port D8
+led = 3			# Connect the Grove LED to digital port D3
 
 grovepi.pinMode(buzzer, "OUTPUT")
 grovepi.pinMode(led, "OUTPUT")
@@ -94,17 +94,26 @@ def display_ssid(ssid):
 		print "Failed on something or other!"
 
 
-while True:
-	list_of_open = []
-	
-	# 1). Test for any open ssids
-	list_of_open = check_open_ssids()
-	print list_of_open
-	
-	# 2). If we find open ssids turn light and buzzer on, print to SSID.
-	for ssid in list_of_open:
-		display_ssid(ssid)
-	
-	# 3). Look around ever 5 seconds.
-	time.sleep(5)
-	
+try:
+	while True:
+
+		list_of_open = []
+		
+		# 1). Test for any open ssids
+		list_of_open = check_open_ssids()
+		print list_of_open
+		
+		# 2). If we find open ssids turn light and buzzer on, print to SSID.
+		for ssid in list_of_open:
+			display_ssid(ssid)
+		
+		# 3). Look around ever 5 seconds.
+		time.sleep(5)
+except:
+	pass
+finally:
+	setText("")
+	setRGB(0,0,0)
+	grovepi.digitalWrite(buzzer,0)
+	grovepi.digitalWrite(led,0)
+
