@@ -52,7 +52,7 @@ while True:
     try:
 		butt_val = grovepi.digitalRead(button)	# Each time we go through the loop, we read A0.
 		print (butt_val)						# Print the value of A0.
-		if butt_val > 0:
+		if butt_val == 1:
 			grovepi.digitalWrite(buzzer,1)
 			print ('start')
 			time.sleep(1)
