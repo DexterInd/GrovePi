@@ -42,9 +42,10 @@ button = 14		# This is the A0 pin.
 buzzer = 8		# This is the D8 pin.
 
 grovepi.pinMode(button,"INPUT")
+grovepi.pinMode(buzzer,"OUTPUT")
 
 print "GrovePi Basic Hardware Test."
-print "Setup:  Connect the button sensor to port A0.  Connect a Grove LED to port D8."
+print "Setup:  Connect the button sensor to port A0.  Connect a Grove Buzzer to port D8."
 print "Press the button and the buzzer will buzz!"
 
 while True:
