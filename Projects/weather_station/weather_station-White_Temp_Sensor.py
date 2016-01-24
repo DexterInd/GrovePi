@@ -75,8 +75,8 @@ camera = picamera.PiCamera()	# Initialize the camera.
 # You can adjust the frequency of the operations here:  how frequently the sensors are read,
 # how frequently the data is written to csv, and how frequently pictures are taken.
 
-time_for_sensor	= 60  	#= 1*60*60	# Take sensor data every 1 hour
-time_for_picture	= 120	#= 8*60*60	# Take sensor data every 8 hours
+time_for_sensor	 = 1*60*60	# Take sensor data every 1 hour
+time_for_picture = 8*60*60	# Take sensor data every 8 hours
 
 time_to_sleep		= 10		# The main loop runs every 10 seconds.
 
