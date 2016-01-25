@@ -48,7 +48,7 @@ import time
 import grovepi
 import subprocess
 import math
-import picamera
+# import picamera
 from grove_i2c_barometic_sensor_BMP180 import BMP085
 #################################################################
 ## File Location
@@ -68,7 +68,7 @@ white=1
 therm_version = white			# If you change the thermometer, this is where you redefine.
 # bmp = BMP085(0x77, 1)			#Initialize the pressure sensor (barometer)
 
-camera = picamera.PiCamera()	# Initialize the camera.
+# camera = picamera.PiCamera()	# Initialize the camera.
 
 #################################################################
 # Timings
@@ -102,6 +102,7 @@ def read_sensor():
 			# return [-1,-1,-1,-1]
 
 #Take a picture with the current time using the Raspberry Pi camera. Save it in the same folder.
+''' 
 def take_picture():
 	try:
 		picture_name = "plant_monitor_"+str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
@@ -109,6 +110,7 @@ def take_picture():
 		print "Picture taken\n------------>\n"
 	except:
 		print "Camera problem!  Please check the camera connections and settings"
+'''
 
 #Save the initial time, we will use this to find out when it is time to take a picture or save a reading
 last_read_sensor=last_pic_time= int(time.time())
@@ -139,7 +141,7 @@ while True:
 	
 	# If it is time to take the picture
 	if curr_time_sec-last_pic_time>time_for_picture:
-		take_picture()
+		# take_picture()
 		last_pic_time=curr_time_sec
 	
 	#Slow down the loop
