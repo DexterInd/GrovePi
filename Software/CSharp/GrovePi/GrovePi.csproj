@@ -51,6 +51,7 @@
     <Compile Include="DeviceFactory.cs" />
     <Compile Include="GrovePi.cs" />
     <Compile Include="I2CDevices\RgbLcdDisplay.cs" />
+    <Compile Include="I2CDevices\SixAxisAccelerometerAndCompass.cs" />
     <Compile Include="Sensors\ButtonSensor.cs" />
     <Compile Include="Sensors\Buzzer.cs" />
     <Compile Include="Sensors\Led.cs" />
