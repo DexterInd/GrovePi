@@ -3,8 +3,47 @@ import time
 import math
 import RPi.GPIO
 
+"""
+## License
+
+The MIT License (MIT)
+Copyright (c) 2016 Frederic Aguiard
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
 
 class GroveI2CColorSensor:
+    """ Provides access to the Grove I2C color sensor from Seeedstudios.
+
+    This library supports 2 of the operating modes of the sensor:
+    - Continuous, back-to-back color measures ('integrations') of pre-defined durations
+    - Single measure of arbitrary duration
+    The other sensor operating modes (using an external SYNC pin, interrupts...) which are not supported by this
+    library.
+
+    Usage:
+    1. Use either use_continuous_integration() or use_manual_integration() to select operating mode
+    2. If necessary, adjust gain and prescaler to obtain a color measure of sufficient precision without saturating the
+       sensor.
+    3. Start integration using start_integration()
+    4. In manual integration mode: use stop_integration() after the desired duration
+    5. Use one of the read functions to get the measured color value
+
+    Reference documentation:
+    - Seeedstudio wiki: http://www.seeedstudio.com/wiki/index.php?title=Twig_-_I2C_Color_Sensor_v0.9b
+    - TCS3414-A Datasheet: http://www.seeedstudio.com/wiki/File:TCS3404_TCS3414-A.pdf
+    """
     # Common colors coordinates (CIE xy and RGB)
     COLOR_TABLE = {"Red":           {"x": 0.64,  "y": 0.33,  "r": 255, "g": 0,   "b": 0},
                    "Green":         {"x": 0.3,   "y": 0.6,   "r": 0,   "g": 255, "b": 0},
@@ -268,6 +307,8 @@ class GroveI2CColorSensor:
 
     def read_xy(self):
         """ Reads the measured color and converts it as CIE x,y coordinates.
+
+        See http://www.techmind.org/colour/ and https://en.wikipedia.org/wiki/CIE_1931_color_space for more information.
 
         :return: a (x, y) tuple
         """
