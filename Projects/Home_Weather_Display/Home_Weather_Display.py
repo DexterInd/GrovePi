@@ -10,7 +10,7 @@
 #  1 - DHT22 - white one, aka DHT Pro or AM2302
 #  2 - DHT21 - black one, aka AM2301
 #
-# For more info please see: http://www.dexterindustries.com/forum/?topic=537-6c-displayed-in-home-weather-project/#post-4485
+# For more info please see: http://www.dexterindustries.com/topic/537-6c-displayed-in-home-weather-project/
 #
 '''
 The MIT License (MIT)
