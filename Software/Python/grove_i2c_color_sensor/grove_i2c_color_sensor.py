@@ -272,7 +272,7 @@ class GroveI2CColorSensor:
         :return: True if integration is completed.
         """
         integration_status = self.bus.read_i2c_block_data(self._I2C_SENSOR_ADDRESS, self._REGISTER_CONTROL, 1)
-        return integration_status[0] == self._CONTROL_ADC_IS_VALID
+        return integration_status[0] & self._CONTROL_ADC_IS_VALID == self._CONTROL_ADC_IS_VALID
 
     def read_rgbc_word(self):
         """ Reads the measured color, split over 4 channels: red, green, blue, clear.
