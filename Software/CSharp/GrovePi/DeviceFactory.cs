@@ -32,7 +32,7 @@ namespace GrovePi
         IButtonSensor ButtonSensor(Pin pin);
         IRgbLcdDisplay RgbLcdDisplay();
         IRgbLcdDisplay RgbLcdDisplay(int rgbAddress, int textAddress);
-        
+        ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass();
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -41,8 +41,10 @@ namespace GrovePi
         private const byte GrovePiAddress = 0x04;
         private const byte DisplayRgbI2CAddress = 0x62;
         private const byte DisplayTextI2CAddress = 0x3e;
+        private const byte SixAxisAccelerometerI2CAddress = 0x1e;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
+        private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
 
         public IGrovePi GrovePi()
         {
@@ -129,6 +131,11 @@ namespace GrovePi
             return BuildRgbLcdDisplayImpl(DisplayRgbI2CAddress, DisplayTextI2CAddress);
         }
 
+        public ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass()
+        {
+            return BuildSixAxisAccelerometerAndCompassImpl();
+        }
+
         public IButtonSensor ButtonSensor(Pin pin)
         {
             return DoBuild(x => new ButtonSensor(x, pin));
@@ -192,6 +199,29 @@ namespace GrovePi
                 return new RgbLcdDisplay(rgbDevice, textDevice);
             }).Result;
             return _rgbLcdDisplay;
+        }
+
+        private SixAxisAccelerometerAndCompass BuildSixAxisAccelerometerAndCompassImpl()
+        {
+            if (_sixAxisAccelerometerAndCompass != null)
+            {
+                return _sixAxisAccelerometerAndCompass;
+            }
+
+            var settings = new I2cConnectionSettings(SixAxisAccelerometerI2CAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _sixAxisAccelerometerAndCompass = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, settings);
+
+                return new SixAxisAccelerometerAndCompass(device);
+            }).Result;
+
+            return _sixAxisAccelerometerAndCompass;
         }
 
         private static async Task<DeviceInformationCollection> GetDeviceInfo()
