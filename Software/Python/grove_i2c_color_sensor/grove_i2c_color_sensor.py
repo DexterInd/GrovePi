@@ -23,8 +23,9 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER I
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+
 class GroveI2CColorSensor:
-    """ Provides access to the Grove I2C color sensor from Seeedstudios.
+    """ Provides access to the Grove I2C color sensor from Seeedstudio.
 
     This library supports 2 of the operating modes of the sensor:
     - Continuous, back-to-back color measures ('integrations') of pre-defined durations
@@ -264,7 +265,7 @@ class GroveI2CColorSensor:
         self.bus.write_i2c_block_data(
             self._I2C_SENSOR_ADDRESS,
             self._REGISTER_CONTROL,
-            [self._CONTROL_ADC_DISABLE | self._CONTROL_ADC_POWER_OFF])
+            [self._CONTROL_ADC_DISABLE | self._CONTROL_ADC_POWER_ON])
 
     def is_integration_complete(self):
         """ Checks if an integration has been successfully completed and color data is ready to be read.
@@ -290,7 +291,7 @@ class GroveI2CColorSensor:
                 raw_color[6] + raw_color[7] * 256)
 
     def read_rgbc(self):
-        """ Reads the measured color, split over 4 channels: red, green, blue, clear.
+        """ Reads the measured color, split over 4 channels: red, green, blue, clear (unfiltered).
         Each value is provided as a byte.
 
         :return: a (r,g,b,c) tuple of the 4 byte values measured by the red/green/blue/clear channels
@@ -324,6 +325,8 @@ class GroveI2CColorSensor:
 
     def read_color_name(self):
         """ Reads the measured color and maps it to the nearest color present in COLOR_TABLE.
+
+        Warning: current implementation does not work well with white / grey / black or dark colors.
 
         :return: The color name used as a key in COLOR_TABLE.
         """
