@@ -4,7 +4,7 @@ namespace GrovePi.Sensors
 {
     public interface ITemperatureAndHumiditySensor
     {
-        double TemperatureInCelcius();
+        double TemperatureInCelsius();
     }
 
     public enum Model
@@ -28,7 +28,7 @@ namespace GrovePi.Sensors
             _model = model;
         }
 
-        public double TemperatureInCelcius()
+        public double TemperatureInCelsius()
         {
             var result = (double) _device.AnalogRead(_pin);
             var resistance = (1023 - result)*10000/result;
