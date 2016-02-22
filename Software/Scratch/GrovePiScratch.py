@@ -43,7 +43,6 @@ THE SOFTWARE.
 import scratch,sys,threading,math
 import grovepi
 import time
-from grove_i2c_barometic_sensor_BMP180 import BMP085		# Barometric pressure sensor.
 
 en_grovepi=1
 en_debug=1
@@ -293,6 +292,9 @@ while True:
 		# Barometer code, pressure
 		elif msg[:9].lower()=="pressure".lower():
 			if en_grovepi:
+				# We import here to prevent errors thrown.  If the import fails, you just get an error message instead of the communicator crashing.
+				# If user is using multiple sensors and using their own image which does not have the pythonpath set correctly then they'll just not get the output for 1 sensor, and the others will still keep working
+				from grove_i2c_barometic_sensor_BMP180 import BMP085		# Barometric pressure sensor.
 				bmp = BMP085(0x77, 1)			#Initialize the pressure sensor (barometer)
 				press = bmp.readPressure()/100.0
 				s.sensorupdate({'pressure':press})
