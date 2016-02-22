@@ -5,7 +5,8 @@
 # History
 # ------------------------------------------------
 # Author     Date      		Comments
-# Karan      29 June 15  	Initial Authoring                                                            
+# Karan      29 June 15  	Initial Authoring                                                        
+# John		22 Feb 16	Adding GrovePi Barometer
 '''
 ## License
 
@@ -42,6 +43,7 @@ THE SOFTWARE.
 import scratch,sys,threading,math
 import grovepi
 import time
+from grove_i2c_barometic_sensor_BMP180 import BMP085		# Barometric pressure sensor.
 
 en_grovepi=1
 en_debug=1
@@ -303,11 +305,11 @@ while True:
 			if en_debug:
 				print "Ignoring: ",msg
 					
-    except KeyboardInterrupt:
-        running= False
-        print "GrovePi Scratch: Disconnected from Scratch"
-        break
-    except (scratch.scratch.ScratchConnectionError,NameError) as e:
+	except KeyboardInterrupt:
+		running= False
+		print "GrovePi Scratch: Disconnected from Scratch"
+		break
+	except (scratch.scratch.ScratchConnectionError,NameError) as e:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
@@ -319,6 +321,6 @@ while True:
 				break;
 			except scratch.ScratchError:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
-    except:
+	except:
 		e = sys.exc_info()[0]
 		print "GrovePi Scratch: Error %s" % e	
