@@ -296,18 +296,9 @@ while True:
 				s.sensorupdate({'pressure':press})
 				if en_debug:
 					print "Pressure: " + str(press)
-			if en_debug:
+			if en_debug:		# If Debug is enabled, print the value of msg.
 				print msg
-		
-		else:
-			if en_debug:
-				print "Ignoring: ",msg
-					
-		else:
-			if en_debug:
-				print "Ignoring: ",msg
-					
-			
+				
 		else:
 			if en_debug:
 				print "Ignoring: ",msg
