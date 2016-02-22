@@ -287,7 +287,27 @@ while True:
 					print "Error taking picture"
 				s.sensorupdate({'camera':"Error"})	
 			s.sensorupdate({'camera':"Picture Taken"})	
+
+		# Barometer code, pressure
+		elif msg[:9].lower()=="pressure".lower():
+			if en_grovepi:
+				bmp = BMP085(0x77, 1)			#Initialize the pressure sensor (barometer)
+				press = bmp.readPressure()/100.0
+				s.sensorupdate({'pressure':press})
+				if en_debug:
+					print "Pressure: " + str(press)
+			if en_debug:
+				print msg
+		
+		else:
+			if en_debug:
+				print "Ignoring: ",msg
 					
+		else:
+			if en_debug:
+				print "Ignoring: ",msg
+					
+			
 		else:
 			if en_debug:
 				print "Ignoring: ",msg
