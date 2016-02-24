@@ -88,7 +88,7 @@ except NameError:
 
 
 while True:
-    try:
+	try:
 		m = s.receive()
 
 		while m[0] == 'sensor-update' :
