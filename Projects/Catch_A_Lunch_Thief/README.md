@@ -1,9 +1,6 @@
-## **Catch a Lunch Thief Readme**
+## **Catch a Lunch Thief**
 
-
-
-- **home_temp_humi_display**: Shows the temperature and humidity on Grove I2C OLED.
-
+Have you ever had your lunch stolen?  This project will help you find the culprit!  Using the GrovePi, a Raspberry Pi, and a Raspberry Pi camera this project will e-mail you when your lunch is moved, taking a picture of the offender and helping you nab the lunch thief.
 
 See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
 
