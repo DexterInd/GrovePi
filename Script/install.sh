@@ -81,8 +81,14 @@ sudo apt-get install python3-rpi.gpio
 sudo pip install -U RPi.GPIO
 echo "Dependencies installed"
 
-git clone git://git.drogon.net/wiringPi
-cd wiringPi
+if [ -d wiringPi ]; then
+    cd wiringPi
+    git pull
+else
+    git clone git://git.drogon.net/wiringPi
+    cd wiringPi
+fi
+
 ./build
 RES=$?
 
