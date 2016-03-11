@@ -29,7 +29,7 @@ echo "   - i2c-tools        This Python module allows SMBus access through the I
 echo "   - python-smbus     Python bindings for Linux SMBus access through i2c-dev"
 echo "   - arduino          AVR development board IDE and built-in libraries"
 echo "   - minicom          friendly menu driven serial communication program"
-echo "2) Installs wiringPi in GrovePi/Script"
+echo "2) Clone, build wiringPi in GrovePi/Script and install it"
 echo "3) Removes I2C and SPI from modprobe blacklist /etc/modprobe.d/raspi-blacklist.conf"
 echo "4) Adds I2C-dev, i2c-bcm2708 and spi-dev to /etc/modules"
 echo "5) Installs gertboard avrdude_5.10-4_armhf.deb package"
@@ -46,19 +46,28 @@ echo "Special thanks to Joe Sanford at Tufts University. This script was derived
 echo " "
 echo "Raspberry Pi wil reboot after completion."
 echo " "
-echo -e "Press \E[32mENTER\E[0m to begin... or \E[91mctrl+c\E[0m to abort"
-# read
+echo " "
 sleep 5
 
 echo " "
 echo "Check for internet connectivity..."
 echo "=================================="
-wget -q --tries=2 --timeout=100 http://google.com
+wget -q --tries=2 --timeout=100 http://google.com -O /dev/null
 if [ $? -eq 0 ];then
 	echo "Connected"
 else
 	echo "Unable to Connect, try again !!!"
 	exit 0
+fi
+
+USER_ID=$(/usr/bin/id -u)
+USER_NAME=$(/usr/bin/who am i | awk '{ print $1 }')
+SCRIPT_PATH=$(/usr/bin/realpath $0)
+DIR_PATH=$(/usr/bin/dirname ${SCRIPT_PATH} | sed 's/\/Script$//')
+
+if [ ${USER_ID} -ne 0 ]; then
+    echo "Please run this as root."
+    exit 1
 fi
 
 echo " "
@@ -72,25 +81,37 @@ sudo apt-get install python3-rpi.gpio
 sudo pip install -U RPi.GPIO
 echo "Dependencies installed"
 
-git clone git://git.drogon.net/wiringPi
-cd wiringPi
+if [ -d wiringPi ]; then
+    cd wiringPi
+    git pull
+else
+    git clone git://git.drogon.net/wiringPi
+    cd wiringPi
+fi
+
 ./build
+RES=$?
+
+if [ $RES -ne 0 ]; then
+  echo "Something went wrong building/installing wiringPi, exiting."
+  exit 1
+fi
+
 echo "wiringPi Installed"
 
 echo " "
-echo "Removing blacklist from /etc/modprobe.d/raspi-blacklist.conf . . ."
-echo "=================================================================="
-if grep -q "#blacklist i2c-bcm2708" /etc/modprobe.d/raspi-blacklist.conf; then
-	echo "I2C already removed from blacklist"
-else
-	sudo sed -i -e 's/blacklist i2c-bcm2708/#blacklist i2c-bcm2708/g' /etc/modprobe.d/raspi-blacklist.conf
-	echo "I2C removed from blacklist"
-fi
-if grep -q "#blacklist spi-bcm2708" /etc/modprobe.d/raspi-blacklist.conf; then
-	echo "SPI already removed from blacklist"
-else
-	sudo sed -i -e 's/blacklist spi-bcm2708/#blacklist spi-bcm2708/g' /etc/modprobe.d/raspi-blacklist.conf
-	echo "SPI removed from blacklist"
+RASPI_BL="/etc/modprobe.d/raspi-blacklist.conf.bak"
+MODS="i2c spi"
+if [ -f ${RASPI_BL} ]; then
+    echo "Removing blacklist from ${RASPI_BL} . . ."
+    echo "=================================================================="
+    echo " "
+    for i in ${MODS}
+    do
+        MOD_NAME=$(echo $i | tr [a-z] [A-Z])
+        sudo sed -i -e "s/blacklist ${i}-bcm2708/#blacklist ${i}-bcm2708/g" ${RASPI_BL}
+        echo "${MOD_NAME} not present or removed from blacklist"
+    done
 fi
 
 #Adding in /etc/modules
@@ -98,19 +119,19 @@ echo " "
 echo "Adding I2C-dev and SPI-dev in /etc/modules . . ."
 echo "================================================"
 if grep -q "i2c-dev" /etc/modules; then
-	echo "I2C-dev already there"
+	echo "I2C-dev already present"
 else
 	echo i2c-dev >> /etc/modules
 	echo "I2C-dev added"
 fi
 if grep -q "i2c-bcm2708" /etc/modules; then
-	echo "i2c-bcm2708 already there"
+	echo "i2c-bcm2708 already present"
 else
 	echo i2c-bcm2708 >> /etc/modules
 	echo "i2c-bcm2708 added"
 fi
 if grep -q "spi-dev" /etc/modules; then
-	echo "spi-dev already there"
+	echo "spi-dev already present"
 else
 	echo spi-dev >> /etc/modules
 	echo "spi-dev added"
@@ -120,25 +141,44 @@ echo " "
 echo "Making I2C changes in /boot/config.txt . . ."
 echo "================================================"
 
-echo dtparam=i2c1=on >> /boot/config.txt
-echo dtparam=i2c_arm=on >> /boot/config.txt
+BOOT_CONFIG="/boot/config.txt"
+DTPARAMS="i2c1 i2c_arm"
+for i in ${DTPARAMS}
+do
+    if grep -q "^dtparam=${i}=on$" ${BOOT_CONFIG}; then
+        echo "${i} already present"
+    else
+        echo "dtparam=${i}=on" >> /boot/config.txt
+    fi
+done
 
-sudo adduser pi i2c
-sudo chmod +x /home/pi/Desktop/GrovePi/Software/Scratch/GrovePi_Scratch_Scripts/*.sh
+sudo adduser ${USER_NAME} i2c
+sudo chmod +x ${DIR_PATH}/Software/Scratch/GrovePi_Scratch_Scripts/*.sh
 
 #Adding ARDUINO setup files
 echo " "
 echo "Making changes to Arduino . . ."
 echo "==============================="
-cd /tmp
-wget http://project-downloads.drogon.net/gertboard/avrdude_5.10-4_armhf.deb
-sudo dpkg -i avrdude_5.10-4_armhf.deb
-sudo chmod 4755 /usr/bin/avrdude
+PKG_NAME="avrdude"
+PKG_VER="5.10-4"
+PKG_INSTALLED=$(dpkg-query -W -f='${Version}' ${PKG_NAME} 2>/dev/null)
+PKG_RES=$?
+
+if [ ${PKG_RES} -eq -1 ]; then
+    cd /tmp
+    wget http://project-downloads.drogon.net/gertboard/${PKG_NAME}_${PKG_VER}_armhf.deb
+    sudo dpkg -i avrdude_5.10-4_armhf.deb
+    sudo chmod 4755 /usr/bin/avrdude
+fi
 
 cd /tmp
 wget http://project-downloads.drogon.net/gertboard/setup.sh
 chmod +x setup.sh
 sudo ./setup.sh
+echo " "
+echo "If you see errors related to /etc/inittab, it's fine."
+echo "/etc/inittab has been deprecated in favor of systemd,"
+echo "cfr. https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=123081"
 
 echo " "
 echo "Install smbus for python"
@@ -147,7 +187,12 @@ sudo apt-get install python-smbus
 echo " "
 echo "Making libraries global . . ."
 echo "============================="
-sudo cp /home/pi/Desktop/GrovePi/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
+if [ -d /usr/lib/python2.7/dist-packages ]; then
+    sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
+else
+    echo "/usr/lib/python2.7/dist-packages not found, exiting"
+    exit 1
+fi
 
 echo " "
 echo "Please restart to implement changes!"
