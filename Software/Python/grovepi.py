@@ -152,19 +152,6 @@ encoder_dis_cmd=[17]
 flow_read_cmd=[12]
 flow_disable_cmd=[13]
 flow_en_cmd=[18]
-
-# Grove 433MHz Simple RF link kit - Transmitter commands & subcommands
-# Control command, with actual subcommand specified as 2nd byte
-tx433_control_cmd = [100]
-# Control subcommand: set transmitter PIN
-tx433_control_set_pin_subcmd = 1
-# Control subcommand: initialize message buffer of specified size (up to 64 bytes)
-tx433_control_set_buffer_subcmd = 2
-# Control subcommand: send contents of the message buffer
-tx433_control_send_buffer_subcmd = 3
-# Append 3 bytes to the message buffer
-tx433_fill_buffer_cmd=[101]
-
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
@@ -577,53 +564,3 @@ def flowRead():
 		return [data_back[0],data_back[2]*256+data_back[1]]
 	else:
 		return [-1,-1]
-		
-# Set connexion Pin for 433MHz RF link - transmitter
-def tx433_setup(pin):
-	write_i2c_block(address, tx433_control_cmd + [tx433_control_set_pin_subcmd, pin, unused])
-
-# Prepares a message to be sent by 433MHz RF link transmitter
-def tx433_set_message(message):
-	# Send a first command to specify the size of the message that we will send.
-	while True:
-		if write_i2c_block(address, tx433_control_cmd + [tx433_control_set_buffer_subcmd, len(message), unused]) != -1:
-			break
-		time.sleep(0.5)
-	time.sleep(0.5)
-
-	# Send to the firmware the message to broadcast, 3 bytes at a time.
-	for x in range(0, len(message) // 3):
-		while True:
-			if write_i2c_block(address, tx433_fill_buffer_cmd + [
-				ord(message[x * 3]),
-				ord(message[x * 3 + 1]),
-				ord(message[x * 3 + 2]) ]) != -1:
-				break
-			time.sleep(.5)
-		time.sleep(0.5)
-	if len(message) % 3 == 1:
-		while True:
-			if write_i2c_block(address, tx433_fill_buffer_cmd + [
-				ord(message[len(message) // 3 * 3]),
-				unused,
-				unused]) != -1:
-				break
-			time.sleep(.5)
-		time.sleep(0.5)
-	elif len(message) % 3 == 2:
-		while True:
-			if write_i2c_block(address, tx433_fill_buffer_cmd + [
-				ord(message[len(message) // 3 * 3]),
-				ord(message[len(message) // 3 * 3 + 1]),
-				unused]) != -1:
-				break
-			time.sleep(.5)
-		time.sleep(0.5)
-
-# Request that the 433MHz RF link transmitter sends the prepared message.
-# Message can be received by the matching 433MHz link receiver module running the sample 
-# code provided on Seeedstudios wiki.
-# (see http://www.seeedstudio.com/wiki/Grove_-_433MHz_Simple_RF_link_kit)
-def tx433_send_message():
-	write_i2c_block(address, tx433_control_cmd + [tx433_control_send_buffer_subcmd, unused, unused])
-	
