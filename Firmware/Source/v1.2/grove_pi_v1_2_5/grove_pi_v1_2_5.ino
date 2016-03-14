@@ -30,6 +30,13 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define flow_en_cmd				18
 #define flow_dis_cmd       		13
 
+#define tx433_control_cmd       100
+#define tx433_fill_buffer_cmd   101
+#define tx433_control_set_pin_subcmd        1
+#define tx433_control_set_buffer_subcmd     2
+#define tx433_control_send_buffer_subcmd    3
+#define tx433_buffer_max_size   64
+
 int cmd[5];
 int index=0;
 int flag=0;
@@ -64,6 +71,11 @@ int hallsensor = 2;    //The pin location of the sensor
 int flow_run_bk=0;
 long flow_read_start;
 byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background 
+
+// 433MHz TX/RX variables
+char tx_msg_buffer[tx433_buffer_max_size]; // static buffer for message storage
+byte tx_msg_buffer_len = 0; // length of message to send
+byte tx_msg_buffer_idx = 0; // current position in buffer while filling it
 
 void setup()
 {
@@ -591,6 +603,76 @@ void loop()
 		flow_run_bk=0;
         detachInterrupt(0);
         cmd[0]=0;
+    }
+    // 433MHz transmitter: control commands
+    else if (cmd[0]==tx433_control_cmd)
+    {
+      if (run_once==1)
+      {
+//        Serial.println("Subcommand: " + String(cmd[1]));
+//        Serial.println("Parameter: " + String(cmd[2]));
+
+        // Set TX module PIN
+        if(cmd[1]==tx433_control_set_pin_subcmd)
+        {
+//          Serial.println("Setting up 433MHz TX on port " + String(cmd[2]));
+          vw_set_tx_pin(cmd[2]);
+          vw_setup(2000);
+        }
+        // Set buffer size for TX module
+        else if(cmd[1]==tx433_control_set_buffer_subcmd)
+        {
+//            Serial.println("Set buffer size: " + String(cmd[2]));
+            for(byte i=0;i++;i<tx433_buffer_max_size)
+            {
+              tx_msg_buffer[i] = 0;
+            }
+            if(cmd[2] <= tx433_buffer_max_size)
+            {
+              tx_msg_buffer_len=cmd[2];
+            }
+            else
+            {
+              tx_msg_buffer_len=0;
+//              Serial.println("Requested buffer size is too large. Max =" + String(tx433_buffer_max_size));
+            }
+            tx_msg_buffer_idx=0;
+        }
+        // Send buffer contents
+        else if(cmd[1]==tx433_control_send_buffer_subcmd)
+        {
+            if(tx_msg_buffer_len >0 && tx_msg_buffer_len==tx_msg_buffer_idx)
+            {
+//              Serial.println("Sending message over 433MHz TX");
+//              Serial.println("Buffer len = " + String(tx_msg_buffer_len));
+//              for(byte i=0;i<tx_msg_buffer_len;i++)
+//              {
+//                Serial.print((int)tx_msg_buffer[i], DEC);
+//                Serial.print(" ");
+//              }
+//              Serial.println();
+              vw_send((uint8_t *)tx_msg_buffer, tx_msg_buffer_len);
+            }
+        }
+        run_once=0;
+      }
+    }
+    // 433MHz transmitter: fill TX buffer
+    else if (cmd[0]==tx433_fill_buffer_cmd)
+    {
+      if (run_once==1)
+      {
+//        Serial.println("Append buffer with: " + String(cmd[1]) + " " + String(cmd[2]) + " " + String(cmd[3]));
+        if(tx_msg_buffer_idx < tx_msg_buffer_len)
+        {
+          for(int i=1; i <= 3 && tx_msg_buffer_idx != tx_msg_buffer_len ; i++)
+          {
+            tx_msg_buffer_idx++;
+            tx_msg_buffer[tx_msg_buffer_idx-1]=cmd[i];
+          }
+        }
+        run_once=0;
+      }
     }
   }
     //Dust sensor can run in background so has a dedicated if condition
