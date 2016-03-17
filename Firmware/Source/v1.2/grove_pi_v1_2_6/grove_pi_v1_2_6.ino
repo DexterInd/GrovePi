@@ -8,6 +8,7 @@
 #include "IRSendRev.h"
 #include "Encoder.h"
 #include "TimerOne.h"
+#include "VirtualWire.h"
 
 MMA7660 acc;
 DS1307 clock;
