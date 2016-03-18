@@ -1,4 +1,4 @@
-This is a Python 2.7 script wich can be used to get readings from the Grove Digital Light Sensor connected to the GrovePi on a Raspberry Pi.
+This is a Python 2.7 script which can be used to get readings from the Grove Digital Light Sensor(http://www.seeedstudio.com/wiki/Grove_-_Digital_Light_Sensor) connected to the GrovePi on a Raspberry Pi.
 
 If you set debug = 1 (standard option) it displays all calculations on screen.
 If you set debug = 0, the script just runs and only displays the output.
