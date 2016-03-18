@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove GPS Module.
+# GrovePi Example for using the Grove GPS Module http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -38,6 +38,8 @@ THE SOFTWARE.
 # Author     Date      		Comments
 # Karan      21 Aug 14 		Initial Authoring
 # Karan		 10 June 15		Updated the code to reflect the decimal GPS coordinates (contributed by rschmidt on the DI forums: http://www.dexterindustries.com/forum/?topic=gps-example-questions/#post-5668)
+# Karan		 18 Mar 16		Updated code to handle conditions where no fix from satellite
+
 import serial, time
 import smbus
 import math
@@ -45,6 +47,9 @@ import RPi.GPIO as GPIO
 import struct
 import sys
 import ir_receiver_check
+
+enable_debug=1
+enable_save_to_file=0
 
 if ir_receiver_check.check_ir():
 	print "Disable IR receiver before continuing"
@@ -70,20 +75,44 @@ class GPS:
 			ind=GPS.inp.index('$GPGGA',5,len(GPS.inp))	#Sometimes multiple GPS data packets come into the stream. Take the data only after the last '$GPGGA' is seen
 			GPS.inp=GPS.inp[ind:]
 		except ValueError:
-			print ""
+			print ("")
 		GPS.GGA=GPS.inp.split(",")	#Split the stream into individual parts
 		return [GPS.GGA]
 		
 	#Split the data into individual elements
 	def vals(self):
+		if enable_debug:
+			print GPS.GGA
+			
 		time=GPS.GGA[1]
-		lat=GPS.GGA[2]
-		lat_ns=GPS.GGA[3]
-		long=GPS.GGA[4]
-		long_ew=GPS.GGA[5]
-		fix=GPS.GGA[6]
-		sats=GPS.GGA[7]
-		alt=GPS.GGA[9]
+		
+		if GPS.GGA[2]=='':
+			lat =-1.0
+		else:
+			lat=float(GPS.GGA[2])
+		
+		if GPS.GGA[3]=='':
+			lat_ns=-1.0
+		else:
+			lat_ns=float(GPS.GGA[3])
+			
+		if  GPS.GGA[4]=='':
+			long=-1.0
+		else:
+			long=float(GPS.GGA[4])
+		
+		if  GPS.GGA[4]=='':
+			long_ew=-1.0
+		else:
+			long_ew=float(GPS.GGA[5])
+			
+		fix=int(GPS.GGA[6])
+		sats=int(GPS.GGA[7])
+		
+		if  GPS.GGA[9]=='':
+			alt=-1.0
+		else:
+			alt=float(GPS.GGA[9])
 		return [time,fix,sats,alt,lat,lat_ns,long,long_ew]
 	
 	# Convert to decimal degrees
@@ -93,31 +122,41 @@ class GPS:
 		return degrees + d
 		
 g=GPS()
-f=open("gps_data.csv",'w')	#Open file to log the data
-f.write("name,latitude,longitude\n")	#Write the header to the top of the file
+if enable_save_to_file:
+	f=open("gps_data.csv",'w')	#Open file to log the data
+	f.write("name,latitude,longitude\n")	#Write the header to the top of the file
 ind=0
 while True:
+	time.sleep(0.01)
 	try:
 		x=g.read()	#Read from GPS
 		[t,fix,sats,alt,lat,lat_ns,long,long_ew]=g.vals()	#Get the individial values
 		
 		# Convert to decimal degrees
-		lat = g.decimal_degrees(float(lat))
-		if lat_ns == "S":
-			lat = -lat
+		if lat !=-1.0:
+			lat = g.decimal_degrees(float(lat))
+			if lat_ns == "S":
+				lat = -lat
 
-		long = g.decimal_degrees(float(long))
-		if long_ew == "W":
-			long = -long
+		if long !=-1.0:
+			long = g.decimal_degrees(float(long))
+			if long_ew == "W":
+				long = -long
 			
-		print ("Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew)
+		# print ("Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew)
+		
+		print ("Time\t\t: %s\nFix status\t: %d\nSats in view\t: %d\nAltitude\t: %f\nLat\t\t: %f\nLong\t\t: %f") %(t,fix,sats,alt,lat,long)
+		
 		s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"	
-		f.write(s)	#Save to file
+		
+		if enable_save_to_file:
+			f.write(s)	#Save to file
 		time.sleep(2)
 	except IndexError:
 		print ("Unable to read")
 	except KeyboardInterrupt:
-		f.close()
+		if enable_save_to_file:
+			f.close()
 		print ("Exiting")
 		sys.exit(0)
 	
