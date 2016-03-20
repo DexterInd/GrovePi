@@ -1,4 +1,4 @@
-GrovePi Examples for using the Grove GPS Module http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130
+GrovePi Examples for using the [Grove GPS Module](http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130)
 
 *Files*:
 - grove_gps_hardware_test.py : This example is for is the simplest GPS Script.  It simply reads the raw output of the GPS sensor on the GoPiGo or GrovePi and prints it. 
