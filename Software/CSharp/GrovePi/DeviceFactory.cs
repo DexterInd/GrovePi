@@ -22,7 +22,7 @@ namespace GrovePi
         IDHTTemperatureAndHumiditySensor DHTTemperatureAndHumiditySensor(Pin pin, DHTModel model);
         IUltrasonicRangerSensor UltraSonicSensor(Pin pin);
         IAccelerometerSensor AccelerometerSensor(Pin pin);
-		IAirQualitySensor AirQualitySensor(Pin pin);
+        IAirQualitySensor AirQualitySensor(Pin pin);
         IRealTimeClock RealTimeClock(Pin pin);
         ILedBar BuildLedBar(Pin pin);
         IFourDigitDisplay FourDigitDisplay(Pin pin);
@@ -76,6 +76,11 @@ namespace GrovePi
         public IDHTTemperatureAndHumiditySensor DHTTemperatureAndHumiditySensor(Pin pin, DHTModel model)
         {
             return DoBuild(x => new DHTTemperatureAndHumiditySensor(x, pin, model));
+        }
+
+        public IAirQualitySensor AirQualitySensor(Pin pin)
+        {
+            return DoBuild(x => new AirQualitySensor(x, pin));
         }
 
         public IUltrasonicRangerSensor UltraSonicSensor(Pin pin)
