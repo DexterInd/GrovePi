@@ -1,4 +1,6 @@
-﻿namespace GrovePi.Sensors
+﻿using GrovePi.Common;
+
+namespace GrovePi.Sensors
 {
     public interface IUltrasonicRangerSensor
     {
@@ -19,9 +21,20 @@
 
         public int MeasureInCentimeters()
         {
-            var buffer = new[] {CommandAddress, (byte) _pin, Constants.Unused, Constants.Unused};
-            _device.DirectAccess.Write(buffer);
-            _device.DirectAccess.Read(buffer);
+            var buffer = new byte[4] {CommandAddress, (byte) _pin, Constants.Unused, Constants.Unused};
+            _device.DirectAccess.WritePartial(buffer);
+            var result = _device.DirectAccess.WritePartial(buffer);
+            if (result.Status != Windows.Devices.I2c.I2cTransferStatus.FullTransfer)
+            {
+                return -1;
+            }
+            Delay.Milliseconds(50);
+            buffer = new byte[3];
+            result = _device.DirectAccess.ReadPartial(buffer);
+            if (result.Status != Windows.Devices.I2c.I2cTransferStatus.FullTransfer)
+            {
+                return -1;
+            }
             return buffer[1]*256 + buffer[2];
         }
     }
