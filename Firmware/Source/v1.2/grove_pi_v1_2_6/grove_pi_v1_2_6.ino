@@ -42,7 +42,7 @@ int cmd[5];
 int index=0;
 int flag=0;
 int i;
-byte val=0,b[21],float_array[4],dht_b[21];
+byte val=0,b[21],float_array[4],dht_b[21],ultrasonic_b[3];
 unsigned char dta[21];
 int length;
 int aRead=0;
@@ -138,20 +138,24 @@ void loop()
     //Ultrasonic Read
     else if(cmd[0]==7)
     {
-      pin=cmd[1];
-      pinMode(pin, OUTPUT);
-      digitalWrite(pin, LOW);
-      delayMicroseconds(2);
-      digitalWrite(pin, HIGH);
-      delayMicroseconds(5);
-      digitalWrite(pin,LOW);
-      pinMode(pin,INPUT);
-      dur = pulseIn(pin,HIGH);
-      RangeCm = dur/29/2;
-      b[1]=RangeCm/256;
-      b[2]=RangeCm%256;
-      //Serial.println(b[1]);
-      //Serial.println(b[2]);
+      if(run_once)
+      {
+          pin=cmd[1];
+          pinMode(pin, OUTPUT);
+          digitalWrite(pin, LOW);
+          delayMicroseconds(2);
+          digitalWrite(pin, HIGH);
+          delayMicroseconds(5);
+          digitalWrite(pin,LOW);
+          pinMode(pin,INPUT);
+          dur = pulseIn(pin,HIGH,50000); //limit the timeout to avoid blocking the program 1s when ranger is covered.
+          RangeCm = dur/29/2;
+          ultrasonic_b[1]=RangeCm/256;
+          ultrasonic_b[2]=RangeCm%256;
+          //Serial.println(b[1]);
+          //Serial.println(b[2]);
+          run_once = 0;
+      }
     }
     //Firmware version
     else if(cmd[0]==8)
@@ -745,15 +749,23 @@ void sendData()
 {
   if(cmd[0] == 1)
     Wire.write(val);
-  if(cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
+  if(cmd[0] == 3 || cmd[0] == 56)
     Wire.write(b, 3);
+  if(cmd[0] == 7)
+  {
+    Wire.write(ultrasonic_b, 3);
+    cmd[0] = 0;
+  }
   if(cmd[0] == 8 || cmd[0] == 20)
     Wire.write(b, 4);
   if(cmd[0] == 30) 
     Wire.write(b, 9);
-  if(cmd[0] == 40) 
+  if(cmd[0] == 40)
+  {
     Wire.write(dht_b, 9);
-  
+    cmd[0] = 0;
+  }
+
   if(cmd[0]==21)
   {
     Wire.write(b,21);     
