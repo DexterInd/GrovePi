@@ -1,6 +1,8 @@
 ﻿using System;
 using Windows.Devices.I2c;
 
+using GrovePi.Common;
+
 namespace GrovePi
 {
     public interface IGrovePi
@@ -11,6 +13,7 @@ namespace GrovePi
         int AnalogRead(Pin pin);
         void AnalogWrite(Pin pin, byte value);
         void PinMode(Pin pin, PinMode mode);
+        void Flush();
     }
 
     internal sealed class GrovePi : IGrovePi
@@ -25,47 +28,84 @@ namespace GrovePi
 
         public string GetFirmwareVersion()
         {
-            var buffer = new byte[] {(byte) Command.Version, Constants.Unused, Constants.Unused, Constants.Unused};
-            DirectAccess.Write(buffer);
-            DirectAccess.Read(buffer);
-            return $"{buffer[1]}.{buffer[2]}.{buffer[3]}";
+            var wbuffer = new byte[4] {(byte) Command.Version, Constants.Unused, Constants.Unused, Constants.Unused};
+            var rbuffer = new byte[4];
+            var i2cTransferResult = DirectAccess.WritePartial(wbuffer);
+            if (i2cTransferResult.Status != I2cTransferStatus.FullTransfer)
+            {
+                return "0.0.0";
+            }
+            i2cTransferResult = DirectAccess.ReadPartial(rbuffer);
+            if (i2cTransferResult.Status != I2cTransferStatus.FullTransfer)
+            {
+                return "0.0.0";
+            }
+            return $"{rbuffer[1]}.{rbuffer[2]}.{rbuffer[3]}";
         }
 
         public byte DigitalRead(Pin pin)
         {
-            var buffer = new byte[] {(byte) Command.DigitalRead, (byte) pin, Constants.Unused, Constants.Unused};
-            DirectAccess.Write(buffer);
+            var wbuffer = new byte[4] {(byte) Command.DigitalRead, (byte) pin, Constants.Unused, Constants.Unused};
+            var rBuffer = new byte[1];
+            var i2cTransferResult = DirectAccess.WritePartial(wbuffer);
+            Delay.Milliseconds(10);
+            if (i2cTransferResult.Status != I2cTransferStatus.FullTransfer)
+            {
+                return 0;
+            }
+            i2cTransferResult = DirectAccess.ReadPartial(rBuffer);
+            if (i2cTransferResult.Status != I2cTransferStatus.FullTransfer)
+            {
+                return 0;
+            }
 
-            var readBuffer = new byte[1];
-            DirectAccess.Read(readBuffer);
-            return readBuffer[0];
+            return rBuffer[0];
         }
 
         public void DigitalWrite(Pin pin, byte value)
         {
-            var buffer = new byte[] {(byte) Command.DigitalWrite, (byte) pin, value, Constants.Unused};
-            DirectAccess.Write(buffer);
+            var buffer = new byte[4] {(byte) Command.DigitalWrite, (byte) pin, value, Constants.Unused};
+            DirectAccess.WritePartial(buffer);
+            Delay.Milliseconds(10);
         }
 
         public int AnalogRead(Pin pin)
         {
-            var buffer = new byte[]
-            {(byte) Command.DigitalRead, (byte) Command.AnalogRead, (byte) pin, Constants.Unused, Constants.Unused};
-            DirectAccess.Write(buffer);
-            DirectAccess.Read(buffer);
-            return buffer[1]*256 + buffer[2];
+            var wbuffer = new byte[4]{(byte) Command.AnalogRead, (byte) pin, Constants.Unused, Constants.Unused};
+            var rbuffer = new byte[3];
+            var i2cTransferResult  = DirectAccess.WritePartial(wbuffer);
+            Delay.Milliseconds(10);
+            if (i2cTransferResult.Status != I2cTransferStatus.FullTransfer)
+            {
+                return 0;
+            }
+            i2cTransferResult = DirectAccess.ReadPartial(rbuffer);
+            if (i2cTransferResult.Status != I2cTransferStatus.FullTransfer)
+            {
+                return 0;
+            }
+
+            return rbuffer[1]*256 + rbuffer[2];
         }
 
         public void AnalogWrite(Pin pin, byte value)
         {
-            var buffer = new byte[] {(byte) Command.AnalogWrite, (byte) pin, value, Constants.Unused};
-            DirectAccess.Write(buffer);
+            var buffer = new byte[4] {(byte) Command.AnalogWrite, (byte) pin, value, Constants.Unused};
+            DirectAccess.WritePartial(buffer);
+            Delay.Milliseconds(10);
         }
 
         public void PinMode(Pin pin, PinMode mode)
         {
-            var buffer = new byte[] {(byte) Command.PinMode, (byte) pin, (byte) mode, Constants.Unused};
-            DirectAccess.Write(buffer);
+            var buffer = new byte[4] {(byte) Command.PinMode, (byte) pin, (byte) mode, Constants.Unused};
+            DirectAccess.WritePartial(buffer);
+            Delay.Milliseconds(10);
+        }
+
+        public void Flush()
+        {
+            var buffer = new byte[4] { Constants.Unused, Constants.Unused, Constants.Unused, Constants.Unused };
+            DirectAccess.WritePartial(buffer);
         }
 
         private enum Command

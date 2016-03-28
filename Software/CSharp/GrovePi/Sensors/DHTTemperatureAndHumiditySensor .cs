@@ -5,9 +5,10 @@ namespace GrovePi.Sensors
 {
     public interface IDHTTemperatureAndHumiditySensor
     {
-        double TemperatureInCelsius();
-        double TemperatureInFahrenheit();
-        double Humidity();
+        double TemperatureInCelsius { get; }
+        double TemperatureInFahrenheit { get; }
+        double Humidity { get; }
+        void Measure();
     }
 
     /// <summary>
@@ -33,6 +34,9 @@ namespace GrovePi.Sensors
 
         private const byte DHTCmd = 40;
 
+        private double t = 0;
+        private double h = 0;
+
         internal DHTTemperatureAndHumiditySensor(GrovePi device, Pin pin, DHTModel model)
         {
             if (device == null) throw new ArgumentNullException(nameof(device));
@@ -41,17 +45,19 @@ namespace GrovePi.Sensors
             _model = model;
         }
 
-        public double TemperatureInCelsius()
+        public void Measure()
         {
-            _device.DirectAccess.Write(new byte[] { DHTCmd, (byte)_pin, (byte)_model, 0 });
+            _device.DirectAccess.WritePartial(new byte[4] { DHTCmd, (byte)_pin, (byte)_model, Constants.Unused });
             Delay.Milliseconds(600);
 
             var readBuffer = new byte[9];
-            _device.DirectAccess.Read(readBuffer);
+            _device.DirectAccess.ReadPartial(readBuffer);
 
-            float tmp = BitConverter.ToSingle(readBuffer, 1);
+            float t0 = BitConverter.ToSingle(readBuffer, 1);
+            float h0 = BitConverter.ToSingle(readBuffer, 5);
 
-            return (double)tmp;
+            t = (double)t0;
+            h = (double)h0;
         }
 
         private double CtoF(double c)
@@ -59,22 +65,28 @@ namespace GrovePi.Sensors
             return c * 9 / 5 + 32;
         }
 
-        public double TemperatureInFahrenheit()
+        public double TemperatureInCelsius
         {
-            return CtoF(TemperatureInCelsius());
+            get
+            {
+                return t;
+            }
         }
 
-        public double Humidity()
+        public double TemperatureInFahrenheit
         {
-            _device.DirectAccess.Write(new byte[] { DHTCmd, (byte)_pin, (byte)_model, 0 });
-            Delay.Milliseconds(600);
+            get
+            {
+                return CtoF(t);
+            }
+        }
 
-            var readBuffer = new byte[9];
-            _device.DirectAccess.Read(readBuffer);
-
-            float tmp = BitConverter.ToSingle(readBuffer, 5);
-
-            return (double)tmp;
+        public double Humidity
+        {
+            get
+            {
+                return h;
+            }
         }
     }
 }
