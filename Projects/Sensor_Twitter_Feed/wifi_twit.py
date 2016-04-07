@@ -77,7 +77,7 @@ while True:
         out_str ="%s Temp: %d C, Humidity: %d, Light: %d, Sound: %d" %(intro_str,t,h,light_intensity/10,sound_level) 
         print (out_str)
         api.PostUpdate(out_str)
-        time.sleep(3)
+        time.sleep(60)
     except IOError:
         print "Error"
     except KeyboardInterrupt:
