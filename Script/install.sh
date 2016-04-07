@@ -27,6 +27,7 @@ echo "   - python-serial    pyserial - module encapsulating access for the seria
 echo "   - python-rpi.gpio  Python GPIO module for Raspberry Pi"
 echo "   - i2c-tools        This Python module allows SMBus access through the I2C /dev"
 echo "   - python-smbus     Python bindings for Linux SMBus access through i2c-dev"
+echo "   - python3-smbus    Python3 bindings for Linux SMBus access through i2c-dev"
 echo "   - arduino          AVR development board IDE and built-in libraries"
 echo "   - minicom          friendly menu driven serial communication program"
 echo "2) Clone, build wiringPi in GrovePi/Script and install it"
@@ -73,7 +74,7 @@ fi
 echo " "
 echo "Installing Dependencies"
 echo "======================="
-sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus arduino minicom python-dev
+sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev
 sudo apt-get purge python-rpi.gpio -y
 sudo apt-get purge python3-rpi.gpio -y
 sudo apt-get install python-rpi.gpio
