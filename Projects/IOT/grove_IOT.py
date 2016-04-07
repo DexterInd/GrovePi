@@ -45,7 +45,7 @@ while True:
 		light=int(grovepi.analogRead(0)/10.24)
 		sound=int(grovepi.analogRead(1)/10.24)
 		
-		print temp,humidity,light,sound
+		print(temp,humidity,light,sound)
 		
 		feed.datastreams = [
 			xively.Datastream(id='temp', current_value=temp, at=now),
@@ -56,4 +56,4 @@ while True:
 		feed.update()
 		time.sleep(10)
 	except:
-		print "Error"
+		print("Error")

@@ -121,16 +121,16 @@ while True:
 	[light,temp,humidity]=read_sensor()
 	# If any reading is a bad reading, skip the loop and try again
 	if light==-1:
-		print "Bad reading"
+		print("Bad reading")
 		time.sleep(1)
 		continue
 	curr_time = time.strftime("%Y-%m-%d:%H-%M-%S")
-	print ("Time:%s\nLight: %d\nTemp: %.2fC\nHumidity:%.2f %%\n" %(curr_time,light,temp,humidity))
+	print(("Time:%s\nLight: %d\nTemp: %.2fC\nHumidity:%.2f %%\n" %(curr_time,light,temp,humidity)))
 
 	# If it is time to take the sensor reading
 	if curr_time_sec-last_read_sensor>time_for_sensor:
 		# Save the sensor reading to the CSV file
-		print "Save the sensor reading to the CSV file."
+		print("Save the sensor reading to the CSV file.")
 		f=open(log_file,'a')
 		f.write("%s,%d,%.2f,%.2f;\n" %(curr_time,light,temp,humidity))
 		f.close()

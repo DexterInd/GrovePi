@@ -45,10 +45,10 @@ def send_email(content, destination, subject, file):
             conn.sendmail(sender, destination, msg.as_string())
         finally:
             conn.close()
-    except Exception, exc:
+    except Exception as exc:
         # Print a message error!
-        print "Mail failed; %s" % str(exc)
-        print "Moving on!"
+        print("Mail failed; %s" % str(exc))
+        print("Moving on!")
 
 # Example function call!  This is what calling the function would look like!
 # send_email(content, destination, subject, file)  where "content" is the content of the email, destination is the destination 
