@@ -43,7 +43,7 @@ grovepi.pinMode(button,"INPUT")
 
 while True:
     try:
-        print (grovepi.digitalRead(button))
+        print(grovepi.digitalRead(button))
         time.sleep(.5)
 
     except IOError:

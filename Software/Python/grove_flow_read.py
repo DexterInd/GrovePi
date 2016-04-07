@@ -50,13 +50,13 @@ import grovepi
 import atexit
 atexit.register(grovepi.flowDisable())
 
-print "Reading from the Flow meter"
+print("Reading from the Flow meter")
 grovepi.flowEnable()
 while True:
     try:
 		[new_val,flow_val] = grovepi.flowRead()
 		if new_val:
-			print flow_val
+			print(flow_val)
 		time.sleep(.5) 
 
     except IOError:

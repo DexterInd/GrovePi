@@ -68,7 +68,7 @@ class MutichannelGasSensor:
         rtnData = 0
         
         buffer=bus.read_i2c_block_data(self.address, cmd, 4)
-        print data
+        print(data)
         
         checksum = buffer[0] + buffer[1] + buffer[2]
         if checksum != buffer[3]:

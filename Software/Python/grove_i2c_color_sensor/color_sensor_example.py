@@ -15,13 +15,13 @@ time.sleep(.1)
 if color_sensor.is_integration_complete():
     print ("Continuous integration complete. Read color:")
     color = color_sensor.read_rgbc()
-    print ("RGB: {},{},{} - Clear {}".format(color[0], color[1], color[2], color[3]))
+    print("RGB: {},{},{} - Clear {}".format(color[0], color[1], color[2], color[3]))
     color = color_sensor.read_xy()
-    print ("xy: {},{}".format(color[0], color[1]))
+    print("xy: {},{}".format(color[0], color[1]))
     color = color_sensor.read_color_name()
-    print ("Closest color match: {}".format(color))
+    print("Closest color match: {}".format(color))
 else:
-    print "Continuous integration incomplete"
+    print("Continuous integration incomplete")
 
 # Stop integration before changing settings
 color_sensor.stop_integration()
@@ -38,10 +38,10 @@ color_sensor.stop_integration()
 if color_sensor.is_integration_complete():
     print ("Manual integration complete. Read color:")
     color = color_sensor.read_rgbc()
-    print ("RGB: {},{},{} - Clear {}".format(color[0], color[1], color[2], color[3]))
+    print("RGB: {},{},{} - Clear {}".format(color[0], color[1], color[2], color[3]))
     color = color_sensor.read_xy()
-    print ("xy: {},{}".format(color[0], color[1]))
+    print("xy: {},{}".format(color[0], color[1]))
     color = color_sensor.read_color_name()
-    print ("Closest color match: {}".format(color))
+    print("Closest color match: {}".format(color))
 else:
-    print "Manual integration incomplete"
+    print("Manual integration incomplete")

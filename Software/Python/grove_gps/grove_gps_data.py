@@ -52,7 +52,7 @@ enable_debug=1
 enable_save_to_file=0
 
 if ir_receiver_check.check_ir():
-	print "Disable IR receiver before continuing"
+	print("Disable IR receiver before continuing")
 	exit()
 	
 ser = serial.Serial('/dev/ttyAMA0',  9600, timeout = 0)	#Open the serial port at 9600 baud
@@ -82,7 +82,7 @@ class GPS:
 	#Split the data into individual elements
 	def vals(self):
 		if enable_debug:
-			print GPS.GGA
+			print(GPS.GGA)
 			
 		time=GPS.GGA[1]
 		
@@ -145,7 +145,7 @@ while True:
 			
 		# print ("Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew)
 		
-		print ("Time\t\t: %s\nFix status\t: %d\nSats in view\t: %d\nAltitude\t: %f\nLat\t\t: %f\nLong\t\t: %f") %(t,fix,sats,alt,lat,long)
+		print("Time\t\t: %s\nFix status\t: %d\nSats in view\t: %d\nAltitude\t: %f\nLat\t\t: %f\nLong\t\t: %f") %(t,fix,sats,alt,lat,int)
 		
 		s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"	
 		

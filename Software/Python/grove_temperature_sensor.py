@@ -55,7 +55,7 @@ sensor = 0
 while True:
     try:
         temp = grovepi.temp(sensor,'1.1')
-        print ("temp =", temp)
+        print("temp =", temp)
         time.sleep(.5)
 
     except KeyboardInterrupt:

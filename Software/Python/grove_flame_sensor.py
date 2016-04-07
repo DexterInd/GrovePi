@@ -43,7 +43,7 @@ grovepi.pinMode(flame_sensor,"INPUT")
 
 while True:
     try:
-        print (grovepi.digitalRead(flame_sensor))
+        print(grovepi.digitalRead(flame_sensor))
         time.sleep(.5)
 
     except IOError:

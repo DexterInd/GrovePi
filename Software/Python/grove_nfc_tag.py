@@ -67,9 +67,9 @@ def writeNFCData(addr,data):
 
 # example code
 if __name__=="__main__":         
-    print (readNFCData(0,16)) # read some data from address 0
+    print(readNFCData(0,16)) # read some data from address 0
     time.sleep(0.1)
     writeNFCData(0,[11,12,13,14,15,16,17,18,19]) # write this data to address 0
     time.sleep(0.1)
-    print( readNFCData(0,16)) # this should show the changed data
+    print(readNFCData(0,16)) # this should show the changed data
 

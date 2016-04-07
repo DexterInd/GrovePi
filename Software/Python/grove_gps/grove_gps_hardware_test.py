@@ -24,7 +24,7 @@ import sys
 import ir_receiver_check
 
 if ir_receiver_check.check_ir():
-	print "Disable IR receiver before continuing"
+	print("Disable IR receiver before continuing")
 	exit()
 
 ser = serial.Serial('/dev/ttyAMA0',  9600, timeout = 0)	#Open the serial port at 9600 baud
@@ -43,7 +43,7 @@ def readlineCR():
 while True:
 	#readlineCR()
 	x=readlineCR()
-	print x
+	print(x)
 	
 ########################################################################
 #

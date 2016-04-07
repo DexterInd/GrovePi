@@ -44,25 +44,25 @@ while True:
 	gest=g.return_gesture()
 	#Match the gesture
 	if gest==g.FORWARD:
-		print"FORWARD"
+		print("FORWARD")
 	elif gest==g.BACKWARD:
-		print "BACKWARD"
+		print("BACKWARD")
 	elif gest==g.RIGHT:
-		print "RIGHT"
+		print("RIGHT")
 	elif gest==g.LEFT:
-		print "LEFT"
+		print("LEFT")
 	elif gest==g.UP:
-		print "UP"
+		print("UP")
 	elif gest==g.DOWN:
-		print "DOWN"
+		print("DOWN")
 	elif gest==g.CLOCKWISE:
-		print "CLOCKWISE"
+		print("CLOCKWISE")
 	elif gest==g.ANTI_CLOCKWISE:
-		print "ANTI_CLOCKWISE"
+		print("ANTI_CLOCKWISE")
 	elif gest==g.WAVE:
-		print "WAVE"
+		print("WAVE")
 	elif gest==0:
-		print "-"
+		print("-")
 	else:
-		print "Error"
+		print("Error")
 	time.sleep(.1)

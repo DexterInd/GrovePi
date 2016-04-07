@@ -44,7 +44,7 @@ while True:
         # Read the sound level
         sensor_value = grovepi.analogRead(loudness_sensor)
 
-        print ("sensor_value = %d" %sensor_value)
+        print("sensor_value = %d" %sensor_value)
         time.sleep(.5)
 
     except IOError:

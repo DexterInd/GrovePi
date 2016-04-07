@@ -58,7 +58,7 @@ sensor = 0
 
 while True:
     try:
-        print (grovepi.analogRead(sensor))
+        print(grovepi.analogRead(sensor))
         time.sleep(.5)
 
     except KeyboardInterrupt:

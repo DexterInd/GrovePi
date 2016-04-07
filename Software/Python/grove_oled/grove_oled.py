@@ -65,7 +65,7 @@ Data_mode=0x40
 
 Normal_Display_Cmd=0xA4
 
-BasicFont = [[0 for x in xrange(8)] for x in xrange(10)]
+BasicFont = [[0 for x in range(8)] for x in range(10)]
 BasicFont=[[0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00],
 [0x00,0x00,0x5F,0x00,0x00,0x00,0x00,0x00],
 [0x00,0x00,0x07,0x00,0x07,0x00,0x00,0x00],
@@ -169,7 +169,7 @@ def sendCommand(byte):
         block.append(byte)
         return bus.write_i2c_block_data(address,Command_Mode,block)
     except IOError:
-        print "IOError"
+        print("IOError")
         return -1
 
 def sendData(byte):
@@ -178,7 +178,7 @@ def sendData(byte):
         block.append(byte)
         return bus.write_i2c_block_data(address,Data_mode,block)
     except IOError:
-        print "IOError"
+        print("IOError")
         return -1
 
 def multi_comm(commands):

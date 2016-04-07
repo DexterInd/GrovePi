@@ -68,5 +68,5 @@ class ADC:
 if __name__ == "__main__":		
 	adc= ADC()
 	while True:
-		print adc.adc_read()
+		print(adc.adc_read())
 		time.sleep(.5)

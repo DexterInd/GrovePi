@@ -74,7 +74,7 @@ thisLedAndOutwards = 3
 
 try:
 
-    print "Test 1) Initialise"
+    print("Test 1) Initialise")
 
     # init chain of leds
     grovepi.chainableRgbLed_init(pin, numleds)

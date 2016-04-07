@@ -288,7 +288,7 @@ def init():
 def main():
 	init()
 	while (True):
-		print "Lux: %i [Vis+IR=%i, IR=%i @ Gain=%ix, Timing=%.1fms]" % (readVisibleLux(), channel0, channel1, gain_m, timing_ms)
+		print("Lux: %i [Vis+IR=%i, IR=%i @ Gain=%ix, Timing=%.1fms]" % (readVisibleLux(), channel0, channel1, gain_m, timing_ms))
 		time.sleep(1)
 
 if __name__ == "__main__":

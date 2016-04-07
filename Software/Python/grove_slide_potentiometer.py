@@ -60,7 +60,7 @@ while True:
         else:
             grovepi.digitalWrite(led,0)
 
-        print ("sensor_value =", sensor_value)
+        print("sensor_value =", sensor_value)
 
     except IOError:
         print ("Error")

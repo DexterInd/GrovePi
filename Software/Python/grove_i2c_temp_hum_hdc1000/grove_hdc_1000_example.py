@@ -41,7 +41,7 @@ hdc = HDC1000()
 hdc.Config()
 
 while 1:
-    print 'Temp    : %.2f C' % hdc.Temperature()
-    print 'Humidity: %.2f %%' % hdc.Humidity()
-    print '-' * 17
+    print('Temp    : %.2f C' % hdc.Temperature())
+    print('Humidity: %.2f %%' % hdc.Humidity())
+    print('-' * 17)
     time.sleep(1)
