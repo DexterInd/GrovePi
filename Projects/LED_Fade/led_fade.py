@@ -49,7 +49,7 @@ while True:
         print i
 
         # Send PWM signal to LED
-        grovepi.analogWrite(led,i/4)
+        grovepi.analogWrite(led,i//4)
 
     except IOError:
         print "Error"
