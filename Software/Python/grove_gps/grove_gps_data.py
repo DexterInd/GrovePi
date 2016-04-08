@@ -130,7 +130,7 @@ while True:
 	time.sleep(0.01)
 	try:
 		x=g.read()	#Read from GPS
-		[t,fix,sats,alt,lat,lat_ns,long,long_ew]=g.vals()	#Get the individial values
+		[t,fix,sats,alt,lat,lat_ns,longitude,long_ew]=g.vals()	#Get the individial values
 		
 		# Convert to decimal degrees
 		if lat !=-1.0:
@@ -138,16 +138,16 @@ while True:
 			if lat_ns == "S":
 				lat = -lat
 
-		if long !=-1.0:
-			long = g.decimal_degrees(float(long))
+		if longitude !=-1.0:
+			longitude = g.decimal_degrees(float(longitude))
 			if long_ew == "W":
-				long = -long
+				longitude = -longitude
 			
 		# print ("Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew)
 		
-		print("Time\t\t: %s\nFix status\t: %d\nSats in view\t: %d\nAltitude\t: %f\nLat\t\t: %f\nLong\t\t: %f") %(t,fix,sats,alt,lat,int)
+		print("Time\t\t: %s\nFix status\t: %d\nSats in view\t: %d\nAltitude\t: %f\nLat\t\t: %f\nLong\t\t: %f") %(t,fix,sats,alt,lat,longitude)
 		
-		s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"	
+		s=str(t)+","+str(float(lat)/100)+","+str(float(longitude)/100)+"\n"	
 		
 		if enable_save_to_file:
 			f.write(s)	#Save to file
