@@ -57,7 +57,7 @@ while True:
         else:
             print ("Air fresh")
 
-        print ("sensor_value =", sensor_value)
+        print("sensor_value =", sensor_value)
         time.sleep(.5)
 
     except IOError:

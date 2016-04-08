@@ -44,15 +44,15 @@ pinMode(Relay_pin,"OUTPUT")
 
 while True:
     try:
-		# Read distance value from Ultrasonic
-		distant = ultrasonicRead(ultrasonic_ranger)
-		print distant,'cm'
-		if distant <= 10:
-			digitalWrite(Relay_pin,1)
-		else:
-			digitalWrite(Relay_pin,0)
+        # Read distance value from Ultrasonic
+        distant = ultrasonicRead(ultrasonic_ranger)
+        print(distant,'cm')
+        if distant <= 10:
+            digitalWrite(Relay_pin,1)
+        else:
+            digitalWrite(Relay_pin,0)
 
     except TypeError:
-        print "Error"
+        print("Error")
     except IOError:
-        print "Error"
+        print("Error")

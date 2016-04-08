@@ -43,7 +43,7 @@ time.sleep(.1)
 while True:
 	try:
 		[ temp,hum ] = dht(dht_sensor_port,1)		#Get the temperature and Humidity from the DHT sensor
-		print "temp =", temp, "C\thumidity =", hum,"%" 	
+		print("temp =", temp, "C\thumidity =", hum,"%") 	
 		t = str(temp)
 		h = str(hum)
 		
@@ -58,4 +58,4 @@ while True:
 		oled_putString("Hum :")
 		oled_putString(h+"%")
 	except (IOError,TypeError) as e:
-		print "Error"
+		print("Error")

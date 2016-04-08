@@ -178,14 +178,14 @@ try:
             precip_today = parsed_json['current_observation']['precip_today_in']
         else:
             precip_today = parsed_json['current_observation']['precip_today_metric']
-        print "Current precipitation in %s is: %s" % (location, precip_today)
+        print("Current precipitation in %s is: %s" % (location, precip_today))
 
         if float(precip_today) > float(RAIN_THRESHOLD):
-            print "Rain today, take the umbrella"
+            print("Rain today, take the umbrella")
             assign_rain(True, BLINK)
 
         else:
-            print "No Rain today"
+            print("No Rain today")
             assign_rain(False, BLINK)
 
 except KeyboardInterrupt:

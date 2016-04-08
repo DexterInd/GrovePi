@@ -50,9 +50,9 @@ try:
 		# Read the heading
 		heading= acc_mag.getHeading()
 		
-		print "Acceleration of X,Y,Z is %.3fg, %.3fg, %.3fg" %(acc[0],acc[1],acc[2])
-		print "Heading %.3f degrees\n" %(heading)
+		print("Acceleration of X,Y,Z is %.3fg, %.3fg, %.3fg" %(acc[0],acc[1],acc[2]))
+		print("Heading %.3f degrees\n" %(heading))
 
 except IOError:
-	print "Unable to read from accelerometer, check the sensor and try again"
+	print("Unable to read from accelerometer, check the sensor and try again")
 	

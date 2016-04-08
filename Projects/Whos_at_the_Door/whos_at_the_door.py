@@ -44,7 +44,7 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from subprocess import call
 
-print "System Working"
+print("System Working")
 switch = 4
 led_status = 3
 relay = 2
@@ -62,7 +62,7 @@ while True:     # in case of IO error, restart
         while True:
             if grovepi.digitalRead(switch) == 1:    # If the system is ON
                 if grovepi.ultrasonicRead() < 100:  # If a person walks through the door
-                    print "Welcome"
+                    print("Welcome")
                     grovepi.analogWrite(buzzer,100) # Make a sound on the Buzzer
                     time.sleep(.5)
                     grovepi.analogWrite(buzzer,0)       # Turn off the Buzzer
@@ -71,16 +71,16 @@ while True:     # in case of IO error, restart
 
                     # Take a picture from the Raspberry Pi camera
                     call (["raspistill -o i1.jpg -w 640 -h 480 -t 0"], shell=True)
-                    print "Image Shot"
+                    print("Image Shot")
                     p = subprocess.Popen(["runlevel"], stdout=subprocess.PIPE)
                     out, err=p.communicate()    # Connect to the mail server
                     if out[2] == '0':
-                        print 'Halt detected'
+                        print('Halt detected')
                         exit(0)
                     if out [2] == '6':
-                        print 'Shutdown detected'
+                        print('Shutdown detected')
                         exit(0)
-                    print "Connected to mail"
+                    print("Connected to mail")
 
                     # Create the container (outer) email message
                     TO = SMTP_RECIPIENT
@@ -95,14 +95,14 @@ while True:     # in case of IO error, restart
                     msg.attach(img)
 
                     # Send the email via Gmail
-                    print "Sending the mail"
+                    print("Sending the mail")
                     server = smtplib.SMTP_SSL(SMTP_SERVER, SSL_PORT)
                     server.login(SMTP_USERNAME, SMTP_PASSWORD)
                     server.sendmail(FROM, [TO], msg.as_string())
                     server.quit()
-                    print "Mail sent"
+                    print("Mail sent")
 
                     grovepi.digitalWrite(led_status,0)  # Turn off the LED
                     grovepi.digitalWrite(relay,0)       # Turn off the Relay
     except IOError:
-        print "Error"
+        print("Error")

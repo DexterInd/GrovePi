@@ -46,7 +46,7 @@ grovepi.pinMode(piezo,"INPUT")
 while True:
     try:
         # When vibration is detected, the sensor outputs a logic high signal
-        print (grovepi.analogRead(piezo))
+        print(grovepi.analogRead(piezo))
         time.sleep(.5)
 
     except IOError:

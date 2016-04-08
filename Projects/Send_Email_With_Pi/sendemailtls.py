@@ -82,7 +82,7 @@ def send_email(content, destination, subject):
         finally:
             conn.close()
 
-    except Exception, exc:
+    except Exception as exc:
         # sys.exit( "mail failed; %s" % str(exc) ) # give a error message
-        print "Mail failed; %s" % str(exc)
-        print "Moving on!"
+        print("Mail failed; %s" % str(exc))
+        print("Moving on!")

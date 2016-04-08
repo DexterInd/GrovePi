@@ -89,20 +89,20 @@ class CO2:
     def calibrateZero(self):
         try:
              ser.write(CO2.cmd_zero_sensor)
-             print "CO2 sensor zero calibrated"
+             print("CO2 sensor zero calibrated")
 
         except IOError:
-                print "CO2 sensor calibration error"
+                print("CO2 sensor calibration error")
 
     def calibrateSpan(self):
         try:
           while True:
                 #ser.write(CO2.cmd_zero_sensor)
-                print "CO2 sensor span calibrated"
+                print("CO2 sensor span calibrated")
                 break
 
         except IOError:
-                print "CO2 sensor calibration error"
+                print("CO2 sensor calibration error")
 
 ########################################################################################################
 #############   MAIN
@@ -114,21 +114,21 @@ c = CO2()
 while True:
     try:
         #CO2 sensor calib
-        print "wait 3 minutes to warm up CO2 sensor"
+        print("wait 3 minutes to warm up CO2 sensor")
         time.sleep(180)
-        print "Read before calibration-->",c.read()
+        print("Read before calibration-->",c.read())
 
-        print "calibrating..."
+        print("calibrating...")
         co2 = c.calibrateZero()
         time.sleep(5)
 
-        print "Read after calibration-->",c.read()
+        print("Read after calibration-->",c.read())
 
-        print "DONE"
+        print("DONE")
         break
 
     except IndexError:
-        print "Unable to read"
+        print("Unable to read")
     except KeyboardInterrupt:
-        print "Exiting"
+        print("Exiting")
         sys.exit(0)

@@ -73,13 +73,13 @@ def sleeptime():
     go_to_sleep_time = start_sleeptime + (hours_after_sunset*60*60)
     # print now, start_sleeptime, "(", now-start_sleeptime,")", go_to_sleep_time, "(",go_to_sleep_time-now,")"
     if now >= go_to_sleep_time:
-        print "Sleep time!!!"
-        print "Will wake up in ", hours_of_sleep, " hours" 
+        print("Sleep time!!!")
+        print("Will wake up in ", hours_of_sleep, " hours") 
         grovepi.digitalWrite(relay,0)
         lights_on = False
         for i in range(60):
             time.sleep(hours_of_sleep * 60  ) # long sleep time!!!
-        print "Wake up!"
+        print("Wake up!")
 
 def blink(in_time):
     """
@@ -124,7 +124,7 @@ while True:
             if lights_on == False:
                 lights_on = True
                 start_sleeptime = time.time()
-                print "turning lights on " 
+                print("turning lights on ") 
                 grovepi.digitalWrite(relay,1)
         
         # is it getting light?
@@ -132,7 +132,7 @@ while True:
             # turn lights off
             if lights_on == True:
                 lights_on = False
-                print "turning lights off", light_sensor_value
+                print("turning lights off", light_sensor_value)
                 grovepi.digitalWrite(relay,0)
         
 

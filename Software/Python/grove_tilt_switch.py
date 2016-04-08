@@ -43,7 +43,7 @@ grovepi.pinMode(tilt_switch,"INPUT")
 
 while True:
     try:
-        print (grovepi.digitalRead(tilt_switch))
+        print(grovepi.digitalRead(tilt_switch))
         time.sleep(.5)
 
     except IOError:

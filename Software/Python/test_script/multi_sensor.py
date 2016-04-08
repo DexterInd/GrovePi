@@ -48,7 +48,7 @@ while True:
 		a0 = grovepi.analogRead(0)
 		a1 = grovepi.analogRead(1)
 		a2 = grovepi.analogRead(2)
-		print new_val,lowpulseoccupancy,"temp =", temp, " humidity =", humidity,"a0",a0,"a1",a1,"a2",a2
+		print(new_val,lowpulseoccupancy,"temp =", temp, " humidity =", humidity,"a0",a0,"a1",a1,"a2",a2)
 
     except:
         print ("Error")

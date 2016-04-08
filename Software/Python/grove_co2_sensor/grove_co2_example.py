@@ -41,6 +41,6 @@ co2= grove_co2_lib.CO2()
 
 while True:
 	[ppm,temp]= co2.read()
-	print "CO2 Conc: %d ppm\t Temp: %d C" %(ppm,temp)
+	print("CO2 Conc: %d ppm\t Temp: %d C" %(ppm,temp))
 	time.sleep(1)
 	

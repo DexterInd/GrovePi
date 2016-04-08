@@ -83,7 +83,7 @@ def read_sensor():
 		return [moisture,light,temp,humidity]
 	
 	#Return -1 in case of sensor error
-	except IOError,TypeError:
+	except IOError as TypeError:
 			return [-1,-1,-1,-1]
 
 #Take a picture with the current time using the Raspberry Pi camera. Save it in the same folder
@@ -92,9 +92,9 @@ def take_picture():
 		cmd="raspistill -t 1 -o plant_monitor_"+str(time.strftime("%Y_%m_%d__%H_%M_%S"))+".jpg"
 		process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
 		output = process.communicate()[0]
-		print "Picture taken\n------------>\n"
+		print("Picture taken\n------------>\n")
 	except:
-		print "Camera problem,please check the camera connections and settings"
+		print("Camera problem,please check the camera connections and settings")
 
 #Save the initial time, we will use this to find out when it is time to take a picture or save a reading
 last_read_sensor=last_pic_time= int(time.time())
@@ -107,11 +107,11 @@ while True:
 		[moisture,light,temp,humidity]=read_sensor()
 		# If any reading is a bad reading, skip the loop and try again
 		if moisture==-1:
-			print "Bad reading"
+			print("Bad reading")
 			time.sleep(1)
 			continue
 		curr_time = time.strftime("%Y-%m-%d:%H-%M-%S")
-		print ("Time:%s\nMoisture: %d\nLight: %d\nTemp: %.2f\nHumidity:%.2f %%\n" %(curr_time,moisture,light,temp,humidity))
+		print(("Time:%s\nMoisture: %d\nLight: %d\nTemp: %.2f\nHumidity:%.2f %%\n" %(curr_time,moisture,light,temp,humidity)))
 		
 		# Save the sensor reading to the CSV file
 		f=open(log_file,'a')

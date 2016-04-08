@@ -91,7 +91,7 @@ def display_ssid(ssid):
 		time.sleep(3)
 		setRGB(0,0,0)
 	except:
-		print "Failed on something or other!"
+		print("Failed on something or other!")
 
 
 try:
@@ -101,7 +101,7 @@ try:
 		
 		# 1). Test for any open ssids
 		list_of_open = check_open_ssids()
-		print list_of_open
+		print(list_of_open)
 		
 		# 2). If we find open ssids turn light and buzzer on, print to SSID.
 		for ssid in list_of_open:

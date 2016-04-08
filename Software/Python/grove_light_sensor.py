@@ -68,7 +68,7 @@ while True:
             # Send LOW to switch off LED
             grovepi.digitalWrite(led,0)
 
-        print ("sensor_value = %d resistance =%.2f" %(sensor_value,  resistance))
+        print("sensor_value = %d resistance =%.2f" %(sensor_value,  resistance))
         time.sleep(.5)
 
     except IOError:

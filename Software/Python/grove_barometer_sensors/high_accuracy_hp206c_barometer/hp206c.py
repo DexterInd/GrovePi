@@ -145,11 +145,11 @@ if __name__ == "__main__":
 	h= hp206c()
 	ret=h.isAvailable()
 	if h.OK_HP20X_DEV == ret:
-		print "HP20x_dev is available."   
+		print("HP20x_dev is available.")   
 	else:
-		print "HP20x_dev isn't available."
+		print("HP20x_dev isn't available.")
 		
 	temp=h.ReadTemperature()
 	pressure=h.ReadPressure()
 	altitude=h.ReadAltitude()
-	print temp,pressure,altitude	
+	print(temp,pressure,altitude)	

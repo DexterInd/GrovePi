@@ -88,7 +88,7 @@ Scroll_64Frames         =0x1
 Scroll_128Frames        =0x2
 Scroll_256Frames        =0x3
 
-BasicFont = [[0 for x in xrange(8)] for x in xrange(10)]
+BasicFont = [[0 for x in range(8)] for x in range(10)]
 BasicFont=[[0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00],
 [0x00,0x00,0x5F,0x00,0x00,0x00,0x00,0x00],
 [0x00,0x00,0x07,0x00,0x07,0x00,0x00,0x00],
@@ -192,7 +192,7 @@ def sendCommand(byte):
         block.append(byte)
         return bus.write_i2c_block_data(address,SeeedOLED_Command_Mode,block)
     except IOError:
-        print "IOError"
+        print("IOError")
         return -1
 
 def sendData(byte):
@@ -201,7 +201,7 @@ def sendData(byte):
         block.append(byte)
         return bus.write_i2c_block_data(address,SeeedOLED_Data_Mode,block)
     except IOError:
-        print "IOError"
+        print("IOError")
         return -1
 
 def multi_comm(commands):

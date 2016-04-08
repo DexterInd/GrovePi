@@ -133,7 +133,7 @@ class lsm303d:
 	
 	# get the status of the sensor
 	def status(self):
-		if self.read_reg(self.WHO_AM_I) <>73:
+		if self.read_reg(self.WHO_AM_I) !=73:
 			return -1
 		return 1
 		
@@ -147,7 +147,7 @@ class lsm303d:
 		
 	# Check if compass is ready
 	def isMagReady(self):
-		if self.read_reg(self.STATUS_REG_M)&0x03<>0:
+		if self.read_reg(self.STATUS_REG_M)&0x03!=0:
 			return 1
 		return 0
 
@@ -207,7 +207,7 @@ class lsm303d:
 		
 		pitch = math.asin(-accelValue[X])
 		
-		print accelValue[Y],pitch,math.cos(pitch),accelValue[Y]/math.cos(pitch),math.asin(accelValue[Y]/math.cos(pitch))
+		print(accelValue[Y],pitch,math.cos(pitch),accelValue[Y]/math.cos(pitch),math.asin(accelValue[Y]/math.cos(pitch)))
 		roll = math.asin(accelValue[Y]/math.cos(pitch))
 
 		xh = magValue[X] * math.cos(pitch) + magValue[Z] * math.sin(pitch)
@@ -223,12 +223,12 @@ class lsm303d:
 if __name__ == "__main__":		
 	acc_mag=lsm303d()
 	while True:
-		print acc_mag.getRealAccel()
+		print(acc_mag.getRealAccel())
 		
 		while True:
 			if acc_mag.isMagReady():
 				break
-		print acc_mag.getHeading()
+		print(acc_mag.getHeading())
 		
 		# Do not use, math error
 		# print acc_mag.getTiltHeading()

@@ -60,6 +60,6 @@ class CO2:
 if __name__ == "__main__":		
 	c = CO2()
 	while True:
-		print c.read()
+		print(c.read())
 		time.sleep(1)
 

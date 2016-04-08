@@ -79,8 +79,8 @@ while True:
         api.PostUpdate(out_str)
         time.sleep(60)
     except IOError:
-        print "Error"
+        print("Error")
     except KeyboardInterrupt:
         exit()
     except:
-        print "Duplicate Tweet or Twitter Refusal"
+        print("Duplicate Tweet or Twitter Refusal")

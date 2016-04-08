@@ -82,7 +82,7 @@ while True:
         # Was a click detected on the X axis?
         click = 1 if x >= 1020 else 0
 
-        print ("x =", x, " y =", y, " Rx =", Rx, " Ry =", Ry, " click =", click)
+        print("x =", x, " y =", y, " Rx =", Rx, " Ry =", Ry, " click =", click)
         time.sleep(.5)
 
     except IOError:

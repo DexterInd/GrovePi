@@ -41,5 +41,5 @@ adc= grove_i2c_adc.ADC()
 
 while True:
 	#Print the 12 bit value from the I2C ADC
-	print adc.adc_read()
+	print(adc.adc_read())
 	time.sleep(.5)

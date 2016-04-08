@@ -46,10 +46,10 @@ while True:
     try:
         # Read resistance from Potentiometer
         i = grovepi.analogRead(potentiometer)
-        print i
+        print(i)
 
         # Send PWM signal to LED
-        grovepi.analogWrite(led,i/4)
+        grovepi.analogWrite(led,i//4)
 
     except IOError:
-        print "Error"
+        print("Error")

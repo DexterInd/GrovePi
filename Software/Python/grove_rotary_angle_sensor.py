@@ -78,7 +78,7 @@ while True:
         # Give PWM output to LED
         grovepi.analogWrite(led,brightness)
 
-        print ("sensor_value = %d voltage = %.2f degrees = %.1f brightness = %d" %(sensor_value, voltage, degrees, brightness))
+        print("sensor_value = %d voltage = %.2f degrees = %.1f brightness = %d" %(sensor_value, voltage, degrees, brightness))
     except KeyboardInterrupt:
         grovepi.analogWrite(led,0)
         break
