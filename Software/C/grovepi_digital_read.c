@@ -1,4 +1,5 @@
-//GrovePi Example for using the digital read command
+// GrovePi Example for using the digital read command
+// http://dexterindustries.com/grovepi
 #include "grovepi.h"
 //gcc grovepi_digital_read.c grovepi.c -Wall
 int main(void)

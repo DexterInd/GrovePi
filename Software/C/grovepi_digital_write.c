@@ -1,6 +1,7 @@
 //GrovePi Example for using the digital write command
 #include "grovepi.h"
 //gcc grovepi_digital_write.c grovepi.c -Wall
+// http://dexterindustries.com/grovepi
 int main(void)
 {		
 	//Exit on failure to start communications with the GrovePi

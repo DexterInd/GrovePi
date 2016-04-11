@@ -1,7 +1,7 @@
 #! /bin/bash
 echo "Updating the GrovePi firmware"
 echo "============================="
-echo " "
+echo " http://www.dexterindustries.com/grovepi "
 echo " Run this program: "
 echo " sudo ./firmware_update.sh"
 echo " "

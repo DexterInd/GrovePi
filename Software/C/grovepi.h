@@ -1,3 +1,6 @@
+// Copyright Dexter Industries, 2016
+// http://dexterindustries.com/grovepi
+
 #ifndef GROVEPI_H
 #define GROVEPI_H
 

@@ -1,4 +1,5 @@
-//GrovePi Example for using the analog read 
+// GrovePi Example for using the analog read.
+// http://dexterindustries.com/grovepi
 #include "grovepi.h"
 
 int main(void)

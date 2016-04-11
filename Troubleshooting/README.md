@@ -10,3 +10,5 @@ and run it:
 Choose option 5 to run all the tests. This might take a few minutes.
 
 Once the tests are completed, a log.txt file would be created on the Desktop. Send this by email or post it on the forums. 
+
+See more about the GrovePi at http://www.dexterindustries.com/grovepi

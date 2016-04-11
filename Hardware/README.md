@@ -1,3 +1,6 @@
+Dexter Industries GrovePi
+
+http://www.dexterindustries.com/grovepi
 
 ## License
 

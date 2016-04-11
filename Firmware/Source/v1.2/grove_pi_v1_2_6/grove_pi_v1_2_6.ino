@@ -1,3 +1,7 @@
+// GrovePi Firmware
+// Developed by Dexter Industries, Inc.  2016
+// http://www.dexterindustries.com/grovepi
+
 #include <Wire.h>
 #include "MMA7660.h"
 #include "DS1307.h"

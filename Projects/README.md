@@ -1,5 +1,5 @@
 ## **GrovePi Projects Readme**
-
+GrovePi is an electronics board that you can connect to hundreds of different sensors, so you can program them to monitor, control, and automate devices in your life.  [View Product Details here.](http://www.dexterindustries.com/grovepi/)
 
 - **Advanced_RGB_LCD_TempAndHumidity**: Changes the color of the RGB color LCD depending on the temperature. (Works with the GrovePi starter kit)
 

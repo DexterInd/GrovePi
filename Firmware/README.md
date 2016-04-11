@@ -1,7 +1,7 @@
 GrovePi
 =======
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  [See more about the GrovePi here.](http://www.dexterindustries.com/grovepi)
 
 ## Compiling
 The best way to compile the firmware on the GrovePi is to use Ino.  You can see more about [ino](http://inotool.org).

@@ -1,7 +1,7 @@
 GrovePi C library
 v0.1
 
-This library provides the basic functions for using the GrovePi in C.
+This library provides the basic functions for using the GrovePi in C.  See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 
 To compile use:
 gcc programe_name.c grovepi.c -Wall
