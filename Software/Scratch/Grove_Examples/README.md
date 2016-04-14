@@ -44,3 +44,11 @@ Clicking on Dex will have Dex ask you your name, and then display it on the LCD 
 Plug the rotary sensor into port A0
 
 Click on the Green flag and use the rotary sensor to move Dex left to right
+
+
+### The GrovePi
+
+GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+different sensors, so you can program them to monitor, control, and automate devices in your life.  
+See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
+

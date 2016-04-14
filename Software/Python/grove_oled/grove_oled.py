@@ -3,7 +3,11 @@
 # GrovePi library for the basic functions of Grove 96x96 OLED (http://www.seeedstudio.com/depot/Grove-OLED-Display-096-p-824.html)
 # v1.0
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
 #
 # Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #

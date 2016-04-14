@@ -10,6 +10,11 @@
 # - Connect the light sensor to A0. (http://www.dexterindustries.com/shop/grove-light-sensor/)
 # You can adjust the threshold value if you have a bright environment.  
 # Change the email_destination to change the destination you send an e-mail to.  
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
 
 import time
 import datetime

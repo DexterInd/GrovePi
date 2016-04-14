@@ -2,10 +2,14 @@
 #
 # GrovePi Example for using the Grove Light Sensor and the LED together to turn the LED On and OFF if the background light is greater than a threshold.
 # Modules:
-# 	http://www.seeedstudio.com/wiki/Grove_-_Light_Sensor
-# 	http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
+# 	http://www.dexterindustries.com/shop/grove-light-sensor/
+# 	http://www.dexterindustries.com/shop/grove-green-led/
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
 #
 # Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
@@ -15,7 +19,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2016  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

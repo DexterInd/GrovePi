@@ -16,3 +16,10 @@ IR receiver Hardware v1.0 and back have the IR receiver connected to white wire 
 
 **Usage:_**
 Run the **ir_recv_example.py** to check if the remote is working properly
+
+
+### The GrovePi
+
+GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+different sensors, so you can program them to monitor, control, and automate devices in your life.  
+See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
