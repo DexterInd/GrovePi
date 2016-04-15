@@ -55,19 +55,21 @@ The project should now have all the updated references you need.
 #### Samples as Independent Solutions
 When you run the sampels as independent solutions, you need to ensure you are referencing a current version of the GrovePi assembly (likely more current than the one available as a NuGet package). 
 
-The following steps assume you have already opened _GrovePi\Software\CSharp\GrovePi.sln_ in Visual Studio and built the solution.
+The following steps assume you have already opened _GrovePi\Software\CSharp\GrovePi.sln_ in Visual Studio and built the solution.  To build the solution, open GrovePi.sln, and click on press CTRL + SHIFT + B.  Then close GrovePi.sln.
 
+After building the GrovePi solution:
 1. Open __GrovePi\Software\CSharp\Samples\LedFade.sln__ in Visual Studio
 2. In _Solution Explorer_ expand the _LedFade_ project and the _References_ node.
 3. Right-click on the __GrovePi__ reference and click __Remove_
-4. Select the __Browse__ tab and click the __Browse__ button.
-5. Browse to __GrovePi\Software\CSharp\GrovePi\bin\ARM\Debug__ and select the __GrovePi.dll__ file
-6. Click __OK__
+4. Right-click on "References" and click "Add Reference".  
+5. Select the __Browse__ tab and click the __Browse__ button.
+6. Browse to __GrovePi\Software\CSharp\GrovePi\bin\ARM\Debug__ and select the __GrovePi.dll__ file
+7. Click __OK__
 
 The project should now have all the updated references you need. 
 
 ### Setup the Hardware
-For this sample, coinnect the following:
+For this sample, connect the following:
 
 1. Rotary Angle Sensor to __A2__ (Analog Pin 2)
 2. LED Socker Kit (any color) to __D5__ (Digital Pin 5)
@@ -81,5 +83,5 @@ To run the sample...
 4. Select the __Debug__ tab
 5. Select __Remote Machine__ in the _Target device_ field
 6. In the __Remote Machine__ field, Type in the name or IP Address of your Windows 10 IoT Core Raspberry Pi
-7. Press __Ctrl__ + __S__ (this file will not get save automatically)
-8. Press __F5__ to launch the debugger (it will take a minute or two to deploy your app onto the Raspberry Pi)
+7. Press __Ctrl__ + __S__ (this file will not be saved automatically, you must save it manually).
+8. Press __F5__ to launch the debugger (it will take a minute or two to deploy your app onto the Raspberry Pi).
