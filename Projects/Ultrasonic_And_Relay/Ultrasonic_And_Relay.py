@@ -5,6 +5,12 @@
 # 
 # In this project, the ultrasonic can figure out the distance of object in front, 
 # when object close to it within 10cm, the relay will turn on
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
+
 
 '''
 ## License
@@ -12,7 +18,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2016  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

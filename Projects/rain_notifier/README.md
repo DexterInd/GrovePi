@@ -11,6 +11,11 @@ Add the zip code of your location to the program.
 
 Run the program to fetch the weather data.
 
+### The GrovePi
+
+GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+different sensors, so you can program them to monitor, control, and automate devices in your life.  
+See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
 
 ## License
 

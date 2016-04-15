@@ -9,3 +9,9 @@ Use:
 
 Write-up with explanations can be found here:
 http://www.dexterindustries.com/projects/holiday-wreath/
+
+### The GrovePi
+
+GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+different sensors, so you can program them to monitor, control, and automate devices in your life.  
+See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).

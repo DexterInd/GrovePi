@@ -9,7 +9,11 @@
 #			-> Grove Temperature and Humidity sensor	- Port D4
 #			-> Raspberry Pi Camera
 #			-> Grove Pressure sensor (BMP 180)			- Any I2C port, I2C-1, I2C-2, or I2C-3.
-
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
 #
 # NOTES:
 #	*	Make sure that the Pi camera is enabled and working. You can see detailed directions here: https://www.raspberrypi.org/help/camera-module-setup/

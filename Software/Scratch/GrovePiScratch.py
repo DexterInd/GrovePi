@@ -7,6 +7,13 @@
 # Author     Date      		Comments
 # Karan      29 June 15  	Initial Authoring                                                        
 # John		22 Feb 16	Adding GrovePi Barometer
+
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
+
 '''
 ## License
 

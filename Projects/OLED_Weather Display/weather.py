@@ -1,4 +1,10 @@
 #This is an example for the using the Grove OLED as a weather display
+#
+# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+# different sensors, so you can program them to monitor, control, and automate devices in your life.  
+# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
+#
+
 '''
 The MIT License (MIT)
 

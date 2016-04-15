@@ -11,6 +11,14 @@ See more at http://www.dexterindustries.com/grovepi/
 3. Make a desktop Shortcut from **Desktop->Education->GrovePi_Scratch_Start**
 3. Double click on **GrovePi_Scratch_Start** to start running the script
 
+
+### The GrovePi
+
+GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
+different sensors, so you can program them to monitor, control, and automate devices in your life.  
+See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
+
+
 ## License
 
 The MIT License (MIT)
