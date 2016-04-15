@@ -1,10 +1,5 @@
 // GrovePi Example for using the analog write 
-
-// GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-// different sensors, so you can program them to monitor, control, and automate devices in your life.  
-// See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-
-
+// http://dexterindustries.com/grovepi
 #include "grovepi.h"
 //gcc grovepi_analog_write.c grovepi.c -Wall
 int main(void)

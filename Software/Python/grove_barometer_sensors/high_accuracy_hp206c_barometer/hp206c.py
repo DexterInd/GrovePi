@@ -2,11 +2,8 @@
 #
 # GrovePi Library for using the Grove - Barometer (High-Accuracy)(http://www.seeedstudio.com/depot/Grove-Barometer-HighAccuracy-p-1865.html
 #
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-##
 # Have a question about this library?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
 # This library is derived from the Arduino library written by Oliver Wang for SeeedStudio (https://github.com/Seeed-Studio/Grove_Barometer_HP20x/tree/master/HP20x_dev)
@@ -16,7 +13,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2016  Dexter Industries
+Copyright (C) 2015  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

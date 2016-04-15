@@ -3,7 +3,7 @@
 GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  Create your Internet of Things devices and inventions without the need for soldering!
 ![Picture](GrovePi_Plus_By_Dexter_Industries_For_the_Raspberry_Pi.JPG)
 
-There are millions of Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
+There are over 2 million Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
 
 We brought Grove and Raspberry Pi together in a simple and affordable way. Grove sensors allow you to interact and monitor the world. Raspberry Pi lets you store and process data, and bring the real world to the Raspberry Pi and the web.  
 The GrovePi brings both Grove Sensors and the popular Raspberry Pi together in a simple, elegant, and open source design.
@@ -12,7 +12,7 @@ The GrovePi brings both Grove Sensors and the popular Raspberry Pi together in a
 The GrovePi board slips over the Raspberry Pi.  Connect the Grove Sensors to the GrovePi board.  Upload your program.  Begin taking in the worlds data!
 
 ### Raspberry Pi Compatibility
-The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, 2 and 3.  See our latest [blog post about compatibility here](http://www.dexterindustries.com/dexter-industries-and-the-raspberry-pi-3/).
+The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, and 2.
 
 ### Getting Started
 Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/). 

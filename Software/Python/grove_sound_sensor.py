@@ -2,11 +2,7 @@
 #
 # GrovePi Example for using the Grove Sound Sensor and the Grove LED
 #
-#
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
 # Modules:
 #	 http://www.seeedstudio.com/wiki/Grove_-_Sound_Sensor
@@ -20,7 +16,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2016  Dexter Industries
+Copyright (C) 2015  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

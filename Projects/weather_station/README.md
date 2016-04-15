@@ -7,9 +7,6 @@
      * [Raspberry Pi Camera](http://www.dexterindustries.com/shop/raspberry-pi-camera/)
      * Grove Pressure sensor (BMP 180) - Any I2C port, I2C-1, I2C-2, or I2C-3.
 
-
-GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-different sensors, so you can program them to monitor, control, and automate devices in your life.  
 See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
 
 ## License

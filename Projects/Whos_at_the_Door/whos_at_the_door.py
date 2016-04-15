@@ -1,11 +1,6 @@
 # Detects motion, triggers Buzzer, LED and Relay, takes picture from RPi Camera, sends as attachment via Gmail
 # http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/whos-at-the-door/
 
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-
-
 # GrovePi + Ultrasonic Ranger + Buzzer + Switch + Relay + LED + RPi Camera
 # http://www.seeedstudio.com/wiki/Grove_-_Ultrasonic_Ranger
 # http://www.seeedstudio.com/wiki/Grove_-_Buzzer
