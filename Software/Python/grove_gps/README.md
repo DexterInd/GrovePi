@@ -6,10 +6,3 @@ GrovePi Examples for using the [Grove GPS Module](http://www.seeedstudio.com/dep
 
 *Note*:
 You would only get good data when fix is 1 and you have 3 or more satellites in view. You might have to take the module near a window with access to open sky for good results
-
-
-### The GrovePi
-
-GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-different sensors, so you can program them to monitor, control, and automate devices in your life.  
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).

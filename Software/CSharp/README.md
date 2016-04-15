@@ -45,9 +45,3 @@ Sound the buzzer plugged into digital pin 2 (D2)
   DeviceFactory.Build.Buzzer(Pin.DigitalPin2).ChangeState(SensorStatus.On);
 </code>
 </p>
-
-### The GrovePi
-
-GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-different sensors, so you can program them to monitor, control, and automate devices in your life.  
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).

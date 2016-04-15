@@ -6,12 +6,6 @@ GrovePi is an open source platform for connecting Grove Sensors to the Raspberry
 See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
 [Dexter Industries](http://www.dexterindustries.com)
 
-### The GrovePi
-
-GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-different sensors, so you can program them to monitor, control, and automate devices in your life.  
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
-
 ## License
 
 The MIT License (MIT)

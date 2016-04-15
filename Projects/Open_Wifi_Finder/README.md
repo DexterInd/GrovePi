@@ -53,19 +53,16 @@ Then that's it!  Reboot and test!
  
 Have a question about this example?  [Ask on the forums here.](http://www.dexterindustries.com/forum/?forum=grovepi)
 
+LICENSE: 
+These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
+
 
 ### Raspberry Pi Compatibility
-The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, 2, and 3.
+The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, and 2.
 
 ### Programming the GrovePi
 The GrovePi can be programmed in Python, C, C#, Go, and NodeJS on the Raspberry Pi.  Simply start with one of our [example projects](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/) or [example code](https://github.com/DexterInd/GrovePi/tree/master/Software).  
 The GrovePi uses an Arduino to interface between the Raspberry Pi and the Grove Sensors, and comes programmed with a standard firmware.  The firmware can be rewritten from the Raspberry Pi.  
-
-### The GrovePi
-
-GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-different sensors, so you can program them to monitor, control, and automate devices in your life.  
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/).
 
 ### Getting Help
 Need help? We [have a forum here where you can ask questions or make suggestions](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/).

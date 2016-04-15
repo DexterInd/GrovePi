@@ -5,11 +5,6 @@
 # This library is based on the work by Cedric Maion https://github.com/cmaion/TSL2561
 #
 # Read http://www.dexterindustries.com/topic/greehouse-project/ for the forum discussion about the sensor
-#
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-#
 
 import time
 import smbus

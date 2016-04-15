@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 ########################################################################               # GrovePi Library for using the Grove - CO2 Sensor(http://www.seeedstudio.com/depot/Grove-CO2-Sensor-p-1863.html)
 #
-#
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-#
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
 # Have a question about this library?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #         

@@ -1,10 +1,4 @@
 #!/usr/bin/env python
-#
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-#
-
 ''' 
  wifi_finder.py
  Scan for open wifi networks!  This is a portable wifi hotspot finder.  See our project at www.dexterindustries.com/GrovePi for more information on turning this into a portable wifi hotspot finder.

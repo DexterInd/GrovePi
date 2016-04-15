@@ -13,13 +13,6 @@
 # Re-written from: https://github.com/Seeed-Studio/Grove_Barometer_HP20x
 # Refer to the datasheet to add additional functionality http://www.seeedstudio.com/wiki/images/d/d8/HP206C_Datasheet.pdf
 ########################################################################
-#
-# GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of 
-# different sensors, so you can program them to monitor, control, and automate devices in your life.  
-# See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
-#
-
-
 '''
 ## License
 
