@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="GrovePi.nuspec" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -89,7 +90,8 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <Exec Command="nuget pack $(MSBuildProjectFile) -OutputDirectory $(OutDir) -Symbols -Prop Configuration=$(Configuration) -Prop TargetPath=$(OutDir)$(AssemblyName)$(TargetExt)" />
+  </Target>
 </Project>
