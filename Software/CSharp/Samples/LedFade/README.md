@@ -57,14 +57,15 @@ When you run the sampels as independent solutions, you need to ensure you are re
 
 The following steps assume you have already opened _GrovePi\Software\CSharp\GrovePi.sln_ in Visual Studio and built the solution.  To build the solution, open GrovePi.sln, and click on press CTRL + SHIFT + B.  Then close GrovePi.sln.
 
-After building the GrovePi solution:
-1. Open __GrovePi\Software\CSharp\Samples\LedFade.sln__ in Visual Studio
-2. In _Solution Explorer_ expand the _LedFade_ project and the _References_ node.
-3. Right-click on the __GrovePi__ reference and click __Remove_
+After building the GrovePi solution:   
+
+1. Open __GrovePi\Software\CSharp\Samples\LedFade.sln__ in Visual Studio.   
+2. In _Solution Explorer_ expand the _LedFade_ project and the _References_ node.  
+3. Right-click on the __GrovePi__ reference and click __Remove_.  
 4. Right-click on "References" and click "Add Reference".  
-5. Select the __Browse__ tab and click the __Browse__ button.
-6. Browse to __GrovePi\Software\CSharp\GrovePi\bin\ARM\Debug__ and select the __GrovePi.dll__ file
-7. Click __OK__
+5. Select the __Browse__ tab and click the __Browse__ button.  
+6. Browse to __GrovePi\Software\CSharp\GrovePi\bin\ARM\Debug__ and select the __GrovePi.dll__ file  
+7. Click __OK__  
 
 The project should now have all the updated references you need. 
 
