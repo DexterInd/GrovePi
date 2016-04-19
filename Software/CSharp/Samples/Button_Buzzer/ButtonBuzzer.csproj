@@ -7,8 +7,8 @@
     <ProjectGuid>{1AAB0B0C-4AD6-49A7-9A1C-78ACE337A938}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LedFade</RootNamespace>
-    <AssemblyName>LedFade</AssemblyName>
+    <RootNamespace>ButtonBuzzer</RootNamespace>
+    <AssemblyName>ButtonBuzzer</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -18,9 +18,10 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AllowCrossPlatformRetargeting>false</AllowCrossPlatformRetargeting>
-    <PackageCertificateKeyFile>LedFade_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>ButtonBuzzer_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackage>true</AppxPackage>
     <ContainsStartupTask>true</ContainsStartupTask>
+    <PackageCertificateThumbprint>248FBDE23D3A4D2ADF6A12A4178EB28F28C0BE1C</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -93,6 +94,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="ButtonBuzzer_TemporaryKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +105,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="LedFade_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -130,7 +131,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GrovePi">
+    <Reference Include="GrovePi, Version=1.0.7.0, Culture=neutral, processorArchitecture=ARM">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\GrovePi\bin\ARM\Debug\GrovePi.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -139,6 +141,13 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
