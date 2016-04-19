@@ -1,5 +1,5 @@
-## **LED Fade Sample**
-This sample will demonstrate how to use the [LED Socket Kit](http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit) with the [Rotary Angle Sensor](http://www.seeedstudio.com/wiki/Grove_-_Rotary_Angle_Sensor) to create a fade effect using Pulse Width Modulation (PWM). This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
+## **Button and Buzzer Example**
+This example will demonstrate how to use the [Dexter Industries GrovePi](http://www.dexterindustries.com/grovepi-starter-kit/) with the [Grove Buzzer](http://www.dexterindustries.com/shop/grove-buzzer/) and the  [Grove Button](http://www.dexterindustries.com/shop/grove-button/) to create a buzzer controlled by the touch sensor. This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
 
 ### Requirements
 You must have the following:
@@ -37,13 +37,13 @@ When you run the samples as part of the GrovePi solution you know that you are u
 4. Name the folder __Samples__
 5. Right-click on the solution in the _Solution Explorer_
 6. Select __Add__ > __ Existing Project__
-7. Find the __LedFade.csproj__ file - select it and click __Open__
+7. Find the __ButtonBuzzer.csproj__ file - select it and click __Open__
 
-This will add the _LedFade_ project to you new _Samples_ directory.
+This will add the _ButtonBuzzer_ project to you new _Samples_ directory.
 
-In the _LedFade_ project you need to update the reference to _GrovePi_.
+In the _ButtonBuzzer_ project you need to update the reference to _GrovePi_.
 
-1. In _Solution Explorer_ expand the _LedFade_ project and the _References_ node.
+1. In _Solution Explorer_ expand the _ButtonBuzzer_ project and the _References_ node.
 2. Right-click on the __GrovePi__ reference and click __Remove_
 3. Right-click on the __References__ node and choose __Add Reference__
 4. Expand the __Projects__ node
@@ -58,8 +58,8 @@ When you run the sampels as independent solutions, you need to ensure you are re
 The following steps assume you have already opened _GrovePi\Software\CSharp\GrovePi.sln_ in Visual Studio and built the solution.  To build the solution, open GrovePi.sln, and click on press CTRL + SHIFT + B.  Then close GrovePi.sln.
 
 After building the GrovePi solution:
-1. Open __GrovePi\Software\CSharp\Samples\LedFade.sln__ in Visual Studio
-2. In _Solution Explorer_ expand the _LedFade_ project and the _References_ node.
+1. Open __GrovePi\Software\CSharp\Samples\ButtonBuzzer.sln__ in Visual Studio
+2. In _Solution Explorer_ expand the _ButtonBuzzer_ project and the _References_ node.
 3. Right-click on the __GrovePi__ reference and click __Remove_
 4. Right-click on "References" and click "Add Reference".  
 5. Select the __Browse__ tab and click the __Browse__ button.
@@ -69,17 +69,17 @@ After building the GrovePi solution:
 The project should now have all the updated references you need. 
 
 ### Setup the Hardware
-For this sample, connect the following:
+For this example program, connect the following:
 
-1. Rotary Angle Sensor to __A2__ (Analog Pin 2)
-2. LED Socker Kit (any color) to __D5__ (Digital Pin 5)
+1. Buzzer to __D5__ (Digital Pin 5)
+2. Button to __D2__ (Digital Pin 2)
 
 ### Run the Sample
 To run the sample... 
 
-1. Right-click on the _LedFade_ project in the _Solution Explorer_
+1. Right-click on the _ButtonBuzzer_ project in the _Solution Explorer_
 2. Select __Set as Startup Project__
-3. Right-click on the __Properties__ node under _LedFade_ and select __Open__
+3. Right-click on the __Properties__ node under _ButtonBuzzer_ and select __Open__
 4. Select the __Debug__ tab
 5. Select __Remote Machine__ in the _Target device_ field
 6. In the __Remote Machine__ field, Type in the name or IP Address of your Windows 10 IoT Core Raspberry Pi
