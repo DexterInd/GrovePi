@@ -70,7 +70,7 @@ class myThread (threading.Thread):
 thread1 = myThread(1, "Thread-1", 1)        #Setup and start the thread
 thread1.setDaemon(True)
 
-analog_sensors=['analogRead','rotary','sound','light']
+analog_sensors=['analogRead','rotary','sound','light','moisture']
 digitalInp=['button']
 digitalOp=['led','relay']
 pwm=['LEDPower','buzzer','analogWrite']
