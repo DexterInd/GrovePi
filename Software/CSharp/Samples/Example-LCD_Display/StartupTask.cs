@@ -1,10 +1,10 @@
-﻿// Ultrasonic Sensor Demonstration for the GrovePi.
+﻿// LCDDisplay Sensor Demonstration for the GrovePi.
 
-// This example combines the GrovePi and the Grove Ultrasonic using the Raspberry Pi and GrovePi.
+// This example combines the GrovePi and the Grove LCDDisplay using the Raspberry Pi and GrovePi.
 // http://www.dexterindustries.com/shop/grovepi-board/
-// http://www.dexterindustries.com/shop/ultrasonic-sensor/
+// http://www.dexterindustries.com/shop/LCDDisplay-sensor/
 
-// Connct the Ultrasonic Sensor to Digital Port 4 on the GrovePi.
+// Connct the LCD Display to any I2C port on the GrovePi.
 
 /*
 The MIT License(MIT)
@@ -38,29 +38,33 @@ using System.Threading.Tasks;
 // Add using statements to the GrovePi libraries
 using GrovePi;
 using GrovePi.Sensors;
+using GrovePi.I2CDevices;
 
-namespace Ultrasonic
+namespace LCDDisplay
 {
     public sealed class StartupTask : IBackgroundTask
     {
         public void Run(IBackgroundTaskInstance taskInstance)
         {
-            // Connect the Ultrasonic Sensor to digital port 4
-            IUltrasonicRangerSensor sensor = DeviceFactory.Build.UltraSonicSensor(Pin.DigitalPin4);
+
+            // Connect the RGB display to one of the I2C ports.
+            IRgbLcdDisplay display = DeviceFactory.Build.RgbLcdDisplay();
+
+            // Send out some diagnostics into the debug Output.
             System.Diagnostics.Debug.WriteLine("Hello from Dexter Industries!");
             System.Diagnostics.Debug.WriteLine("Connect the LCD Screen to any I2C port on the GrovePi.");
 
             // Loop endlessly
             while (true)
             {
-                Task.Delay(100).Wait(); //Delay 0.1 second
+                Task.Delay(100).Wait();     // Delay 0.1 second
+                                            // We need to make sure we delay here.  If we don't, we won't be able to read
+                                            // the LCD Screen.
                 try
                 {
-
-                    GroveLCD.SetText("Hello from Dexter Industries!").SetBacklightRgb(255, 50, 255);
-
-                    // Check the value of the Ultrasonic Sensor
-                    string sensorvalue = sensor.MeasureInCentimeters().ToString();
+                    // First, output to the LCD Display.
+                    display.SetText("Hello from Dexter Industries!").SetBacklightRgb(255, 50, 255);
+                    // Then output to the debug window.
                     System.Diagnostics.Debug.WriteLine("Hello from Dexter Industries!");
 
                 }

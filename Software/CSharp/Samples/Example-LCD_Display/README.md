@@ -1,5 +1,5 @@
-## **Sound Sensor Example**
-This sample will demonstrate how to use the [Grove Sound Sensor](http://www.dexterindustries.com/shop/grove-sound-sensor/) with the GrovePi and Raspberry Pi. This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
+## **LCD Display Example**
+This sample will demonstrate how to use the [Grove LCD Display](http://www.dexterindustries.com/shop/grove-sound-sensor/) with the GrovePi and Raspberry Pi. This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
 
 ### Requirements
 You must have the following:
@@ -37,13 +37,13 @@ When you run the samples as part of the GrovePi solution you know that you are u
 4. Name the folder __Samples__
 5. Right-click on the solution in the _Solution Explorer_
 6. Select __Add__ > __ Existing Project__
-7. Find the __Ultrasonic.csproj__ file - select it and click __Open__
+7. Find the __LCDDisplay.csproj__ file - select it and click __Open__
 
-This will add the _Ultrasonic_ project to you new _Samples_ directory.
+This will add the _LCDDisplay_ project to you new _Samples_ directory.
 
-In the _Ultrasonic_ project you need to update the reference to _GrovePi_.
+In the _LCDDisplay_ project you need to update the reference to _GrovePi_.
 
-1. In _Solution Explorer_ expand the _Ultrasonic_ project and the _References_ node.
+1. In _Solution Explorer_ expand the _LCDDisplay_ project and the _References_ node.
 2. Right-click on the __GrovePi__ reference and click __Remove_
 3. Right-click on the __References__ node and choose __Add Reference__
 4. Expand the __Projects__ node
@@ -59,8 +59,8 @@ The following steps assume you have already opened _GrovePi\Software\CSharp\Grov
 
 After building the GrovePi solution:   
 
-1. Open __GrovePi\Software\CSharp\Samples\Ultrasonic.sln__ in Visual Studio.   
-2. In _Solution Explorer_ expand the _Ultrasonic_ project and the _References_ node.  
+1. Open __GrovePi\Software\CSharp\Samples\LCDDisplay.sln__ in Visual Studio.   
+2. In _Solution Explorer_ expand the _LCDDisplay_ project and the _References_ node.  
 3. Right-click on the __GrovePi__ reference and click __Remove_.  
 4. Right-click on "References" and click "Add Reference".  
 5. Select the __Browse__ tab and click the __Browse__ button.  
@@ -72,15 +72,15 @@ The project should now have all the updated references you need.
 ### Setup the Hardware
 For this sample, connect the following:
 
-1. Ultrasonic Sensor to __D4__ (Digital Pin 4)
+1. LCD Sensor to __I2C1__ (I2C 1 or any I2C Port on the GrovePi)
 
 
 ### Run the Sample
 To run the sample... 
 
-1. Right-click on the _Ultrasonic_ project in the _Solution Explorer_
+1. Right-click on the _LCDDisplay_ project in the _Solution Explorer_
 2. Select __Set as Startup Project__
-3. Right-click on the __Properties__ node under _Ultrasonic_ and select __Open__
+3. Right-click on the __Properties__ node under _LCDDisplay_ and select __Open__
 4. Select the __Debug__ tab
 5. Select __Remote Machine__ in the _Target device_ field
 6. In the __Remote Machine__ field, Type in the name or IP Address of your Windows 10 IoT Core Raspberry Pi

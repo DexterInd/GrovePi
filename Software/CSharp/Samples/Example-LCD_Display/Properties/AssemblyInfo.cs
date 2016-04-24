@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ultrasonic")]
-[assembly: AssemblyDescription("Demonstrates using the Grove Ultrasonic with the GrovePi.")]
+[assembly: AssemblyTitle("LCDDisplay")]
+[assembly: AssemblyDescription("Demonstrates using the Grove LCD Display with the GrovePi.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Dexter Industries")]
 [assembly: AssemblyProduct("GrovePi")]
