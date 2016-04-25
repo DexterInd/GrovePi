@@ -68,7 +68,7 @@ namespace LedFade
                     // If the Rotary Angle sensor value is greater than zero...
                     if (angle > 0)
                     {
-                        // Divide the anlge (a 10-bit value from 0-1023) by four
+                        // Divide the angle (a 10-bit value from 0-1023) by four
                         // to get a single byte value value from 0-255.
                         brightness = Math.Floor(angle / 4);
                     }
