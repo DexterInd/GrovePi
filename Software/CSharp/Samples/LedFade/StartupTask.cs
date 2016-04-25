@@ -82,7 +82,7 @@ namespace LedFade
                     System.Diagnostics.Debug.WriteLine("Brightness is " + brightness.ToString());
 
                     // AnalogWrite uses Pulse WIdth Modulation (PWM) to 
-                    // controll the brightness of the digital LED.
+                    // control the brightness of the digital LED.
                     led.AnalogWrite(Convert.ToByte(brightness));
                 }
                 catch (Exception ex)
