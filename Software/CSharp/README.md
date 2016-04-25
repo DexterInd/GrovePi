@@ -1,4 +1,4 @@
-# GrovePi
+# GrovePi in C#
 Windows 10 IoT C# driver library for [GrovePi](https://www.nuget.org/packages/GrovePi/).
 
 The NuGet package for the current release is available [here](https://www.nuget.org/packages/GrovePi/).
