@@ -1,5 +1,5 @@
-## **LED Fade Sample**
-This sample will demonstrate how to use the [LED Socket Kit](http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit) with the [Rotary Angle Sensor](http://www.seeedstudio.com/wiki/Grove_-_Rotary_Angle_Sensor) to create a fade effect using Pulse Width Modulation (PWM). This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
+## **Light Sensor Sample**
+This sample will demonstrate how to use the [Grove Light Sensor](http://www.dexterindustries.com/shop/grove-light-sensor/) with the [Dexter Industries GrovePi](http://www.dexterindustries.com/product-category/robots/grovepi/) to create a basic reading of light levels. This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
 
 ### Requirements
 You must have the following:

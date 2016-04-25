@@ -21,7 +21,7 @@
     <PackageCertificateKeyFile>ButtonBuzzer_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackage>true</AppxPackage>
     <ContainsStartupTask>true</ContainsStartupTask>
-    <PackageCertificateThumbprint>248FBDE23D3A4D2ADF6A12A4178EB28F28C0BE1C</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>E9BF24791F021240D5974379AE636319A5A29E21</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
