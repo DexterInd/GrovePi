@@ -2,9 +2,9 @@
 <package >
   <metadata>
     <id>GrovePi</id>
-    <version>1.0.7</version>
+    <version>$version$</version>
     <title>GrovePi for Windows IoT</title>
-    <authors>Jonathan Robson,Exadon</authors>
+    <authors>Jonathan Robson,Exadon, Ryan Pedersen</authors>
     <owners>Jonathan Robson</owners>
     <licenseUrl>http://opensource.org/licenses/MS-PL</licenseUrl>
     <projectUrl>https://github.com/robsonj/GrovePi</projectUrl>
