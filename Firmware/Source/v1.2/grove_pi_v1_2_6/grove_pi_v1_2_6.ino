@@ -13,6 +13,7 @@
 #include "Encoder.h"
 #include "TimerOne.h"
 #include "VirtualWire.h"
+#include "TH02_dev.h"
 
 MMA7660 acc;
 DS1307 clock;
@@ -90,6 +91,7 @@ void setup()
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
 	attachInterrupt(0,readPulseDust,CHANGE);
+	TH02.begin();
 }
 int pin;
 int j;
@@ -180,6 +182,26 @@ void loop()
       b[1]=accv[0];
       b[2]=accv[1];
       b[3]=accv[2];
+    }
+    //Read temperature from TH02
+    if(cmd[0]==28)
+    {
+        float temperature = TH02.ReadTemperature();
+        byte *b1=(byte*)&temperature;
+        for(j=0;j<4;j++)
+        {
+          b[j+1]=b1[j];
+        }
+    }
+    //Read humidity from TH02
+    if(cmd[0]==29)
+    {
+        float humidity = TH02.ReadHumidity();
+        byte *b1=(byte*)&humidity;
+        for(j=0;j<4;j++)
+        {
+          b[j+1]=b1[j];
+        }
     }
     //RTC tine read
     else if(cmd[0]==30)
