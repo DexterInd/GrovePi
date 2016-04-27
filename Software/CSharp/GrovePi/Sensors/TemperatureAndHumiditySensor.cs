@@ -4,14 +4,22 @@ namespace GrovePi.Sensors
 {
     public interface ITemperatureAndHumiditySensor
     {
-        double TemperatureInCelcius();
+        double TemperatureInCelsius();
     }
 
+    /// <summary>
+    /// Specifies the model of sensor. 
+    /// DHT11 - blue one - comes with the GrovePi+ Starter Kit.
+    /// DHT22 - white one, aka DHT Pro or AM2302.
+    /// DHT21 - black one, aka AM2301.
+    /// </summary>
     public enum Model
     {
-        OnePointZero = 3975,
-        OnePointOne = 4250,
-        OnePointTwo = 4250
+        /* 
+        */
+        Dht11 = 3975,
+        Dht21 = 4250,
+        Dht22 = 4250
     }
 
     internal class TemperatureAndHumiditySensor : ITemperatureAndHumiditySensor
@@ -28,7 +36,7 @@ namespace GrovePi.Sensors
             _model = model;
         }
 
-        public double TemperatureInCelcius()
+        public double TemperatureInCelsius()
         {
             var result = (double) _device.AnalogRead(_pin);
             var resistance = (1023 - result)*10000/result;

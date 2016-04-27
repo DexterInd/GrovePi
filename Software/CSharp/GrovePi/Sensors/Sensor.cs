@@ -10,9 +10,9 @@ namespace GrovePi.Sensors
         internal Sensor(IGrovePi device, Pin pin, PinMode pinMode)
         {
             if (device == null) throw new ArgumentNullException(nameof(device));
-            device.PinMode(Pin, pinMode);
             Device = device;
             Pin = pin;
+            device.PinMode(Pin, pinMode);
         }
 
         internal Sensor(IGrovePi device, Pin pin)
@@ -28,6 +28,11 @@ namespace GrovePi.Sensors
         {
             Device.DigitalWrite(Pin, (byte) newState);
             return this as TSensorType;
+        }
+
+        public void AnalogWrite(byte value)
+        {
+            Device.AnalogWrite(Pin,value);
         }
     }
 }

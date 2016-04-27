@@ -54,8 +54,8 @@ Sensor.prototype.watch = function(delay) {
   }, delay)
 }
 Sensor.prototype.stopWatch = function() {
-  if (typeof watchInterval != 'undefined' && typeof watchInterval.clearInterval == 'function')
-    watchInterval.clearInterval()
+  if (typeof watchInterval != 'undefined' && typeof clearInterval == 'function')
+    clearInterval(watchInterval)
 }
 
 module.exports = Sensor

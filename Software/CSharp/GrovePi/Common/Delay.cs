@@ -5,9 +5,14 @@ namespace GrovePi.Common
 {
     public static class Delay
     {
-        public static async void Milliseconds(int milliseconds)
+        public static void Milliseconds(int milliseconds)
         {
-            await Task.Delay(TimeSpan.FromMilliseconds(milliseconds));
+            Task.Delay(milliseconds).Wait();
+        }
+
+        public static void Microseconds(int microseconds)
+        {
+            Task.Delay(new TimeSpan(microseconds*10)).Wait();
         }
     }
 }

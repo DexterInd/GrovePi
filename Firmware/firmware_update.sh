@@ -1,6 +1,11 @@
 #! /bin/bash
 echo "Updating the GrovePi firmware"
 echo "============================="
+echo " http://www.dexterindustries.com/grovepi "
+echo " Run this program: "
+echo " sudo ./firmware_update.sh"
+echo " "
+echo "============================="
 
 read -n1 -p "Do you want to update the firmware? [y,n]" input
 if [[ $input == "Y" || $input == "y" ]]; then
@@ -17,8 +22,11 @@ else
 	exit 0
 fi
 
-printf "\nConnect the jumper to the Reset pin and Press any key to start firmware update\n. . .";
+printf "\nPress any key to start firmware update\n. . .";
 read -n1
+avrdude -c gpio -p m328p -U lfuse:w:0xFF:m
+avrdude -c gpio -p m328p -U hfuse:w:0xDA:m
+avrdude -c gpio -p m328p -U efuse:w:0x05:m
 avrdude -c gpio -p m328p -U flash:w:grove_pi_firmware.hex
 
 
