@@ -17,13 +17,6 @@
 #include "S208T02.h"
 
 
-S208T02 fan2;
-S208T02 fan3;
-S208T02 fan4;
-S208T02 fan5;
-S208T02 fan6;
-S208T02 fan7;
-S208T02 fan8;
 Timer t;
 
 MMA7660 acc;
@@ -102,35 +95,22 @@ void setup()
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
 	attachInterrupt(0,readPulseDust,CHANGE);
-	fan2.begin();
-	fan2.setPin(2);
-	fan3.begin();
-	fan3.setPin(3);
-	fan4.begin();
-	fan4.setPin(4);
-	fan5.begin();
-	fan5.setPin(5);
-	fan6.begin();
-	fan6.setPin(6);        
-	fan7.begin();
-	fan7.setPin(7);        
-	fan8.begin();
-	fan8.setPin(8);
+	for(uint8_t i=0;i<6;i++){
+			fan[i].begin();
+			fan[i].setPin(2+i);	
+		}
+	}	
 	delay(150);
 	tevery = t.every(20, FanStatus);
 }
 
 void FanStatus()
 {
-  fan2.checkFanStatus();
-  fan3.checkFanStatus();
-  fan4.checkFanStatus();
-  fan5.checkFanStatus();
-  fan6.checkFanStatus();
-  fan7.checkFanStatus();
-  fan8.checkFanStatus();
+  	for(uint8_t i=0;i<6;i++){
+			fan[i].checkFanStatus();			
+		}
+	}	
 }
-
 
 int pin;
 int j;
@@ -228,34 +208,8 @@ void loop()
     if(cmd[0]==21)
     {
       t.stop(tevery);
-      if(cmd[1]==2){
-        fan2.controlFanSpeed(cmd[2]);
-        fan2.setFanControllerState(cmd[3]);
-      }
-      else if(cmd[1]==3){
-        fan3.controlFanSpeed(cmd[2]);
-        fan3.setFanControllerState(cmd[3]);
-      }
-      else if(cmd[1]==4){
-        fan4.controlFanSpeed(cmd[2]);
-        fan4.setFanControllerState(cmd[3]);
-      }
-      else if(cmd[1]==5){
-        fan5.controlFanSpeed(cmd[2]);
-        fan5.setFanControllerState(cmd[3]);
-      }
-      else if(cmd[1]==6){
-        fan6.controlFanSpeed(cmd[2]);
-        fan6.setFanControllerState(cmd[3]);
-      }
-      else if(cmd[1]==7){
-        fan7.controlFanSpeed(cmd[2]);
-        fan7.setFanControllerState(cmd[3]);
-      }
-      else if(cmd[1]==8){
-        fan8.controlFanSpeed(cmd[2]);
-        fan8.setFanControllerState(cmd[3]);
-      }
+	  fan[cmd[1]].controlFanSpeed(cmd[2]);
+      fan[cmd[1]].setFanControllerState(cmd[3]);      
       tevery = t.every(20, FanStatus);
     }
 	
