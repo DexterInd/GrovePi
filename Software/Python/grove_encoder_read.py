@@ -45,13 +45,13 @@ import atexit
 
 atexit.register(grovepi.encoder_dis)
 
-print "Reading from the encoder"
+print("Reading from the encoder")
 grovepi.encoder_en()
 while True:
     try:
 		[new_val,encoder_val] = grovepi.encoderRead()
 		if new_val:
-			print encoder_val
+			print(encoder_val)
 		time.sleep(.5) 
 
     except IOError:

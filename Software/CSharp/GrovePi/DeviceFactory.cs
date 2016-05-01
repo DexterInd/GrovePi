@@ -19,8 +19,10 @@ namespace GrovePi
         IRelay Relay(Pin pin);
         ILed Led(Pin pin);
         ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model);
+        IDHTTemperatureAndHumiditySensor DHTTemperatureAndHumiditySensor(Pin pin, DHTModel model);
         IUltrasonicRangerSensor UltraSonicSensor(Pin pin);
         IAccelerometerSensor AccelerometerSensor(Pin pin);
+        IAirQualitySensor AirQualitySensor(Pin pin);
         IRealTimeClock RealTimeClock(Pin pin);
         ILedBar BuildLedBar(Pin pin);
         IFourDigitDisplay FourDigitDisplay(Pin pin);
@@ -32,7 +34,7 @@ namespace GrovePi
         IButtonSensor ButtonSensor(Pin pin);
         IRgbLcdDisplay RgbLcdDisplay();
         IRgbLcdDisplay RgbLcdDisplay(int rgbAddress, int textAddress);
-        
+        ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass();
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -41,8 +43,10 @@ namespace GrovePi
         private const byte GrovePiAddress = 0x04;
         private const byte DisplayRgbI2CAddress = 0x62;
         private const byte DisplayTextI2CAddress = 0x3e;
+        private const byte SixAxisAccelerometerI2CAddress = 0x1e;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
+        private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
 
         public IGrovePi GrovePi()
         {
@@ -67,6 +71,16 @@ namespace GrovePi
         public ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model)
         {
             return DoBuild(x => new TemperatureAndHumiditySensor(x, pin, model));
+        }
+
+        public IDHTTemperatureAndHumiditySensor DHTTemperatureAndHumiditySensor(Pin pin, DHTModel model)
+        {
+            return DoBuild(x => new DHTTemperatureAndHumiditySensor(x, pin, model));
+        }
+
+        public IAirQualitySensor AirQualitySensor(Pin pin)
+        {
+            return DoBuild(x => new AirQualitySensor(x, pin));
         }
 
         public IUltrasonicRangerSensor UltraSonicSensor(Pin pin)
@@ -127,6 +141,11 @@ namespace GrovePi
         public IRgbLcdDisplay RgbLcdDisplay()
         {
             return BuildRgbLcdDisplayImpl(DisplayRgbI2CAddress, DisplayTextI2CAddress);
+        }
+
+        public ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass()
+        {
+            return BuildSixAxisAccelerometerAndCompassImpl();
         }
 
         public IButtonSensor ButtonSensor(Pin pin)
@@ -192,6 +211,29 @@ namespace GrovePi
                 return new RgbLcdDisplay(rgbDevice, textDevice);
             }).Result;
             return _rgbLcdDisplay;
+        }
+
+        private SixAxisAccelerometerAndCompass BuildSixAxisAccelerometerAndCompassImpl()
+        {
+            if (_sixAxisAccelerometerAndCompass != null)
+            {
+                return _sixAxisAccelerometerAndCompass;
+            }
+
+            var settings = new I2cConnectionSettings(SixAxisAccelerometerI2CAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _sixAxisAccelerometerAndCompass = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, settings);
+
+                return new SixAxisAccelerometerAndCompass(device);
+            }).Result;
+
+            return _sixAxisAccelerometerAndCompass;
         }
 
         private static async Task<DeviceInformationCollection> GetDeviceInfo()

@@ -43,7 +43,7 @@ grovepi.pinMode(collision_sensor,"INPUT")
 
 while True:
     try:
-        print (grovepi.digitalRead(collision_sensor))
+        print(grovepi.digitalRead(collision_sensor))
         time.sleep(.5)
 
     except IOError:

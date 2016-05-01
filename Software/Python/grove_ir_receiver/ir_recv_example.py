@@ -42,4 +42,4 @@ while True:
 	#Wait for the next IR code to arrive. The codes are queued in a buffer before printing
 	a= lirc.nextcode()  
 	if len(a) !=0:
-		print a[0]
+		print(a[0])

@@ -43,7 +43,7 @@ while True:
     try:
         sensor_value = grovepi.analogRead(sensor)
 
-        print ("sensor_value =", sensor_value)
+        print ("sensor_value = %d" %sensor_value)
         time.sleep(.5)
 
     except IOError:

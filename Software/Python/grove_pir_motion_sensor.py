@@ -51,20 +51,22 @@ import grovepi
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # SIG,NC,VCC,GND
-pir_sensor = 8
-
+pir_sensor = 7 
+motion=0
 grovepi.pinMode(pir_sensor,"INPUT")
 
 while True:
-    try:
-        # Sense motion, usually human, within the target range
-        if grovepi.digitalRead(pir_sensor):
-            print ('Motion Detected')
-        else:
-            print ('-')
-        
-        # if your hold time is less than this, you might not see as many detections
-        time.sleep(.2)
+	try:
+		# Sense motion, usually human, within the target range
+		motion=grovepi.digitalRead(pir_sensor)
+		if motion==0 or motion==1:	# check if reads were 0 or 1 it can be 255 also because of IO Errors so remove those values
+			if motion==1:
+				print ('Motion Detected')
+			else:
+				print ('-')
 
-    except IOError:
-        print ("Error")
+			# if your hold time is less than this, you might not see as many detections
+		time.sleep(.2)
+
+	except IOError:
+		print ("Error")

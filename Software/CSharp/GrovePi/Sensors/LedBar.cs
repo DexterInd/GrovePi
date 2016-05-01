@@ -34,14 +34,14 @@ namespace GrovePi.Sensors
         public ILedBar Initialize(Orientation orientation)
         {
             var buffer = new[] {InitialiseCommandAddress, (byte) _pin, (byte) orientation, Constants.Unused};
-            _device.DirectAccess.Write(buffer);
+            _device.DirectAccess.WritePartial(buffer);
             return this;
         }
 
         public ILedBar SetOrientation(Orientation orientation)
         {
             var buffer = new[] {OrientationCommandAddress, (byte) _pin, (byte) orientation, Constants.Unused};
-            _device.DirectAccess.Write(buffer);
+            _device.DirectAccess.WritePartial(buffer);
             return this;
         }
 
@@ -49,21 +49,21 @@ namespace GrovePi.Sensors
         {
             level = Math.Min(level, (byte) 10);
             var buffer = new[] {LevelCommandAddress, (byte) _pin, level, Constants.Unused};
-            _device.DirectAccess.Write(buffer);
+            _device.DirectAccess.WritePartial(buffer);
             return this;
         }
 
         public ILedBar SetLed(byte level, byte led, SensorStatus state)
         {
             var buffer = new[] {SetOneCommandAddress, (byte) _pin, led, (byte) state};
-            _device.DirectAccess.Write(buffer);
+            _device.DirectAccess.WritePartial(buffer);
             return this;
         }
 
         public ILedBar ToggleLed(byte led)
         {
             var buffer = new[] {ToggleOneCommandAddress, (byte) _pin, led, Constants.Unused};
-            _device.DirectAccess.Write(buffer);
+            _device.DirectAccess.WritePartial(buffer);
             return this;
         }
     }

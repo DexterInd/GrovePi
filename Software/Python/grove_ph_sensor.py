@@ -53,7 +53,7 @@ while True:
         # Calculate PH
         ph = 7 - 1000 * (float)(sensor_value) * adc_ref / 59.16 / 1023
 
-        print ("sensor_value =", sensor_value, " ph =", ph)
+        print("sensor_value =", sensor_value, " ph =", ph)
 
     except IOError:
         print ("Error")

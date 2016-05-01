@@ -12,7 +12,7 @@ The GrovePi brings both Grove Sensors and the popular Raspberry Pi together in a
 The GrovePi board slips over the Raspberry Pi.  Connect the Grove Sensors to the GrovePi board.  Upload your program.  Begin taking in the worlds data!
 
 ### Raspberry Pi Compatibility
-The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, and 2.
+The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, 2, and 3.
 
 ### Getting Started
 Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/). 

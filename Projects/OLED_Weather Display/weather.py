@@ -40,7 +40,7 @@ pressure=text["main"]["pressure"]				# Pressure in hPa
 humidity=text["main"]["humidity"]				# Humidity %
 wind_speed=text["wind"]["speed"]				# Wind speed mps
 
-print weather_desc,temp,pressure,humidity,wind_speed
+print(weather_desc,temp,pressure,humidity,wind_speed)
 
 #Print the data on the OLED
 

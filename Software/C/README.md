@@ -1,13 +1,17 @@
-GrovePi
-=======
+GrovePi C library
+v0.1
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+This library provides the basic functions for using the GrovePi in C.  See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 
-Started 2013/10/04
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
-[Dexter Industries](http://www.dexterindustries.com)
+To compile use:
+gcc programe_name.c grovepi.c -Wall
+e.g.: gcc grovepi_analog_read.c grovepi.c -Wall
 
-## License
+and then run the executable:
+./a.out
+
+###
+License
 
 The MIT License (MIT)
 

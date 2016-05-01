@@ -527,7 +527,7 @@ def dustSensorRead():
 		return [data_back[0],lowpulseoccupancy]
 	else:
 		return [-1,-1]
-	print data_back
+	print (data_back)
 	
 def encoder_en():
 	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])

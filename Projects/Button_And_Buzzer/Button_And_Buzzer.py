@@ -51,4 +51,4 @@ while True:
 		digitalWrite(buzzer_pin,0)
 		break
 	except (IOError,TypeError) as e:
-		print "Error"
+		print("Error")

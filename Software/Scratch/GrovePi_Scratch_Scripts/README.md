@@ -1,4 +1,5 @@
 NOTE: THIS IS FOR DEVELOPERS ONLY.  Normal user need not do this.
+See more at http://www.dexterindustries.com/grovepi/
 
 1. Make both **GrovePiScratch_debug.sh** and **GrovePi_Scratch_Start.sh** executable:
 
@@ -15,7 +16,7 @@ NOTE: THIS IS FOR DEVELOPERS ONLY.  Normal user need not do this.
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2016  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

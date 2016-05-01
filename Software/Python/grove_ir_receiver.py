@@ -47,5 +47,5 @@ while True:
 	elif ir_data_back[0]==0:	#Old signal
 		pass
 	else:
-		print (ir_data_back[1:])		#Current signal from IR remote
+		print(ir_data_back[1:])		#Current signal from IR remote
 	time.sleep(.1)

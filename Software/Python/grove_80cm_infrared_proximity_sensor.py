@@ -58,7 +58,7 @@ while True:
         # Calculate voltage
         voltage = round((float)(sensor_value) * adc_ref / 1024, 2)
 
-        print ("sensor_value =", sensor_value, " voltage =", voltage)
+        print("sensor_value =", sensor_value, " voltage =", voltage)
 
     except IOError:
         print ("Error")

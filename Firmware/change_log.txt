@@ -1,3 +1,6 @@
+Dexter Industries, Inc.
+http://www.dexterindustries.com/grovepi
+
 v 1.1
 13 Feb 2014
 	*DHT, ultrasonic, RTC code added

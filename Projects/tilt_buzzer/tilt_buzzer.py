@@ -48,14 +48,14 @@ while True:
 
 			if accl[0] > 16:	# If the value on X-axis is greater than the Threshold, start the buzzer
 				digitalWrite(buzzer_pin,1)
-				print "\tBuzzing",			
+				print ("\tBuzzing")
 			else:	#Else stop the buzzer
 				digitalWrite(buzzer_pin,0)
 		else:		#If switch is in Off position, print "Off" on the screen
-			print "Off"	
+			print("Off")	
 		time.sleep(.1)
 	except KeyboardInterrupt:	# Stop the buzzer before stopping
 		digitalWrite(buzzer_pin,0)
 		break
 	except (IOError,TypeError) as e:
-		print "Error"
+		print("Error")

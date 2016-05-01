@@ -5,14 +5,15 @@
 # History
 # ------------------------------------------------
 # Author     Date      		Comments
-# Karan      29 June 15  	Initial Authoring                                                            
+# Karan      29 June 15  	Initial Authoring                                                        
+# John		22 Feb 16	Adding GrovePi Barometer
 '''
 ## License
 
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2016  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +70,7 @@ class myThread (threading.Thread):
 thread1 = myThread(1, "Thread-1", 1)        #Setup and start the thread
 thread1.setDaemon(True)
 
-analog_sensors=['analogRead','rotary','sound','light']
+analog_sensors=['analogRead','rotary','sound','light','moisture']
 digitalInp=['button']
 digitalOp=['led','relay']
 pwm=['LEDPower','buzzer','analogWrite']
@@ -81,11 +82,13 @@ def match_sensors(msg,lst):
 	return -1
 	
 try:
-    s.broadcast('READY')
+	s.broadcast('READY')
 except NameError:
 	print "GrovePi Scratch: Unable to Broadcast"
+
+
 while True:
-    try:
+	try:
 		m = s.receive()
 
 		while m[0] == 'sensor-update' :
@@ -232,8 +235,6 @@ while True:
 					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
 				elif msg[3:6].lower() == "txt".lower():
 					txt = msg[6:]
-					print txt
-					print "play with me\nplease"
 					grove_rgb_lcd.setText(txt)
 				else:
 					pass
@@ -287,16 +288,30 @@ while True:
 					print "Error taking picture"
 				s.sensorupdate({'camera':"Error"})	
 			s.sensorupdate({'camera':"Picture Taken"})	
-					
+
+		# Barometer code, pressure
+		elif msg[:9].lower()=="pressure".lower():
+			if en_grovepi:
+				# We import here to prevent errors thrown.  If the import fails, you just get an error message instead of the communicator crashing.
+				# If user is using multiple sensors and using their own image which does not have the pythonpath set correctly then they'll just not get the output for 1 sensor, and the others will still keep working
+				from grove_i2c_barometic_sensor_BMP180 import BMP085		# Barometric pressure sensor.
+				bmp = BMP085(0x77, 1)			#Initialize the pressure sensor (barometer)
+				press = bmp.readPressure()/100.0
+				s.sensorupdate({'pressure':press})
+				if en_debug:
+					print "Pressure: " + str(press)
+			if en_debug:		# If Debug is enabled, print the value of msg.
+				print msg
+				
 		else:
 			if en_debug:
 				print "Ignoring: ",msg
 					
-    except KeyboardInterrupt:
-        running= False
-        print "GrovePi Scratch: Disconnected from Scratch"
-        break
-    except (scratch.scratch.ScratchConnectionError,NameError) as e:
+	except KeyboardInterrupt:
+		running= False
+		print "GrovePi Scratch: Disconnected from Scratch"
+		break
+	except (scratch.scratch.ScratchConnectionError,NameError) as e:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
@@ -308,6 +323,6 @@ while True:
 				break;
 			except scratch.ScratchError:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
-    except:
+	except:
 		e = sys.exc_info()[0]
 		print "GrovePi Scratch: Error %s" % e	
