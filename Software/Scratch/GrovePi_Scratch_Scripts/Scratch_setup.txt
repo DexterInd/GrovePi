@@ -1,0 +1,28 @@
+These are instructions for installing GrovePi Scratch on any Raspberry Pi image not from Dexter Industries.
+To skip this step, use the Dexter Industries Raspberry Pi image, found here:  http://www.dexterindustries.com/BrickPi/getting-started/pi-prep/
+
+The following is a short list of changes needed to setup GrovePi for Scratch.  
+
+You need the ScratchPy library to be installed. Install it by the following procedure.
+Run the command:
+	sudo wget https://bitbucket.org/pypa/setuptools/raw/0.7.4/ez_setup.py -O - | sudo python
+Clone scratchpy:
+	cd Desktop/GrovePi/Software/Scratch
+	git clone https://github.com/pilliq/scratchpy.git
+Navigate to extracted directory and run:
+	sudo make install
+
+Start Scratch
+Select "Sensing"
+Right Click Enable Remote sensor connections
+You will see "Remote Sensor Connections Enabled"
+
+back to terminal
+	cd Desktop/GrovePi/Software/Scratch
+	sudo python GrovePiScratch.py
+	
+Now open up an example:
+	Might see "Remote sensor connections enabled" again.  That's fine, hit ok.
+	And now go!
+	
+	

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GrovePi</id>
+    <version>$version$</version>
+    <title>GrovePi for Windows IoT</title>
+    <authors>Jonathan Robson,Exadon, Ryan Pedersen</authors>
+    <owners>Jonathan Robson</owners>
+    <licenseUrl>http://opensource.org/licenses/MS-PL</licenseUrl>
+    <projectUrl>https://github.com/robsonj/GrovePi</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>GrovePi IoT C# library</description>
+    <summary>Windows IoT C# library to support GrovePi RaspberryPi 2 sensors</summary>
+    <releaseNotes>Corrected library structure to work with IoT devices (github issue #19 - https://github.com/robsonj/GrovePi/issues/19)</releaseNotes>
+    <language />
+    <tags>iot, grovepi, windows, arm</tags>
+  </metadata>
+</package>

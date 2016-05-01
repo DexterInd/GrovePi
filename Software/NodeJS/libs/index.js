@@ -19,5 +19,6 @@ module.exports.GrovePi = {
     , TemperatureAnalog: require('./sensors/temperatureAnalogSensor')
     , UltrasonicDigital: require('./sensors/ultrasonicDigitalSensor')
     , IRReceiver: require('./sensors/IRReceiverSensor')
+    , SPDTRelay: require('./sensors/SPDTRelay')
   }
 }
