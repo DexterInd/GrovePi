@@ -72,8 +72,7 @@ The project should now have all the updated references you need.
 ### Setup the Hardware
 For this sample, connect the following:
 
-1. Rotary Angle Sensor to __A2__ (Analog Pin 2)
-2. LED Socker Kit (any color) to __D5__ (Digital Pin 5)
+1. Connect the Button Sensor to __D2__ (Digital Pin 2)
 
 ### Run the Sample
 To run the sample... 
