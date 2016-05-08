@@ -74,11 +74,11 @@ fi
 echo " "
 echo "Installing Dependencies"
 echo "======================="
-sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev
+sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev -y
 sudo apt-get purge python-rpi.gpio -y
 sudo apt-get purge python3-rpi.gpio -y
-sudo apt-get install python-rpi.gpio
-sudo apt-get install python3-rpi.gpio
+sudo apt-get install python-rpi.gpio -y
+sudo apt-get install python3-rpi.gpio -y
 sudo pip install -U RPi.GPIO
 echo "Dependencies installed"
 
@@ -183,7 +183,7 @@ echo "cfr. https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=123081"
 
 echo " "
 echo "Install smbus for python"
-sudo apt-get install python-smbus
+sudo apt-get install python-smbus -y
 
 echo " "
 echo "Making libraries global . . ."
