@@ -1,14 +1,14 @@
 {
     "name": "node-grovepi",
-    "version": "2.0.7",
+    "version": "2.0.8",
     "description": "GrovePi library for Node.js",
     "keywords": ["grovepi", "robot", "gpio", "i2c"],
     "dependencies": {
-        "async": "0.9.*",
+        "async": "1.*",
         "buffertools": "2.1.*",
-        "i2c-bus": "0.11.*",
-        "npmlog": "1.2.*",
-        "sleep": "3.0.*"
+        "i2c-bus": "1.*",
+        "npmlog": "2.*",
+        "sleep": "3.*"
     },
     "main": "index.js",
     "scripts": {

@@ -7,7 +7,6 @@ function AirQualityAnalogSensor(pin) {
 AirQualityAnalogSensor.prototype = new AnalogSensor()
 
 AirQualityAnalogSensor.prototype.read = function() {
-  this.board.pinMode(this.board.INPUT)
   var res = AnalogSensor.prototype.read.call(this)
   return parseInt(res)
 }

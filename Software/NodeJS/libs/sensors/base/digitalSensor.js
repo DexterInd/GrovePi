@@ -6,7 +6,7 @@ function DigitalSensor(pin) {
   Sensor.apply(this, Array.prototype.slice.call(arguments))
   this.pin = pin
 }
-util.inherits(DigitalSensor, Sensor);
+util.inherits(DigitalSensor, Sensor)
 DigitalSensor.prototype = new DigitalSensor()
 
 DigitalSensor.prototype.read = function() {

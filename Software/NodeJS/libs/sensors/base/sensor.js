@@ -1,14 +1,6 @@
 var util         = require('util')
 var EventEmitter = require('events').EventEmitter
 var Board        = require('../../grovepi')
-var streamInterval, watchInterval
-var watchDelay = 100
-
-function Sensor() {
-  this.board = new Board()
-  this.lastValue = 0
-  this.currentValue = 0
-}
 
 var isEqual = function(a, b) {
   if (typeof a == 'object') {
@@ -23,27 +15,40 @@ var isEqual = function(a, b) {
   }
 }
 
+function Sensor() {
+  this.board = new Board()
+  this.lastValue = 0
+  this.currentValue = 0
+  this.streamInterval = this.watchInterval = undefined
+  this.watchDelay = 100
+}
+
 util.inherits(Sensor, EventEmitter)
 
 Sensor.prototype.read = function() {}
 Sensor.prototype.write = function() {}
 Sensor.prototype.stream = function(delay, cb) {
   var self = this
+  delay = typeof delay == 'undefined' ? self.watchDelay : delay
+
   self.stopStream()
-  streamInterval = setInterval(function onInterval() {
+  self.streamInterval = setInterval(function onStreamInterval() {
     var res = self.read()
     cb(res)
   }, delay)
 }
 Sensor.prototype.stopStream = function() {
-  if (typeof streamInterval != 'undefined' && typeof streamInterval.clearInterval == 'function')
-    streamInterval.clearInterval()
+  var self = this
+  if (typeof self.streamInterval != 'undefined')
+    clearInterval(self.streamInterval)
 }
+
 Sensor.prototype.watch = function(delay) {
   var self = this
-  var delay = typeof delay == 'undefined' ? watchDelay : delay
+  delay = typeof delay == 'undefined' ? self.watchDelay : delay
+
   self.stopWatch()
-  watchInterval = setInterval(function onInterval() {
+  self.watchInterval = setInterval(function onInterval() {
     var res = self.read()
 
     self.lastValue = self.currentValue
@@ -54,8 +59,9 @@ Sensor.prototype.watch = function(delay) {
   }, delay)
 }
 Sensor.prototype.stopWatch = function() {
-  if (typeof watchInterval != 'undefined' && typeof clearInterval == 'function')
-    clearInterval(watchInterval)
+  var self = this
+  if (typeof self.watchInterval != 'undefined')
+    clearInterval(self.watchInterval)
 }
 
 module.exports = Sensor
