@@ -1,5 +1,5 @@
 ## **LED Fade Sample**
-This sample will demonstrate how to use the [LED Socket Kit](http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit) with the [Rotary Angle Sensor](http://www.seeedstudio.com/wiki/Grove_-_Rotary_Angle_Sensor) to create a fade effect using Pulse Width Modulation (PWM). This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
+This sample will demonstrate how to use the Grove Button to Digital Port 2.  This sample is designed to run on a Raspberry Pi 2 running Windows 10 IoT Core. The application is written as a Background Task and will run in Windows 10 IoT Core without any user interface.
 
 ### Requirements
 You must have the following:
@@ -72,8 +72,7 @@ The project should now have all the updated references you need.
 ### Setup the Hardware
 For this sample, connect the following:
 
-1. Rotary Angle Sensor to __A2__ (Analog Pin 2)
-2. LED Socker Kit (any color) to __D5__ (Digital Pin 5)
+1. Connect the Button Sensor to __D2__ (Digital Pin 2)
 
 ### Run the Sample
 To run the sample... 
