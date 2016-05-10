@@ -6,7 +6,7 @@ function AnalogSensor(pin) {
   Sensor.apply(this, Array.prototype.slice.call(arguments))
   this.pin = pin
 }
-util.inherits(AnalogSensor, Sensor);
+util.inherits(AnalogSensor, Sensor)
 AnalogSensor.prototype = new AnalogSensor()
 
 AnalogSensor.prototype.read = function(length) {
