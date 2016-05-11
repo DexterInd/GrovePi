@@ -46,12 +46,10 @@ function start() {
         accSensor.watch()
 
         // Ultrasonic Ranger
-        /*
         console.log('Ultrasonic Ranger Digital Sensor (start watch)')
         ultrasonicSensor.on('change', function(res) {
           console.log('Ultrasonic Ranger onChange value=' + res)
         })
-        */
         //ultrasonicSensor.watch()
 
         // Air Quality Sensor

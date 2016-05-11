@@ -8,6 +8,7 @@ function ChainableRGBLedDigitalSensor(pin, numLeds) {
 ChainableRGBLedDigitalSensor.prototype = new DigitalSensor()
 
 ChainableRGBLedDigitalSensor.prototype.init = function() {
+  this.board.pinMode(this.board.OUTPUT)
   var write = this.board.writeBytes(commands.chainableRgbLedInit.concat([this.pin, this.numLeds, commands.unused]))
   if (write) {
     this.board.wait(500)
@@ -17,6 +18,7 @@ ChainableRGBLedDigitalSensor.prototype.init = function() {
   }
 }
 ChainableRGBLedDigitalSensor.prototype.setPattern = function(pattern, whichLed) {
+  this.board.pinMode(this.board.OUTPUT)
   var write = this.board.writeBytes(commands.chainableRgbLedSetPattern.concat([this.pin, pattern, whichLed]))
   if (write) {
     this.board.wait(500)
@@ -26,6 +28,7 @@ ChainableRGBLedDigitalSensor.prototype.setPattern = function(pattern, whichLed) 
   }
 }
 ChainableRGBLedDigitalSensor.prototype.setModulo = function(offset, divisor) {
+  this.board.pinMode(this.board.OUTPUT)
   var write = this.board.writeBytes(commands.chainableRgbLedSetModulo.concat([this.pin, offset, divisor]))
   if (write) {
     this.board.wait(500)
@@ -35,6 +38,7 @@ ChainableRGBLedDigitalSensor.prototype.setModulo = function(offset, divisor) {
   }
 }
 ChainableRGBLedDigitalSensor.prototype.setLevel = function(level, reverse) {
+  this.board.pinMode(this.board.OUTPUT)
   var write = this.board.writeBytes(commands.chainableRgbLedSetLevel.concat([this.pin, level, reverse]))
   if (write) {
     this.board.wait(500)

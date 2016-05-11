@@ -7,7 +7,6 @@ function LightAnalogSensor(pin) {
 LightAnalogSensor.prototype = new AnalogSensor()
 
 LightAnalogSensor.prototype.read = function() {
-  this.board.pinMode(this.board.INPUT)
   var res = AnalogSensor.prototype.read.call(this)
   var number = parseInt(res)
   var resistance = number <= 0 ? 0 : +(Number(parseFloat((1023 - number) * 10 / number)).toFixed(2))

@@ -79,6 +79,21 @@ module.exports = {
   // Set pin for the IR reciever
   , irRecvPin                                   : [22]
 
+  // Grove Dust sensor
+  , dustSensorRead                              : [10]
+  , dustSensorEn                                : [14]
+  , dustSensorDis                               : [15]
+
+  // Encoder
+  , encoderRead                                 : [11]
+  , encoderEn                                   : [16]
+  , encoderDis                                  : [17]
+
+  // Grove Flow sensor
+  , flowRead                                    : [12]
+  , flowEn                                      : [18]
+  , flowDis                                     : [13]
+
   // This allows us to be more specific about which commands contain unused bytes
   , unused                                      : 0
 };
