@@ -96,7 +96,7 @@ int j;
 void loop()
 {
   long dur,RangeCm;
-  if(index==4)
+  if(index==4 && flag==0)
   {
     flag=1;
     //IR reciever pin set command
