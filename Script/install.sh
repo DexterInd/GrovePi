@@ -160,17 +160,11 @@ sudo chmod +x ${DIR_PATH}/Software/Scratch/GrovePi_Scratch_Scripts/*.sh
 echo " "
 echo "Making changes to Arduino . . ."
 echo "==============================="
-PKG_NAME="avrdude"
-PKG_VER="5.10-4"
-PKG_INSTALLED=$(dpkg-query -W -f='${Version}' ${PKG_NAME} 2>/dev/null)
-PKG_RES=$?
 
-if [ ${PKG_RES} -eq -1 ]; then
-    cd /tmp
-    wget http://project-downloads.drogon.net/gertboard/${PKG_NAME}_${PKG_VER}_armhf.deb
-    sudo dpkg -i avrdude_5.10-4_armhf.deb
-    sudo chmod 4755 /usr/bin/avrdude
-fi
+cd /tmp
+wget http://project-downloads.drogon.net/gertboard/avrdude_5.10-4_armhf.deb
+sudo dpkg -i avrdude_5.10-4_armhf.deb
+sudo chmod 4755 /usr/bin/avrdude
 
 cd /tmp
 wget http://project-downloads.drogon.net/gertboard/setup.sh
