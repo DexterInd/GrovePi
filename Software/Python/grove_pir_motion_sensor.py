@@ -51,7 +51,7 @@ import grovepi
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # SIG,NC,VCC,GND
-pir_sensor = 7 
+pir_sensor = 8
 motion=0
 grovepi.pinMode(pir_sensor,"INPUT")
 
