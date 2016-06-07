@@ -10,3 +10,5 @@ GenericDigitalInputSensor.prototype = new DigitalSensor()
 GenericDigitalInputSensor.prototype.read = function() {
     return DigitalSensor.prototype.read.call(this)
 }
+
+module.exports = GenericDigitalInputSensor
