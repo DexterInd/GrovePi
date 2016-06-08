@@ -26,3 +26,5 @@ GenericDigitalOutputSensor.prototype.off = function() {
       return false
   }
 }
+
+module.exports = GenericDigitalOutputSensor
