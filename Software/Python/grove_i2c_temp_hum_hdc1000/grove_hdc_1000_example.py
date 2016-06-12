@@ -6,7 +6,7 @@
 #
 # Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
-# This example is derived from the HDC1000 example by aklib here: https://github.com/nonNoise/akilib/blob/master/examples/raspberrypi/hdc1000.py
+# This example is derived from the HDC1000 example by control everyhing here: https://github.com/ControlEverythingCommunity/HDC1000/blob/master/Python/HDC1000.py
 '''
 ## License
 
