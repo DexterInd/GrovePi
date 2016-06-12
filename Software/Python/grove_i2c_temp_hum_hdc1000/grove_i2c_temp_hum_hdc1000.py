@@ -49,56 +49,27 @@ class HDC1000:
     I2C_ADDR = 0
     def __init__(self):
         self.I2C_ADDR=0x40
-        
-    def i2cReg(self,wr,addr=0x00,data=0x0000):
-        try :
-            if(wr == "w"):
-                tmp = (data&0x00FF)<<8 | (data&0xFF00)>>8
-                #print "W:0x%02X = 0x%04X" % (addr,data)
-                return bus.write_word_data(self.I2C_ADDR,addr,tmp)
-            elif(wr == "r"):
-                tmp =  bus.read_word_data(self.I2C_ADDR,addr)
-                tmp = (tmp&0x00FF)<<8 | (tmp&0xFF00)>>8               
-                #print "R:0x%02X = 0x%04X" % (addr,tmp)
-                return tmp
-            else :
-               return -1
-        except IOError as err:
-            print("No ACK!")
-            time.sleep(0.1)
-            self.i2cReg(wr,addr,data)
-            
+ 
     def Config(self):
-         # 0 - 7 bit = 0
-         # 8bit :     HRES1 = 0
-         # 9bit :     HRES2 = 0 14bit mode
-         # 10bit :     TRES = 0
-         # 11bit :     BTST = 0 (ReadOnly)
-         # 12bit :     MODE = 0
-         # 13bit :     Reserved = 0
-         # 14bit :     Reserved = 0
-         # 15bit :     RST = 0
-         self.i2cReg('r',0xFE)
-         self.i2cReg('r',0xFF)
-         self.i2cReg('r',0x02)
-         self.i2cReg('w',0x02,0x0000)
-         self.i2cReg('r',0x02)
-         time.sleep(0.01)
+        # HDC1000 address, 0x40(64)
+        # Select configuration register, 0x02(02)
+        #		0x30(48)	Temperature, Humidity enabled, Resolultion = 14-bits, Heater on
+        bus.write_byte_data(self.I2C_ADDR, 0x02, 0x30)
          
     def Temperature(self):
         try :
             bus.write_byte(self.I2C_ADDR,0x00)
-            time.sleep(0.20)
-            d=[0]*2
-            # print self.i2c.read_block_data(I2C_ADDR,0x00)
-            d[0] = bus.read_byte(self.I2C_ADDR) 
-            time.sleep(0.001)
-            d[1] = bus.read_byte(self.I2C_ADDR) 
-            time.sleep(0.001)
-            #print "0x%02X :0x%02X" % (d[0],d[1])
-            raw = ( d[0]<<8 | d[1] )
-            #print (float(raw)/(2**16))*(165-40)
-            return float(raw)/65536.0*165.0-40.0
+            time.sleep(0.50)
+
+            # Read data back, 2 bytes
+            # temp MSB, temp LSB
+            data0 = bus.read_byte(0x40)
+            data1 = bus.read_byte(0x40)
+
+            # Convert the data
+            temp = (data0 * 256) + data1
+            cTemp = (temp / 65536.0) * 165.0 - 40
+            return cTemp
         except IOError as err:
             print("No ACK!")
             time.sleep(0.1)
@@ -106,16 +77,18 @@ class HDC1000:
 
     def Humidity(self):
         try :
-            bus.write_byte(self.I2C_ADDR,0x00)
-            time.sleep(0.10)
-            d=[0]*2
-            d[0] = bus.read_byte(self.I2C_ADDR) 
-            time.sleep(0.001)
-            d[1] = bus.read_byte(self.I2C_ADDR) 
-            time.sleep(0.001)
-            #print "0x%02X :0x%02X" % (d[0],d[1])
-            raw = ( d[0]<<8 | d[1] )
-            return float(raw)/65536.0*100.0
+            bus.write_byte(self.I2C_ADDR,0x01)
+            time.sleep(0.50)
+            
+            # Read data back, 2 bytes
+            # humidity MSB, humidity LSB
+            data0 = bus.read_byte(0x40)
+            data1 = bus.read_byte(0x40)
+
+            # Convert the data
+            humidity = (data0 * 256) + data1
+            humidity = (humidity / 65536.0) * 100.0
+            return humidity
         except IOError as err:
             print("No ACK!")
             time.sleep(0.1)
