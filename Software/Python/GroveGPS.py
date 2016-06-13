@@ -28,7 +28,7 @@ class GPS:
 	def read(self):	
 		while True:
 			# GPS.inp=ser.readline()
-			GPS.inp = readlineCR()
+			GPS.inp = readlineCR().strip()
 			if GPS.inp[:6] =='$GPGGA': # GGA data , packet 1, has all the data we need
 				break
 			time.sleep(0.1)
