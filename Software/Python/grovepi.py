@@ -297,9 +297,9 @@ def dht(pin, module_type):
 		number = read_i2c_block(address)
 		time.sleep(.1)
 		if number == -1:
-			return -1
+			return [-1,-1]
 	except (TypeError, IndexError):
-		return -1
+		return [-1,-1]
 	# data returned in IEEE format as a float in 4 bytes
 	
 	if p_version==2:
