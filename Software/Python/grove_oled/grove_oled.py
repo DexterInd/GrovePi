@@ -45,17 +45,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import smbus
+import sys
 import time
 import math
-import RPi.GPIO as GPIO
 import struct
 
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
+if sys.platform == 'uwp':
+    import winrt_smbus as smbus
     bus = smbus.SMBus(1)
 else:
-    bus = smbus.SMBus(0)
+    import smbus
+    import RPi.GPIO as GPIO
+    rev = GPIO.RPI_REVISION
+    if rev == 2 or rev == 3:
+        bus = smbus.SMBus(1)
+    else:
+        bus = smbus.SMBus(0)
+
 grayH= 0xF0
 grayL= 0x0F
 
