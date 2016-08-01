@@ -448,16 +448,24 @@ void loop()
     // [90, red, green, blue]
     else if(cmd[0] == 90)
     {
-      rgb[0] = cmd[1];
-      rgb[1] = cmd[2];
-      rgb[2] = cmd[3];
+      if(run_once)
+      {
+        rgb[0] = cmd[1];
+        rgb[1] = cmd[2];
+        rgb[2] = cmd[3];
+        run_once = 0;
+      }
     }
 
     // Initialise a RGB LED chain
     // [91, pin, num leds, unused]
     else if(cmd[0] == 91)
     {
-      rgbled[cmd[1]-2].begin(cmd[1], cmd[1]+1, cmd[2]);  // clock, data, num leds
+      if(run_once)
+      {
+        rgbled[cmd[1]-2].begin(cmd[1], cmd[1]+1, cmd[2]);  // clock, data, num leds
+        run_once = 0;
+      }
     }
     
     // Test colors, repeating red green blue
@@ -465,17 +473,21 @@ void loop()
     // [92, pin, num leds, color code]
     else if(cmd[0] == 92)
     {
-      rgbled[cmd[1]-2].begin(cmd[1], cmd[1]+1, cmd[2]);
-      
-      // figure out which color to display, a single bit for each rgb led
-      byte rr = ((cmd[3] & 4) >> 2) * 255,
-           gg = ((cmd[3] & 2) >> 1) * 255,
-           bb = ((cmd[3] & 1)) * 255;
-
-      // set each led to the specified color
-      for(int i = 0; i < cmd[2]; i++)
+      if(run_once)
       {
-        rgbled[cmd[1]-2].setColorRGB(i, rr, gg, bb);
+        rgbled[cmd[1]-2].begin(cmd[1], cmd[1]+1, cmd[2]);
+      
+        // figure out which color to display, a single bit for each rgb led
+        byte rr = ((cmd[3] & 4) >> 2) * 255,
+             gg = ((cmd[3] & 2) >> 1) * 255,
+             bb = ((cmd[3] & 1)) * 255;
+
+        // set each led to the specified color
+        for(int i = 0; i < cmd[2]; i++)
+        {
+          rgbled[cmd[1]-2].setColorRGB(i, rr, gg, bb);
+        }
+        run_once = 0;
       }
     }
 
@@ -485,23 +497,27 @@ void loop()
     // [93, pin, pattern, which led]
     else if(cmd[0] == 93)
     {
-      if(cmd[2] == 0) {
-        // set an individual led to the stored color
-        rgbled[cmd[1]-2].setColorRGB(cmd[3], rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
-      }
-      else {
-        // set all leds to stored color
-        byte num_leds = rgbled[cmd[1]-2].getNumLeds();
+      if(run_once)
+      {
+        if(cmd[2] == 0) {
+          // set an individual led to the stored color
+          rgbled[cmd[1]-2].setColorRGB(cmd[3], rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+        }
+        else {
+          // set all leds to stored color
+          byte num_leds = rgbled[cmd[1]-2].getNumLeds();
 
-        for(int i = 0; i < num_leds; i++)
-        {
-          // cmd[2] == 1: set all leds other than this one to the stored color
-          // cmd[2] == 2: this led and all previous leds, inwards
-          // cmd[2] == 3: this led and all next leds, outwards
-          if((cmd[2] == 1 && i != cmd[3]) || (cmd[2] == 2 && i <= cmd[3]) || (cmd[2] == 3 && i >= cmd[3])) {
-            rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+          for(int i = 0; i < num_leds; i++)
+          {
+            // cmd[2] == 1: set all leds other than this one to the stored color
+            // cmd[2] == 2: this led and all previous leds, inwards
+            // cmd[2] == 3: this led and all next leds, outwards
+            if((cmd[2] == 1 && i != cmd[3]) || (cmd[2] == 2 && i <= cmd[3]) || (cmd[2] == 3 && i >= cmd[3])) {
+              rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+            }
           }
         }
+        run_once = 0;
       }
     }
     
@@ -511,21 +527,25 @@ void loop()
     // [94, pin, led offset, modulo divisor]
     else if(cmd[0] == 94)
     {
-      // modulo divisor must be >= 1
-      if(cmd[3] < 1) {
-        cmd[3] = 1;
-      }
-
-      // get the chain length
-      byte num_leds = rgbled[cmd[1]-2].getNumLeds();
-      
-      // starting at the offset, step through each led and if the result of the modulo operator results in zero, set the stored color on the led
-      for(int i = cmd[2]; i < num_leds; i++)
+      if(run_once)
       {
-        // use modulo to set every n led
-        if((i - cmd[2]) % cmd[3] == 0) {
-          rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+        // modulo divisor must be >= 1
+        if(cmd[3] < 1) {
+          cmd[3] = 1;
         }
+
+        // get the chain length
+        byte num_leds = rgbled[cmd[1]-2].getNumLeds();
+      
+        // starting at the offset, step through each led and if the result of the modulo operator results in zero, set the stored color on the led
+        for(int i = cmd[2]; i < num_leds; i++)
+        {
+          // use modulo to set every n led
+          if((i - cmd[2]) % cmd[3] == 0) {
+            rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+          }
+        }
+        run_once = 0;
       }
     }
     
@@ -533,33 +553,37 @@ void loop()
     // [95, pin, level, reverse]
     else if(cmd[0] == 95)
     {
-      // get the chain length
-      byte num_leds = rgbled[cmd[1]-2].getNumLeds();
-
-      if(cmd[3] == 0)
+      if(run_once)
       {
-        // outwards
-        for(int i = 0; i < num_leds; i++)
+        // get the chain length
+        byte num_leds = rgbled[cmd[1]-2].getNumLeds();
+
+        if(cmd[3] == 0)
         {
-          if(cmd[2] > i) {
-            rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
-          }
-          else {
-            rgbled[cmd[1]-2].setColorRGB(i, 0, 0, 0);  // which led, red, green, blue
+          // outwards
+          for(int i = 0; i < num_leds; i++)
+          {
+            if(cmd[2] > i) {
+              rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+            }
+            else {
+              rgbled[cmd[1]-2].setColorRGB(i, 0, 0, 0);  // which led, red, green, blue
+            }
           }
         }
-      }
-      else {
-        // inwards
-        for(int i = num_leds; i > 0; i--)
-        {
-          if((num_leds - cmd[2]) <= i) {
-            rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
-          }
-          else {
-            rgbled[cmd[1]-2].setColorRGB(i, 0, 0, 0);  // which led, red, green, blue
+        else {
+          // inwards
+          for(int i = num_leds; i > 0; i--)
+          {
+            if((num_leds - cmd[2]) <= i) {
+              rgbled[cmd[1]-2].setColorRGB(i, rgb[0], rgb[1], rgb[2]);  // which led, red, green, blue
+            }
+            else {
+              rgbled[cmd[1]-2].setColorRGB(i, 0, 0, 0);  // which led, red, green, blue
+            }
           }
         }
+        run_once = 0;
       }
     }
     else if(cmd[0]==dust_sensor_en_cmd)
