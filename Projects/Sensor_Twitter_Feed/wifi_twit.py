@@ -1,5 +1,5 @@
 # Tweet the temperature, light, and sound levels with our Raspberry Pi
-# http://dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/sensor-twitter-feed/
+# http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/raspberry-pi-twitter-sensor-feed/
 
 # GrovePi + Sound Sensor + Light Sensor + Temperature Sensor + LED
 # http://www.seeedstudio.com/wiki/Grove_-_Sound_Sensor
