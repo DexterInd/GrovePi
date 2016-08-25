@@ -1,5 +1,7 @@
 ## **Mine Controls.**
 
+![Picture](Minecraft-dexter-industries.jpg)
+
 ### What is it?
 Mine Controls are custom hardware controls for Minecraft and the Raspberry Pi!  In this project we show you how to build a custom controller for Minecraft using the Raspberry Pi and the GrovePi.  You can get [all the hardware for this project from the Dexter Industries website.](http://dexterindustries.com/grovepi)
 
