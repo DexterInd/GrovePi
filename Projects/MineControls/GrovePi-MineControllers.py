@@ -3,9 +3,11 @@
 # In this example, we show you how to build your own custom Minecraft controller
 # with the GrovePi.
 # See more about the GrovePi at http://dexterindustries.com/grovepi
+# A great reference we used is the MagPi's Essentials Minecraft Guide: https://www.raspberrypi.org/magpi-issues/Essentials_Minecraft_v1.pdf
 '''
 Software Setup:
   Before we begin, run the following commands to setup:
+    sudo apt-get install minecraft-pi 
     sudo pip3 install python3-xlib
     sudo pip3 install pyautogui
 
