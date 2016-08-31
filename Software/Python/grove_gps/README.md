@@ -17,6 +17,7 @@ GrovePi Examples for using the [Grove GPS Module](http://www.seeedstudio.com/dep
 ```
 
 **gps.lat** and **gps.NS** go hand in hand, so do **gps.lon** and **gps.EW**
+
 **gps.latitude** and **gps.longitude** are calculated to give you a Google Map appropriate format and make use of negative numbers to indicate either South or West
 
 *Note*:
