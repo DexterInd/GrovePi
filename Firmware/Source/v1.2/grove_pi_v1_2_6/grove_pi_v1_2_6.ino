@@ -3,18 +3,18 @@
 // http://www.dexterindustries.com/grovepi
 
 #include <Wire.h>
-#include "MMA7660.h"
+//#include "MMA7660.h"
 #include "DS1307.h"
 #include "DHT.h"
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "ChainableLED.h"
-#include "IRSendRev.h"
+##include "IRSendRev.h"
 #include "Encoder.h"
 #include "TimerOne.h"
 #include "VirtualWire.h"
 
-MMA7660 acc;
+//MMA7660 acc;
 DS1307 clock;
 DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
@@ -50,8 +50,8 @@ byte val=0,b[21],float_array[4],dht_b[21],ultrasonic_b[3];
 unsigned char dta[21];
 int length;
 int aRead=0;
-byte accFlag=0,clkFlag=0;
-int8_t accv[3];
+//byte accFlag=0,clkFlag=0;
+//int8_t accv[3];
 byte rgb[] = { 0, 0, 0 };
 int run_once;
 
@@ -100,23 +100,23 @@ void loop()
   {
     flag=1;
     //IR reciever pin set command
-    if(cmd[0]==22)
-       IR.Init(cmd[1]);
+    //if(cmd[0]==22)
+       //IR.Init(cmd[1]);
     
     //Grove IR recieve command
-    else if(cmd[0]==21)
-    {
-        if(IR.IsDta())
-        {
-            int length= IR.Recv(dta);
-            b[0]=1;
-            for(i=0;i<20;i++) 
-                b[i+1]=dta[i];
-        }
-    }
+    //else if(cmd[0]==21)
+    //{
+        //if(IR.IsDta())
+        //{
+            //int length= IR.Recv(dta);
+            //b[0]=1;
+            //for(i=0;i<20;i++) 
+                //b[i+1]=dta[i];
+        //}
+    //}
     
     //Digital Read
-    else if(cmd[0]==1)
+    if(cmd[0]==1)
       val=digitalRead(cmd[1]);
 
     //Digital Write
@@ -169,41 +169,41 @@ void loop()
       b[3] = 6;
     }
     //Accelerometer x,y,z, read
-    else if(cmd[0]==20)
-    {
-      if(accFlag==0)
-      {
-        acc.init();
-        accFlag=1;
-      }
-      acc.getXYZ(&accv[0],&accv[1],&accv[2]);
-      b[1]=accv[0];
-      b[2]=accv[1];
-      b[3]=accv[2];
+    //else if(cmd[0]==20)
+    //{
+      //if(accFlag==0)
+      //{
+        //acc.init();
+        //accFlag=1;
+      //}
+      //acc.getXYZ(&accv[0],&accv[1],&accv[2]);
+      //b[1]=accv[0];
+      //b[2]=accv[1];
+      //b[3]=accv[2];
     }
     //RTC tine read
-    else if(cmd[0]==30)
-    {
-      if(clkFlag==0)
-      {
-        clock.begin();
+    //else if(cmd[0]==30)
+    //{
+      //if(clkFlag==0)
+      //{
+        //clock.begin();
         //Set time the first time
         //clock.fillByYMD(2013,1,19);
         //clock.fillByHMS(15,28,30);//15:28 30"
         //clock.fillDayOfWeek(SAT);//Saturday
         //clock.setTime();//write time to the RTC chip
-        clkFlag=1;
-      }
-      clock.getTime();
-      b[1]=clock.hour;
-      b[2]=clock.minute;
-      b[3]=clock.second;
-      b[4]=clock.month;
-      b[5]=clock.dayOfMonth;
-      b[6]=clock.year;
-      b[7]=clock.dayOfMonth;
-      b[8]=clock.dayOfWeek;
-    }
+        //clkFlag=1;
+      //}
+      //clock.getTime();
+      //b[1]=clock.hour;
+      //b[2]=clock.minute;
+      //b[3]=clock.second;
+      //b[4]=clock.month;
+      //b[5]=clock.dayOfMonth;
+      //b[6]=clock.year;
+      //b[7]=clock.dayOfMonth;
+      //b[8]=clock.dayOfWeek;
+    //}
     //Grove temp and humidity sensor pro
     //40- Temperature
     else if(cmd[0]==40)
@@ -784,21 +784,21 @@ void sendData()
     Wire.write(ultrasonic_b, 3);
     cmd[0] = 0;
   }
-  if(cmd[0] == 8 || cmd[0] == 20)
+  if(cmd[0] == 8)
     Wire.write(b, 4);
-  if(cmd[0] == 30) 
-    Wire.write(b, 9);
+  //if(cmd[0] == 30) 
+    //Wire.write(b, 9);
   if(cmd[0] == 40)
   {
     Wire.write(dht_b, 9);
     cmd[0] = 0;
   }
 
-  if(cmd[0]==21)
-  {
-    Wire.write(b,21);     
-    b[0]=0;
-  }
+  //if(cmd[0]==21)
+  //{
+    //Wire.write(b,21);     
+    //b[0]=0;
+  //}
   if(cmd[0]==dust_sensor_read_cmd)
   {
     Wire.write(b,4);     
