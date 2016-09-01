@@ -9,7 +9,7 @@
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "ChainableLED.h"
-##include "IRSendRev.h"
+//#include "IRSendRev.h"
 #include "Encoder.h"
 #include "TimerOne.h"
 #include "VirtualWire.h"
@@ -180,7 +180,7 @@ void loop()
       //b[1]=accv[0];
       //b[2]=accv[1];
       //b[3]=accv[2];
-    }
+    //}
     //RTC tine read
     //else if(cmd[0]==30)
     //{
