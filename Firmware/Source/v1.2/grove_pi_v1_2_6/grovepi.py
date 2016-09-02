@@ -79,10 +79,6 @@ pMode_cmd = [5]
 uRead_cmd = [7]
 # Get firmware version
 version_cmd = [8]
-# Accelerometer (+/- 1.5g) read
-acc_xyz_cmd = [20]
-# RTC get time
-rtc_getTime_cmd = [30]
 # DHT Pro sensor temperature
 dht_temp_cmd = [40]
 
@@ -137,12 +133,6 @@ chainableRgbLedSetPattern_cmd = [93]
 chainableRgbLedSetModulo_cmd = [94]
 # sets leds similar to a bar graph, reversible
 chainableRgbLedSetLevel_cmd = [95]
-
-# Read the button from IR sensor
-ir_read_cmd=[21]
-# Set pin for the IR reciever
-ir_recv_pin_cmd=[22]
-
 dus_sensor_read_cmd=[10]
 dust_sensor_en_cmd=[14]
 dust_sensor_dis_cmd=[15]
@@ -269,31 +259,6 @@ def version():
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return "%s.%s.%s" % (number[1], number[2], number[3])
-
-
-# Read Grove Accelerometer (+/- 1.5g) XYZ value
-def acc_xyz():
-	write_i2c_block(address, acc_xyz_cmd + [unused, unused, unused])
-	time.sleep(.1)
-	read_i2c_byte(address)
-	number = read_i2c_block(address)
-	if number[1] > 32:
-		number[1] = - (number[1] - 224)
-	if number[2] > 32:
-		number[2] = - (number[2] - 224)
-	if number[3] > 32:
-		number[3] = - (number[3] - 224)
-	return (number[1], number[2], number[3])
-
-
-# Read from Grove RTC
-def rtc_getTime():
-	write_i2c_block(address, rtc_getTime_cmd + [unused, unused, unused])
-	time.sleep(.1)
-	read_i2c_byte(address)
-	number = read_i2c_block(address)
-	return number
-
 
 # Read and return temperature and humidity from Grove DHT Pro
 def dht(pin, module_type):
@@ -502,22 +467,6 @@ def chainableRgbLed_setLevel(pin, level, reverse):
 	time.sleep(.05)
 	return 1
 
-# Grove - Infrared Receiver- get the commands received from the Grove IR sensor
-def ir_read_signal():
-	try:
-		write_i2c_block(address,ir_read_cmd+[unused,unused,unused])
-		time.sleep(.1)
-		data_back= bus.read_i2c_block_data(address, 1)[0:21]
-		if (data_back[1]!=255):
-			return data_back
-		return [-1]*21
-	except IOError:
-		return [-1]*21
-		
-# Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
-def ir_recv_pin(pin):
-	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
-	
 def dust_sensor_en():
 	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
 	time.sleep(.2)

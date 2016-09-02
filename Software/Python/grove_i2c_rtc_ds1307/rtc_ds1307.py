@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove I2C RTC (http://www.seeedstudio.com/wiki/Grove_-_RTC)
+# GrovePi Library for using the Grove - RTC v1.1(http://wiki.seeedstudio.com/wiki/Grove_-_RTC)
+#		
+# This example returns time stored in the Real time clock(RTC)- DS1307
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -32,18 +34,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-
 import time
-import grovepi
+import datetime
+import grove_i2c_rtc_ds1307
 
-# Connect the Grove Real Time Clock to any I2C port eg. I2C-1
-# Can be found at I2C address 0x68
-# SCL,SDA,VCC,GND
+# Main Program
+
+print ""
+print "               RTC DS1307                    "
+print ""
+print "Program Started at:"+ time.strftime("%Y-%m-%d %H:%M:%S")
+ds1307 = grove_i2c_rtc_ds1307.rtc()
+
+# Writes the date and time of Raspberry Pi into DS 1307
+ds1307.write_now()
+
+## Another way to write the date and time to DS1307 -Uncomment the following 3 lines##
+
+# Writes the date and time stored in the object "dt" into DS 1307
+#dt = datetime.datetime.strptime("02/09/16 17:00", "%d/%m/%y %H:%M")
+#ds1307.write_datetime(dt)
+
+# Main Loop - sleeps 10 Seconds, then reads and prints values of all clocks
 
 while True:
-    try:
-        print(grovepi.rtc_getTime())
-        time.sleep(.5)
-
-    except IOError:
-        print ("Error")
+    # Prints the date and time of Raspberry Pi
+	print ""
+	print ""
+	print "Raspberry Pi=\t" + time.strftime("%Y-%m-%d %H:%M:%S")
+	# Prints the date and time of DS 1307
+	print "DS1307=\t\t%s" % ds1307.read_datetime()
+	# Waits for 10 seconds and then again reads and prints the time of both the clocks
+	time.sleep(10.0)
