@@ -1,4 +1,4 @@
-rove - RTC DS1307 v1.1 Python library and examples
+Grove - RTC DS1307 v1.1 Python library and examples
 =======================================================
 ####This library is for using the Grove - RTC DS1307 v1.1(http://wiki.seeedstudio.com/wiki/Grove_-_RTC)
 
