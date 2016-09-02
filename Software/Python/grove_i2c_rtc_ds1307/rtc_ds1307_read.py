@@ -59,4 +59,4 @@ while True:
 	# Prints the date and time of DS 1307
 	print "DS1307=\t\t%s" % ds1307.read_datetime()
 	# Waits for 10 seconds and then again reads and prints the time of both the clocks
-    time.sleep(10.0)
+	time.sleep(10.0)
