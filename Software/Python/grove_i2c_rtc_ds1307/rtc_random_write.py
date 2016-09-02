@@ -63,4 +63,4 @@ while True:
 # Prints the date and time of Raspberry Pi
 	print "Raspberry Pi=\t" + time.strftime("%Y-%m-%d %H:%M:%S")
 # Waits for 10 seconds and then again reads and prints the time of both the clocks
-    time.sleep(10.0)
+	time.sleep(10.0)
