@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove - Gesture Sensor v1.0(http://www.seeedstudio.com/depot/Grove-Gesture-p-2463.html)
+# GrovePi Library for using the Grove - RTC v1.1(http://wiki.seeedstudio.com/wiki/Grove_-_RTC)
 #		
-# This example returns a value when a user does an action over the sensor
+# This example returns time stored in the Real time clock(RTC)- DS1307
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -41,26 +41,28 @@ import grove_i2c_rtc_ds1307
 # Main Program
 
 print ""
-print "              RTC DS1307 Random Write                   "
+print "               RTC DS1307                    "
 print ""
 print "Program Started at:"+ time.strftime("%Y-%m-%d %H:%M:%S")
-ds1307 = grove_i2c_rtc_ds1307.grove_i2c_rtc_ds1307(1, 0x68)
-dt = datetime.datetime.strptime("02/09/16 17:00", "%d/%m/%y %H:%M")
+ds1307 = grove_i2c_rtc_ds1307.rtc()
+
+# Writes the date and time of Raspberry Pi into DS 1307
+ds1307.write_now()
+
+## Another way to write the date and time to DS1307 -Uncomment the following 3 lines##
 
 # Writes the date and time stored in the object "dt" into DS 1307
-ds1307.write_datetime(dt)
-# Prints the date and time written into DS 1307
-print "Random date and time written into DS1307=\t\t%s" % ds1307.read_datetime()
+#dt = datetime.datetime.strptime("02/09/16 17:00", "%d/%m/%y %H:%M")
+#ds1307.write_datetime(dt)
 
 # Main Loop - sleeps 10 Seconds, then reads and prints values of all clocks
 
-
 while True:
-    
+    # Prints the date and time of Raspberry Pi
 	print ""
-# Prints the date and time of DS 1307
-	print "DS1307=\t\t%s" % ds1307.read_datetime()
-# Prints the date and time of Raspberry Pi
+	print ""
 	print "Raspberry Pi=\t" + time.strftime("%Y-%m-%d %H:%M:%S")
-# Waits for 10 seconds and then again reads and prints the time of both the clocks
+	# Prints the date and time of DS 1307
+	print "DS1307=\t\t%s" % ds1307.read_datetime()
+	# Waits for 10 seconds and then again reads and prints the time of both the clocks
 	time.sleep(10.0)

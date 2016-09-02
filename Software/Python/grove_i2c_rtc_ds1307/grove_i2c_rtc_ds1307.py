@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# GrovePi Library for using the Grove - Gesture Sensor v1.0(http://www.seeedstudio.com/depot/Grove-Gesture-p-2463.html)
+# GrovePi Library for using the Grove - RTC v1.1(http://wiki.seeedstudio.com/wiki/Grove_-_RTC)
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -70,7 +70,7 @@ def _int_to_bcd(n):
     return bcd >> 1
 
 
-class grove_i2c_rtc_ds1307():
+class rtc():
     _REG_SECONDS = 0x00
     _REG_MINUTES = 0x01
     _REG_HOURS = 0x02
