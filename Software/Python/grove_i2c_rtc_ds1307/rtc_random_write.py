@@ -44,13 +44,13 @@ print ""
 print "              RTC DS1307 Random Write                   "
 print ""
 print "Program Started at:"+ time.strftime("%Y-%m-%d %H:%M:%S")
-ds1307 = SDL_DS1307.SDL_DS1307(1, 0x68)
-dt = datetime.strptime("02/09/16 17:00", "%d/%m/%y %H:%M")
+ds1307 = grove_i2c_rtc_ds1307.grove_i2c_rtc_ds1307(1, 0x68)
+dt = datetime.datetime.strptime("02/09/16 17:00", "%d/%m/%y %H:%M")
 
 # Writes the date and time stored in the object "dt" into DS 1307
-  ds1307.write_datetime(dt)
+ds1307.write_datetime(dt)
 # Prints the date and time written into DS 1307
-  print "Random date and time written into DS1307=\t\t%s" % ds1307.read_datetime()
+print "Random date and time written into DS1307=\t\t%s" % ds1307.read_datetime()
 
 # Main Loop - sleeps 10 Seconds, then reads and prints values of all clocks
 

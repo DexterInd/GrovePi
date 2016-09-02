@@ -44,13 +44,14 @@ print ""
 print "              RTC DS1307 Write                   "
 print ""
 print "Program Started at:"+ time.strftime("%Y-%m-%d %H:%M:%S")
-ds1307 = SDL_DS1307.SDL_DS1307(1, 0x68)
+ds1307 = grove_i2c_rtc_ds1307.grove_i2c_rtc_ds1307(1, 0x68)
 # Writes the date and time of Raspberry Pi into DS 1307
 ds1307.write_now()
 print ""
+print ""
 # Prints the date and time written into DS 1307
-print "Date and Time written into DS1307=\t\t%s" % ds1307.read_datetime()
+print "Date and Time written into DS1307=\t%s" % ds1307.read_datetime()
 # Prints the date and time of Raspberry Pi
-print " Date and time of Raspberry Pi=\t" + time.strftime("%Y-%m-%d %H:%M:%S")
+print "Date and Time of Raspberry Pi=\t\t" + time.strftime("%Y-%m-%d %H:%M:%S")
 
 	

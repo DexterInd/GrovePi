@@ -34,38 +34,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-import sys
 import time
 import datetime
-
-import SDL_DS1307
+import grove_i2c_rtc_ds1307
 
 # Main Program
 
 print ""
-print "Test SDL_DS1307 Version 1.0 - SwitchDoc Labs"
-print ""
+print "              RTC DS1307 Read                   "
 print ""
 print "Program Started at:"+ time.strftime("%Y-%m-%d %H:%M:%S")
-
-filename = time.strftime("%Y-%m-%d%H:%M:%SRTCTest") + ".txt"
-starttime = datetime.datetime.utcnow()
-
-ds1307 = SDL_DS1307.SDL_DS1307(1, 0x68)
+ds1307 = grove_i2c_rtc_ds1307.grove_i2c_rtc_ds1307(1, 0x68)
+# Writes the date and time of Raspberry Pi into DS 1307
 ds1307.write_now()
 
-# Main Loop - sleeps 10 minutes, then reads and prints values of all clocks
+# Main Loop - sleeps 10 Seconds, then reads and prints values of all clocks
 
 
 while True:
-
-	currenttime = datetime.datetime.utcnow()
-
-	deltatime = currenttime - starttime
- 
+    # Prints the date and time of Raspberry Pi
+	print ""
 	print ""
 	print "Raspberry Pi=\t" + time.strftime("%Y-%m-%d %H:%M:%S")
-	
+	# Prints the date and time of DS 1307
 	print "DS1307=\t\t%s" % ds1307.read_datetime()
-
-	time.sleep(10.0)
+	# Waits for 10 seconds and then again reads and prints the time of both the clocks
+    time.sleep(10.0)

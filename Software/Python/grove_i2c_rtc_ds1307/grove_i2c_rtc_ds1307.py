@@ -70,7 +70,7 @@ def _int_to_bcd(n):
     return bcd >> 1
 
 
-class SDL_DS1307():
+class grove_i2c_rtc_ds1307():
     _REG_SECONDS = 0x00
     _REG_MINUTES = 0x01
     _REG_HOURS = 0x02
