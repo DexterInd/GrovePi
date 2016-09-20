@@ -19,5 +19,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-![alt text](https://github.com/Shoban94/GrovePi/Hardware/GrovePi Graphical Datasheet.jpg)
