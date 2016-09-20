@@ -80,6 +80,7 @@ class MMA7660FC:
                  bus.write_byte_data(self.address, SR, Sampling_Rate)
                  time.sleep(0.5)
 				 
+		# Returns the current reading from the sensor for each axis in m/s^2 	
         def getAxes(self):
         # Read data back from 0x00, 3 bytes
                  data=bus.read_i2c_block_data(self.address, MMA7660_X, 3)
