@@ -70,11 +70,16 @@ class MMA7660FC:
                  self.address = ADDR
                  self.setMode(MODE_ACTIVE)
                  self.setSampleRate(SR_AUTO_SLEEP_1) #1 Sample/second active
+				 
+		# Sets the Mode of Accelerometer (Standby/Active)
         def setMode(self, Mode_Name):
                  bus.write_byte_data(self.address, MODE, Mode_Name)
+				 
+        # Sets number of Samples taken per second
 	def setSampleRate(self, Sampling_Rate):
                  bus.write_byte_data(self.address, SR, Sampling_Rate)
                  time.sleep(0.5)
+				 
         def getAxes(self):
         # Read data back from 0x00, 3 bytes
                  data=bus.read_i2c_block_data(self.address, MMA7660_X, 3)
