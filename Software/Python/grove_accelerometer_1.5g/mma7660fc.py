@@ -42,7 +42,6 @@ bus = smbus.SMBus(1 if int(revision, 16) >= 4 else 0)
 # MMA7660FC constants
 SENSITIVITY = 21.33 # Sensitivity = 21.33counts/g
 EARTH_GRAVITY_MS2   = 9.80665    # 1g = 9.80665
-ADDR        = 0x4c
 MMA7660_X   = 0x00
 MMA7660_Y   = 0x01
 MMA7660_Z   = 0x02
@@ -66,8 +65,8 @@ PDET       = 0x09
 PD         = 0x0A
 
 class MMA7660FC:
-        def __init__(self):
-                 self.address = ADDR
+        def __init__(self, address= 0X4c):
+                 self.address = address
                  self.setMode(MODE_ACTIVE)
                  self.setSampleRate(SR_AUTO_SLEEP_1) #1 Sample/second active
 				 
