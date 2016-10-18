@@ -11,9 +11,9 @@ See the [full project description for making a custom Minecraft controller for y
 
 Software Setup:
   Before we begin, run the following commands to setup:
-    `sudo apt-get install minecraft-pi 
-    sudo pip3 install python3-xlib
-    sudo pip3 install pyautogui`
+    `sudo apt-get install minecraft-pi `
+    `sudo pip3 install python3-xlib`
+    `sudo pip3 install pyautogui`
 
 Hardware Setup:
   Setup the GrovePi on the Raspberry Pi.
