@@ -7,7 +7,7 @@ Mine Controls are custom hardware controls for Minecraft and the Raspberry Pi!  
 
 
 ### Setup
-See the [GoBox Missions here](http://www.dexterindustries.com/goboxmissions/).
+See the [full project descriptin for making a custom Minecraft controller for your Raspberry Pi here](http://www.dexterindustries.com/projects/custom-minecraft-controller/).
 
 Software Setup:
   Before we begin, run the following commands to setup:
