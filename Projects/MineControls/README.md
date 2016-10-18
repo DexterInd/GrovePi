@@ -7,13 +7,13 @@ Mine Controls are custom hardware controls for Minecraft and the Raspberry Pi!  
 
 
 ### Setup
-See the [full project descriptin for making a custom Minecraft controller for your Raspberry Pi here](http://www.dexterindustries.com/projects/custom-minecraft-controller/).
+See the [full project description for making a custom Minecraft controller for your Raspberry Pi here](http://www.dexterindustries.com/projects/custom-minecraft-controller/).
 
 Software Setup:
   Before we begin, run the following commands to setup:
-    sudo apt-get install minecraft-pi 
+    `sudo apt-get install minecraft-pi 
     sudo pip3 install python3-xlib
-    sudo pip3 install pyautogui
+    sudo pip3 install pyautogui`
 
 Hardware Setup:
   Setup the GrovePi on the Raspberry Pi.
