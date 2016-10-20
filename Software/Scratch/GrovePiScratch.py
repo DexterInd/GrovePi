@@ -47,6 +47,7 @@ import os # to handle folder paths
 
 defaultCameraFolder="/home/pi/Desktop/"
 cameraFolder = defaultCameraFolder
+pi=1000
 
 en_grovepi=1
 en_debug=1
@@ -281,7 +282,6 @@ while True:
 			try:
 				cameraFolder=defaultCameraFolder+str(msg[6:])
 				if not os.path.exists(cameraFolder):
-					pi=1000  # uid and gid of user pi
 					os.makedirs(cameraFolder)
 					os.chown(cameraFolder,pi,pi)
 					s.sensorupdate({"folder":"created"})
@@ -295,24 +295,16 @@ while True:
 			try:
 				from subprocess import call
 				import datetime
-				newimage = "{}/img_{}.jpg".format(cameraFolder,str(datetime.datetime.now()).replace(" ","_",10))
+				newimage = "{}/img_{}.jpg".format(cameraFolder,str(datetime.datetime.now()).replace(" ","_",10).replace(":","_",10))
 				photo_cmd="raspistill -o {} -w 640 -h 480 -t 1".format(newimage)
-				#print photo_cmd
-	#				cmd_end=" -w 640 -h 480 -t 1"
-	#				dt=str(datetime.datetime.now())
-	#				dt=dt.replace(' ','_',10)
-				# call ([photo_cmd], shell=True)
-				# cmd_start="raspistill -o /home/pi/Desktop/img_"
-				# cmd_end=".jpg -w 640 -h 480 -t 1"
-				# dt=str(datetime.datetime.now())
-				# dt=dt.replace(' ','_',10)
-				# call ([cmd_start+dt+cmd_end], shell=True)
+				print photo_cmd
+				call ([photo_cmd], shell=True)
 				os.chown(newimage,pi,pi)
 				print "Picture Taken"
 			except:
 				if en_debug:
 					e = sys.exc_info()[1]
-					print "Error taking picture"
+					print "Error taking picture",e
 				s.sensorupdate({'camera':"Error"})	
 			s.sensorupdate({'camera':"Picture Taken"})	
 
