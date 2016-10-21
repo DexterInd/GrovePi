@@ -43,6 +43,11 @@ THE SOFTWARE.
 import scratch,sys,threading,math
 import grovepi
 import time
+import os # to handle folder paths
+
+defaultCameraFolder="/home/pi/Desktop/"
+cameraFolder = defaultCameraFolder
+pi=1000
 
 en_grovepi=1
 en_debug=1
@@ -270,22 +275,36 @@ while True:
 					s.sensorupdate({'read_ir':read_ir[0]})		
 				else:
 					s.sensorupdate({'read_ir':""})
-					
+		# CREATE FOLDER TO SAVE PHOTOS IN
+
+		elif msg[:6].lower()=="FOLDER".lower():
+			print "Camera folder"
+			try:
+				cameraFolder=defaultCameraFolder+str(msg[6:])
+				if not os.path.exists(cameraFolder):
+					os.makedirs(cameraFolder)
+					os.chown(cameraFolder,pi,pi)
+					s.sensorupdate({"folder":"created"})
+				else:
+					s.sensorupdate({"folder":"set"})
+			except:
+				print "error with folder name"
+
 		elif msg.lower()=="TAKE_PICTURE".lower():
 			print "TAKE_PICTURE!" 
 			try:
 				from subprocess import call
 				import datetime
-				cmd_start="raspistill -o /home/pi/Desktop/img_"
-				cmd_end=".jpg -w 640 -h 480 -t 1"
-				dt=str(datetime.datetime.now())
-				dt=dt.replace(' ','_',10)
-				call ([cmd_start+dt+cmd_end], shell=True)
+				newimage = "{}/img_{}.jpg".format(cameraFolder,str(datetime.datetime.now()).replace(" ","_",10).replace(":","_",10))
+				photo_cmd="raspistill -o {} -w 640 -h 480 -t 1".format(newimage)
+				print photo_cmd
+				call ([photo_cmd], shell=True)
+				os.chown(newimage,pi,pi)
 				print "Picture Taken"
 			except:
 				if en_debug:
 					e = sys.exc_info()[1]
-					print "Error taking picture"
+					print "Error taking picture",e
 				s.sensorupdate({'camera':"Error"})	
 			s.sensorupdate({'camera':"Picture Taken"})	
 
