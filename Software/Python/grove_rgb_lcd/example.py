@@ -4,7 +4,7 @@
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 '''
 ## License
@@ -38,6 +38,7 @@ from grove_rgb_lcd import *
 setText("Hello world\nLCD test")
 setRGB(0,128,64)
 
+# Slowly change the colors every 0.01 seconds.
 for c in range(0,255):
     setRGB(c,255-c,0)
     time.sleep(0.01)
