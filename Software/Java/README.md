@@ -30,7 +30,7 @@ To compile the library and run the test program you can use the following comman
 
 By default you will find some logs inside the /var/log/GrovePi folder.
 
-In case of any trouble or if you need further information don't hesitate to leave a comment on the official forum: http://www.dexterindustries.com/forum/?forum=grovepi
+In case of any trouble or if you need further information don't hesitate to leave a comment on the official forum: http://forum.dexterindustries.com/c/grovepi
 
 ## License
 GrovePi for the Raspberry Pi: an open source robotics platform for the Raspberry Pi.
