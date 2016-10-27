@@ -99,17 +99,20 @@ while True:
 		while m[0] == 'sensor-update' :
 			m = s.receive()
 
-		msg = m[1]
+		# change input to all lowercase. 
+		# Users can enter any which way they want
+		msg = m[1].lower()
 		if en_debug:
 			print "Rx:",msg
-		if msg == 'SETUP' :
+		if msg == 'SETUP'.lower() :
 			print "Setting up sensors done"
-		elif msg == 'START' :
+		elif msg == 'START'.lower() :
 			running = True
 			if thread1.is_alive() == False:
 				thread1.start()
 			print "Service Started"
 		
+		# ANALOG SENSORS
 		elif match_sensors(msg,analog_sensors) >=0:
 			if en_grovepi:
 				s_no=match_sensors(msg,analog_sensors)
@@ -139,6 +142,7 @@ while True:
 		elif msg[:11].lower()=="digitalRead".lower():
 			if en_grovepi:
 				port=int(msg[11:])
+				grovepi.pinMode(port,"INPUT")
 				d_read=grovepi.digitalRead(port)
 				s.sensorupdate({'digitalRead':d_read})
 			if en_debug:
@@ -161,6 +165,7 @@ while True:
 		elif msg[:16].lower()=="digitalWriteHigh".lower():
 			if en_grovepi:
 				port=int(msg[16:])
+				grovepi.pinMode(port,"OUTPUT")
 				grovepi.digitalWrite(port,1)
 			if en_debug:
 				print msg
@@ -168,6 +173,7 @@ while True:
 		elif msg[:15].lower()=="digitalWriteLow".lower():
 			if en_grovepi:
 				port=int(msg[15:])
+				grovepi.pinMode(port,"OUTPUT")
 				grovepi.digitalWrite(port,0)
 			if en_debug:
 				print msg
@@ -231,7 +237,7 @@ while True:
 				if en_debug:
 					print msg[:3], msg[3:6],msg[6:]
 				import grove_rgb_lcd 
-				if msg[3:6].lower() == "col".lower():
+				if msg[3:6].lower() == "col".lower(): #lower() added just for consistency. Not really needed
 					rgb = []
 					for i in range(0,6,2): 
 						rgb.append(int(msg[6:][i:i+2],16))  # convert from one hex string to three ints
@@ -246,15 +252,15 @@ while True:
 			if en_debug:
 				print msg
 			
-		elif msg[:10].lower()=="setOutput".lower():
-			if en_grovepi:
-				port=int(msg[10:])
-				a_read=grovepi.analogRead(port)
-				s.sensorupdate({'analogRead':a_read})
-			if en_debug:
-				print msg
-				print "Analog Reading: " + str(a_read)		
-		elif msg.lower()=="READ_IR".lower():
+		# elif msg[:10].lower()=="setOutput".lower():
+		# 	if en_grovepi:
+		# 		port=int(msg[10:])
+		# 		a_read=grovepi.analogRead(port)
+		# 		s.sensorupdate({'analogRead':a_read})
+		# 	if en_debug:
+		# 		print msg
+		# 		print "Analog Reading: " + str(a_read)		
+		elif msg.lower()=="READ_IR".lower() or msg.lower()=="IR".lower():
 			print "READ_IR!" 
 			if en_ir_sensor==0:
 				import lirc
