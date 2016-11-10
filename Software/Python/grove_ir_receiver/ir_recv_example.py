@@ -2,12 +2,14 @@
 ##################################################
 # IR remote control example
 #
-# This example is for controlling the GoPiGo with an Keyes IR remote
+# This example is for controlling the GrovePi with an Keyes IR remote
 # 
 # History
 # ------------------------------------------------
 # Author	Date      		Comments
 # Karan		21 Aug  15	  	Initial Authoring
+#
+# Have a question?  Please ask on our forums!  http://forum.dexterindustries.com/c/grovepi
 '''
 ## License
 

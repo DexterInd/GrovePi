@@ -43,6 +43,11 @@ THE SOFTWARE.
 import scratch,sys,threading,math
 import grovepi
 import time
+import os # to handle folder paths
+
+defaultCameraFolder="/home/pi/Desktop/"
+cameraFolder = defaultCameraFolder
+pi=1000
 
 en_grovepi=1
 en_debug=1
@@ -94,17 +99,20 @@ while True:
 		while m[0] == 'sensor-update' :
 			m = s.receive()
 
-		msg = m[1]
+		# change input to all lowercase. 
+		# Users can enter any which way they want
+		msg = m[1].lower()
 		if en_debug:
 			print "Rx:",msg
-		if msg == 'SETUP' :
+		if msg == 'SETUP'.lower() :
 			print "Setting up sensors done"
-		elif msg == 'START' :
+		elif msg == 'START'.lower() :
 			running = True
 			if thread1.is_alive() == False:
 				thread1.start()
 			print "Service Started"
 		
+		# ANALOG SENSORS
 		elif match_sensors(msg,analog_sensors) >=0:
 			if en_grovepi:
 				s_no=match_sensors(msg,analog_sensors)
@@ -134,6 +142,7 @@ while True:
 		elif msg[:11].lower()=="digitalRead".lower():
 			if en_grovepi:
 				port=int(msg[11:])
+				grovepi.pinMode(port,"INPUT")
 				d_read=grovepi.digitalRead(port)
 				s.sensorupdate({'digitalRead':d_read})
 			if en_debug:
@@ -156,6 +165,7 @@ while True:
 		elif msg[:16].lower()=="digitalWriteHigh".lower():
 			if en_grovepi:
 				port=int(msg[16:])
+				grovepi.pinMode(port,"OUTPUT")
 				grovepi.digitalWrite(port,1)
 			if en_debug:
 				print msg
@@ -163,6 +173,7 @@ while True:
 		elif msg[:15].lower()=="digitalWriteLow".lower():
 			if en_grovepi:
 				port=int(msg[15:])
+				grovepi.pinMode(port,"OUTPUT")
 				grovepi.digitalWrite(port,0)
 			if en_debug:
 				print msg
@@ -226,7 +237,7 @@ while True:
 				if en_debug:
 					print msg[:3], msg[3:6],msg[6:]
 				import grove_rgb_lcd 
-				if msg[3:6].lower() == "col".lower():
+				if msg[3:6].lower() == "col".lower(): #lower() added just for consistency. Not really needed
 					rgb = []
 					for i in range(0,6,2): 
 						rgb.append(int(msg[6:][i:i+2],16))  # convert from one hex string to three ints
@@ -241,15 +252,15 @@ while True:
 			if en_debug:
 				print msg
 			
-		elif msg[:10].lower()=="setOutput".lower():
-			if en_grovepi:
-				port=int(msg[10:])
-				a_read=grovepi.analogRead(port)
-				s.sensorupdate({'analogRead':a_read})
-			if en_debug:
-				print msg
-				print "Analog Reading: " + str(a_read)		
-		elif msg.lower()=="READ_IR".lower():
+		# elif msg[:10].lower()=="setOutput".lower():
+		# 	if en_grovepi:
+		# 		port=int(msg[10:])
+		# 		a_read=grovepi.analogRead(port)
+		# 		s.sensorupdate({'analogRead':a_read})
+		# 	if en_debug:
+		# 		print msg
+		# 		print "Analog Reading: " + str(a_read)		
+		elif msg.lower()=="READ_IR".lower() or msg.lower()=="IR".lower():
 			print "READ_IR!" 
 			if en_ir_sensor==0:
 				import lirc
@@ -270,22 +281,36 @@ while True:
 					s.sensorupdate({'read_ir':read_ir[0]})		
 				else:
 					s.sensorupdate({'read_ir':""})
-					
+		# CREATE FOLDER TO SAVE PHOTOS IN
+
+		elif msg[:6].lower()=="FOLDER".lower():
+			print "Camera folder"
+			try:
+				cameraFolder=defaultCameraFolder+str(msg[6:])
+				if not os.path.exists(cameraFolder):
+					os.makedirs(cameraFolder)
+					os.chown(cameraFolder,pi,pi)
+					s.sensorupdate({"folder":"created"})
+				else:
+					s.sensorupdate({"folder":"set"})
+			except:
+				print "error with folder name"
+
 		elif msg.lower()=="TAKE_PICTURE".lower():
 			print "TAKE_PICTURE!" 
 			try:
 				from subprocess import call
 				import datetime
-				cmd_start="raspistill -o /home/pi/Desktop/img_"
-				cmd_end=".jpg -w 640 -h 480 -t 1"
-				dt=str(datetime.datetime.now())
-				dt=dt.replace(' ','_',10)
-				call ([cmd_start+dt+cmd_end], shell=True)
+				newimage = "{}/img_{}.jpg".format(cameraFolder,str(datetime.datetime.now()).replace(" ","_",10).replace(":","_",10))
+				photo_cmd="raspistill -o {} -w 640 -h 480 -t 1".format(newimage)
+				print photo_cmd
+				call ([photo_cmd], shell=True)
+				os.chown(newimage,pi,pi)
 				print "Picture Taken"
 			except:
 				if en_debug:
 					e = sys.exc_info()[1]
-					print "Error taking picture"
+					print "Error taking picture",e
 				s.sensorupdate({'camera':"Error"})	
 			s.sensorupdate({'camera':"Picture Taken"})	
 

@@ -19,7 +19,7 @@ Getting started is easy. Check out our Getting Started With GrovePi Guide [here]
 We have an extensive library that covers most Grove sensors. You can find it on the Github repo.  You won’t need to hack much at all with our library: get started coding in Python and C now! 
 
 ### Want to use a sensor not in the library yet?  
-Ask us in the [forums](http://www.dexterindustries.com/forum/?forum=grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://www.dexterindustries.com/forum/?forum=grovepi).
+Ask us in the [forums](http://forum.dexterindustries.com/c/grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://forum.dexterindustries.com/c/grovepi).
 
 ### Programming the GrovePi
 The GrovePi can be programmed in Python, C, C#, Go, and NodeJS on the Raspberry Pi.  Simply start with one of our [example projects](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/) or [example code](https://github.com/DexterInd/GrovePi/tree/master/Software).  

@@ -1,7 +1,11 @@
-GrovePi+ by Dexter Industries
-GrovePi is an electronics board designed by Dexter Industries that you can connect to hundreds of different sensors, so you can program them to monitor, control, and automate devices in your life.  
+#GrovePi+ 
+GrovePi+ is an electronics board designed by Dexter Industries that you can connect to hundreds of different sensors, so you can program them to monitor, control, and automate devices in your life. 
+
+![GrovePi+](https://github.com/DexterInd/GrovePi/blob/master/Hardware/GrovePi%20Graphical%20Datasheet.jpg)
+
 See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
 Copyright (C) 2016  Dexter Industries 
+
 
 ## License
 

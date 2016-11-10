@@ -14,7 +14,7 @@
 # NOTES:
 #	*	Make sure that the Pi camera is enabled and working. You can see detailed directions here: https://www.raspberrypi.org/help/camera-module-setup/
 #	*	The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
-#	*	Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+#	*	Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 '''
 ## License

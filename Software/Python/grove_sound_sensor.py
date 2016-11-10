@@ -8,7 +8,7 @@
 #	 http://www.seeedstudio.com/wiki/Grove_-_Sound_Sensor
 #	 http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 '''
 ## License

@@ -51,7 +51,7 @@ exit 0
 
 Then that's it!  Reboot and test!
  
-Have a question about this example?  [Ask on the forums here.](http://www.dexterindustries.com/forum/?forum=grovepi)
+Have a question about this example?  [Ask on the forums here.](http://forum.dexterindustries.com/c/grovepi)
 
 LICENSE: 
 These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.

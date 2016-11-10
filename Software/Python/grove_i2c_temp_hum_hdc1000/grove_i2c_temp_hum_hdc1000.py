@@ -4,7 +4,7 @@
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this library?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 # This library is derived from the HDC1000 library by aklib here: https://github.com/nonNoise/akilib/blob/master/akilib/raspberrypi/AKI_I2C_HDC1000.py
 #
