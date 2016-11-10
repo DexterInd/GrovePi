@@ -43,7 +43,7 @@ pin = 7
 
 # I have 10 LEDs connected in series with the first connected to the GrovePi and the last not connected
 # First LED input socket connected to GrovePi, output socket connected to second LED input and so on
-numleds = 10     #If you only plug 1 LED, change 10 to 1
+numleds = 4     #If you only plug 1 LED, change 10 to 1
 
 grovepi.pinMode(pin,"OUTPUT")
 time.sleep(1)

@@ -35,11 +35,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-
-# Karan Nayan
 # Initial Date: 13 Feb 2014
-# Last Updated: 01 June 2015
+# Last Updated: 11 Nov 2016
 # http://www.dexterindustries.com/
+# Author	Date      		Comments
+# Karan		13 Feb 2014  	Initial Authoring
+# 			11 Nov 2016		I2C retries added for faster IO
+#							DHT function updated to look for nan's 
 
 import sys
 import time
@@ -158,43 +160,46 @@ flow_disable_cmd=[13]
 flow_en_cmd=[18]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
-
+retries = 10
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
 
 
 # Write I2C block
 def write_i2c_block(address, block):
-	try:
-		return bus.write_i2c_block_data(address, 1, block)
-	except IOError:
-		if debug:
-			print ("IOError")
-		return -1
+	for i in range(retries):
+		try:
+			return bus.write_i2c_block_data(address, 1, block)
+		except IOError:
+			if debug:
+				print ("IOError")
+	return -1
 
 # Read I2C byte
 def read_i2c_byte(address):
-	try:
-		return bus.read_byte(address)
-	except IOError:
-		if debug:
-			print ("IOError")
-		return -1
+	for i in range(retries):
+		try:
+			return bus.read_byte(address)
+		except IOError:
+			if debug:
+				print ("IOError")
+	return -1
 
 
 # Read I2C block
 def read_i2c_block(address):
-	try:
-		return bus.read_i2c_block_data(address, 1)
-	except IOError:
-		if debug:
-			print ("IOError")
-		return -1
+	for i in range(retries):
+		try:
+			return bus.read_i2c_block_data(address, 1)
+		except IOError:
+			if debug:
+				print ("IOError")
+	return -1
 
 # Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
-	time.sleep(.1)
+	# time.sleep(.1)
 	n = read_i2c_byte(address)
 	return n
 
@@ -215,11 +220,9 @@ def pinMode(pin, mode):
 
 # Read analog value from Pin
 def analogRead(pin):
-	bus.write_i2c_block_data(address, 1, aRead_cmd + [pin, unused, unused])
-	time.sleep(.1)
-	bus.read_byte(address)
-	number = bus.read_i2c_block_data(address, 1)
-	time.sleep(.1)
+	write_i2c_block(address, aRead_cmd + [pin, unused, unused])
+	read_i2c_byte(address)
+	number = read_i2c_block(address)
 	return number[1] * 256 + number[2]
 
 
@@ -247,7 +250,7 @@ def temp(pin, model = '1.0'):
 # Read value from Grove Ultrasonic
 def ultrasonicRead(pin):
 	write_i2c_block(address, uRead_cmd + [pin, unused, unused])
-	time.sleep(.2)
+	time.sleep(.06)	#firmware has a time of 50ms so wait for more than that
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return (number[1] * 256 + number[2])
@@ -291,11 +294,11 @@ def dht(pin, module_type):
 	write_i2c_block(address, dht_temp_cmd + [pin, module_type, unused])
 
 	# Delay necessary for proper reading fron DHT sensor
-	time.sleep(.6)
+	# time.sleep(.6)
 	try:
 		read_i2c_byte(address)
 		number = read_i2c_block(address)
-		time.sleep(.1)
+		# time.sleep(.1)
 		if number == -1:
 			return [-1,-1]
 	except (TypeError, IndexError):
@@ -321,7 +324,10 @@ def dht(pin, module_type):
 		h_val=bytearray(number[5:9])
 		t=round(struct.unpack('f',t_val)[0],2)
 		hum=round(struct.unpack('f',h_val)[0],2)
-	return [t, hum]
+	if t > -100.0 and t <150.0 and hum >= 0.0 and hum<=100.0:
+		return [t, hum]
+	else:
+		return [float('nan'),float('nan')]
 
 # Grove LED Bar - initialise
 # orientation: (0 = red to green, 1 = green to red)
