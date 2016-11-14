@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Temperature & Humidity Sensor Pro 
-# (http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro)
+# GrovePi test for multiple digital reads
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  
-# You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
 '''
 ## License
@@ -34,25 +32,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+import time
 import grovepi
-import math
-# Connect the Grove Temperature & Humidity Sensor Pro to digital port D4
-# This example uses the blue colored sensor.
-# SIG,NC,VCC,GND
-sensor = 4  # The Sensor goes on digital port 4.
 
-# temp_humidity_sensor_type
-# Grove Base Kit comes with the blue sensor.
-blue = 0    # The Blue colored sensor.
-white = 1   # The White colored sensor.
+# Connect the Grove Button to digital port D2,D3 and D4
+# SIG,NC,VCC,GND
+button2 = 2
+button3 = 3
+button4 = 4
+
+grovepi.pinMode(button2,"INPUT")
+grovepi.pinMode(button3,"INPUT")
+grovepi.pinMode(button4,"INPUT")
 
 while True:
-    try:
-        # This example uses the blue colored sensor. 
-        # The first parameter is the port, the second parameter is the type of sensor.
-        [temp,humidity] = grovepi.dht(sensor,blue)  
-        if math.isnan(temp) == False and math.isnan(humidity) == False:
-            print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
-
-    except IOError:
-        print ("Error")
+	try:
+		d2=grovepi.digitalRead(button2)
+		d3=grovepi.digitalRead(button3)
+		d4=grovepi.digitalRead(button4)
+		print ("%d,%d,%d" %(d2,d3,d4))
+	except IOError:
+		print ("Error")

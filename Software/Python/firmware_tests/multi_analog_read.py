@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Temperature & Humidity Sensor Pro 
-# (http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro)
+# GrovePi test for using the multiple analog sensors
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  
-# You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
 #
 '''
 ## License
@@ -34,25 +32,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-import grovepi
-import math
-# Connect the Grove Temperature & Humidity Sensor Pro to digital port D4
-# This example uses the blue colored sensor.
-# SIG,NC,VCC,GND
-sensor = 4  # The Sensor goes on digital port 4.
 
-# temp_humidity_sensor_type
-# Grove Base Kit comes with the blue sensor.
-blue = 0    # The Blue colored sensor.
-white = 1   # The White colored sensor.
+import time
+import grovepi
+
+#Sensor connected to A0,A1,A2 Port 
+sensor0 = 0		 
+sensor1 = 1		 
+sensor2 = 2		 
 
 while True:
     try:
-        # This example uses the blue colored sensor. 
-        # The first parameter is the port, the second parameter is the type of sensor.
-        [temp,humidity] = grovepi.dht(sensor,blue)  
-        if math.isnan(temp) == False and math.isnan(humidity) == False:
-            print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
-
+        sensor_value0 = grovepi.analogRead(sensor0)
+        sensor_value1 = grovepi.analogRead(sensor1)
+        sensor_value2 = grovepi.analogRead(sensor2)
+        print ("%d,%d,%d" %(sensor_value0,sensor_value1,sensor_value2))
     except IOError:
         print ("Error")
