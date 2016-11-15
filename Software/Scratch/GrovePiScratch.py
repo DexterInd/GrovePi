@@ -354,7 +354,7 @@ while True:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
-			print e
+			# print e
 			time.sleep(5)
 			try:
 				s = scratch.Scratch()
