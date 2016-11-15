@@ -96,7 +96,7 @@ while True:
 	try:
 		m = s.receive()
 
-		while m[0] == 'sensor-update' :
+		while m==None or m[0] == 'sensor-update':
 			m = s.receive()
 
 		# change input to all lowercase. 
@@ -104,6 +104,7 @@ while True:
 		msg = m[1].lower()
 		if en_debug:
 			print "Rx:",msg
+
 		if msg == 'SETUP'.lower() :
 			print "Setting up sensors done"
 		elif msg == 'START'.lower() :
@@ -327,10 +328,23 @@ while True:
 					print "Pressure: " + str(press)
 			if en_debug:		# If Debug is enabled, print the value of msg.
 				print msg
-				
+
+		elif (msg[:5].lower()=="SPEAK".lower()):
+			if en_grovepi:
+				from subprocess import call
+				cmd_beg = "espeak -ven+f1 "
+				in_text = msg[len("SPEAK"):]
+				cmd_end = " 2>/dev/null"
+
+				call([cmd_beg+"\""+in_text+"\""+cmd_end], shell=True)
+			if en_debug:
+				print(msg)
+
 		else:
 			if en_debug:
 				print "Ignoring: ",msg
+
+
 					
 	except KeyboardInterrupt:
 		running= False
@@ -340,6 +354,7 @@ while True:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
+			print e
 			time.sleep(5)
 			try:
 				s = scratch.Scratch()
