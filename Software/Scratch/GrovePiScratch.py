@@ -330,15 +330,18 @@ while True:
 				print msg
 
 		elif (msg[:5].lower()=="SPEAK".lower()):
-			if en_grovepi:
-				from subprocess import call
-				cmd_beg = "espeak -ven+f1 "
-				in_text = msg[len("SPEAK"):]
-				cmd_end = " 2>/dev/null"
+			try:
+				if en_grovepi:
+					from subprocess import call
+					cmd_beg = "espeak -ven+f1 "
+					in_text = msg[len("SPEAK"):]
+					cmd_end = " 2>/dev/null"
 
-				call([cmd_beg+"\""+in_text+"\""+cmd_end], shell=True)
-			if en_debug:
-				print(msg)
+					call([cmd_beg+"\""+in_text+"\""+cmd_end], shell=True)
+				if en_debug:
+					print(msg)
+			except:
+				print("Issue with espeak")
 
 		else:
 			if en_debug:
