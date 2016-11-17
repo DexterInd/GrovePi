@@ -4,9 +4,9 @@
 # http://www.dexterindustries.com/GrovePi/                                                                
 # History
 # ------------------------------------------------
-# Author     Date      		Comments
-# Karan      29 June 15  	Initial Authoring                                                        
-# John		22 Feb 16	Adding GrovePi Barometer
+# Author     Date           Comments
+# Karan      29 June 15     Initial Authoring                                                        
+# John      22 Feb 16   Adding GrovePi Barometer
 '''
 ## License
 
@@ -45,6 +45,13 @@ import grovepi
 import time
 import os # to handle folder paths
 
+try:
+	sys.path.insert(0, '/home/pi/Dexter/PivotPi/Software/Scratch/')
+	import PivotPiScratch
+	pivotpi_available=True
+except:
+	pivotpi_available=False
+
 defaultCameraFolder="/home/pi/Desktop/"
 cameraFolder = defaultCameraFolder
 pi=1000
@@ -53,24 +60,24 @@ en_grovepi=1
 en_debug=1
 
 try:
-    s = scratch.Scratch()
-    if s.connected:
-        print "GrovePi Scratch: Connected to Scratch successfully"
+	s = scratch.Scratch()
+	if s.connected:
+		print "GrovePi Scratch: Connected to Scratch successfully"
 	#else:
-    #sys.exit(0)
+	#sys.exit(0)
 except scratch.ScratchError:
-    print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled"
-    #sys.exit(0)
+	print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled"
+	#sys.exit(0)
 
 class myThread (threading.Thread):     
-    def __init__(self, threadID, name, counter):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.counter = counter
-    def run(self):
-        while running:
-            time.sleep(.2)              # sleep for 200 ms
+	def __init__(self, threadID, name, counter):
+		threading.Thread.__init__(self)
+		self.threadID = threadID
+		self.name = name
+		self.counter = counter
+	def run(self):
+		while running:
+			time.sleep(.2)              # sleep for 200 ms
 
 thread1 = myThread(1, "Thread-1", 1)        #Setup and start the thread
 thread1.setDaemon(True)
@@ -131,7 +138,7 @@ while True:
 				port=int(msg[8:])
 				grovepi.pinMode(port,"INPUT")
 			if en_debug:
-				print msg	
+				print msg   
 				
 		elif msg[:9].lower()=="setOutput".lower():
 			if en_grovepi:
@@ -212,7 +219,7 @@ while True:
 				[temp,humidity] = grovepi.dht(port,0)
 				s.sensorupdate({'temp':temp})
 			if en_debug:
-				print msg
+				# print msg
 				print "temp: ",temp
 		
 		elif msg[:8].lower()=="humidity".lower():
@@ -221,7 +228,7 @@ while True:
 				[temp,humidity] = grovepi.dht(port,0)
 				s.sensorupdate({'humidity':humidity})
 			if en_debug:
-				print msg
+				# print msg
 				print "humidity:",humidity
 		
 		elif msg[:8].lower()=="distance".lower():
@@ -231,7 +238,7 @@ while True:
 				s.sensorupdate({'distance':dist})
 			if en_debug:
 				print msg
-				print "distance=",dist	
+				print "distance=",dist  
 		
 		elif msg[:3].lower()=="lcd".lower():
 			if en_grovepi:
@@ -254,13 +261,13 @@ while True:
 				print msg
 			
 		# elif msg[:10].lower()=="setOutput".lower():
-		# 	if en_grovepi:
-		# 		port=int(msg[10:])
-		# 		a_read=grovepi.analogRead(port)
-		# 		s.sensorupdate({'analogRead':a_read})
-		# 	if en_debug:
-		# 		print msg
-		# 		print "Analog Reading: " + str(a_read)		
+		#   if en_grovepi:
+		#       port=int(msg[10:])
+		#       a_read=grovepi.analogRead(port)
+		#       s.sensorupdate({'analogRead':a_read})
+		#   if en_debug:
+		#       print msg
+		#       print "Analog Reading: " + str(a_read)      
 		elif msg.lower()=="READ_IR".lower() or msg.lower()=="IR".lower():
 			print "READ_IR!" 
 			if en_ir_sensor==0:
@@ -279,7 +286,7 @@ while True:
 				print "IR Recv Reading: " + str(read_ir)
 			if en_gpg:
 				if len(read_ir) !=0:
-					s.sensorupdate({'read_ir':read_ir[0]})		
+					s.sensorupdate({'read_ir':read_ir[0]})      
 				else:
 					s.sensorupdate({'read_ir':""})
 		# CREATE FOLDER TO SAVE PHOTOS IN
@@ -312,21 +319,21 @@ while True:
 				if en_debug:
 					e = sys.exc_info()[1]
 					print "Error taking picture",e
-				s.sensorupdate({'camera':"Error"})	
-			s.sensorupdate({'camera':"Picture Taken"})	
+				s.sensorupdate({'camera':"Error"})  
+			s.sensorupdate({'camera':"Picture Taken"})  
 
 		# Barometer code, pressure
 		elif msg[:9].lower()=="pressure".lower():
 			if en_grovepi:
 				# We import here to prevent errors thrown.  If the import fails, you just get an error message instead of the communicator crashing.
 				# If user is using multiple sensors and using their own image which does not have the pythonpath set correctly then they'll just not get the output for 1 sensor, and the others will still keep working
-				from grove_i2c_barometic_sensor_BMP180 import BMP085		# Barometric pressure sensor.
-				bmp = BMP085(0x77, 1)			#Initialize the pressure sensor (barometer)
+				from grove_i2c_barometic_sensor_BMP180 import BMP085        # Barometric pressure sensor.
+				bmp = BMP085(0x77, 1)           #Initialize the pressure sensor (barometer)
 				press = bmp.readPressure()/100.0
 				s.sensorupdate({'pressure':press})
 				if en_debug:
 					print "Pressure: " + str(press)
-			if en_debug:		# If Debug is enabled, print the value of msg.
+			if en_debug:        # If Debug is enabled, print the value of msg.
 				print msg
 
 		elif (msg[:5].lower()=="SPEAK".lower()):
@@ -343,6 +350,12 @@ while True:
 			except:
 				print("Issue with espeak")
 
+		# elif (msg[:len("PivotPi")].lower() =="PivotPi".lower()):
+		elif pivotpi_available==True and PivotPiScratch.isPivotPiMsg(msg):
+			pivotsensors = PivotPiScratch.handlePivotPi(msg)
+			print "Back from PivotPi",pivotsensors
+			s.sensorupdate(pivotsensors)
+
 		else:
 			if en_debug:
 				print "Ignoring: ",msg
@@ -357,7 +370,7 @@ while True:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
-			# print e
+			print e
 			time.sleep(5)
 			try:
 				s = scratch.Scratch()
@@ -368,4 +381,4 @@ while True:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
 	except:
 		e = sys.exc_info()[0]
-		print "GrovePi Scratch: Error %s" % e	
+		print "GrovePi Scratch: Error %s" % e   
