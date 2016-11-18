@@ -4,9 +4,12 @@
 # http://www.dexterindustries.com/GrovePi/                                                                
 # History
 # ------------------------------------------------
-# Author     Date           Comments
-# Karan      29 June 15     Initial Authoring                                                        
-# John      22 Feb 16   Adding GrovePi Barometer
+# Author	Date           	Comments
+# Karan		29 June 15     	Initial Authoring                                                        
+# John		22 Feb 16   	Adding GrovePi Barometer
+# Nicole	Nov 16			Added Folder support for take_picture 
+# Nicole	Nov 16			Added eSpeak Support
+# Nicole	18 Nov 16		Adding PivotPi support
 '''
 ## License
 
@@ -52,11 +55,18 @@ try:
 except:
 	pivotpi_available=False
 
+# Folders where pictures get saved
 defaultCameraFolder="/home/pi/Desktop/"
 cameraFolder = defaultCameraFolder
-pi=1000
 
+
+# Pi user ID Number - used for setting permissions
+pi_user=1000
+pi_group=1000
+
+# used is GrovePi is actually connected - allows for testing without a GrovePi
 en_grovepi=1
+# print debugging statements
 en_debug=1
 
 try:
@@ -297,7 +307,7 @@ while True:
 				cameraFolder=defaultCameraFolder+str(msg[6:])
 				if not os.path.exists(cameraFolder):
 					os.makedirs(cameraFolder)
-					os.chown(cameraFolder,pi,pi)
+					os.chown(cameraFolder,pi_user,pi_grou)
 					s.sensorupdate({"folder":"created"})
 				else:
 					s.sensorupdate({"folder":"set"})
@@ -313,7 +323,7 @@ while True:
 				photo_cmd="raspistill -o {} -w 640 -h 480 -t 1".format(newimage)
 				print photo_cmd
 				call ([photo_cmd], shell=True)
-				os.chown(newimage,pi,pi)
+				os.chown(newimage,pi_user,pi_group)
 				print "Picture Taken"
 			except:
 				if en_debug:
