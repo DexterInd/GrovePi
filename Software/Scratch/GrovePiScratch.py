@@ -228,7 +228,7 @@ while True:
 				[temp,humidity] = grovepi.dht(port,0)
 				s.sensorupdate({'humidity':humidity})
 			if en_debug:
-				# print msg
+				print msg
 				print "humidity:",humidity
 		
 		elif msg[:8].lower()=="distance".lower():
@@ -350,10 +350,9 @@ while True:
 			except:
 				print("Issue with espeak")
 
-		# elif (msg[:len("PivotPi")].lower() =="PivotPi".lower()):
 		elif pivotpi_available==True and PivotPiScratch.isPivotPiMsg(msg):
 			pivotsensors = PivotPiScratch.handlePivotPi(msg)
-			print "Back from PivotPi",pivotsensors
+			# print "Back from PivotPi",pivotsensors
 			s.sensorupdate(pivotsensors)
 
 		else:
@@ -370,7 +369,7 @@ while True:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
-			print e
+			# print e
 			time.sleep(5)
 			try:
 				s = scratch.Scratch()
@@ -381,4 +380,4 @@ while True:
 				print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled\n..............................\n"
 	except:
 		e = sys.exc_info()[0]
-		print "GrovePi Scratch: Error %s" % e   
+		print "GrovePi Scratch: Error %s" % e
