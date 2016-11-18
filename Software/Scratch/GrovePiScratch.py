@@ -307,7 +307,7 @@ while True:
 				cameraFolder=defaultCameraFolder+str(msg[6:])
 				if not os.path.exists(cameraFolder):
 					os.makedirs(cameraFolder)
-					os.chown(cameraFolder,pi_user,pi_grou)
+					os.chown(cameraFolder,pi_user,pi_group)
 					s.sensorupdate({"folder":"created"})
 				else:
 					s.sensorupdate({"folder":"set"})
