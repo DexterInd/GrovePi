@@ -219,7 +219,7 @@ while True:
 				[temp,humidity] = grovepi.dht(port,0)
 				s.sensorupdate({'temp':temp})
 			if en_debug:
-				# print msg
+				print msg
 				print "temp: ",temp
 		
 		elif msg[:8].lower()=="humidity".lower():
@@ -238,7 +238,7 @@ while True:
 				s.sensorupdate({'distance':dist})
 			if en_debug:
 				print msg
-				print "distance=",dist  
+				print "distance=",dist
 		
 		elif msg[:3].lower()=="lcd".lower():
 			if en_grovepi:
@@ -267,7 +267,7 @@ while True:
 		#       s.sensorupdate({'analogRead':a_read})
 		#   if en_debug:
 		#       print msg
-		#       print "Analog Reading: " + str(a_read)      
+		#       print "Analog Reading: " + str(a_read)   
 		elif msg.lower()=="READ_IR".lower() or msg.lower()=="IR".lower():
 			print "READ_IR!" 
 			if en_ir_sensor==0:
@@ -286,7 +286,7 @@ while True:
 				print "IR Recv Reading: " + str(read_ir)
 			if en_gpg:
 				if len(read_ir) !=0:
-					s.sensorupdate({'read_ir':read_ir[0]})      
+					s.sensorupdate({'read_ir':read_ir[0]})
 				else:
 					s.sensorupdate({'read_ir':""})
 		# CREATE FOLDER TO SAVE PHOTOS IN
@@ -319,15 +319,16 @@ while True:
 				if en_debug:
 					e = sys.exc_info()[1]
 					print "Error taking picture",e
-				s.sensorupdate({'camera':"Error"})  
-			s.sensorupdate({'camera':"Picture Taken"})  
+				s.sensorupdate({'camera':"Error"})
+			s.sensorupdate({'camera':"Picture Taken"})
 
 		# Barometer code, pressure
 		elif msg[:9].lower()=="pressure".lower():
 			if en_grovepi:
 				# We import here to prevent errors thrown.  If the import fails, you just get an error message instead of the communicator crashing.
-				# If user is using multiple sensors and using their own image which does not have the pythonpath set correctly then they'll just not get the output for 1 sensor, and the others will still keep working
-				from grove_i2c_barometic_sensor_BMP180 import BMP085        # Barometric pressure sensor.
+				# If user is using multiple sensors and using their own image which does not have the pythonpath set correctly then 
+				#    they'll just not get the output for 1 sensor, and the others will still keep working
+				from grove_i2c_barometic_sensor_BMP180 import BMP085 # Barometric pressure sensor.
 				bmp = BMP085(0x77, 1)           #Initialize the pressure sensor (barometer)
 				press = bmp.readPressure()/100.0
 				s.sensorupdate({'pressure':press})
