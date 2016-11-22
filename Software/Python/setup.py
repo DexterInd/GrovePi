@@ -39,6 +39,6 @@ setuptools.setup(
 	description="Drivers and examples for using the GrovePi in Python",
 	author="Dexter Industries",
 	url="http://www.dexterindustries.com/GrovePi/",
-	py_modules=['grovepi'],
+	py_modules=['grovepi','grove_rgb_lcd/grove_rgb_lcd'],
 	#install_requires=open('requirements.txt').readlines(),
 )
