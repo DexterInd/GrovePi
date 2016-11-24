@@ -361,6 +361,7 @@ while True:
 			except:
 				print("Issue with espeak")
 
+		# PIVOTPI
 		elif pivotpi_available==True and PivotPiScratch.isPivotPiMsg(msg):
 			pivotsensors = PivotPiScratch.handlePivotPi(msg)
 			# print "Back from PivotPi",pivotsensors
