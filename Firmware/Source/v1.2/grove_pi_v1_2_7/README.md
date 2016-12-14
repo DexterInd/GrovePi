@@ -1,4 +1,4 @@
-## GrovePi Firmware version 1.2.2 - Jan 2015
+## GrovePi Firmware version 1.2.7 - Dec 2016
 '''
 ## License
 
@@ -28,8 +28,19 @@ Binary sketch size: 14,504 bytes (of a 32,256 byte maximum)
 
 ### Changes
 
-* Adds Grove Chainable RGB LED
+* Faster IO (upto 300 reads/writes a second)
+* Less IO Errors
+* Support for RTC and MMA7xxx accelerometer removed from firmware and moved to Software
 
+### Installation
+* First run DI update from the Desktop. (If you are not running Raspbian for Robots, first update the GrovePi git repository, then run setup.py from [here](https://github.com/DexterInd/GrovePi/tree/master/Software/Python to update the grovepi python library): **sudo python setup.py install**
+* Next run the firmware update script for v1.2.7.
+* Go to the fimrware 1.2.7 folder [here] https://github.com/DexterInd/GrovePi/tree/master/Firmware/Source/v1.2/grove_pi_v1_2_7)
+* Make the firmware update script executable: **sudo chmod +x firmware_update_1_2_7.sh**
+* then run it: **sudo ./firmware_update_1_2_7.sh**
+* After this, run the firmware check script [here]( https://github.com/DexterInd/GrovePi/blob/master/Software/Python/grove_firmware_version_check.py) to make sure that you are running 1.2.7. 
+
+In case of any problems with the firmware, just run the firmware update [here](https://github.com/karan259/GrovePi/tree/master/Firmware) to go back to the stable firmware and report the problems on the [forums](http://forum.dexterindustries.com/c/grovepi)
 
 ### Commands
 
