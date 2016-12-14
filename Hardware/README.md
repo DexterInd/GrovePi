@@ -3,6 +3,11 @@ GrovePi+ is an electronics board designed by Dexter Industries that you can conn
 
 ![GrovePi+](https://github.com/DexterInd/GrovePi/blob/master/Hardware/GrovePi%20Graphical%20Datasheet.jpg)
 
+#GrovePi Zero
+GrovePi+ is an electronics board designed by Dexter Industries that makes electronics prototyping with the Raspberry Pi Zero easy and fast.  With the GrovePi Zero you can start your connected device projects in minutes.
+
+![GrovePi Zero](https://github.com/DexterInd/GrovePi/blob/master/Hardware/GrovePiZero%20Graphical%20Datasheet.jpg)
+
 See more about the GrovePi here:  http://www.dexterindustries.com/grovepi/
 Copyright (C) 2016  Dexter Industries 
 
