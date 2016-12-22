@@ -4,6 +4,7 @@ echo Checking I2C bus for devices
 echo ============================
 echo ""
 
+sleep 1
 echo Checking I2C bus 0
 echo ==================
 i2cdetect -y 0 
