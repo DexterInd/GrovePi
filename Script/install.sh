@@ -82,15 +82,40 @@ sudo apt-get install python3-rpi.gpio -y
 sudo pip install -U RPi.GPIO
 echo "Dependencies installed"
 
-if [ -d wiringPi ]; then
-    cd wiringPi
-    git pull
-else
-    git clone git://git.drogon.net/wiringPi
-    cd wiringPi
-fi
+# Check if WiringPi Installed
+# Check if WiringPi Installed and has the latest version.  If it does, skip the step.
+version=`gpio -v`       # Gets the version of wiringPi installed
+set -- $version         # Parses the version to get the number
+WIRINGVERSIONDEC=$3     # Gets the third word parsed out of the first line of gpio -v returned.
+                                        # Should be 2.36
+echo $WIRINGVERSIONDEC >> tmpversion    # Store to temp file
+VERSION=$(sed 's/\.//g' tmpversion)     # Remove decimals
+rm tmpversion                           # Remove the temp file
 
-./build
+echo "VERSION is $VERSION"
+if [ $VERSION -eq '236' ]; then
+
+	echo "FOUND WiringPi Version 2.32 No installation needed."
+else
+	echo "Did NOT find WiringPi Version 2.32"
+	# Check if the Dexter directory exists.
+	DIRECTORY='/home/pi/Dexter'
+	if [ -d "$DIRECTORY" ]; then
+		# Will enter here if $DIRECTORY exists, even if it contains spaces
+		echo "Dexter Directory Found!"
+	else
+		mkdir $DIRECTORY
+	fi
+	# Install wiringPi
+	cd $DIRECTORY 	# Change directories to Dexter
+	git clone https://github.com/DexterInd/wiringPi/  # Clone directories to Dexter.
+	cd wiringPi
+	sudo chmod +x ./build
+	sudo ./build
+	echo "wiringPi Installed"
+fi
+# End check if WiringPi installed
+
 RES=$?
 
 if [ $RES -ne 0 ]; then
