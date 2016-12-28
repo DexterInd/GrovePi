@@ -7,7 +7,7 @@ function GenericDigitalOutputSensor(pin) {
 }
 GenericDigitalOutputSensor.prototype = new DigitalSensor()
 
-GenericDigitalOutputSensor.prototype.on = function() {
+GenericDigitalOutputSensor.prototype.turnOn = function() {
   this.board.pinMode(this.board.OUTPUT)
   var write = this.board.writeBytes(commands.dWrite.concat([this.pin, 1, commands.unused]))
   if (write) {
@@ -17,7 +17,7 @@ GenericDigitalOutputSensor.prototype.on = function() {
   }
 }
 
-GenericDigitalOutputSensor.prototype.off = function() {
+GenericDigitalOutputSensor.prototype.turnOff = function() {
   this.board.pinMode(this.board.OUTPUT)
   var write = this.board.writeBytes(commands.dWrite.concat([this.pin, 0, commands.unused]))
   if (write) {
