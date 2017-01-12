@@ -24,9 +24,5 @@ fi
 
 printf "\nPress any key to start firmware update\n. . .";
 read -n1
-avrdude -c gpio -p m328p -U lfuse:w:0xFF:m
-avrdude -c gpio -p m328p -U hfuse:w:0xDA:m
-avrdude -c gpio -p m328p -U efuse:w:0x05:m
-avrdude -c gpio -p m328p -U flash:w:grove_pi_firmware.hex
-
-
+source /home/pi/Desktop/GrovePi/Firmware/grovepi_firmware_update.sh
+update_grovepi_firmware
