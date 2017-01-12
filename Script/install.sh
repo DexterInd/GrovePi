@@ -8,14 +8,6 @@ USER_NAME=$(/usr/bin/who am i | awk '{ print $1 }')
 SCRIPT_PATH=$(/usr/bin/realpath $0)
 DIR_PATH=$(/usr/bin/dirname ${SCRIPT_PATH} | sed 's/\/Script$//')
 
-#check if there's an argument on the command line
-if [[ -f /home/pi/quiet_mode ]]
-then
-    quiet_mode=1
-else
-    quiet_mode=0
-fi
-
 source $DEXTERSCRIPT/functions_library.sh
 
 identify_cie() {
