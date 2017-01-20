@@ -175,3 +175,17 @@ int analogWrite(int pin,int value)
 {
 	return write_block(aWrite_cmd,pin,value,0);
 }
+// Read a Ultrasonic distance value from a pin
+int ultrasonicRead(int pin)
+{
+	int data;
+	write_block(uRead_cmd,pin,0,0);
+	usleep(60);
+	read_byte();
+	read_block();
+	data=r_buf[1]* 256 + r_buf[2];
+	if (data==65535)
+		return -1;
+	return data;
+}
+ 
