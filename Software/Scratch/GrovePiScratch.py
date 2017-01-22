@@ -116,11 +116,13 @@ while True:
 		while m==None or m[0] == 'sensor-update':
 			m = s.receive()
 
+		originalmsg = m[1]
+
 		# change input to all lowercase. 
 		# Users can enter any which way they want
-		msg = m[1].lower()
+		msg = originalmsg.lower()
 		if en_debug:
-			print "Rx:",msg
+			print "Rx:",originalmsg
 
 		if msg == 'SETUP'.lower() :
 			print "Setting up sensors done"
@@ -253,7 +255,7 @@ while True:
 		elif msg[:3].lower()=="lcd".lower():
 			if en_grovepi:
 				if en_debug:
-					print msg[:3], msg[3:6],msg[6:]
+					print msg[:3], msg[3:6], originalmsg[6:]
 				import grove_rgb_lcd 
 				if msg[3:6].lower() == "col".lower(): #lower() added just for consistency. Not really needed
 					rgb = []
@@ -263,7 +265,7 @@ while True:
 						print "colours are:",rgb[0],rgb[1],rgb[2]
 					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
 				elif msg[3:6].lower() == "txt".lower():
-					txt = msg[6:]
+					txt = originalmsg[6:]
 					grove_rgb_lcd.setText(txt)
 				else:
 					pass
