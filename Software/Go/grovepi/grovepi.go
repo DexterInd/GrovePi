@@ -70,6 +70,16 @@ func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 	return ((v1 * 256) + v2), nil
 }
 
+func (grovePi *GrovePi) AnalogWrite(pin byte, val byte) error {
+	b := []byte{ANALOG_WRITE, pin, val, 0}
+	err := grovePi.i2cDevice.Write(1, b)
+	time.Sleep(100 * time.Millisecond)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
 	b := []byte{DIGITAL_READ, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
