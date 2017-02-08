@@ -91,7 +91,7 @@ check_internet() {
     if ! quiet_mode ; then
         feedback "Check for internet connectivity..."
         feedback "=================================="
-        wget -q --tries=2 --timeout=20 --output-document=/dev/null http://raspberrypi.org 
+        wget -q --tries=2 --timeout=20 --output-document=/dev/null https://raspberrypi.org 
         if [ $? -eq 0 ];then
             echo "Connected to the Internet"
         else
