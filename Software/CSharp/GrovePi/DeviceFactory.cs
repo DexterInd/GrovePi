@@ -18,6 +18,7 @@ namespace GrovePi
         IGrovePi GrovePi(int address);
         IRelay Relay(Pin pin);
         ILed Led(Pin pin);
+        ITemperatureSensor TemperatureSensor(Pin pin);
         ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model);
         IDHTTemperatureAndHumiditySensor DHTTemperatureAndHumiditySensor(Pin pin, DHTModel model);
         IUltrasonicRangerSensor UltraSonicSensor(Pin pin);
@@ -66,6 +67,11 @@ namespace GrovePi
         public ILed Led(Pin pin)
         {
             return DoBuild(x => new Led(x, pin));
+        }
+
+        public ITemperatureSensor TemperatureSensor(Pin pin)
+        {
+            return DoBuild(x => new TemperatureSensor(x, pin));
         }
 
         public ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model)
