@@ -34,9 +34,11 @@ num_led=3
 
 l= chainable_rgb_direct.rgb_led(num_led)
 
+###########################
 #Set Color on the first LED
 #l.setColorRGB(255,0,0)
 
+###########################
 #Set color on LED chain
 #RGB array needs to be sent
 #r[0],g[0],b[0] specifies the color for led[0]
@@ -49,25 +51,33 @@ l= chainable_rgb_direct.rgb_led(num_led)
 # b=[255,0,0]
 # l.setColorRGBs(r,g,b,num_led)
 
+###########################
 #Turn off all LED's
-r=[0,0,0]
-g=[0,0,0]
-b=[0,0,0]
-l.setColorRGBs(r,g,b,num_led)
+# r=[0,0,0]
+# g=[0,0,0]
+# b=[0,0,0]
+# l.setColorRGBs(r,g,b,num_led)
 
-#Show a pattern with 3 LED's 
-while 1:
-	for i in range(0,255,5):
-		r[0]=i
-		g[0]=255-i
-		b[0]=0
+###########################
+# #Show a pattern with 3 LED's 
+# while 1:
+	# for i in range(0,255,5):
+		# r[0]=i
+		# g[0]=255-i
+		# b[0]=0
 		
-		r[1]=0
-		g[1]=i
-		b[1]=255-i
+		# r[1]=0
+		# g[1]=i
+		# b[1]=255-i
 		
-		r[2]=255-i
-		g[2]=0
-		b[2]=i
+		# r[2]=255-i
+		# g[2]=0
+		# b[2]=i
 		
-		l.setColorRGBs(r,g,b,num_led)
+		# l.setColorRGBs(r,g,b,num_led)
+
+###########################
+# Control one LED at at time 
+l.setOneLED(127,127,0,0)	#Set LED 0
+l.setOneLED(0,127,127,1)	#Set LED 1
+l.setOneLED(0,0,0,0)		#Clear LED 0
