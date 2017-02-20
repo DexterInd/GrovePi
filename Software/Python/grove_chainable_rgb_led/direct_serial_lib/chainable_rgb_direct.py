@@ -34,9 +34,17 @@ import RPi.GPIO as GPIO
 import smbus
 
 class rgb_led:
+	r_all=[]
+	g_all=[]
+	b_all=[]
+	
 	def __init__(self,led=1):
 		GPIO.setwarnings(False)
 		self.num_led=led
+		self.r_all=[0] * self.num_led
+		self.g_all=[0] * self.num_led
+		self.b_all=[0] * self.num_led
+		             
 		GPIO.setmode(GPIO.BCM)  
 		self.clk_pin= 15 #RX pin BCM
 		self.data_pin= 14 # TX pin BCM 
@@ -106,6 +114,14 @@ class rgb_led:
 			self.sendColor(r[i], g[i], b[i])
 		for i in range(4):
 				self.sendByte(0)
+	
+	def setOneLED(self,r,g,b,led_num):
+		self.r_all[led_num]=r
+		self.g_all[led_num]=g
+		self.b_all[led_num]=b
+		
+		self.setColorRGBs(self.r_all,self.g_all,self.b_all,self.num_led)
+		
 	
 if __name__ == "__main__":	
 	num_led=3
