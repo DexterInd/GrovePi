@@ -36,6 +36,8 @@ namespace GrovePi
         IRgbLcdDisplay RgbLcdDisplay();
         IRgbLcdDisplay RgbLcdDisplay(int rgbAddress, int textAddress);
         ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass();
+        IMiniMotorDriver MiniMotorDriver();
+        IOLEDDisplay9696 OLEDDisplay9696();
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -45,9 +47,14 @@ namespace GrovePi
         private const byte DisplayRgbI2CAddress = 0x62;
         private const byte DisplayTextI2CAddress = 0x3e;
         private const byte SixAxisAccelerometerI2CAddress = 0x1e;
+        private const byte MiniMotorDriverI2cAddress1 = 0x62;  // 0xC4
+        private const byte MiniMotorDriverI2cAddress2 = 0x60;  // 0xC0
+        private const byte OLED96_96I2cAddress = 0x3C;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
         private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
+        private MiniMotorDriver _miniMotorDriver;
+        private OLEDDisplay9696 _oledDisplay9696;
 
         public IGrovePi GrovePi()
         {
@@ -154,6 +161,21 @@ namespace GrovePi
             return BuildSixAxisAccelerometerAndCompassImpl();
         }
 
+        public IMiniMotorDriver MiniMotorDriver()
+        {
+            return BuildMiniMotorDriverImpl(MiniMotorDriverI2cAddress1, MiniMotorDriverI2cAddress2);
+        }
+
+        public IMiniMotorDriver MiniMotorDriver(int address1, int address2)
+        {
+            return BuildMiniMotorDriverImpl(address1, address2);
+        }
+
+        public IOLEDDisplay9696 OLEDDisplay9696()
+        {
+            return BuildOLEDDisplayImpl();
+        }
+
         public IButtonSensor ButtonSensor(Pin pin)
         {
             return DoBuild(x => new ButtonSensor(x, pin));
@@ -242,6 +264,52 @@ namespace GrovePi
             return _sixAxisAccelerometerAndCompass;
         }
 
+        private MiniMotorDriver BuildMiniMotorDriverImpl(int miniMotorDriverAddress1, int miniMotorDriverAddress2)
+        {
+            if (_miniMotorDriver != null)
+            {
+                return _miniMotorDriver;
+            }
+
+            var motor1ConnectionSettings = new I2cConnectionSettings(MiniMotorDriverI2cAddress1)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+            var motor2ConnectionSettings = new I2cConnectionSettings(MiniMotorDriverI2cAddress2)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _miniMotorDriver = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+                var miniMotor1 = await I2cDevice.FromIdAsync(dis[0].Id, motor1ConnectionSettings);
+                var miniMotor2 = await I2cDevice.FromIdAsync(dis[0].Id, motor2ConnectionSettings);
+                return new MiniMotorDriver(miniMotor1, miniMotor2);
+            }).Result;
+            return _miniMotorDriver;
+        }
+
+        private OLEDDisplay9696 BuildOLEDDisplayImpl()
+        {
+            if(_oledDisplay9696 != null)
+            {
+                return _oledDisplay9696;
+            }
+            var connectionSettings = new I2cConnectionSettings(OLED96_96I2cAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _oledDisplay9696 = Task.Run(async () => 
+            {
+                var dis = await GetDeviceInfo();
+
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, connectionSettings);
+                return new OLEDDisplay9696(device);
+            }).Result;
+            return _oledDisplay9696;
+        }
         private static async Task<DeviceInformationCollection> GetDeviceInfo()
         {
             //Find the selector string for the I2C bus controller
