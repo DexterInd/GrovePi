@@ -37,6 +37,7 @@ namespace GrovePi
         IRgbLcdDisplay RgbLcdDisplay(int rgbAddress, int textAddress);
         ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass();
         IPIRMotionSensor PIRMotionSensor(Pin pin);
+        IGasSensorMQ2 GasSensorMQ2(Pin pin);
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -255,6 +256,11 @@ namespace GrovePi
         public IPIRMotionSensor PIRMotionSensor(Pin pin)
         {
             return DoBuild(x => new PIRMotionSensor(x, pin));
+        }
+
+        public IGasSensorMQ2 GasSensorMQ2(Pin pin)
+        {
+            return DoBuild(x => new GasSensorMQ2(x, pin));
         }
     }
 }
