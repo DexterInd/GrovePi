@@ -4,21 +4,21 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{D482FC6B-F6F9-42C5-8AF9-3822623D7008}</ProjectGuid>
+    <ProjectGuid>{76D27072-3C43-4B4F-A081-1FCE182FD8C7}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GasSensorMQ2</RootNamespace>
-    <AssemblyName>GasSensorMQ2</AssemblyName>
-    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <RootNamespace>OLEDDisplay9696</RootNamespace>
+    <AssemblyName>OLEDDisplay9696</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AllowCrossPlatformRetargeting>false</AllowCrossPlatformRetargeting>
-    <PackageCertificateKeyFile>GasSensorMQ2_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>OLEDDisplay9696_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackage>true</AppxPackage>
     <ContainsStartupTask>true</ContainsStartupTask>
   </PropertyGroup>
@@ -103,7 +103,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="GasSensorMQ2_TemporaryKey.pfx" />
+    <None Include="OLEDDisplay9696_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -130,7 +130,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GrovePi\GrovePi.csproj">
+    <ProjectReference Include="..\..\..\GrovePi\GrovePi.csproj">
       <Project>{a667742a-b887-4b46-8ec1-c671e8bec5e4}</Project>
       <Name>GrovePi</Name>
     </ProjectReference>
