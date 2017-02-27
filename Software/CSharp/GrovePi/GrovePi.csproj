@@ -57,6 +57,7 @@
     <Compile Include="I2CDevices\OLEDDisplay9696.cs" />
     <Compile Include="I2CDevices\RgbLcdDisplay.cs" />
     <Compile Include="I2CDevices\SixAxisAccelerometerAndCompass.cs" />
+    <Compile Include="I2CDevices\ThreeAxisAccelerometerADXL345.cs" />
     <Compile Include="Sensors\AirQualitySensor.cs" />
     <Compile Include="Sensors\ButtonSensor.cs" />
     <Compile Include="Sensors\Buzzer.cs" />

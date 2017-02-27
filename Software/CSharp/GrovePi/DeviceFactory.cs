@@ -40,6 +40,7 @@ namespace GrovePi
         IGasSensorMQ2 GasSensorMQ2(Pin pin);
         IMiniMotorDriver MiniMotorDriver();
         IOLEDDisplay9696 OLEDDisplay9696();
+        IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345();
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -52,11 +53,13 @@ namespace GrovePi
         private const byte MiniMotorDriverI2cAddress1 = 0x62;  // 0xC4
         private const byte MiniMotorDriverI2cAddress2 = 0x60;  // 0xC0
         private const byte OLED96_96I2cAddress = 0x3C;
+        private const byte ThreeAxisAccelemeterADXL345I2cAddress = 0x53;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
         private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
         private MiniMotorDriver _miniMotorDriver;
         private OLEDDisplay9696 _oledDisplay9696;
+        private ThreeAxisAccelerometerADXL345 _ThreeAxisAccelerometerADXL345;
 
         public IGrovePi GrovePi()
         {
@@ -176,6 +179,11 @@ namespace GrovePi
         public IOLEDDisplay9696 OLEDDisplay9696()
         {
             return BuildOLEDDisplayImpl();
+        }
+
+        public IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345()
+        {
+            return BuildThreeAxisAccelerometerADXL345Impl();
         }
 
         public IButtonSensor ButtonSensor(Pin pin)
@@ -312,6 +320,28 @@ namespace GrovePi
             }).Result;
             return _oledDisplay9696;
         }
+
+        private ThreeAxisAccelerometerADXL345 BuildThreeAxisAccelerometerADXL345Impl()
+        {
+            if (_ThreeAxisAccelerometerADXL345 != null)
+            {
+                return _ThreeAxisAccelerometerADXL345;
+            }
+            var connectionSettings = new I2cConnectionSettings(ThreeAxisAccelemeterADXL345I2cAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _ThreeAxisAccelerometerADXL345 = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, connectionSettings);
+                return new ThreeAxisAccelerometerADXL345(device);
+            }).Result;
+            return _ThreeAxisAccelerometerADXL345;
+        }
+
         private static async Task<DeviceInformationCollection> GetDeviceInfo()
         {
             //Find the selector string for the I2C bus controller
