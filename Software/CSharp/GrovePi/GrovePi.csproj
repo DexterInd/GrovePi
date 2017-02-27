@@ -53,11 +53,14 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DeviceFactory.cs" />
     <Compile Include="GrovePi.cs" />
+    <Compile Include="I2CDevices\MiniMotorDriver.cs" />
+    <Compile Include="I2CDevices\OLEDDisplay9696.cs" />
     <Compile Include="I2CDevices\RgbLcdDisplay.cs" />
     <Compile Include="I2CDevices\SixAxisAccelerometerAndCompass.cs" />
     <Compile Include="Sensors\AirQualitySensor.cs" />
     <Compile Include="Sensors\ButtonSensor.cs" />
     <Compile Include="Sensors\Buzzer.cs" />
+    <Compile Include="Sensors\GasSensorMQ2.cs" />
     <Compile Include="Sensors\Led.cs" />
     <Compile Include="Pin.cs" />
     <Compile Include="PinMode.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Sensors\FourDigitDisplay.cs" />
     <Compile Include="Sensors\LedBar.cs" />
     <Compile Include="Sensors\LightSensor.cs" />
+    <Compile Include="Sensors\PIRMotionSensor.cs" />
     <Compile Include="Sensors\RealTimeClock.cs" />
     <Compile Include="Sensors\Relay.cs" />
     <Compile Include="Sensors\RotaryAngleSensor.cs" />
