@@ -38,13 +38,6 @@ namespace GrovePi.I2CDevices
 
         public IThreeAxisAccelerometerADXL345 Initialize()
         {
-
-            //var settings = new I2cConnectionSettings(ACCEL_I2C_ADDR); 
-            //settings.BusSpeed = I2cBusSpeed.FastMode;
-            //var controller = await I2cController.GetDefaultAsync();
-            //I2CAccel = controller.GetDevice(settings);    /* Create an I2cDevice with our selected bus controller and I2C settings */
-
-
             /* 
              * Initialize the accelerometer:
              *
@@ -61,19 +54,6 @@ namespace GrovePi.I2CDevices
 
             return this;
         }
-
-        //private void MainPage_Unloaded(object sender, object args)
-        //{
-        //    /* Cleanup */
-        //    DirectAccess.Dispose();
-        //}
-        
-        //public double[] updateAccData()
-        //{
-        //    double[] accel = ReadI2CAccel();
-
-        //    return accel;
-        //}
 
         public double[] GetAcclXYZ()
         {
