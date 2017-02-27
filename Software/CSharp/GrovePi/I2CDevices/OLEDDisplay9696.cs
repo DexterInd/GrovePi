@@ -362,9 +362,9 @@ namespace GrovePi.I2CDevices
                     byte bit2 = (byte)(Byte << (j + 1) & 0x80);
 
                     // Each bit is changed to a nibble
-                    c |= (byte)((bit1.Equals(1)) ? grayH : 0x00);
+                    c |= (byte)((bit1.Equals(0x80)) ? grayH : 0x00);
                     // Each bit is changed to a nibble
-                    c |= (byte)((bit2.Equals(1)) ? grayL : 0x00);
+                    c |= (byte)((bit2.Equals(0x80)) ? grayL : 0x00);
                     this.sendData(c);
                 }
             }
