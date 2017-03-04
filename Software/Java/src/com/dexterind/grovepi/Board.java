@@ -27,7 +27,7 @@ public class Board {
   
   private Debug debug;
 
-  public Board() throws IOException, InterruptedException {
+  public Board() throws IOException, InterruptedException, Exception {
     int busId;
 
     String type = SystemInfo.getBoardType().name();
