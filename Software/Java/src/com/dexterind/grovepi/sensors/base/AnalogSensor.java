@@ -11,7 +11,7 @@ public class AnalogSensor extends Sensor {
 
   protected Debug debug;
 
-  public AnalogSensor(int pin, int length) throws IOException, InterruptedException {
+  public AnalogSensor(int pin, int length) throws IOException, InterruptedException, Exception {
 	super();
 	this.pin = pin;
 	this.length = length == -1 ? this.length : length;
