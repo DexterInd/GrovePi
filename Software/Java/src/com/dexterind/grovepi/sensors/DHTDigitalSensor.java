@@ -51,7 +51,7 @@ public class DHTDigitalSensor extends DigitalSensor {
 	  return (float) (needsConversion ? this.convertFtoC(hi) : hi);
   }
 
-  public DHTDigitalSensor(int pin, int moduleType, int scale) throws IOException, InterruptedException {
+  public DHTDigitalSensor(int pin, int moduleType, int scale) throws IOException, InterruptedException, Exception {
 	super(pin);
 	this.moduleType = moduleType;
 	this.scale = scale;
