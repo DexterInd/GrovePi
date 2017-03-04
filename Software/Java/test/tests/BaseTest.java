@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class BaseTest implements GrovepiListener {
   private static Grovepi grovepi = null;
 
-  public BaseTest() throws IOException, InterruptedException {
+  public BaseTest() throws IOException, InterruptedException, Exception {
     System.out.println("-----------------------------------------------------");
     System.out.println(" GrovePi test application");
     System.out.println("----------------------------------------------------");
@@ -37,7 +37,7 @@ public class BaseTest implements GrovepiListener {
 			System.out.print( "\n" );
 			this.getDHTValue();
 			System.out.print( "\n" );
-		} catch ( IOException | InterruptedException e) {
+		} catch ( Exception e) {
 			System.out.print( "Err:" + e.getMessage() );
 		}
 	}
@@ -46,7 +46,7 @@ public class BaseTest implements GrovepiListener {
 	System.out.print(event.value);
   };
   
-  public void getDHTValue() throws IOException, InterruptedException {
+  public void getDHTValue() throws IOException, InterruptedException, Exception {
 	int pin = 2; // D2
 	DHTDigitalSensor sensor = new DHTDigitalSensor(
 								pin,
