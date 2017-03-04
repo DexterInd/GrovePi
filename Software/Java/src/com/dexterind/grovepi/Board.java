@@ -42,7 +42,7 @@ public class Board {
     device = bus.getDevice(ADDRESS);
   }
 
-  public static Board getInstance() throws IOException, InterruptedException {
+  public static Board getInstance() throws IOException, InterruptedException, Exception {
     if(instance == null) {
       instance = new Board();
     }
