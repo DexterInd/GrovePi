@@ -11,7 +11,7 @@ import com.dexterind.grovepi.utils.*;
 public class Sensor {
   protected Board board;
   
-  public Sensor() throws IOException, InterruptedException {
+  public Sensor() throws IOException, InterruptedException, Exception {
     board = Board.getInstance();
   }
   
