@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 # USAGE
 #
-# Connect the dust sensor to Port 8 on the GrovePi. The dust sensor only works on that port
+# Connect the dust sensor to Port D2 on the GrovePi. The dust sensor only works on that port
 # The dust sensor takes 30 seconds to update the new values
 #
 # the fist byte is 1 for a new value and 0 for old values
