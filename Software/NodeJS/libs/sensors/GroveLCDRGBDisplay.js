@@ -138,9 +138,9 @@ var GroveLCDRGBDisplay = class GroveLCDRGBDisplay {
 	}
 
 	/**
-	 *  Reset the display to only show the display message; useful on exit of program
+	 *  Reset the display and turn off LED light useful on termination
 	 */
-	turnOffDisplay(displayMsg) {
+	turnOffDisplay() {
 		this.textCommand(0x01); // clear display
 		//sleep.msleep(50);
 		this.setRGBAry(colorBlack);
