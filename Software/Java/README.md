@@ -34,7 +34,7 @@ In case of any trouble or if you need further information don't hesitate to leav
 
 ## License
 GrovePi for the Raspberry Pi: an open source robotics platform for the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
