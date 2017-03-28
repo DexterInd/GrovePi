@@ -7,6 +7,7 @@ USER_ID=$(/usr/bin/id -u)
 USER_NAME=$(/usr/bin/who am i | awk '{ print $1 }')
 SCRIPT_PATH=$(/usr/bin/realpath $0)
 DIR_PATH=$(/usr/bin/dirname ${SCRIPT_PATH} | sed 's/\/Script$//')
+REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
 
 source $DEXTERSCRIPT/functions_library.sh
 
@@ -219,6 +220,9 @@ install_python_libs(){
 	echo "Making libraries global . . ."
 	echo "============================="
 	if [ -d /usr/lib/python2.7/dist-packages ]; then
+		# Usually "/" used as delimter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
+		# confused on expanding REPO_PATH as it finds "/" to be delimeters, hence here "@" is used as delimeter
+		sudo sed -i "s@^/Software@$REPO_PATH&@" $REPO_PATH/Script/grove.pth
 		sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
 	else
 		echo "/usr/lib/python2.7/dist-packages not found, exiting"
