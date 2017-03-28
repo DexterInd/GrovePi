@@ -1,10 +1,9 @@
 #! /bin/bash
-
+REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
 echo =============================
 echo GrovePi Troubleshooting Script
 echo ============================= 
-
-cd /home/pi/Desktop/GrovePi/Troubleshooting
+cd $REPO_PATH/Troubleshooting
 echo ""
 echo Adding permissions to the scripts
 echo ================================= 
