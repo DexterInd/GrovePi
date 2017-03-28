@@ -18,17 +18,31 @@ function getHeatIndex(temp, hum, scale) {
 
   temp = needsConversion ? convertCtoF(temp) : temp
 
-  var hi = -42.379 +
-           2.04901523  * temp +
-           10.14333127 * hum +
-          -0.22475541  * temp * hum +
-          -0.00683783  * Math.pow(temp, 2) +
-          -0.05481717  * Math.pow(hum, 2) +
-           0.00122874  * Math.pow(temp, 2) * hum +
-           0.00085282  * temp * Math.pow(hum, 2) +
-          -0.00000199  * Math.pow(temp, 2) * Math.pow(hum, 2)
+  // Steadman's result
+  var heatIndex = 0.5 * (temp + 61 + (temp - 68) * 1.2 + hum * 0.094)
 
-  return needsConversion ? convertFtoC(hi) : hi
+  // regression equation of Rothfusz is appropriate
+  if (temp >= 80) {
+      var heatIndexBase = (-42.379                                  +
+                            2.04901523  * temp                      +
+                            10.14333127               * hum         +
+                            -0.22475541 * temp        * hum         +
+                            -0.00683783 * temp * temp               +
+                            -0.05481717               * hum * hum   +
+                            0.00122874  * temp * temp * hum         +
+                            0.00085282  * temp        * hum * hum   +
+                            -0.00000199 * temp * temp * hum * hum   )
+      // adjustment
+      if (hum < 13 && temp <= 112) {
+          heatIndex = heatIndexBase - (13 - hum) / 4 * Math.sqrt((17 - Math.abs(temp - 95)) / 17)
+      } else if (hum > 85 && temp <= 87) {
+          heatIndex = heatIndexBase + ((hum - 85) / 10) * ((87 - temp) / 5)
+      } else {
+          heatIndex = heatIndexBase
+      }
+  }
+  
+  return needsConversion ? convertFtoC(heatIndex) : heatIndex
 }
 
 DHTDigitalSensor.prototype = new DigitalSensor()

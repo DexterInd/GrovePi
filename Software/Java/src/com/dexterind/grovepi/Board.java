@@ -27,7 +27,7 @@ public class Board {
   
   private Debug debug;
 
-  public Board() throws IOException, InterruptedException {
+  public Board() throws IOException, InterruptedException, Exception {
     int busId;
 
     String type = SystemInfo.getBoardType().name();
@@ -42,7 +42,7 @@ public class Board {
     device = bus.getDevice(ADDRESS);
   }
 
-  public static Board getInstance() throws IOException, InterruptedException {
+  public static Board getInstance() throws IOException, InterruptedException, Exception {
     if(instance == null) {
       instance = new Board();
     }

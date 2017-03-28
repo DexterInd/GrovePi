@@ -12,7 +12,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 # USAGE
 #
-# Connect the dust sensor to Port 8 on the GrovePi. The dust sensor only works on that port
+# Connect the dust sensor to Port D2 on the GrovePi. The dust sensor only works on that port
 # The dust sensor takes 30 seconds to update the new values
 #
 # the fist byte is 1 for a new value and 0 for old values

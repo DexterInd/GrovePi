@@ -18,6 +18,7 @@ namespace GrovePi
         IGrovePi GrovePi(int address);
         IRelay Relay(Pin pin);
         ILed Led(Pin pin);
+        ITemperatureSensor TemperatureSensor(Pin pin);
         ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model);
         IDHTTemperatureAndHumiditySensor DHTTemperatureAndHumiditySensor(Pin pin, DHTModel model);
         IUltrasonicRangerSensor UltraSonicSensor(Pin pin);
@@ -35,6 +36,11 @@ namespace GrovePi
         IRgbLcdDisplay RgbLcdDisplay();
         IRgbLcdDisplay RgbLcdDisplay(int rgbAddress, int textAddress);
         ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass();
+        IPIRMotionSensor PIRMotionSensor(Pin pin);
+        IGasSensorMQ2 GasSensorMQ2(Pin pin);
+        IMiniMotorDriver MiniMotorDriver();
+        IOLEDDisplay9696 OLEDDisplay9696();
+        IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345();
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -44,9 +50,16 @@ namespace GrovePi
         private const byte DisplayRgbI2CAddress = 0x62;
         private const byte DisplayTextI2CAddress = 0x3e;
         private const byte SixAxisAccelerometerI2CAddress = 0x1e;
+        private const byte MiniMotorDriverI2cAddress1 = 0x62;  // 0xC4
+        private const byte MiniMotorDriverI2cAddress2 = 0x60;  // 0xC0
+        private const byte OLED96_96I2cAddress = 0x3C;
+        private const byte ThreeAxisAccelemeterADXL345I2cAddress = 0x53;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
         private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
+        private MiniMotorDriver _miniMotorDriver;
+        private OLEDDisplay9696 _oledDisplay9696;
+        private ThreeAxisAccelerometerADXL345 _ThreeAxisAccelerometerADXL345;
 
         public IGrovePi GrovePi()
         {
@@ -66,6 +79,11 @@ namespace GrovePi
         public ILed Led(Pin pin)
         {
             return DoBuild(x => new Led(x, pin));
+        }
+
+        public ITemperatureSensor TemperatureSensor(Pin pin)
+        {
+            return DoBuild(x => new TemperatureSensor(x, pin));
         }
 
         public ITemperatureAndHumiditySensor TemperatureAndHumiditySensor(Pin pin, Model model)
@@ -146,6 +164,26 @@ namespace GrovePi
         public ISixAxisAccelerometerAndCompass SixAxisAccelerometerAndCompass()
         {
             return BuildSixAxisAccelerometerAndCompassImpl();
+        }
+
+        public IMiniMotorDriver MiniMotorDriver()
+        {
+            return BuildMiniMotorDriverImpl(MiniMotorDriverI2cAddress1, MiniMotorDriverI2cAddress2);
+        }
+
+        public IMiniMotorDriver MiniMotorDriver(int address1, int address2)
+        {
+            return BuildMiniMotorDriverImpl(address1, address2);
+        }
+
+        public IOLEDDisplay9696 OLEDDisplay9696()
+        {
+            return BuildOLEDDisplayImpl();
+        }
+
+        public IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345()
+        {
+            return BuildThreeAxisAccelerometerADXL345Impl();
         }
 
         public IButtonSensor ButtonSensor(Pin pin)
@@ -236,6 +274,74 @@ namespace GrovePi
             return _sixAxisAccelerometerAndCompass;
         }
 
+        private MiniMotorDriver BuildMiniMotorDriverImpl(int miniMotorDriverAddress1, int miniMotorDriverAddress2)
+        {
+            if (_miniMotorDriver != null)
+            {
+                return _miniMotorDriver;
+            }
+
+            var motor1ConnectionSettings = new I2cConnectionSettings(MiniMotorDriverI2cAddress1)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+            var motor2ConnectionSettings = new I2cConnectionSettings(MiniMotorDriverI2cAddress2)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _miniMotorDriver = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+                var miniMotor1 = await I2cDevice.FromIdAsync(dis[0].Id, motor1ConnectionSettings);
+                var miniMotor2 = await I2cDevice.FromIdAsync(dis[0].Id, motor2ConnectionSettings);
+                return new MiniMotorDriver(miniMotor1, miniMotor2);
+            }).Result;
+            return _miniMotorDriver;
+        }
+
+        private OLEDDisplay9696 BuildOLEDDisplayImpl()
+        {
+            if(_oledDisplay9696 != null)
+            {
+                return _oledDisplay9696;
+            }
+            var connectionSettings = new I2cConnectionSettings(OLED96_96I2cAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _oledDisplay9696 = Task.Run(async () => 
+            {
+                var dis = await GetDeviceInfo();
+
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, connectionSettings);
+                return new OLEDDisplay9696(device);
+            }).Result;
+            return _oledDisplay9696;
+        }
+
+        private ThreeAxisAccelerometerADXL345 BuildThreeAxisAccelerometerADXL345Impl()
+        {
+            if (_ThreeAxisAccelerometerADXL345 != null)
+            {
+                return _ThreeAxisAccelerometerADXL345;
+            }
+            var connectionSettings = new I2cConnectionSettings(ThreeAxisAccelemeterADXL345I2cAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _ThreeAxisAccelerometerADXL345 = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, connectionSettings);
+                return new ThreeAxisAccelerometerADXL345(device);
+            }).Result;
+            return _ThreeAxisAccelerometerADXL345;
+        }
+
         private static async Task<DeviceInformationCollection> GetDeviceInfo()
         {
             //Find the selector string for the I2C bus controller
@@ -243,6 +349,16 @@ namespace GrovePi
             //Find the I2C bus controller device with our selector string
             var dis = await DeviceInformation.FindAllAsync(aqs);
             return dis;
+        }
+
+        public IPIRMotionSensor PIRMotionSensor(Pin pin)
+        {
+            return DoBuild(x => new PIRMotionSensor(x, pin));
+        }
+
+        public IGasSensorMQ2 GasSensorMQ2(Pin pin)
+        {
+            return DoBuild(x => new GasSensorMQ2(x, pin));
         }
     }
 }

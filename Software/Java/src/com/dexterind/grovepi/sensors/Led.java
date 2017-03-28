@@ -62,7 +62,7 @@ public class Led extends AnalogSensor{
    * @throws IOException
    * @throws InterruptedException
    */
-  public Led(int pin) throws IOException, InterruptedException{
+  public Led(int pin) throws IOException, InterruptedException, Exception {
     super(pin, MAX_BRIGHTNESS + 1);
   }
 

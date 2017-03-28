@@ -9,7 +9,7 @@ public class DigitalSensor extends Sensor {
   protected int pin = 0;
   protected Debug debug;
 
-  public DigitalSensor(int pin) throws IOException, InterruptedException {
+  public DigitalSensor(int pin) throws IOException, InterruptedException, Exception {
 	super();
 	this.pin = pin;
   }

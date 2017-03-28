@@ -20,7 +20,7 @@ public final class Grovepi {
   
   private Debug debug;
 
-  public Grovepi() {
+  public Grovepi() throws Exception {
     debug = new Debug("com.dexterind.gopigo.Grovepi");
     debug.log(Debug.FINEST, "Instancing a new GrovePi");
 
