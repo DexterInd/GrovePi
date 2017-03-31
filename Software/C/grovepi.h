@@ -25,6 +25,7 @@ extern unsigned long reg_addr;
 #define aRead_cmd 	3
 #define aWrite_cmd 	4
 #define pMode_cmd	5
+#define uRead_cmd       7
 //Initialize
 int init(void);
 //Write a register
@@ -34,6 +35,7 @@ char read_byte(void);
 
 void pi_sleep(int); 
 int analogRead(int pin);
+int ultrasonicRead(int pin);
 int digitalWrite(int pin,int value);
 int pinMode(int pin,int mode);
 int digitalRead(int pin);

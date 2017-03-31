@@ -1,4 +1,5 @@
 #! /bin/bash
+REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
 echo "Updating the GrovePi firmware"
 echo "============================="
 echo " http://www.dexterindustries.com/grovepi "
@@ -24,5 +25,5 @@ fi
 
 printf "\nPress any key to start firmware update\n. . .";
 read -n1
-source /home/pi/Desktop/GrovePi/Firmware/grovepi_firmware_update.sh
+source $REPO_PATH/Firmware/grovepi_firmware_update.sh
 update_grovepi_firmware
