@@ -1,0 +1,139 @@
+===== SSH Static IP connection.
+
++ Enable SSH access in the pi (usually on by default)
+
++ Set up Ethernet _static IP_ (connect to your local network)
+PC <-> Rpi You know both IP addresses.
+PC connects to the pi using PUTTY with the static IP.
+
+auto eth0
+allow-hotplug eth0
+iface eth0 inet static
+address 192.168.127.1
+netmask 255.255.255.0
+
++ Add "useDNS no" to the /etc/ssh/sshd_config file fixes slow login attempts.
+
+Restart interfaces!
+sudo service networking restart
+====== WIFI =====
+To configure wireless open the file
+/etc/wpa_supplicant/wpa_supplicant.conf
+file and add the settings for your network.
+sudo ifdown wlan0
+sudo ifup wlan0
+
+Set up wireless
+
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+ ssid="Aperture.Guests"
+ psk="123123123"
+}
+
+
+set default internet
+iface default inet dhcp
+
+
+===== /etc/network/interfaces =====
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+allow-hotplug eth0
+iface eth0 inet static
+address 192.168.127.1
+netmask 255.255.255.0
+
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+iface default inet dhcp
+
+
+===== SET UP DHCP SERVER ON THE PI
+
+Putty to the pi and
+sudo apt-get update
+sudo apt-get install dnsmasq
+
+cd /etc
+sudo mv dnsmasq.conf dnsmasq.default
+sudo nano dnsmasq.conf
+
+interface=eth0
+dhcp-range=192.168.127.11,192.168.127.254,255.255.255.0,12h
+
+sudo service dnsmasq restart
+
+MORE STUFF::
+http://www.glennklockwood.com/sa/rpi-wifi-bridge.php
+
+==== Enable I2C and install i2c utilities ====
+
+
+
+==== JAVA SETUP ====
+
+Download the JDK8 for ARM processors, install on the pi
+Download the DeviceIO and install on the pi
+
+DIO POLICY GPIO+i2C
+
+grant {
+        permission jdk.dio.gpio.GPIOPinPermission "*:*";
+        permission jdk.dio.DeviceMgmtPermission "*:*", "open";
+        permission jdk.dio.i2cbus.I2CPermission "*:*";
+};
+
+
+==== GrovePi and python ====
+
+
+
+
+CREATE BACKUP IMG
+https://www.raspberrypi.org/forums/viewtopic.php?f=26&t=5947&start=25
+
+http://www.richardsramblings.com/2013/02/minimalist-raspberry-pi-server-image/
+
+Free Space
+
+df -B1
+
+Minimalist image::
+
+Remove the GUI Modules
+
+sudo apt-get purge xserver.* x11.* xarchiver xauth xkb-data console-setup xinit lightdm lxde.* python-tk python3-tk scratch gtk.* libgtk.* openbox libxt.* lxpanel gnome.* libqt.* libxcb.* libxfont.* lxmenu.* gvfs.* xdg-.* desktop.* tcl.* shared-mime-info penguinspuzzle omxplayer gsfonts
+sudo apt-get --yes autoremove
+sudo apt-get upgrade
+
+Disable Memory Swapping
+
+sudo swapoff -a
+sudo rm /var/swap
+
+Prepare for Final Imaging
+
+sudo rm -f /var/cache/apt/*cache.bin
+sudo apt-get --yes autoclean
+sudo apt-get --yes clean
+
+sudo find / -type f -name "*-old" |xargs sudo rm -rf
+sudo rm -rf /var/backups/* /var/lib/apt/lists/* ~/.bash_history
+find /var/log/ -type f |xargs sudo rm -rf
+sudo cp /dev/null /etc/resolv.conf
+
+
+
+dd if=/dev/mmcblk0 of=/home/YOUR_USERNAME/Desktop/backup.img bs=1M count=2048
