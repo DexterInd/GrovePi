@@ -40,7 +40,7 @@ import math
 
 # Connections
 sound_sensor = 0        # port A0
-light_sensor = 1        # port A1 
+light_sensor = 1        # port A1
 temperature_sensor = 2  # port D2
 led = 3                 # port D3
 
@@ -48,10 +48,10 @@ intro_str = "DI Lab's"
 
 # Connect to Twitter
 api = twitter.Api(
-    consumer_key='YourKey',
-    consumer_secret='YourKey',
-    access_token_key='YourKey',
-    access_token_secret='YourKey'
+    consumer_key='85sQIIndyvuYhvIBS3KwHtDFB',
+    consumer_secret='jEVKGoJHxXa86WWJwm4UXhUy0Qqj5GVNmzvQIGhxL60xiVRVXL',
+    access_token_key='20803047-Qeb6OWRZTfbVFR2TKPVItqUTNIrARly0EtrECAy8v',
+    access_token_secret='BCSgEq0XF0uMQEF1uENDOtoERG2meCTHpdtQ1mhduoqr5'
     )
 
 grovepi.pinMode(led,"OUTPUT")
@@ -59,10 +59,10 @@ grovepi.analogWrite(led,255)  #turn led to max to show readiness
 
 
 while True:
+
+
     # Error handling in case of problems communicating with the GrovePi
     try:
-        # Get value from temperature sensor
-        [t,h] = grovepi.dht(temperature_sensor,0)
 
         # Get value from light sensor
         light_intensity = grovepi.analogRead(light_sensor)
@@ -73,14 +73,21 @@ while True:
         # Get sound level
         sound_level = grovepi.analogRead(sound_sensor)
 
+        time.sleep(0.5)
+
+        # Get value from temperature sensor
+        [t,h]=[0,0]
+        [t,h] = grovepi.dht(temperature_sensor,0)
+
         # Post a tweet
-        out_str ="%s Temp: %d C, Humidity: %d, Light: %d, Sound: %d" %(intro_str,t,h,light_intensity/10,sound_level) 
+        out_str ="%s Temp: %d C, Humidity: %d, Light: %d, Sound: %d" %(intro_str,t,h,light_intensity/10,sound_level)
         print (out_str)
-        api.PostUpdate(out_str)
-        time.sleep(60)
+        # api.PostUpdate(out_str)
     except IOError:
         print("Error")
     except KeyboardInterrupt:
         exit()
-    except:
-        print("Duplicate Tweet or Twitter Refusal")
+    except Exception as e:
+        print("Duplicate Tweet or Twitter Refusal: {}".format(e))
+
+    time.sleep(60)
