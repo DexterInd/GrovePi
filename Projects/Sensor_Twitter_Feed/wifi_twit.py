@@ -48,10 +48,10 @@ intro_str = "DI Lab's"
 
 # Connect to Twitter
 api = twitter.Api(
-    consumer_key='85sQIIndyvuYhvIBS3KwHtDFB',
-    consumer_secret='jEVKGoJHxXa86WWJwm4UXhUy0Qqj5GVNmzvQIGhxL60xiVRVXL',
-    access_token_key='20803047-Qeb6OWRZTfbVFR2TKPVItqUTNIrARly0EtrECAy8v',
-    access_token_secret='BCSgEq0XF0uMQEF1uENDOtoERG2meCTHpdtQ1mhduoqr5'
+    consumer_key='YourKey',
+    consumer_secret='YourKey',
+    access_token_key='YourKey',
+    access_token_secret='YourKey'
     )
 
 grovepi.pinMode(led,"OUTPUT")
