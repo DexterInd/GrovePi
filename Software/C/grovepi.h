@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <linux/i2c-dev.h>
 #include <fcntl.h>
 #include <string.h>
@@ -13,31 +14,42 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdbool.h>
+#include <stdint.h>
 
-extern int fd;
-extern char *fileName;
-extern int  address;
-extern unsigned char w_buf[5],r_buf[32];
-extern unsigned long reg_addr;
+static const bool DEBUG = false;
+const unsigned int RBUFFER_SIZE = 32;
+const unsigned int WBUFFER_SIZE = 5;
 
-#define dRead_cmd 	1
-#define dWrite_cmd 	2
-#define aRead_cmd 	3
-#define aWrite_cmd 	4
-#define pMode_cmd	5
-#define uRead_cmd       7
-//Initialize
-int init(void);
-//Write a register
-int write_block(char cmd,char v1,char v2,char v3);
-//Read 1 byte of data
-char read_byte(void);
+static char smbus_name[11];
+static int file_device = NULL;
 
-void pi_sleep(int); 
-int analogRead(int pin);
-int ultrasonicRead(int pin);
-int digitalWrite(int pin,int value);
-int pinMode(int pin,int mode);
-int digitalRead(int pin);
-int analogWrite(int pin,int value);
-#endif /*GROVEPI_H */
+const unsigned int DIGITAL_READ = 1;
+const unsigned int DIGITAL_WRITE = 2;
+const unsigned int ANALOG_READ = 3;
+const unsigned int ANALOG_WRITE = 4;
+const unsigned int PIN_MODE = 5;
+const unsigned int USONIC_READ = 6;
+const unsigned int INPUT = 0;
+const unsigned int OUTPUT = 1;
+uint8_t ADDRESS = 0x04;
+
+static unsigned int gpioHardwareRevision();
+static char* SMBusName();
+
+// default address of GrovePi set as default argument
+bool initGrovePi(uint8_t address);
+bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2);
+bool writeByte(uint8_t byte_val);
+bool readBlock(uint8_t *data_block);
+uint8_t readByte();
+
+void piSleep(unsigned int milliseconds);
+bool pinMode(uint8_t pin, uint8_t mode);
+bool digitalWrite(uint8_t pin, uint8_t value);
+uint8_t digitalRead(uint8_t pin);
+bool analogWrite(uint8_t pin, uint8_t value);
+int analogRead(uint8_t pin);
+int ultrasonicRead(uint8_t pin);
+
+#endif

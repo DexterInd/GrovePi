@@ -1,5 +1,5 @@
 // GrovePi C library
-// v0.1
+// v0.2
 //
 // This library provides the basic functions for using the GrovePi in C
 //
@@ -7,185 +7,293 @@
 //
 // Have a question about this example?  Ask on the forums here: http://forum.dexterindustries.com/c/grovepi
 //
-// 	History
-// 	------------------------------------------------
-// 	Author		Date      		Comments
-//	Karan		28 Dec 15		Initial Authoring
+//      History
+//      ------------------------------------------------
+//      Author		Date                    Comments
+//	    Karan		  28 Dec 2015		            Initial Authoring
+//	    Robert		April 2017							Continuing
 
 /*
-License
+   License
 
-The MIT License (MIT)
+   The MIT License (MIT)
 
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
+   GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
+   Copyright (C) 2017  Dexter Industries
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   THE SOFTWARE.
+ */
 
 #include "grovepi.h"
 
-int fd;													
-char *fileName = "/dev/i2c-1";								
-int  address = 0x04;									
-unsigned char w_buf[5],ptr,r_buf[32];	
-unsigned long reg_addr=0;    
-
-#define dbg 0
-int init(void)
+/**
+ * determines the revision of the raspberry hardware
+ * @return revision number
+ */
+static unsigned int gpioHardwareRevision()
 {
-	if ((fd = open(fileName, O_RDWR)) < 0) 
-	{					// Open port for reading and writing
+	static unsigned revision = 0;
+	FILE * filp = fopen("/proc/cpuinfo", "r");
+	char buffer[512];
+	char term;
+
+	if(filp != NULL)
+	{
+		while(fgets(buffer,sizeof(buffer),filp) != NULL)
+		{
+			if(!strncasecmp("revision\t", buffer, 9))
+			{
+				if(sscanf(buffer + strlen(buffer) - 5, "%x%c", &revision, &term) == 2)
+				{
+					if(term == '\n')
+						break;
+					revision = 0;
+				}
+			}
+		}
+		fclose(filp);
+	}
+	return revision;
+}
+
+/**
+ * determines wheter I2C is found at "/dev/i2c-0" or "/dev/i2c-1"
+ * depending on the raspberry model
+ *
+ * hw_rev    0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+ * Type.1    X  X  -  -  X  -  -  X  X  X  X  X  -  -  X  X
+ * Type.2    -  -  X  X  X  -  -  X  X  X  X  X  -  -  X  X
+ * Type.3          X  X  X  X  X  X  X  X  X  X  X  X  X  X
+ *
+ * hw_rev    16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+ * Type.1    -  X  X  -  -  X  X  X  X  X  -  -  -  -  -  -
+ * Type.2    -  X  X  -  -  -  X  X  X  X  -  X  X  X  X  X
+ * Type.3    X  X  X  X  X  X  X  X  X  X  X  X  -  -  -  -
+ *
+ * @return i2c location
+ */
+static char* SMBusName()
+{
+	unsigned int hw_revision = gpioHardwareRevision();
+	unsigned int smbus_rev;
+
+	if(hw_revision < 4)
+		smbus_rev = 1;
+	else if(hw_revision < 16)
+		smbus_rev = 2;
+	else
+		smbus_rev = 3;
+
+	if(smbus_rev == 2 or smbus_rev == 3)
+		strcpy(smbus_name, "/dev/i2c-1");
+	else
+		strcpy(smbus_name, "/dev/i2c-0");
+
+	return smbus_name;
+}
+
+/**
+ * tries to get communication w/ the GrovePi
+ * @param  address 8-bit address of the slave device
+ * @return         true on success, otherwise false
+ */
+bool initGrovePi(uint8_t address)
+{
+	bool success = true;
+
+	// open port for read/write operation
+	if((file_device = open(SMBusName(), O_RDWR)) < 0)
+	{
 		printf("Failed to open i2c port\n");
-		return -1;
+		success = false;
 	}
-	
-	if (ioctl(fd, I2C_SLAVE, address) < 0) 
-	{					// Set the port options and set the address of the device 
+	// setting up port options and address of the device
+	else if(ioctl(file_device, I2C_SLAVE, address) < 0)
+	{
 		printf("Unable to get bus access to talk to slave\n");
-		return -1;
+		success = false;
 	}
-	return 1;
-}
-//Write a register
-int write_block(char cmd,char v1,char v2,char v3)
-{			
-	int dg;
-	w_buf[0]=cmd;
-    w_buf[1]=v1;
-    w_buf[2]=v2;
-    w_buf[3]=v3;
-	
-    dg=i2c_smbus_write_i2c_block_data(fd,1,4,w_buf);
-	
-	if (dbg)
-		printf("wbk: %d\n",dg);
-	
-    // if (i2c_smbus_write_i2c_block_data(fd,1,4,w_buf) != 5) 
-    // {								
-        // printf("Error writing to GrovePi\n");
-        // return -1;
-    // }
-    return 1; 
+
+	return success;
 }
 
-//write a byte to the GrovePi
-int write_byte(char b)
+/**
+ * writes a block of [WBUFFER_SIZE] bytes to the slave i2c device
+ * @param  command    command to send to GrovePi
+ * @param  pin_number [description]
+ * @param  opt1       optional argument depending on sensor/actuator/etc
+ * @param  opt2       optional argument depending on sensor/actuator/etc
+ * @return            always true
+ */
+bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 {
-    w_buf[0]=b;													
-    if ((write(fd, w_buf, 1)) != 1) 
-    {								
-        printf("Error writing to GrovePi\n");
-        return -1;
-    }
-    return 1; 
+	int debug_code;
+	uint8_t data_block[WBUFFER_SIZE] = {0, command, pin_number, opt1, opt2};
+
+	// puts data on the i2c line
+	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, WBUFFER_SIZE, data_block);
+	if(DEBUG)
+		printf("write block: %d");
+
+	return true;
 }
 
-//Read 1 byte of data
-char read_byte(void)
+/**
+ * sends a single byte to the i2c slave
+ * @param  byte_val byte to be sent
+ * @return          true on success, otherwise false
+ */
+bool writeByte(uint8_t byte_val)
 {
-	r_buf[0]=i2c_smbus_read_byte(fd);
-	if (dbg)
-		printf("rbt: %d\n",r_buf[0]);
-	// if (read(fd, r_buf, reg_size) != reg_size) {								
-		// printf("Unable to read from GrovePi\n");
-		// //exit(1);
-        // return -1;
-	// }
-    
-    return r_buf[0];
+	success = true;
+	uint8_t data_block[WBUFFER_SIZE] = {byte_val};
+
+	// try to send the byte to the i2c slave
+	if((write(file_device, data_block, 1)) != 1)
+	{
+		printf("Error writing byte to GrovePi\n");
+		success = false;
+	}
+
+	return succes;
 }
 
-//Read a 32 byte block of data from the GrovePi
-char read_block(void)
+/**
+ * reads a block of [RBUFFER_SIZE] bytes from the slave device
+ * @param  data_block pointer to hold the read data
+ * @return            always true
+ */
+bool readBlock(uint8_t *data_block)
 {
-    int ret;
-    ret=i2c_smbus_read_i2c_block_data(fd,1,32,&r_buf[0]);
-	//&r_buf[0]=&ptr;
-	if(dbg)
-		printf("rbk: %d\n",ret);
-	// if (read(fd, r_buf, reg_size) != reg_size) {								
-		// printf("Unable to read from GrovePi\n");
-		// //exit(1);
-        // return -1;
-	// }
-    
-    return 1;
+	int debug_code;
+	debug_code = i2c_smbus_read_i2c_block_data(file_device, 1, RBUFFER_SIZE, data_block);
+
+	if(DEBUG)
+		printf("read block: %d", debug_code);
+
+	return true;
 }
 
-void pi_sleep(int t) 
+/**
+ * reads 1 byte from the slave device
+ * @return value read from the slave device
+ */
+uint8_t readByte()
 {
-	usleep(t*1000);
+	uint8_t value = i2c_smbus_read_byte(file_device);
+
+	if(DEBUG)
+		printf("read byte: %d\n", value);
+
+	return value;
 }
 
-// Read analog value from Pin
-int analogRead(int pin)
+/**
+ * sleep raspberry
+ * @param milliseconds time
+ */
+void piSleep(unsigned int milliseconds)
 {
-	int data;
-	write_block(aRead_cmd,pin,0,0);
-	read_byte();
-	read_block();
-	data=r_buf[1]* 256 + r_buf[2];
-	if (data==65535)
-		return -1;
-	return data;
+	usleep(milliseconds * 1000);
 }
 
-//Write a digital value to a pin
-int digitalWrite(int pin,int value)
+/**
+ * set pin as OUTPUT or INPUT
+ * @param  pin  number
+ * @param  mode OUTPUT/INPUT
+ * @return      always true
+ */
+bool pinMode(uint8_t pin, uint8_t mode)
 {
-	return write_block(dWrite_cmd,pin,value,0);
+	return writeBlock(PIN_MODE, pin, mode, NULL);
 }
 
-//Set the mode of a pin
-//mode
-//	1: 	output
-//	0:	input
-int pinMode(int pin,int mode)
+/**
+ * set a pin as HIGH or LOW
+ * @param  pin   number
+ * @param  value HIGH or LOW
+ * @return       always true
+ */
+bool digitalWrite(uint8_t pin, uint8_t value)
 {
-	return write_block(pMode_cmd,pin,mode,0);
+	return writeBlock(DIGITAL_WRITE, pin, value, NULL);
 }
 
-//Read a digital value from a pin
-int digitalRead(int pin)
+/**
+ * reads whether a pin is HIGH or LOW
+ * @param  pin number
+ * @return     HIGH or LOW
+ */
+uint8_t digitalRead(uint8_t pin)
 {
-	write_block(dRead_cmd,pin,0,0);
+	writeBlock(DIGITAL_READ, pin, NULL, NULL);
+	// wait 10 ms to receive data
 	usleep(10000);
 	return read_byte();
 }
 
-//Write a PWM value to a pin
-int analogWrite(int pin,int value)
+/**
+ * describe at a desired pin a voltage between 0 and VCC
+ * @param  pin   number
+ * @param  value 0-255
+ * @return       always true
+ */
+bool analogWrite(uint8_t pin, uint8_t value)
 {
-	return write_block(aWrite_cmd,pin,value,0);
+	return write_block(ANALOG_WRITE, pin, value, NULL);
 }
-// Read a Ultrasonic distance value from a pin
-int ultrasonicRead(int pin)
+
+/**
+ * reads analog data from grovepi sensor(s)
+ * @param  pin number
+ * @return     16-bit data
+ */
+int analogRead(uint8_t pin)
 {
-	int data;
-	write_block(uRead_cmd,pin,0,0);
+	uint8_t data[32];
+	writeBlock(ANALOG_READ, pin, NULL, NULL);
+	readBlock(data);
+
+	int output = data[1] << 8 + data[2];
+	if(output == 65535)
+		output = -1;
+	return output;
+}
+
+/**
+ * to be completed
+ * @param  pin number
+ * @return     time taken for the sound to travel back?
+ */
+int ultrasonicRead(uint8_t pin)
+{
+	uint8_t incoming[32];
+	int output;
+	write_block(USONIC_READ, pin, NULL, NULL);
 	usleep(60);
+
 	read_byte();
-	read_block();
-	data=r_buf[1]* 256 + r_buf[2];
-	if (data==65535)
-		return -1;
-	return data;
+	read_block(incoming);
+
+	output = incoming[1] << 8 + incoming[2];
+	if(output == 2 << 16 - 1)
+		output = -1;
+
+	return output;
 }
- 
