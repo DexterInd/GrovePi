@@ -1,21 +1,34 @@
-//GrovePi Example for using the digital write command
-#include "grovepi.h"
-//gcc grovepi_digital_write.c grovepi.c -Wall
+// GrovePi Example for using the digital write command
 // http://dexterindustries.com/grovepi
-int main(void)
-{		
-	//Exit on failure to start communications with the GrovePi
-	if(init()==-1)
-		exit(1);
-	
-	//Set pin mode to output
-	pinMode(4,1);
-	while(1)
+#include "grovepi.h"
+//g++ grovepi_digital_write.c grovepi.c -Wall
+
+int main()
+{
+	bool success = initGrovePi(ADDRESS); // initialize communications w/ GrovePi
+	int pin = 4; // select a digital pin
+	int delay = 500; // measured in ms
+
+	// if communication has been established
+	if(success)
 	{
-		digitalWrite(4,1);
-		pi_sleep(500);
-		digitalWrite(4,0);
-		pi_sleep(500);
+		// set the pin as an OUTPUT
+		pinMode(pin, OUTPUT);
+
+		// continuously digital write
+		// good LED Example
+		// 0.5 seconds OFF / 0.5 seconds ON
+		while(true)
+		{
+			printf("[pin %d][led] = ON\n", pin);
+			digitalWrite(pin, HIGH);
+			piSleep(delay);
+
+			printf("[pin %d][led] = OFF\n", pin);
+			digitalWrite(pin, LOW);
+			piSleep(delay);
+		}
 	}
-   	return 1;
+
+	return 0;
 }

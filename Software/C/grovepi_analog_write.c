@@ -1,25 +1,28 @@
-// GrovePi Example for using the analog write 
+// GrovePi Example for using the analog write
 // http://dexterindustries.com/grovepi
 #include "grovepi.h"
-//gcc grovepi_analog_write.c grovepi.c -Wall
-int main(void)
-{		
-	int i;
-	
-	//Exit on failure to start communications with the GrovePi
-	if(init()==-1)
-		exit(1);
-	
-	while(1)
+//g++ grovepi_analog_write.c grovepi.c -Wall
+
+int main()
+{
+	bool success = initGrovePi(ADDRESS); // initialize communications w/ GrovePi
+	int pin = 3; // select an analog capable pin
+
+	if(success)
 	{
-		for(i=0;i<256;i++)
+		// continuously write data
+		while(true)
 		{
-			printf("%d\n", i);
-			//Write the PWM value
-			analogWrite(3,i);
-			//Sleep for 10ms
-			pi_sleep(10);
+			// iterate the whole range of values
+			// 0 -> 255 maps to 0V -> VCC, where VCC is the supply voltage on GrovePi
+			for(int value = 0; value < 256; value++)
+			{
+				printf("[pin %d][analog write] = %d\n", pin, value);
+				analogWrite(pin, value);
+				piSleep(10); // wait 10 ms
+			}
 		}
 	}
-   	return 1;
+
+	return 0;
 }

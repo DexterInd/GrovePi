@@ -1,23 +1,34 @@
 // GrovePi Example for using the digital read command
 // http://dexterindustries.com/grovepi
 #include "grovepi.h"
-//gcc grovepi_digital_read.c grovepi.c -Wall
-int main(void)
-{		
-	int dval;
-	
-	//Exit on failure to start communications with the GrovePi
-	if(init()==-1)
-		exit(1);
-	
-	//Set pin mode to input
-	pinMode(4,0);
-	while(1)
+//g++ grovepi_digital_read.c grovepi.c -Wall
+
+int main()
+{
+	bool success = initGrovePi(ADDRESS); // initialize communications w/ GrovePi
+	int pin = 4; // select a digital pin
+	int state; // variable to hold the ON/OFF state
+
+
+	if(success)
 	{
-		dval=digitalRead(2);
-		printf("Digital read %d\n", dval);
-		//Sleep for 50ms
-		pi_sleep(50);
+		// set the pin as an INPUT port
+		pinMode(pin, INPUT);
+		// continuously read the data
+		while(true)
+		{
+			// read the data
+			state = digitalRead(pin);
+			printf("[pin %d][digital read] = ", pin);
+			if(state == 0)
+				printf("LOW\n");
+			else
+				printf("HIGH\n");
+
+			// wait 50 ms so that the program doesn't run too fast
+			piSleep(50);
+		}
 	}
-   	return 1;
+
+	return 0;
 }

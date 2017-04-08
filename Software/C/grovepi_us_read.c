@@ -1,19 +1,28 @@
+// GrovePi Example for using the digital write command
+// http://dexterindustries.com/grovepi
 #include "grovepi.h"
+//g++ grovepi_us_read.c grovepi.c -Wall
 
-int main(void)
-{		
-	int adata;
-	
-	//Exit on failure to start communications with the GrovePi
-	if(init()==-1)
-		exit(1);
-	
-	while(1)
+int main()
+{
+	bool success = initGrovePi(ADDRESS);
+	int pin = 4;
+	int incoming; // variable to hold the data
+
+	// if communication has been established
+	if(success)
 	{
-		adata=ultrasonicRead(4);
-		printf("ultasonic read %d\n",adata);
-		if(adata==-1)
-			printf("IO Error");
+		while(true)
+		{
+			incoming = ultrasonicRead(pin);
+			printf("[pin %d][ultrasonic read] = %d", pin, incoming);
+			if(incoming == -1)
+			{
+				printf("IO error on I2C\n");
+				break;
+			}
+		}
 	}
-   	return 1;
+
+	return 0;
 }

@@ -42,13 +42,27 @@
 
 #include "grovepi.h"
 
+static const bool DEBUG = false;
+static const int RBUFFER_SIZE = 32;
+static const int WBUFFER_SIZE = 5;
+
+static char smbus_name[11]; // enough characters for "/dev/i2c-x"
+static int file_device = 0;
+
+static const uint8_t DIGITAL_READ = 1;
+static const uint8_t DIGITAL_WRITE = 2;
+static const uint8_t ANALOG_READ = 3;
+static const uint8_t ANALOG_WRITE = 4;
+static const uint8_t PIN_MODE = 5;
+static const uint8_t USONIC_READ = 6;
+
 /**
  * determines the revision of the raspberry hardware
  * @return revision number
  */
-static unsigned int gpioHardwareRevision()
+static uint8_t gpioHardwareRevision()
 {
-	static unsigned revision = 0;
+	int revision = 0;
 	FILE * filp = fopen("/proc/cpuinfo", "r");
 	char buffer[512];
 	char term;
@@ -94,13 +108,16 @@ static char* SMBusName()
 	unsigned int smbus_rev;
 
 	if(hw_revision < 4)
+		// type 1
 		smbus_rev = 1;
 	else if(hw_revision < 16)
+		// type 2
 		smbus_rev = 2;
 	else
+		// type 3
 		smbus_rev = 3;
 
-	if(smbus_rev == 2 or smbus_rev == 3)
+	if(smbus_rev == 2) //  smbus_rev == 3)
 		strcpy(smbus_name, "/dev/i2c-1");
 	else
 		strcpy(smbus_name, "/dev/i2c-0");
@@ -110,7 +127,7 @@ static char* SMBusName()
 
 /**
  * tries to get communication w/ the GrovePi
- * @param  address 8-bit address of the slave device
+ * @param  address 7-bit address of the slave device
  * @return         true on success, otherwise false
  */
 bool initGrovePi(uint8_t address)
@@ -136,7 +153,7 @@ bool initGrovePi(uint8_t address)
 /**
  * writes a block of [WBUFFER_SIZE] bytes to the slave i2c device
  * @param  command    command to send to GrovePi
- * @param  pin_number [description]
+ * @param  pin_number number
  * @param  opt1       optional argument depending on sensor/actuator/etc
  * @param  opt2       optional argument depending on sensor/actuator/etc
  * @return            always true
@@ -144,12 +161,12 @@ bool initGrovePi(uint8_t address)
 bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 {
 	int debug_code;
-	uint8_t data_block[WBUFFER_SIZE] = {0, command, pin_number, opt1, opt2};
+	uint8_t data_block[5] = {0, command, pin_number, opt1, opt2};
 
 	// puts data on the i2c line
-	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, WBUFFER_SIZE, data_block);
+	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, 5, &data_block[0]);
 	if(DEBUG)
-		printf("write block: %d");
+		printf("write block: %d", debug_code);
 
 	return true;
 }
@@ -161,8 +178,8 @@ bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
  */
 bool writeByte(uint8_t byte_val)
 {
-	success = true;
-	uint8_t data_block[WBUFFER_SIZE] = {byte_val};
+	bool success = true;
+	int data_block[WBUFFER_SIZE] = {byte_val};
 
 	// try to send the byte to the i2c slave
 	if((write(file_device, data_block, 1)) != 1)
@@ -171,7 +188,7 @@ bool writeByte(uint8_t byte_val)
 		success = false;
 	}
 
-	return succes;
+	return success;
 }
 
 /**
@@ -221,7 +238,7 @@ void piSleep(unsigned int milliseconds)
  */
 bool pinMode(uint8_t pin, uint8_t mode)
 {
-	return writeBlock(PIN_MODE, pin, mode, NULL);
+	return writeBlock(PIN_MODE, pin, mode);
 }
 
 /**
@@ -230,9 +247,9 @@ bool pinMode(uint8_t pin, uint8_t mode)
  * @param  value HIGH or LOW
  * @return       always true
  */
-bool digitalWrite(uint8_t pin, uint8_t value)
+bool digitalWrite(uint8_t pin, bool value)
 {
-	return writeBlock(DIGITAL_WRITE, pin, value, NULL);
+	return writeBlock(DIGITAL_WRITE, pin, (uint8_t)value);
 }
 
 /**
@@ -242,10 +259,10 @@ bool digitalWrite(uint8_t pin, uint8_t value)
  */
 uint8_t digitalRead(uint8_t pin)
 {
-	writeBlock(DIGITAL_READ, pin, NULL, NULL);
+	writeBlock(DIGITAL_READ, pin);
 	// wait 10 ms to receive data
 	usleep(10000);
-	return read_byte();
+	return readByte();
 }
 
 /**
@@ -256,7 +273,7 @@ uint8_t digitalRead(uint8_t pin)
  */
 bool analogWrite(uint8_t pin, uint8_t value)
 {
-	return write_block(ANALOG_WRITE, pin, value, NULL);
+	return writeBlock(ANALOG_WRITE, pin, value);
 }
 
 /**
@@ -267,10 +284,10 @@ bool analogWrite(uint8_t pin, uint8_t value)
 int analogRead(uint8_t pin)
 {
 	uint8_t data[32];
-	writeBlock(ANALOG_READ, pin, NULL, NULL);
+	writeBlock(ANALOG_READ, pin);
 	readBlock(data);
 
-	int output = data[1] << 8 + data[2];
+	int output = (data[1] << 8) + data[2];
 	if(output == 65535)
 		output = -1;
 	return output;
@@ -285,14 +302,14 @@ int ultrasonicRead(uint8_t pin)
 {
 	uint8_t incoming[32];
 	int output;
-	write_block(USONIC_READ, pin, NULL, NULL);
+	writeBlock(USONIC_READ, pin);
 	usleep(60);
 
-	read_byte();
-	read_block(incoming);
+	readByte();
+	readBlock(incoming);
 
-	output = incoming[1] << 8 + incoming[2];
-	if(output == 2 << 16 - 1)
+	output = (incoming[1] << 8) + incoming[2];
+	if(output == (2 << 16) - 1)
 		output = -1;
 
 	return output;

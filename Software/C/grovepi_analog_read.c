@@ -1,21 +1,32 @@
 // GrovePi Example for using the analog read.
 // http://dexterindustries.com/grovepi
 #include "grovepi.h"
+//g++ grovepi_analog_write.c grovepi.c -Wall
 
-int main(void)
-{		
-	int adata;
-	
-	//Exit on failure to start communications with the GrovePi
-	if(init()==-1)
-		exit(1);
-	
-	while(1)
+int main()
+{
+	bool success = initGrovePi(ADDRESS); //initialize communications w/ GrovePi
+	int pin = 0; // select an analog capable pin
+	int incoming; // variable to hold data for reading
+
+	// if communication has been established
+	if(success)
 	{
-		adata=analogRead(0);
-		printf("analog read %d\n",adata);
-		if(adata==-1)
-			printf("IO Error");
+		// continuously read data
+		while(true)
+		{
+			// read the data
+			// receives a 10-bit value which maps to
+			// 0V -> VCC, where VCC is the supply voltage of GrovePi
+			incoming = analogRead(pin);
+			printf("[pin %d][analog read] = %d", pin, incoming);
+			if(incoming == -1)
+			{
+				printf("IO error on I2C");
+				break;
+			}
+		}
 	}
-   	return 1;
+
+	return 0;
 }
