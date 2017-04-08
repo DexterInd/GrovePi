@@ -5,7 +5,7 @@
 
 int main()
 {
-	bool success = initGrovePi(ADDRESS); //initialize communications w/ GrovePi
+	bool success = initGrovePi(); //initialize communications w/ GrovePi
 	int pin = 0; // select an analog capable pin
 	int incoming; // variable to hold data for reading
 

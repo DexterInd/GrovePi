@@ -22,11 +22,11 @@ const uint8_t INPUT = 0;
 const uint8_t OUTPUT = 1;
 const bool LOW = false;
 const bool HIGH = true;
-uint8_t ADDRESS = 0x04;
 
 
 // default address of GrovePi set as default argument
-bool initGrovePi(uint8_t address);
+bool initGrovePi();
+void setGrovePiAddress(uint8_t addr);
 bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1 = 0, uint8_t opt2 = 0);
 bool writeByte(uint8_t byte_val);
 bool readBlock(uint8_t *data_block);

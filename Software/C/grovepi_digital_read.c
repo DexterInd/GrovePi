@@ -5,7 +5,7 @@
 
 int main()
 {
-	bool success = initGrovePi(ADDRESS); // initialize communications w/ GrovePi
+	bool success = initGrovePi(); // initialize communications w/ GrovePi
 	int pin = 4; // select a digital pin
 	int state; // variable to hold the ON/OFF state
 

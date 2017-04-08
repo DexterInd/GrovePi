@@ -5,7 +5,7 @@
 
 int main()
 {
-	bool success = initGrovePi(ADDRESS);
+	bool success = initGrovePi();
 	int pin = 4;
 	int incoming; // variable to hold the data
 

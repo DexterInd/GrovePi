@@ -55,6 +55,7 @@ static const uint8_t ANALOG_READ = 3;
 static const uint8_t ANALOG_WRITE = 4;
 static const uint8_t PIN_MODE = 5;
 static const uint8_t USONIC_READ = 6;
+static uint8_t ADDRESS = 0x04;
 
 /**
  * determines the revision of the raspberry hardware
@@ -117,7 +118,7 @@ static char* SMBusName()
 		// type 3
 		smbus_rev = 3;
 
-	if(smbus_rev == 2) //  smbus_rev == 3)
+	if(smbus_rev == 2 || smbus_rev == 3)
 		strcpy(smbus_name, "/dev/i2c-1");
 	else
 		strcpy(smbus_name, "/dev/i2c-0");
@@ -130,7 +131,7 @@ static char* SMBusName()
  * @param  address 7-bit address of the slave device
  * @return         true on success, otherwise false
  */
-bool initGrovePi(uint8_t address)
+bool initGrovePi()
 {
 	bool success = true;
 
@@ -141,13 +142,18 @@ bool initGrovePi(uint8_t address)
 		success = false;
 	}
 	// setting up port options and address of the device
-	else if(ioctl(file_device, I2C_SLAVE, address) < 0)
+	else if(ioctl(file_device, I2C_SLAVE, ADDRESS) < 0)
 	{
 		printf("Unable to get bus access to talk to slave\n");
 		success = false;
 	}
 
 	return success;
+}
+
+void setGrovePiAddress(uint8_t)
+{
+	ADDRESS = address;
 }
 
 /**
