@@ -17,11 +17,13 @@
 #include <sys/stat.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdexcept>
 
-const uint8_t INPUT = 0;
-const uint8_t OUTPUT = 1;
-const bool LOW = false;
-const bool HIGH = true;
+extern const uint8_t INPUT;
+extern const uint8_t OUTPUT;
+extern const bool LOW;
+extern const bool HIGH;
+extern uint8_t GROVE_ADDRESS;
 
 void SMBusName(char *smbus_name);
 
@@ -40,5 +42,12 @@ uint8_t digitalRead(uint8_t pin);
 bool analogWrite(uint8_t pin, uint8_t value);
 int analogRead(uint8_t pin);
 int ultrasonicRead(uint8_t pin);
+
+class I2CError : public std::exception
+{
+public:
+
+const char* detailError();
+};
 
 #endif

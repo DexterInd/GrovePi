@@ -1,5 +1,5 @@
-#include "grove_rgb_lcd.h"
 #include "grovepi.h"
+#include "grove_rgb_lcd.h"
 #include <stdlib.h>
 #include <stdio.h>
 

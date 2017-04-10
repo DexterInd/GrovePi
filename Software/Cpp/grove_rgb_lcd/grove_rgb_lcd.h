@@ -16,8 +16,6 @@
 #include <sys/stat.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdexcept>
-
 #include "grovepi.h"
 
 class GroveLCD
@@ -50,16 +48,6 @@ static uint8_t PROGRAM_MODE;
 static uint8_t NEW_ROW;
 static uint8_t DISPLAY_CHAR;
 static char default_error_message[];
-};
-
-class I2CError : public std::exception
-{
-public:
-
-const char* detailError()
-{
-	return this->what();
-}
 };
 
 #endif

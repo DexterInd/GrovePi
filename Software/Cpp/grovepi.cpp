@@ -54,7 +54,12 @@ static const uint8_t ANALOG_READ = 3;
 static const uint8_t ANALOG_WRITE = 4;
 static const uint8_t PIN_MODE = 5;
 static const uint8_t USONIC_READ = 6;
-static uint8_t ADDRESS = 0x04;
+
+const uint8_t INPUT = 0;
+const uint8_t OUTPUT = 1;
+const bool LOW = false;
+const bool HIGH = true;
+uint8_t GROVE_ADDRESS = 0x04;
 
 /**
  * determines the revision of the raspberry hardware
@@ -142,7 +147,7 @@ bool initGrovePi()
 		success = false;
 	}
 	// setting up port options and address of the device
-	else if(ioctl(file_device, I2C_SLAVE, ADDRESS) < 0)
+	else if(ioctl(file_device, I2C_SLAVE, GROVE_ADDRESS) < 0)
 	{
 		printf("Unable to get bus access to talk to slave\n");
 		success = false;
@@ -153,7 +158,7 @@ bool initGrovePi()
 
 void setGrovePiAddress(uint8_t address)
 {
-	ADDRESS = address;
+	GROVE_ADDRESS = address;
 }
 
 /**
@@ -319,4 +324,9 @@ int ultrasonicRead(uint8_t pin)
 		output = -1;
 
 	return output;
+}
+
+const char* I2CError::detailError()
+{
+	return this->what();
 }
