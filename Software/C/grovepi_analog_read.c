@@ -19,10 +19,10 @@ int main()
 			// receives a 10-bit value which maps to
 			// 0V -> VCC, where VCC is the supply voltage of GrovePi
 			incoming = analogRead(pin);
-			printf("[pin %d][analog read] = %d", pin, incoming);
+			printf("[pin %d][analog read] = %d\n", pin, incoming);
 			if(incoming == -1)
 			{
-				printf("IO error on I2C");
+				printf("IO error on I2C\n");
 				break;
 			}
 		}

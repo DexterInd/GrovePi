@@ -15,12 +15,14 @@ int main()
 		while(true)
 		{
 			incoming = ultrasonicRead(pin);
-			printf("[pin %d][ultrasonic read] = %d", pin, incoming);
+			printf("[pin %d][ultrasonic read] = %d\n", pin, incoming);
 			if(incoming == -1)
 			{
 				printf("IO error on I2C\n");
 				break;
 			}
+
+			delay(50);
 		}
 	}
 

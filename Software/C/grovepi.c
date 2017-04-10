@@ -46,7 +46,6 @@ static const bool DEBUG = false;
 static const int RBUFFER_SIZE = 32;
 static const int WBUFFER_SIZE = 5;
 
-static char smbus_name[11]; // enough characters for "/dev/i2c-x"
 static int file_device = 0;
 
 static const uint8_t DIGITAL_READ = 1;
@@ -91,6 +90,8 @@ static uint8_t gpioHardwareRevision()
  * determines wheter I2C is found at "/dev/i2c-0" or "/dev/i2c-1"
  * depending on the raspberry model
  *
+ * @param smbus_name string to hold the filename
+ *
  * hw_rev    0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
  * Type.1    X  X  -  -  X  -  -  X  X  X  X  X  -  -  X  X
  * Type.2    -  -  X  X  X  -  -  X  X  X  X  X  -  -  X  X
@@ -101,9 +102,8 @@ static uint8_t gpioHardwareRevision()
  * Type.2    -  X  X  -  -  -  X  X  X  X  -  X  X  X  X  X
  * Type.3    X  X  X  X  X  X  X  X  X  X  X  X  -  -  -  -
  *
- * @return i2c location
  */
-static char* SMBusName()
+void SMBusName(char *smbus_name)
 {
 	unsigned int hw_revision = gpioHardwareRevision();
 	unsigned int smbus_rev;
@@ -122,8 +122,6 @@ static char* SMBusName()
 		strcpy(smbus_name, "/dev/i2c-1");
 	else
 		strcpy(smbus_name, "/dev/i2c-0");
-
-	return smbus_name;
 }
 
 /**
@@ -134,9 +132,11 @@ static char* SMBusName()
 bool initGrovePi()
 {
 	bool success = true;
+	char filename[11]; // enough to hold "/dev/i2c-x"
+	SMBusName(filename);
 
 	// open port for read/write operation
-	if((file_device = open(SMBusName(), O_RDWR)) < 0)
+	if((file_device = open(filename, O_RDWR)) < 0)
 	{
 		printf("Failed to open i2c port\n");
 		success = false;
@@ -151,7 +151,7 @@ bool initGrovePi()
 	return success;
 }
 
-void setGrovePiAddress(uint8_t)
+void setGrovePiAddress(uint8_t address)
 {
 	ADDRESS = address;
 }
@@ -172,7 +172,7 @@ bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 	// puts data on the i2c line
 	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, 5, &data_block[0]);
 	if(DEBUG)
-		printf("write block: %d", debug_code);
+		printf("[write block: %s]\n", (debug_code == -1 ? "error" : "ok"));
 
 	return true;
 }
@@ -190,7 +190,7 @@ bool writeByte(uint8_t byte_val)
 	// try to send the byte to the i2c slave
 	if((write(file_device, data_block, 1)) != 1)
 	{
-		printf("Error writing byte to GrovePi\n");
+		printf("[write byte: error]\n");
 		success = false;
 	}
 
@@ -208,7 +208,7 @@ bool readBlock(uint8_t *data_block)
 	debug_code = i2c_smbus_read_i2c_block_data(file_device, 1, RBUFFER_SIZE, data_block);
 
 	if(DEBUG)
-		printf("read block: %d", debug_code);
+		printf("[read block: %s]\n", (debug_code == -1 ? "error" : "ok"));
 
 	return true;
 }
@@ -222,7 +222,7 @@ uint8_t readByte()
 	uint8_t value = i2c_smbus_read_byte(file_device);
 
 	if(DEBUG)
-		printf("read byte: %d\n", value);
+		printf("[read byte: %s]\n", (value == 255 ? "error" : "ok"));
 
 	return value;
 }
@@ -231,7 +231,7 @@ uint8_t readByte()
  * sleep raspberry
  * @param milliseconds time
  */
-void piSleep(unsigned int milliseconds)
+void delay(unsigned int milliseconds)
 {
 	usleep(milliseconds * 1000);
 }
@@ -267,7 +267,7 @@ uint8_t digitalRead(uint8_t pin)
 {
 	writeBlock(DIGITAL_READ, pin);
 	// wait 10 ms to receive data
-	usleep(10000);
+	delay(10);
 	return readByte();
 }
 
@@ -309,7 +309,7 @@ int ultrasonicRead(uint8_t pin)
 	uint8_t incoming[32];
 	int output;
 	writeBlock(USONIC_READ, pin);
-	usleep(60);
+	delay(60);
 
 	readByte();
 	readBlock(incoming);

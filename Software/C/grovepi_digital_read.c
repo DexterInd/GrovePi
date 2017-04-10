@@ -26,7 +26,7 @@ int main()
 				printf("HIGH\n");
 
 			// wait 50 ms so that the program doesn't run too fast
-			piSleep(50);
+			delay(50);
 		}
 	}
 

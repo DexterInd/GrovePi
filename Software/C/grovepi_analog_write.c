@@ -17,9 +17,9 @@ int main()
 			// 0 -> 255 maps to 0V -> VCC, where VCC is the supply voltage on GrovePi
 			for(int value = 0; value < 256; value++)
 			{
-				printf("[pin %d][analog write] = %d\n", pin, value);
+				printf("[pin %d][analog write] = %d", pin, value);
 				analogWrite(pin, value);
-				piSleep(10); // wait 10 ms
+				delay(10); // wait 10 ms
 			}
 		}
 	}

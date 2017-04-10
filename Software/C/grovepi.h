@@ -23,6 +23,7 @@ const uint8_t OUTPUT = 1;
 const bool LOW = false;
 const bool HIGH = true;
 
+void SMBusName(char *smbus_name);
 
 // default address of GrovePi set as default argument
 bool initGrovePi();
@@ -32,7 +33,7 @@ bool writeByte(uint8_t byte_val);
 bool readBlock(uint8_t *data_block);
 uint8_t readByte();
 
-void piSleep(unsigned int milliseconds);
+void delay(unsigned int milliseconds);
 bool pinMode(uint8_t pin, uint8_t mode);
 bool digitalWrite(uint8_t pin, bool value);
 uint8_t digitalRead(uint8_t pin);

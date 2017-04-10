@@ -7,7 +7,7 @@ int main()
 {
 	bool success = initGrovePi(); // initialize communications w/ GrovePi
 	int pin = 4; // select a digital pin
-	int delay = 500; // measured in ms
+	int period = 500; // measured in ms
 
 	// if communication has been established
 	if(success)
@@ -22,11 +22,11 @@ int main()
 		{
 			printf("[pin %d][led] = ON\n", pin);
 			digitalWrite(pin, HIGH);
-			piSleep(delay);
+			delay(period);
 
 			printf("[pin %d][led] = OFF\n", pin);
 			digitalWrite(pin, LOW);
-			piSleep(delay);
+			delay(period);
 		}
 	}
 
