@@ -24,32 +24,42 @@ class GroveLCD
 {
 public:
 
-  GroveLCD();
-  void connect();
-  bool isConnected();
+GroveLCD();
+void connect();
+bool isConnected();
 
-  void setRGB(uint8_t red, uint8_t green, uint8_t blue);
-  void setText(const char *str);
+void setRGB(uint8_t red, uint8_t green, uint8_t blue);
+void setText(const char *str);
 
 private:
 
-  void sendCommand(uint8_t command);
-  void selectSlave(uint8_t slave);
+void sendCommand(uint8_t command);
+void selectSlave(uint8_t slave);
 
-  uint8_t DEVICE_FILE;
-  bool connected;
+uint8_t DEVICE_FILE;
+bool connected;
 
-  static uint8_t DISPLAY_RGB_ADDR;
-  static uint8_t DISPLAY_TEXT_ADDR;
+static uint8_t DISPLAY_RGB_ADDR;
+static uint8_t DISPLAY_TEXT_ADDR;
 
-  static uint8_t CLEAR_DISPLAY;
-  static uint8_t DISPLAY_ON;
-  static uint8_t NO_CURSOR;
-  static uint8_t ENABLE_2ROWS;
-  static uint8_t PROGRAM_MODE;
-  static uint8_t NEW_ROW;
-  static uint8_t DISPLAY_CHAR;
-  static char default_error_message[];
+static uint8_t CLEAR_DISPLAY;
+static uint8_t DISPLAY_ON;
+static uint8_t NO_CURSOR;
+static uint8_t ENABLE_2ROWS;
+static uint8_t PROGRAM_MODE;
+static uint8_t NEW_ROW;
+static uint8_t DISPLAY_CHAR;
+static char default_error_message[];
+};
+
+class I2CError : public std::exception
+{
+public:
+
+const char* detailError()
+{
+	return this->what();
+}
 };
 
 #endif
