@@ -29,13 +29,15 @@ void getReadings(float &temp, float &humidity);
 
 private:
 
-uint8_t DEVICE_FILE;
+uint8_t DEVICE_FILE; // I2C device file
 uint8_t pin;
 uint8_t module_type;
 bool connected;
-const static uint8_t DHT_TEMP_CMD = 40;
-static char default_error_message[64];
+const static uint8_t DHT_TEMP_CMD = 40; // command for reaching DTH sensor on the GrovePi
+static char default_error_message[64]; // default error when throwing
 
+// converts the first 4 bytes of the array
+// into a float
 static float fourBytesToFloat(uint8_t *data);
 
 };
