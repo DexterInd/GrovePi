@@ -26,6 +26,9 @@ int main()
 		// do this
 		try
 		{
+			// reset the counter since we care
+			// about the consecutives
+			current_retries = 0;
 			// read the DHT sensor values
 			dht.getReadings(temp, humidity);
 			// and print them on the screen
