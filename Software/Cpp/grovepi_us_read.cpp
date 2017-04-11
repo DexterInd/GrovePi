@@ -18,7 +18,7 @@ int main()
 			printf("[pin %d][ultrasonic read] = %d\n", pin, incoming);
 			if(incoming == -1)
 			{
-				printf("IO error on I2C\n");
+				printf("[IO error on I2C]\n");
 				break;
 			}
 

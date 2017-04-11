@@ -53,7 +53,7 @@ static const uint8_t DIGITAL_WRITE = 2;
 static const uint8_t ANALOG_READ = 3;
 static const uint8_t ANALOG_WRITE = 4;
 static const uint8_t PIN_MODE = 5;
-static const uint8_t USONIC_READ = 6;
+static const uint8_t USONIC_READ = 7;
 
 const uint8_t INPUT = 0;
 const uint8_t OUTPUT = 1;
