@@ -1,4 +1,4 @@
-// GrovePi C library
+// GrovePi C++ library
 // v0.2
 //
 // This library provides the basic functions for using the GrovePi in C
@@ -11,7 +11,7 @@
 //      ------------------------------------------------
 //      Author		Date                    Comments
 //	    Karan		  28 Dec 2015		            Initial Authoring
-//	    Robert		April 2017							Continuing
+//	    Robert		April 2017							  Continuing
 
 /*
    License
