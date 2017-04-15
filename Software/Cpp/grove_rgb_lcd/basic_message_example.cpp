@@ -55,7 +55,7 @@ int main()
 			lcd.connect();
 
 			// set text and RGB color on the LCD
-			lcd.setText("Hello world\nThis is an LCD test");
+			lcd.setText("Hello world!\nThis is an LCD.");
 			lcd.setRGB(0, 128, 64);
 
 			// continuously change color for roughly 2.5 seconds
@@ -68,7 +68,7 @@ int main()
 			lcd.setRGB(0, 255, 0);
 
 			// and display a last minute text
-			lcd.setText("Bye bye, this should wrap onto the next line");
+			lcd.setText("Bye bye!\nThis is line 2");
 
 			job_done = true;
 		}

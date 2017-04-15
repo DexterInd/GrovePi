@@ -10,6 +10,7 @@ uint8_t GroveLCD::ENABLE_2ROWS = 0x28;
 uint8_t GroveLCD::PROGRAM_MODE = 0x80;
 uint8_t GroveLCD::NEW_ROW = 0xc0;
 uint8_t GroveLCD::DISPLAY_CHAR = 0x40;
+uint8_t GroveLCD::MAX_NO_CHARS = 32;
 char GroveLCD::default_error_message[64] = "I2C Error - check LCD wiring";
 
 GroveLCD::GroveLCD()
@@ -22,9 +23,9 @@ void GroveLCD::connect()
 	char filename[11];
 	SMBusName(filename);
 
-	DEVICE_FILE = open(filename, O_WRONLY);
+	DEVICE_FILE = open(filename, O_RDWR);
 
-	if(DEVICE_FILE != -1)
+	if(DEVICE_FILE == -1)
 	{
 		connected = false;
 		throw std::runtime_error(strcat(default_error_message, " - connect funct\n"));
@@ -49,16 +50,12 @@ void GroveLCD::setRGB(uint8_t red, uint8_t green, uint8_t blue)
 {
 	selectSlave(DISPLAY_RGB_ADDR);
 
-	int error_sum = 0;
-	error_sum += i2c_smbus_write_byte_data(DEVICE_FILE, 0x00, 0x00);
-	error_sum += i2c_smbus_write_byte_data(DEVICE_FILE, 0x01, 0x00);
-	error_sum += i2c_smbus_write_byte_data(DEVICE_FILE, 0x08, 0xaa);
-	error_sum += i2c_smbus_write_byte_data(DEVICE_FILE, 0x04, red);
-	error_sum += i2c_smbus_write_byte_data(DEVICE_FILE, 0x03, green);
-	error_sum += i2c_smbus_write_byte_data(DEVICE_FILE, 0x02, blue);
-
-	if(error_sum < 0)
-		throw std::runtime_error(strcat(default_error_message, " - setRGB funct\n"));
+	sendCommand(0x00, 0x00);
+	sendCommand(0x01, 0x00);
+	sendCommand(0x08, 0xaa);
+	sendCommand(0x04, red);
+	sendCommand(0x03, green);
+	sendCommand(0x02, blue);
 }
 
 /**
@@ -94,38 +91,38 @@ void GroveLCD::setText(const char *str)
 {
 	selectSlave(DISPLAY_TEXT_ADDR);
 
-	sendCommand(CLEAR_DISPLAY);
+	sendCommand(PROGRAM_MODE, CLEAR_DISPLAY);
 	delay(50);
-	sendCommand(DISPLAY_ON | NO_CURSOR);
-	sendCommand(ENABLE_2ROWS);
+	sendCommand(PROGRAM_MODE, DISPLAY_ON | NO_CURSOR);
+	sendCommand(PROGRAM_MODE, ENABLE_2ROWS);
 	delay(50);
 
 	int length = strlen(str);
-	uint8_t row = 0;
-	int error;
-	for(int i = 0; i <= length; i++)
+	bool already_had_newline = false;
+	for(int i = 0; i < length && i < MAX_NO_CHARS; i++)
 	{
-		if(i % 15 == 0 || str[i] == '\n')
+		if(i == 16 || str[i] == '\n')
 		{
-			row += 1;
-			if(row == 2)
+			if(!already_had_newline)
+			{
+				already_had_newline = true;
+				sendCommand(PROGRAM_MODE, NEW_ROW);
+				if(str[i] == '\n')
+					continue;
+			}
+			else if(str[i] == '\n')
 				break;
-
-			sendCommand(NEW_ROW);
-			if(str[i] == '\n')
-				continue;
 		}
-		error = i2c_smbus_write_byte_data(DISPLAY_CHAR, DISPLAY_CHAR, uint8_t(str[i]));
-		if(error < 0)
-			throw std::runtime_error(strcat(default_error_message, " - setText funct\n"));
+
+		sendCommand(DISPLAY_CHAR, uint8_t(str[i]));
 	}
 }
 
-void GroveLCD::sendCommand(uint8_t command)
+void GroveLCD::sendCommand(uint8_t mode, uint8_t command)
 {
-	int error = i2c_smbus_write_byte_data(DISPLAY_CHAR, PROGRAM_MODE, command);
+	int error = i2c_smbus_write_byte_data(DEVICE_FILE, mode, command);
 
-	if(error < 0)
+	if(error == -1)
 		throw std::runtime_error(strcat(default_error_message, " - sendCommand funct\n"));
 }
 
@@ -139,6 +136,6 @@ void GroveLCD::sendCommand(uint8_t command)
 void GroveLCD::selectSlave(uint8_t slave)
 {
 	int error = ioctl(DEVICE_FILE, I2C_SLAVE, slave);
-	if(error < 0)
+	if(error == -1)
 		throw std::runtime_error(strcat(default_error_message, " - selectSlave funct\n"));
 }

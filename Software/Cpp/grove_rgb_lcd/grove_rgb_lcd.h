@@ -31,7 +31,7 @@ void setText(const char *str);
 
 private:
 
-void sendCommand(uint8_t command);
+void sendCommand(uint8_t mode, uint8_t command);
 void selectSlave(uint8_t slave);
 
 uint8_t DEVICE_FILE;
@@ -47,6 +47,7 @@ static uint8_t ENABLE_2ROWS;
 static uint8_t PROGRAM_MODE;
 static uint8_t NEW_ROW;
 static uint8_t DISPLAY_CHAR;
+static uint8_t MAX_NO_CHARS;
 static char default_error_message[];
 };
 

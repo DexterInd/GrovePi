@@ -44,7 +44,7 @@
 
 static const bool DEBUG = false;
 static const int RBUFFER_SIZE = 32;
-static const int WBUFFER_SIZE = 5;
+static const int WBUFFER_SIZE = 4;
 
 static int file_device = 0;
 
@@ -172,10 +172,10 @@ void setGrovePiAddress(uint8_t address)
 bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 {
 	int debug_code;
-	uint8_t data_block[5] = {0, command, pin_number, opt1, opt2};
+	uint8_t data_block[WBUFFER_SIZE] = {command, pin_number, opt1, opt2};
 
 	// puts data on the i2c line
-	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, 5, &data_block[0]);
+	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, WBUFFER_SIZE, &data_block[0]);
 	if(DEBUG)
 		printf("[write block: %s]\n", (debug_code == -1 ? "error" : "ok"));
 
