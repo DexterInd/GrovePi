@@ -34,22 +34,36 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 
 int main()
 {
-	int button_pin = 3; // Grove Button is connected to digital port D3 on the GrovePi
+	int button_pin = 4; // Grove Button is connected to digital port D4 on the GrovePi
 	int button_state; // variable to hold the current state of the button
 
-	// set the button_pin (D3) as INPUT
-	pinMode(button_pin, INPUT);
-
-	// do indefinitely
-	while(true)
+	try
 	{
-		button_state = digitalRead(button_pin); // read the button state
-		printf("[button state = %d]\n", button_state); // and print it on the terminal screen
+		initGrovePi(); // initialize communications w/ GrovePi
+		pinMode(button_pin, INPUT); // set the button_pin (D3) as INPUT
 
-		delay(500); // wait 500 ms for the next reading
+		// do this indefinitely
+		while(true)
+		{
+			button_state = digitalRead(button_pin); // read the button state
+			printf("[button state = "); // and print it on the terminal screen
+			if(button_state == 0)
+				printf("not pressed]\n");
+			else
+				printf("pressed]\n");
+
+			delay(100); // wait 100 ms for the next reading
+		}
+	}
+	catch (I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;
