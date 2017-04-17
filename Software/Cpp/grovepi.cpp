@@ -47,6 +47,7 @@ static const int RBUFFER_SIZE = 32;
 static const int WBUFFER_SIZE = 4;
 
 static int file_device = 0;
+static int max_i2c_retries = 5;
 
 static const uint8_t DIGITAL_READ = 1;
 static const uint8_t DIGITAL_WRITE = 2;
@@ -55,11 +56,18 @@ static const uint8_t ANALOG_WRITE = 4;
 static const uint8_t PIN_MODE = 5;
 static const uint8_t USONIC_READ = 7;
 
-const uint8_t INPUT = 0;
-const uint8_t OUTPUT = 1;
-const bool LOW = false;
-const bool HIGH = true;
-uint8_t GROVE_ADDRESS = 0x04;
+namespace GrovePi
+{
+
+  // variables which can be used
+  // in the user-program
+  const uint8_t INPUT = 0;
+  const uint8_t OUTPUT = 1;
+  const bool LOW = false;
+  const bool HIGH = true;
+  uint8_t GROVE_ADDRESS = 0x04;
+
+}
 
 /**
  * determines the revision of the raspberry hardware
@@ -108,7 +116,7 @@ static uint8_t gpioHardwareRevision()
  * Type.3    X  X  X  X  X  X  X  X  X  X  X  X  -  -  -  -
  *
  */
-void SMBusName(char *smbus_name)
+void GrovePi::SMBusName(char *smbus_name)
 {
 	unsigned int hw_revision = gpioHardwareRevision();
 	unsigned int smbus_rev;
@@ -130,113 +138,187 @@ void SMBusName(char *smbus_name)
 }
 
 /**
- * tries to get communication w/ the GrovePi
- * @param  address 7-bit address of the slave device
- * @return         true on success, otherwise false
+ * sets the threshold limit
+ * at which an exception is thrown
+ * @param _max_i2c_retries number of retries
  */
-bool initGrovePi()
+void GrovePi::setMaxI2CRetries(int _max_i2c_retries)
 {
-	bool success = true;
-	char filename[11]; // enough to hold "/dev/i2c-x"
-	SMBusName(filename);
-
-	// open port for read/write operation
-	if((file_device = open(filename, O_RDWR)) < 0)
-	{
-		printf("Failed to open i2c port\n");
-		success = false;
-	}
-	// setting up port options and address of the device
-	else if(ioctl(file_device, I2C_SLAVE, GROVE_ADDRESS) < 0)
-	{
-		printf("Unable to get bus access to talk to slave\n");
-		success = false;
-	}
-
-	return success;
+	// each failed retry takes 1 second
+	// so the number of [max_i2c_retries]
+	// represents the timeout on a
+	// transaction / connection in seconds
+	max_i2c_retries = _max_i2c_retries;
 }
 
-void setGrovePiAddress(uint8_t address)
+/**
+ * tries to get communication w/ the GrovePi
+ * throws I2CError on failing to establish communication
+ * @param  address 7-bit address of the slave device
+ */
+void GrovePi::initGrovePi()
+{
+	char filename[11];   // enough to hold "/dev/i2c-x"
+	int current_retry = 0;
+	SMBusName(filename);
+
+	// try to connect for a number of times
+	while(current_retry < max_i2c_retries)
+	{
+		// increase the counter
+		current_retry += 1;
+
+		// open port for read/write operation
+		if((file_device = open(filename, O_RDWR)) < 0)
+		{
+			printf("[failed to open i2c port]\n");
+			// try in the next loop to connect
+			continue;
+		}
+		// setting up port options and address of the device
+		if(ioctl(file_device, I2C_SLAVE, GROVE_ADDRESS) < 0)
+		{
+			printf("[unable to get bus access to talk to slave]\n");
+			// try in the next loop to connect
+			continue;
+		}
+
+		// if it got connected, then exit
+		break;
+	}
+
+	// if connection couldn't be established
+	// throw exception
+	if(current_retry == max_i2c_retries)
+		throw I2CError("[I2CError on opening port]\n");
+}
+
+/**
+ * for setting the I2C address of the GrovePi
+ * default address is = 0x04
+ * @param address from 0x00 -> 0x7F
+ */
+void GrovePi::setGrovePiAddress(uint8_t address)
 {
 	GROVE_ADDRESS = address;
 }
 
 /**
  * writes a block of [WBUFFER_SIZE] bytes to the slave i2c device
+ * throws I2CError on failing to send data
  * @param  command    command to send to GrovePi
  * @param  pin_number number
  * @param  opt1       optional argument depending on sensor/actuator/etc
  * @param  opt2       optional argument depending on sensor/actuator/etc
- * @return            always true
  */
-bool writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
+void GrovePi::writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 {
-	int debug_code;
+	int output_code = -1;
+	int current_retry = 0;
 	uint8_t data_block[WBUFFER_SIZE] = {command, pin_number, opt1, opt2};
 
-	// puts data on the i2c line
-	debug_code = i2c_smbus_write_i2c_block_data(file_device, 1, WBUFFER_SIZE, &data_block[0]);
-	if(DEBUG)
-		printf("[write block: %s]\n", (debug_code == -1 ? "error" : "ok"));
+	// repeat until it writes the data
+	// or until it fails sending it
+	while(output_code == -1 && current_retry < max_i2c_retries)
+	{
+		output_code = i2c_smbus_write_i2c_block_data(file_device, 1, WBUFFER_SIZE, &data_block[0]);
+		current_retry += 1;
+	}
 
-	return true;
+	// if the error persisted
+	// after retrying for [max_i2c_retries] retries
+	// then throw exception
+	if(output_code == -1)
+		throw I2CError("[I2CError writing block: max retries reached]\n");
 }
 
 /**
  * sends a single byte to the i2c slave
+ * throws I2CError on failing to send data
  * @param  byte_val byte to be sent
- * @return          true on success, otherwise false
  */
-bool writeByte(uint8_t byte_val)
+void GrovePi::writeByte(uint8_t byte_val)
 {
-	bool success = true;
-	int data_block[WBUFFER_SIZE] = {byte_val};
+	uint8_t data_block[WBUFFER_SIZE] = {byte_val};
+	uint8_t length = 1;
+	int current_retry = 0;
+	int output_code = 0;
 
-	// try to send the byte to the i2c slave
-	if((write(file_device, data_block, 1)) != 1)
+	// repeat until it writes the data
+	// or until it fails sending it
+	while(output_code != length && current_retry < max_i2c_retries)
 	{
-		printf("[write byte: error]\n");
-		success = false;
+		output_code = write(file_device, data_block, length);
+		current_retry += 1;
 	}
 
-	return success;
+	// if the error persisted
+	// after retrying for [max_i2c_retries] retries
+	// then throw exception
+	if(output_code != length)
+		throw I2CError("[I2CError writing byte: max retries reached]\n");
 }
 
 /**
  * reads a block of [RBUFFER_SIZE] bytes from the slave device
+ * throws I2CError on failing to read data
  * @param  data_block pointer to hold the read data
- * @return            always true
+ * @return            number of bytes read
  */
-bool readBlock(uint8_t *data_block)
+uint8_t GrovePi::readBlock(uint8_t *data_block)
 {
-	int debug_code;
-	debug_code = i2c_smbus_read_i2c_block_data(file_device, 1, RBUFFER_SIZE, data_block);
+	int current_retry = 0;
+	int output_code = 0;
 
-	if(DEBUG)
-		printf("[read block: %s]\n", (debug_code == -1 ? "error" : "ok"));
+	// repeat until it reads the data
+	// or until it fails sending it
+	while(output_code == 0 && current_retry < max_i2c_retries)
+	{
+		output_code = i2c_smbus_read_i2c_block_data(file_device, 1, RBUFFER_SIZE, data_block);
+		current_retry += 1;
+	}
 
-	return true;
+	// if the error persisted
+	// after retrying for [max_i2c_retries] retries
+	// then throw exception
+	if(output_code == 0)
+		throw I2CError("[I2CError reading block: max retries reached]\n");
+
+	return output_code;
 }
 
 /**
  * reads 1 byte from the slave device
+ * throws I2CError on failing to read data
  * @return value read from the slave device
  */
-uint8_t readByte()
+uint8_t GrovePi::readByte()
 {
-	uint8_t value = i2c_smbus_read_byte(file_device);
+	int current_retry = 0;
+	int output_code = -1;
 
-	if(DEBUG)
-		printf("[read byte: %s]\n", (value == 255 ? "error" : "ok"));
+	// repeat until it reads the data
+	// or until it fails sending it
+	while((output_code < 0 || output_code == 255) && current_retry < max_i2c_retries)
+	{
+		output_code = i2c_smbus_read_byte(file_device);
+		current_retry += 1;
+	}
 
-	return value;
+	// if the error persisted
+	// after retrying for [max_i2c_retries] retries
+	// then throw exception
+	if(output_code < 0 || output_code == 255)
+		throw I2CError("[I2CError reading byte: max retries reached]\n");
+
+	return output_code;
 }
 
 /**
  * sleep raspberry
  * @param milliseconds time
  */
-void delay(unsigned int milliseconds)
+void GrovePi::delay(unsigned int milliseconds)
 {
 	usleep(milliseconds * 1000);
 }
@@ -245,22 +327,20 @@ void delay(unsigned int milliseconds)
  * set pin as OUTPUT or INPUT
  * @param  pin  number
  * @param  mode OUTPUT/INPUT
- * @return      always true
  */
-bool pinMode(uint8_t pin, uint8_t mode)
+void GrovePi::pinMode(uint8_t pin, uint8_t mode)
 {
-	return writeBlock(PIN_MODE, pin, mode);
+	writeBlock(PIN_MODE, pin, mode);
 }
 
 /**
  * set a pin as HIGH or LOW
  * @param  pin   number
  * @param  value HIGH or LOW
- * @return       always true
  */
-bool digitalWrite(uint8_t pin, bool value)
+void GrovePi::digitalWrite(uint8_t pin, bool value)
 {
-	return writeBlock(DIGITAL_WRITE, pin, (uint8_t)value);
+	writeBlock(DIGITAL_WRITE, pin, (uint8_t)value);
 }
 
 /**
@@ -268,11 +348,9 @@ bool digitalWrite(uint8_t pin, bool value)
  * @param  pin number
  * @return     HIGH or LOW
  */
-uint8_t digitalRead(uint8_t pin)
+bool GrovePi::digitalRead(uint8_t pin)
 {
 	writeBlock(DIGITAL_READ, pin);
-	// wait 10 ms to receive data
-	delay(10);
 	return readByte();
 }
 
@@ -280,11 +358,10 @@ uint8_t digitalRead(uint8_t pin)
  * describe at a desired pin a voltage between 0 and VCC
  * @param  pin   number
  * @param  value 0-255
- * @return       always true
  */
-bool analogWrite(uint8_t pin, uint8_t value)
+void GrovePi::analogWrite(uint8_t pin, uint8_t value)
 {
-	return writeBlock(ANALOG_WRITE, pin, value);
+	writeBlock(ANALOG_WRITE, pin, value);
 }
 
 /**
@@ -292,13 +369,13 @@ bool analogWrite(uint8_t pin, uint8_t value)
  * @param  pin number
  * @return     16-bit data
  */
-int analogRead(uint8_t pin)
+short GrovePi::analogRead(uint8_t pin)
 {
 	uint8_t data[32];
 	writeBlock(ANALOG_READ, pin);
 	readBlock(data);
 
-	int output = (data[1] << 8) + data[2];
+	short output = (data[1] << 8) + data[2];
 	if(output == 65535)
 		output = -1;
 	return output;
@@ -309,10 +386,10 @@ int analogRead(uint8_t pin)
  * @param  pin number
  * @return     time taken for the sound to travel back?
  */
-int ultrasonicRead(uint8_t pin)
+short GrovePi::ultrasonicRead(uint8_t pin)
 {
 	uint8_t incoming[32];
-	int output;
+	short output;
 	writeBlock(USONIC_READ, pin);
 	delay(60);
 
@@ -326,7 +403,7 @@ int ultrasonicRead(uint8_t pin)
 	return output;
 }
 
-const char* I2CError::detailError()
+const char* GrovePi::I2CError::detail()
 {
 	return this->what();
 }
