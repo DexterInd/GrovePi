@@ -29,17 +29,20 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 //g++ grovepi_analog_write.c grovepi.c -Wall
 
 int main()
 {
-	bool success = initGrovePi(); //initialize communications w/ GrovePi
-	int pin = 0; // select an analog capable pin
+	int pin = 0; // we use port A0
 	int incoming; // variable to hold data for reading
 
-	// if communication has been established
-	if(success)
+	try
 	{
+		initGrovePi(); //initialize communication w/ GrovePi
+
+		// set the pin mode for reading
+		pinMode(pin, INPUT);
 		// continuously read data
 		while(true)
 		{
@@ -47,13 +50,17 @@ int main()
 			// receives a 10-bit value which maps to
 			// 0V -> VCC, where VCC is the supply voltage of GrovePi
 			incoming = analogRead(pin);
-			printf("[pin %d][analog read] = %d\n", pin, incoming);
-			if(incoming == -1)
-			{
-				printf("IO error on I2C\n");
-				break;
-			}
+			printf("[pin %d][analog read = %d]\n", pin, incoming);
+
+			// wait 10 ms so we don't overflow the terminal
+			delay(10);
 		}
+	}
+	catch (I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;

@@ -29,27 +29,60 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 //g++ grovepi_analog_write.c grovepi.c -Wall
 
 int main()
 {
-	bool success = initGrovePi(); // initialize communications w/ GrovePi
-	int pin = 3; // select an analog capable pin
+	int pin = 3; // we use port D3
 
-	if(success)
+	// for direction = HIGH the value we write increases with each step
+	// for direction = LOW the value we write decreases with each step
+	int direction = HIGH;
+	int increment_value = 3; // step increase for PWN function
+	int final_value = 0; // variable to hold to value to write to GrovePi
+
+	try
 	{
-		// continuously write data
+		initGrovePi(); // initialize communication w/ GrovePi
+		pinMode(pin, OUTPUT); // set the pin mode for writing
+
+		// continuously do this
 		while(true)
 		{
 			// iterate the whole range of values
 			// 0 -> 255 maps to 0V -> VCC, where VCC is the supply voltage on GrovePi
-			for(int value = 0; value < 256; value++)
+			//
+			// since we're using the a PWM function
+			// we have a duty cycle that goes from 0% to 100% of VCC voltage
+			// with an increase/decrease of voltage of 100 * increment_value / 256 = 0.39%  / increment
+			//
+			// google what a PWM wave is
+			for(int value = 0; value <= 255; value += increment_value)
 			{
-				printf("[pin %d][analog write] = %d\n", pin, value);
-				analogWrite(pin, value);
-				delay(50); // wait 10 ms
+				final_value = 0; // reset it
+				if(direction == HIGH)
+					// if direction == HIGH then let the final_value take ascending values
+					final_value = value;
+				else if(direction == LOW)
+					// if direction == LOW then let the final_value take descending values
+					final_value = 255 - value;
+
+				printf("[pin %d][analog write = %d]\n", pin, final_value);
+				analogWrite(pin, final_value);
+				delay(5); // wait 5 ms for the next change in pin value
 			}
+
+			// if increment_value = HIGH then change it to increment_value = LOW
+			// if increment_value = LOW then change it to increment_value = HIGH
+			direction = (direction == HIGH) ? LOW : HIGH;
 		}
+	}
+	catch (I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;

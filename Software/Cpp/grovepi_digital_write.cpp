@@ -29,33 +29,38 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 //g++ grovepi_digital_write.c grovepi.c -Wall
 
 int main()
 {
-	bool success = initGrovePi(); // initialize communications w/ GrovePi
-	int pin = 4; // select a digital pin
+	int pin = 4; // we use port D4
 	int period = 500; // measured in ms
 
-	// if communication has been established
-	if(success)
+	try
 	{
-		// set the pin as an OUTPUT
-		pinMode(pin, OUTPUT);
+		initGrovePi(); // initialize communication w/ GrovePi
+		pinMode(pin, OUTPUT); // set the pin for digital writing
 
 		// continuously digital write
 		// good LED Example
-		// 0.5 seconds OFF / 0.5 seconds ON
+		// [period] ms OFF / [period] ms ON
 		while(true)
 		{
-			printf("[pin %d][led] = ON\n", pin);
+			printf("[pin %d][led = ON]\n", pin);
 			digitalWrite(pin, HIGH);
 			delay(period);
 
-			printf("[pin %d][led] = OFF\n", pin);
+			printf("[pin %d][led = OFF]\n", pin);
 			digitalWrite(pin, LOW);
 			delay(period);
 		}
+	}
+	catch (I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;
