@@ -34,30 +34,43 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 
 int main()
 {
 	int LED_pin = 5; // Grove LED is connected to digital port D5 on the GrovePi
 	int brigthness = 0; // initial brigthness of 0 (0 to 255)
 
-	pinMode(LED_pin, OUTPUT); // set the LED pin as OUTPUT
-	delay(1000); // and wait a second
-
-	// do indefinitely
-	while(true)
+	try
 	{
-		// reset if above 255
-		// the GrovePi has 8-bit DAC
-		if(brigthness > 255)
-			brigthness = 0;
+		initGrovePi();
+		pinMode(LED_pin, OUTPUT); // set the LED pin as OUTPUT
+		delay(1000); // and wait a second
 
-		// and set the LED brigthness
-		analogWrite(LED_pin, brigthness);
-		printf("[led brigthness = %d]\n", brigthness);
+		// do indefinitely
+		while(true)
+		{
+			// reset if above 255
+			// the GrovePi has 8-bit DAC
+			if(brigthness > 255)
+				brigthness = 0;
 
-		// increment brigthness for next iteration
-		brigthness += 10;
-		delay(50);
+			// and set the LED brigthness
+			analogWrite(LED_pin, brigthness);
+			float percentage_brightness = 100 * float(brigthness) / 255;
+			printf("[led brigthness = %.2f%%]\n", percentage_brightness);
+
+			// increment brigthness for next iteration
+			brigthness += 10;
+			delay(50);
+		}
 	}
+	catch(I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
+	}
+
 	return 0;
 }

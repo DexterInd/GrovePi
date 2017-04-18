@@ -35,12 +35,10 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 
 int main()
 {
-	int current_retries = 0; // current number of I2C errors encountered
-	int max_retries = 5; // maximum number of consecutive I2C errors
-
 	int potentiometer_pin = 0; // potentiometer is connected to A0 port
 	int LED_pin = 5; // potentiometer is connected to D5 port
 
@@ -48,23 +46,17 @@ int main()
 	int grove_ref_vcc = 5; // Grove's reference voltage is 5V, regularly
 	int full_angle = 300; // max turning angle for the potentiomater (almost a complete turn)
 
-	// start reading potentiometer's values
-	int sensor_value = analogRead(potentiometer_pin);
-	// as long as the I2C errors don't get over a certain threshold
-	while(current_retries < max_retries)
+	try
 	{
-		// check if there's an error on the sensor
-		if(sensor_value == -1)
-		{
-			// and if so increase the number of retries
-			current_retries += 1;
-		}
-		else
-		{
-			// otherwise reset the counter
-			// because we only care of the consecutives
-			current_retries = 0;
+		initGrovePi();
+		pinMode(potentiometer_pin, INPUT);
+		pinMode(LED_pin, OUTPUT);
 
+		// do this indefinitely
+		while(true)
+		{
+			// start reading potentiometer's values
+			int sensor_value = analogRead(potentiometer_pin);
 			// calculate voltage
 			float voltage = (float)(sensor_value) * adc_ref / 1023;
 
@@ -74,21 +66,28 @@ int main()
 			// and calculate brightness for the LED
 			// basically we map values 0->300 to 0->255
 			int brightness = int(degrees / full_angle * 255);
+			float percentage_brightness = 100 * float(brightness) / 255;
 
 			// and give a PWM output to the LED
 			analogWrite(LED_pin, brightness);
 
 			// and display status data onto the terminal
-			printf("[sensor value = %d][voltage = %.2f][degrees = %.1f][brightness = %d]\n",
-			       sensor_value, voltage, degrees, brightness);
+			printf("[sensor value = %d][voltage = %.2f][degrees = %.1f][brightness = %.2f%%]\n",
+			       sensor_value, voltage, degrees, percentage_brightness);
 		}
-
-		// wait 20 ms for the next reading
-		// this equates to a rate of 50Hz
-		// so there are 50 reads / second -> more than enough
-		delay(20);
-		sensor_value = analogRead(potentiometer_pin);
 	}
+	catch(I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
+	}
+
+
+	// wait 20 ms for the next reading
+	// this equates to a rate of 50Hz
+	// so there are 50 reads / second -> more than enough
+	delay(20);
 
 	return 0;
 }

@@ -43,7 +43,7 @@ using GrovePi::I2CError;
 
 int main()
 {
-	int sensorPin = 4; // analog port (A0) to which we have DTH sensor connected
+	int sensorPin = 4; // digital port (D4) to which we have DTH serial sensor connected
 	float temp = 0, humidity = 0; // variables to hold data from the DHT sensor
 
 	// initialize the BLUE module (got from the GrovePi kit)

@@ -33,27 +33,38 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 
 int main()
 {
 	int buzzer_pin = 8; // Grove Buzzer is connected to digital port D8 on the GrovePi
 
-	pinMode(buzzer_pin, OUTPUT); // set the buzzer_pin as OUTPUT (we have a buzzer)
-
-	// do indefinitely
-	while(true)
+	try
 	{
-		// turn ON the buzzer for 1000 ms (1 sec)
-		// and put the state on the screen
-		digitalWrite(buzzer_pin, HIGH);
-		printf("[buzzer ON]\n");
-		delay(1000);
+		initGrovePi(); // initialize communication with the GrovePi
+		pinMode(buzzer_pin, OUTPUT); // set the buzzer_pin as OUTPUT (we have a buzzer)
 
-		// and then OFF for another 1000 ms (1 sec)
-		// and put the state on the screen
-		digitalWrite(buzzer_pin, LOW);
-		printf("[buzzer OFF]\n");
-		delay(1000);
+		// do indefinitely
+		while(true)
+		{
+			// turn ON the buzzer for 1000 ms (1 sec)
+			// and put the state on the screen
+			digitalWrite(buzzer_pin, HIGH);
+			printf("[buzzer ON]\n");
+			delay(1000);
+
+			// and then OFF for another 1000 ms (1 sec)
+			// and put the state on the screen
+			digitalWrite(buzzer_pin, LOW);
+			printf("[buzzer OFF]\n");
+			delay(1000);
+		}
+	}
+	catch(I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;

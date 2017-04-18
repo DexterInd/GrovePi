@@ -34,30 +34,41 @@
 */
 
 #include "grovepi.h"
+using namespace GrovePi;
 
 int main()
 {
 	int relay_pin = 4; // Grove Relay is connected to digital port D4 on the GrovePi
 
-	pinMode(relay_pin, OUTPUT); // set the relay's pin as OUTPUT
-
-	// do this indefinitely
-	while(true)
+	try
 	{
-		// turn it ON
-		digitalWrite(relay_pin, HIGH);
-		printf("[relay ON]\n");
+		initGrovePi(); // initialize communication with the GrovePi
+		pinMode(relay_pin, OUTPUT); // set the relay's pin as OUTPUT
 
-		// for 5 seconds
-		delay(5000);
+		// do this indefinitely
+		while(true)
+		{
+			// turn it ON
+			digitalWrite(relay_pin, HIGH);
+			printf("[relay ON]\n");
 
-		// and turn it OFF
-		digitalWrite(relay_pin, LOW);
-		printf("[relay OFF]\n");
+			// for 5 seconds
+			delay(5000);
 
-		// for another 5 seconds
-		delay(5000);
-		// and repeat
+			// and turn it OFF
+			digitalWrite(relay_pin, LOW);
+			printf("[relay OFF]\n");
+
+			// for another 5 seconds
+			delay(5000);
+			// and repeat
+		}
+	}
+	catch(I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;
