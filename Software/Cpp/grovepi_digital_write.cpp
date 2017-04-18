@@ -30,7 +30,8 @@
 
 #include "grovepi.h"
 using namespace GrovePi;
-//g++ grovepi_digital_write.c grovepi.c -Wall
+
+// g++ -Wall grovepi.cpp grovepi_digital_write.cpp -o grovepi_digital_write.exe
 
 int main()
 {

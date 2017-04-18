@@ -1,9 +1,8 @@
+// GrovePi Example for using the Grove Rotary Angle Sensor (Potentiometer) and the Grove LED to create LED sweep
 //
-// GrovePi Example for using the Grove Light Sensor and the LED together to turn the LED On and OFF if the background light is greater than a threshold.
 // Modules:
-//      http://www.seeedstudio.com/wiki/Grove_-_Light_Sensor
-//      http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
-//
+//	 http://www.seeedstudio.com/wiki/Grove_-_Rotary_Angle_Sensor
+//	 http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 // The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
 // Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
@@ -38,48 +37,45 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
+// g++ -Wall grovepi.cpp grove_rotary_angle_sensor.cpp -o grove_rotary_angle_sensor.exe
+
 int main()
 {
-	int light_sensor_pin = 0; // analog port A0 for the Grove Light Sensor
-	int LED_pin = 4; // digital port D4 for the Grove LED
-	int threshold = 10; // threshold value in kOhm for the Grove Light Sensor
-	int sensor_value; // variable to hold the Grove Light Sensor value
-	float resistance; // variable to hold the Grove Light Sensor's resistance value
+	int potentiometer_pin = 0; // potentiometer is connected to A0 port
+	int LED_pin = 5; // potentiometer is connected to D5 port
+
+	int adc_ref = 5; // reference voltage of ADC is 5V
+	int grove_ref_vcc = 5; // Grove's reference voltage is 5V, regularly
+	int full_angle = 300; // max turning angle for the potentiomater (almost a complete turn)
 
 	try
 	{
-		// initialize communication with the GrovePi
 		initGrovePi();
-
-		// set the LED & Light pins accordingly
-		pinMode(light_sensor_pin, INPUT);
+		pinMode(potentiometer_pin, INPUT);
 		pinMode(LED_pin, OUTPUT);
 
+		// do this indefinitely
 		while(true)
 		{
+			// start reading potentiometer's values
+			int sensor_value = analogRead(potentiometer_pin);
+			// calculate voltage
+			float voltage = (float)(sensor_value) * adc_ref / 1023;
 
-			// start reading the value on the Light Sensor
-			sensor_value = analogRead(light_sensor_pin);
-			resistance = (float)(1023 - sensor_value) * 10 / sensor_value;
+			// calculate rotation in degrees (0 to 300)
+			float degrees = voltage * full_angle / grove_ref_vcc;
 
-			printf("[led pin %d][light pin %d][sensor value = %d][resistance = %.2f]", LED_pin, light_sensor_pin, sensor_value, resistance);
+			// and calculate brightness for the LED
+			// basically we map values 0->300 to 0->255
+			int brightness = int(degrees / full_angle * 255);
+			float percentage_brightness = 100 * float(brightness) / 255;
 
-			// check if the resistance gets beyond the threshold
-			// value in kOhm (check how a light sensor works)
-			// and turn ON/OFF the LED on the associated pin accordingly
-			if(resistance > threshold)
-			{
-				digitalWrite(LED_pin, HIGH);
-				printf("[led ON]\n");
-			}
-			else
-			{
-				digitalWrite(LED_pin, LOW);
-				printf("[led OFF]\n");
-			}
+			// and give a PWM output to the LED
+			analogWrite(LED_pin, brightness);
 
-			// wait 200 ms for the next reading
-			delay(200);
+			// and display status data onto the terminal
+			printf("[rotar pin %d][led pin %d][sensor value = %d][voltage = %.2f][degrees = %.1f][brightness = %.2f%%]\n",
+			       potentiometer_pin, LED_pin, sensor_value, voltage, degrees, percentage_brightness);
 		}
 	}
 	catch(I2CError &error)
@@ -88,6 +84,12 @@ int main()
 
 		return -1;
 	}
+
+
+	// wait 20 ms for the next reading
+	// this equates to a rate of 50Hz
+	// so there are 50 reads / second -> more than enough
+	delay(20);
 
 	return 0;
 }

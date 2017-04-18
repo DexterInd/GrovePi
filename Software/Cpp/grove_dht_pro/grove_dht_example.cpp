@@ -1,11 +1,12 @@
 //
-// GrovePi Example for using the Grove LED for LED Fade effect (http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit)
+// GrovePi Example for using the Grove Temperature & Humidity Sensor Pro
+// (http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro)
 //
-// The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+// The GrovePi connects the Raspberry Pi and Grove sensors.
+// You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
 // Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 //
-
 /*
 ## License
 
@@ -34,42 +35,53 @@
 */
 
 #include "grovepi.h"
-using namespace GrovePi;
+#include "grove_dht_pro.h"
+
+using GrovePi::DHT;
+using GrovePi::delay;
+using GrovePi::I2CError;
+
+//g++ -Wall grovepi.cpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.exe
 
 int main()
 {
-	int LED_pin = 5; // Grove LED is connected to digital port D5 on the GrovePi
-	int brigthness = 0; // initial brigthness of 0 (0 to 255)
+	int sensorPin = 4; // digital port (D4) to which we have DTH serial sensor connected
+	float temp = 0, humidity = 0; // variables to hold data from the DHT sensor
+
+	// initialize the BLUE module (got from the GrovePi kit)
+	// and use digital port 4 for the DHT sensor
+	DHT dht = DHT(DHT::BLUE_MODULE, sensorPin);
 
 	try
 	{
-		initGrovePi();
-		pinMode(LED_pin, OUTPUT); // set the LED pin as OUTPUT
-		delay(1000); // and wait a second
+		dht.init(); // same as initGrovePi
 
-		// do indefinitely
+		// do this indefinitely
 		while(true)
 		{
-			// reset if above 255
-			// the GrovePi has 8-bit DAC
-			if(brigthness > 255)
-				brigthness = 0;
+			// read the DHT sensor values
+			dht.getSafeData(temp, humidity);
 
-			// and set the LED brigthness
-			analogWrite(LED_pin, brigthness);
-			float percentage_brightness = 100 * float(brigthness) / 255;
-			printf("[pin %d][led brigthness = %.2f%%]\n", LED_pin, percentage_brightness);
+			// and print them on the screen
+			printf("[temp = %.02f C][humidity = %.02f%%]\n", temp, humidity);
 
-			// increment brigthness for next iteration
-			brigthness += 10;
-			delay(50);
+			// and wait 100 before the other reading
+			// so we don't overflow the terminal
+			delay(100);
 		}
 	}
 	catch(I2CError &error)
 	{
+		// I2C error while reading / writing
 		printf(error.detail());
-
 		return -1;
+	}
+	catch(std::runtime_error &e)
+	{
+		// catch error on number values
+		// NaN & bad value readings
+		printf(e.what());
+		return -2;
 	}
 
 	return 0;

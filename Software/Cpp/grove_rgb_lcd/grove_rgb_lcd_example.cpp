@@ -1,9 +1,7 @@
 //
-// GrovePi Example for using the Grove Temperature & Humidity Sensor Pro
-// (http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro)
+// GrovePi Example for using the Grove - LCD RGB Backlight (http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
 //
-// The GrovePi connects the Raspberry Pi and Grove sensors.
-// You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+// The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
 // Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 //
@@ -35,51 +33,44 @@
 */
 
 #include "grovepi.h"
-#include "grove_dht_pro.h"
+#include "grove_rgb_lcd.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-using GrovePi::DHT;
-using GrovePi::delay;
-using GrovePi::I2CError;
+using namespace GrovePi;
+
+//g++ -Wall grovepi.cpp grove_rgb_lcd.cpp grove_rgb_lcd_example.cpp -o grove_rgb_lcd_example.exe
 
 int main()
 {
-	int sensorPin = 4; // digital port (D4) to which we have DTH serial sensor connected
-	float temp = 0, humidity = 0; // variables to hold data from the DHT sensor
-
-	// initialize the BLUE module (got from the GrovePi kit)
-	// and use digital port 4 for the DHT sensor
-	DHT dht = DHT(DHT::BLUE_MODULE, sensorPin);
+	LCD lcd; // initialize new Grove LCD RGB device
 
 	try
 	{
-		dht.init(); // same as initGrovePi
+		// connect to the i2c-line
+		lcd.connect();
 
-		// do this indefinitely
-		while(true)
+		// set text and RGB color on the LCD
+		lcd.setText("Hello world!\nThis is an LCD.");
+		lcd.setRGB(0, 128, 64);
+
+		// continuously change color for roughly 2.5 seconds
+		for(int value = 0; value < 256; value++)
 		{
-			// read the DHT sensor values
-			dht.getSafeData(temp, humidity);
-
-			// and print them on the screen
-			printf("[temp = %.02f C][humidity = %.02f%%]\n", temp, humidity);
-
-			// and wait 100 before the other reading
-			// so we don't overflow the terminal
-			delay(100);
+			lcd.setRGB(value, 255 - value, 0);
+			delay(10);
 		}
+		// set final color
+		lcd.setRGB(0, 255, 0);
+
+		// and display a last minute text
+		lcd.setText("Bye bye!\nThis is line 2");
 	}
 	catch(I2CError &error)
 	{
-		// I2C error while reading / writing
 		printf(error.detail());
+
 		return -1;
-	}
-	catch(std::runtime_error &e)
-	{
-		// catch error on number values
-		// NaN & bad value readings
-		printf(e.what());
-		return -2;
 	}
 
 	return 0;

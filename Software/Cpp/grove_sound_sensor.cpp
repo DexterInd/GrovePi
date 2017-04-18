@@ -39,6 +39,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
+// g++ -Wall grovepi.cpp grove_sound_sensor.cpp -o grove_sound_sensor.exe
+
 int main()
 {
 	int sound_sensor_pin = 0; // analog port A0 for the Grove Sound Sensor

@@ -1,11 +1,10 @@
 //
-// GrovePi Example for using the Grove Relay (http://www.seeedstudio.com/wiki/Grove_-_Relay)
+// GrovePi Example for using the Grove Buzzer (http://www.seeedstudio.com/wiki/Grove_-_Buzzer)
 //
 // The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
 // Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 //
-
 /*
 ## License
 
@@ -36,32 +35,31 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
+// g++ -Wall grovepi.cpp grove_buzzer.cpp -o grove_buzzer.exe
+
 int main()
 {
-	int relay_pin = 4; // Grove Relay is connected to digital port D4 on the GrovePi
+	int buzzer_pin = 8; // Grove Buzzer is connected to digital port D8 on the GrovePi
 
 	try
 	{
 		initGrovePi(); // initialize communication with the GrovePi
-		pinMode(relay_pin, OUTPUT); // set the relay's pin as OUTPUT
+		pinMode(buzzer_pin, OUTPUT); // set the buzzer_pin as OUTPUT (we have a buzzer)
 
-		// do this indefinitely
+		// do indefinitely
 		while(true)
 		{
-			// turn it ON
-			digitalWrite(relay_pin, HIGH);
-			printf("[pin %d][relay ON]\n", relay_pin);
+			// turn ON the buzzer for 1000 ms (1 sec)
+			// and put the state on the screen
+			digitalWrite(buzzer_pin, HIGH);
+			printf("[pin %d][buzzer ON]\n", buzzer_pin);
+			delay(1000);
 
-			// for 5 seconds
-			delay(5000);
-
-			// and turn it OFF
-			digitalWrite(relay_pin, LOW);
-			printf("[pin %d][relay OFF]\n", relay_pin);
-
-			// for another 5 seconds
-			delay(5000);
-			// and repeat
+			// and then OFF for another 1000 ms (1 sec)
+			// and put the state on the screen
+			digitalWrite(buzzer_pin, LOW);
+			printf("[pin %d][buzzer OFF]\n", buzzer_pin);
+			delay(1000);
 		}
 	}
 	catch(I2CError &error)

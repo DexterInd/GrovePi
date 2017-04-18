@@ -1,10 +1,11 @@
 //
-// GrovePi Example for using the Grove Buzzer (http://www.seeedstudio.com/wiki/Grove_-_Buzzer)
+// GrovePi Example for using the Grove LED for LED Fade effect (http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit)
 //
 // The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
 // Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 //
+
 /*
 ## License
 
@@ -35,29 +36,35 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
+// g++ -Wall grovepi.cpp grove_led_fade.cpp -o grove_led_fade.exe
+
 int main()
 {
-	int buzzer_pin = 8; // Grove Buzzer is connected to digital port D8 on the GrovePi
+	int LED_pin = 5; // Grove LED is connected to digital port D5 on the GrovePi
+	int brigthness = 0; // initial brigthness of 0 (0 to 255)
 
 	try
 	{
-		initGrovePi(); // initialize communication with the GrovePi
-		pinMode(buzzer_pin, OUTPUT); // set the buzzer_pin as OUTPUT (we have a buzzer)
+		initGrovePi();
+		pinMode(LED_pin, OUTPUT); // set the LED pin as OUTPUT
+		delay(1000); // and wait a second
 
 		// do indefinitely
 		while(true)
 		{
-			// turn ON the buzzer for 1000 ms (1 sec)
-			// and put the state on the screen
-			digitalWrite(buzzer_pin, HIGH);
-			printf("[pin %d][buzzer ON]\n", buzzer_pin);
-			delay(1000);
+			// reset if above 255
+			// the GrovePi has 8-bit DAC
+			if(brigthness > 255)
+				brigthness = 0;
 
-			// and then OFF for another 1000 ms (1 sec)
-			// and put the state on the screen
-			digitalWrite(buzzer_pin, LOW);
-			printf("[pin %d][buzzer OFF]\n", buzzer_pin);
-			delay(1000);
+			// and set the LED brigthness
+			analogWrite(LED_pin, brigthness);
+			float percentage_brightness = 100 * float(brigthness) / 255;
+			printf("[pin %d][led brigthness = %.2f%%]\n", LED_pin, percentage_brightness);
+
+			// increment brigthness for next iteration
+			brigthness += 10;
+			delay(50);
 		}
 	}
 	catch(I2CError &error)

@@ -1,5 +1,5 @@
 //
-// GrovePi Example for using the Grove Button (http://www.seeedstudio.com/wiki/Grove_-_Button)
+// GrovePi Example for using the Grove Relay (http://www.seeedstudio.com/wiki/Grove_-_Relay)
 //
 // The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
@@ -36,30 +36,37 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
+// g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.exe
+
 int main()
 {
-	int button_pin = 4; // Grove Button is connected to digital port D4 on the GrovePi
-	int button_state; // variable to hold the current state of the button
+	int relay_pin = 4; // Grove Relay is connected to digital port D4 on the GrovePi
 
 	try
 	{
-		initGrovePi(); // initialize communications w/ GrovePi
-		pinMode(button_pin, INPUT); // set the button_pin (D3) as INPUT
+		initGrovePi(); // initialize communication with the GrovePi
+		pinMode(relay_pin, OUTPUT); // set the relay's pin as OUTPUT
 
 		// do this indefinitely
 		while(true)
 		{
-			button_state = digitalRead(button_pin); // read the button state
-			printf("[pin %d][button state = ", button_pin); // and print it on the terminal screen
-			if(button_state == 0)
-				printf("not pressed]\n");
-			else
-				printf("pressed]\n");
+			// turn it ON
+			digitalWrite(relay_pin, HIGH);
+			printf("[pin %d][relay ON]\n", relay_pin);
 
-			delay(100); // wait 100 ms for the next reading
+			// for 5 seconds
+			delay(5000);
+
+			// and turn it OFF
+			digitalWrite(relay_pin, LOW);
+			printf("[pin %d][relay OFF]\n", relay_pin);
+
+			// for another 5 seconds
+			delay(5000);
+			// and repeat
 		}
 	}
-	catch (I2CError &error)
+	catch(I2CError &error)
 	{
 		printf(error.detail());
 

@@ -1,5 +1,5 @@
 //
-// GrovePi Example for using the Grove - LCD RGB Backlight (http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
+// GrovePi LED blink Example for the Grove LED Socket (http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit)
 //
 // The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 //
@@ -33,36 +33,38 @@
 */
 
 #include "grovepi.h"
-#include "grove_rgb_lcd.h"
-#include <stdlib.h>
-#include <stdio.h>
-
 using namespace GrovePi;
+
+// g++ -Wall grovepi.cpp grove_led_blink.cpp -o grove_led_blink.exe
 
 int main()
 {
-	LCD lcd; // initialize new Grove LCD RGB device
+	int LED_pin = 4; // Grove LED is connected to digital port D4 on the GrovePi
 
 	try
 	{
-		// connect to the i2c-line
-		lcd.connect();
+		initGrovePi(); // initialize communication w/ GrovePi
+		pinMode(LED_pin, OUTPUT); // set the LED pin as OUTPUT on the GrovePi
+		delay(1000); // wait 1 second
 
-		// set text and RGB color on the LCD
-		lcd.setText("Hello world!\nThis is an LCD.");
-		lcd.setRGB(0, 128, 64);
+		printf("This example will blink a Grove LED connected to the GrovePi+ on the port labeled D4.\n");
+		printf("If you're having trouble seeing the LED blink, be sure to check the LED connection and the port number.\n");
+		printf("You may also try reversing the direction of the LED on the sensor.\n\n");
+		printf("Connect the LED to the port label D4!\n");
 
-		// continuously change color for roughly 2.5 seconds
-		for(int value = 0; value < 256; value++)
+		// do indefinitely
+		while(true)
 		{
-			lcd.setRGB(value, 255 - value, 0);
-			delay(10);
-		}
-		// set final color
-		lcd.setRGB(0, 255, 0);
+			// 1 second the LED is HIGH -> ON
+			digitalWrite(LED_pin, HIGH);
+			printf("[pin %d][LED ON]\n", LED_pin);
+			delay(1000);
 
-		// and display a last minute text
-		lcd.setText("Bye bye!\nThis is line 2");
+			// and another second LED is LOW -> OFF
+			digitalWrite(LED_pin, LOW);
+			printf("[pin %d][LED OFF]\n", LED_pin);
+			delay(1000);
+		}
 	}
 	catch(I2CError &error)
 	{
