@@ -154,12 +154,22 @@ void GrovePi::setMaxI2CRetries(int _max_i2c_retries)
 /**
  * tries to get communication w/ the GrovePi
  * throws I2CError on failing to establish communication
- * @param  address 7-bit address of the slave device
+ * @param  7-bit address of the slave device
  */
 void GrovePi::initGrovePi()
 {
-	char filename[11];   // enough to hold "/dev/i2c-x"
+	file_device = initDevice(GROVE_ADDRESS);
+}
+
+/**
+ * for setting the address of an I2C device
+ * @param address 7-bit address of the slave device
+ */
+int GrovePi::initDevice(uint8_t address)
+{
+	char filename[11];           // enough to hold "/dev/i2c-x"
 	int current_retry = 0;
+	int i2c_file_device;
 	SMBusName(filename);
 
 	// try to connect for a number of times
@@ -169,14 +179,14 @@ void GrovePi::initGrovePi()
 		current_retry += 1;
 
 		// open port for read/write operation
-		if((file_device = open(filename, O_RDWR)) < 0)
+		if((i2c_file_device = open(filename, O_RDWR)) < 0)
 		{
 			printf("[failed to open i2c port]\n");
 			// try in the next loop to connect
 			continue;
 		}
 		// setting up port options and address of the device
-		if(ioctl(file_device, I2C_SLAVE, GROVE_ADDRESS) < 0)
+		if(ioctl(i2c_file_device, I2C_SLAVE, address) < 0)
 		{
 			printf("[unable to get bus access to talk to slave]\n");
 			// try in the next loop to connect
@@ -191,13 +201,10 @@ void GrovePi::initGrovePi()
 	// throw exception
 	if(current_retry == max_i2c_retries)
 		throw I2CError("[I2CError on opening port]\n");
+
+	return i2c_file_device;
 }
 
-/**
- * for setting the I2C address of the GrovePi
- * default address is = 0x04
- * @param address from 0x00 -> 0x7F
- */
 void GrovePi::setGrovePiAddress(uint8_t address)
 {
 	GROVE_ADDRESS = address;

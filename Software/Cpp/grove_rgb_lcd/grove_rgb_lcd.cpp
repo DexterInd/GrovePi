@@ -1,42 +1,24 @@
 #include "grove_rgb_lcd.h"
 
-uint8_t GroveLCD::DISPLAY_RGB_ADDR = 0x62;
-uint8_t GroveLCD::DISPLAY_TEXT_ADDR = 0x3e;
+using GrovePi::LCD;
 
-uint8_t GroveLCD::CLEAR_DISPLAY = 0x01;
-uint8_t GroveLCD::DISPLAY_ON = 0x08;
-uint8_t GroveLCD::NO_CURSOR = 0x04;
-uint8_t GroveLCD::ENABLE_2ROWS = 0x28;
-uint8_t GroveLCD::PROGRAM_MODE = 0x80;
-uint8_t GroveLCD::NEW_ROW = 0xc0;
-uint8_t GroveLCD::DISPLAY_CHAR = 0x40;
-uint8_t GroveLCD::MAX_NO_CHARS = 32;
-char GroveLCD::default_error_message[64] = "I2C Error - check LCD wiring";
+uint8_t LCD::DISPLAY_RGB_ADDR = 0x62;
+uint8_t LCD::DISPLAY_TEXT_ADDR = 0x3e;
 
-GroveLCD::GroveLCD()
+uint8_t LCD::CLEAR_DISPLAY = 0x01;
+uint8_t LCD::DISPLAY_ON = 0x08;
+uint8_t LCD::NO_CURSOR = 0x04;
+uint8_t LCD::ENABLE_2ROWS = 0x28;
+uint8_t LCD::PROGRAM_MODE = 0x80;
+uint8_t LCD::NEW_ROW = 0xc0;
+uint8_t LCD::DISPLAY_CHAR = 0x40;
+uint8_t LCD::MAX_NO_CHARS = 32;
+
+void LCD::connect()
 {
-	connected = false;
-}
-
-void GroveLCD::connect()
-{
-	char filename[11];
-	SMBusName(filename);
-
-	DEVICE_FILE = open(filename, O_RDWR);
-
-	if(DEVICE_FILE == -1)
-	{
-		connected = false;
-		throw std::runtime_error(strcat(default_error_message, " - connect funct\n"));
-	}
-
-	connected = true;
-}
-
-bool GroveLCD::isConnected()
-{
-	return connected;
+	// initializing with a random address
+	// it's just important to get the device file
+	this->DEVICE_FILE = initDevice(LCD::DISPLAY_TEXT_ADDR);
 }
 
 /**
@@ -46,16 +28,16 @@ bool GroveLCD::isConnected()
  * @param green 8-bit
  * @param blue  8-bit
  */
-void GroveLCD::setRGB(uint8_t red, uint8_t green, uint8_t blue)
+void LCD::setRGB(uint8_t red, uint8_t green, uint8_t blue)
 {
-	selectSlave(DISPLAY_RGB_ADDR);
+	this->selectSlave(LCD::DISPLAY_RGB_ADDR);
 
-	sendCommand(0x00, 0x00);
-	sendCommand(0x01, 0x00);
-	sendCommand(0x08, 0xaa);
-	sendCommand(0x04, red);
-	sendCommand(0x03, green);
-	sendCommand(0x02, blue);
+	this->sendCommand(0x00, 0x00);
+	this->sendCommand(0x01, 0x00);
+	this->sendCommand(0x08, 0xaa);
+	this->sendCommand(0x04, red);
+	this->sendCommand(0x03, green);
+	this->sendCommand(0x02, blue);
 }
 
 /**
@@ -87,26 +69,26 @@ void GroveLCD::setRGB(uint8_t red, uint8_t green, uint8_t blue)
  *
  * @param string of maximum 32 characters excluding the NULL character.
  */
-void GroveLCD::setText(const char *str)
+void LCD::setText(const char *str)
 {
-	selectSlave(DISPLAY_TEXT_ADDR);
+	this->selectSlave(LCD::DISPLAY_TEXT_ADDR);
 
-	sendCommand(PROGRAM_MODE, CLEAR_DISPLAY);
+	this->sendCommand(LCD::PROGRAM_MODE, LCD::CLEAR_DISPLAY);
 	delay(50);
-	sendCommand(PROGRAM_MODE, DISPLAY_ON | NO_CURSOR);
-	sendCommand(PROGRAM_MODE, ENABLE_2ROWS);
+	this->sendCommand(LCD::PROGRAM_MODE, LCD::DISPLAY_ON | LCD::NO_CURSOR);
+	this->sendCommand(LCD::PROGRAM_MODE, LCD::ENABLE_2ROWS);
 	delay(50);
 
 	int length = strlen(str);
 	bool already_had_newline = false;
-	for(int i = 0; i < length && i < MAX_NO_CHARS; i++)
+	for(int i = 0; i < length && i < LCD::MAX_NO_CHARS; i++)
 	{
 		if(i == 16 || str[i] == '\n')
 		{
 			if(!already_had_newline)
 			{
 				already_had_newline = true;
-				sendCommand(PROGRAM_MODE, NEW_ROW);
+				this->sendCommand(LCD::PROGRAM_MODE, LCD::NEW_ROW);
 				if(str[i] == '\n')
 					continue;
 			}
@@ -114,16 +96,21 @@ void GroveLCD::setText(const char *str)
 				break;
 		}
 
-		sendCommand(DISPLAY_CHAR, uint8_t(str[i]));
+		this->sendCommand(LCD::DISPLAY_CHAR, uint8_t(str[i]));
 	}
 }
 
-void GroveLCD::sendCommand(uint8_t mode, uint8_t command)
+/**
+ * function for sending data to GrovePi RGB LCD
+ * @param mode    see the constants defined up top
+ * @param command see the constants defined up top
+ */
+void LCD::sendCommand(uint8_t mode, uint8_t command)
 {
-	int error = i2c_smbus_write_byte_data(DEVICE_FILE, mode, command);
+	int error = i2c_smbus_write_byte_data(this->DEVICE_FILE, mode, command);
 
 	if(error == -1)
-		throw std::runtime_error(strcat(default_error_message, " - sendCommand funct\n"));
+		throw I2CError("[I2CError writing data: check LCD wirings]\n");
 }
 
 /**
@@ -133,9 +120,9 @@ void GroveLCD::sendCommand(uint8_t mode, uint8_t command)
  * therefore there are 2 adresses
  * @param slave 7-bit address
  */
-void GroveLCD::selectSlave(uint8_t slave)
+void LCD::selectSlave(uint8_t slave)
 {
-	int error = ioctl(DEVICE_FILE, I2C_SLAVE, slave);
+	int error = ioctl(this->DEVICE_FILE, I2C_SLAVE, slave);
 	if(error == -1)
-		throw std::runtime_error(strcat(default_error_message, " - selectSlave funct\n"));
+		throw I2CError("[I2CError selecting LCD address]\n");
 }

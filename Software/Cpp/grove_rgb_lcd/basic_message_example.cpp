@@ -37,58 +37,38 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+using namespace GrovePi;
+
 int main()
 {
-	GroveLCD lcd; // initialize new Grove LCD RGB device
-	int max_retries = 5;
-	int current_retries = 0;
-	bool job_done = false;
+	LCD lcd; // initialize new Grove LCD RGB device
 
-	while(job_done == false && current_retries < max_retries)
+	try
 	{
+		// connect to the i2c-line
+		lcd.connect();
 
-		try{
-			// set/reset the counter
-			current_retries = 0;
+		// set text and RGB color on the LCD
+		lcd.setText("Hello world!\nThis is an LCD.");
+		lcd.setRGB(0, 128, 64);
 
-			// connect to the i2c-line
-			lcd.connect();
-
-			// set text and RGB color on the LCD
-			lcd.setText("Hello world!\nThis is an LCD.");
-			lcd.setRGB(0, 128, 64);
-
-			// continuously change color for roughly 2.5 seconds
-			for(int value = 0; value < 256; value++)
-			{
-				lcd.setRGB(value, 255 - value, 0);
-				delay(10);
-			}
-			// set final color
-			lcd.setRGB(0, 255, 0);
-
-			// and display a last minute text
-			lcd.setText("Bye bye!\nThis is line 2");
-
-			job_done = true;
+		// continuously change color for roughly 2.5 seconds
+		for(int value = 0; value < 256; value++)
+		{
+			lcd.setRGB(value, 255 - value, 0);
+			delay(10);
 		}
-		catch (I2CError &error) {
+		// set final color
+		lcd.setRGB(0, 255, 0);
 
-			// if any connection errors arise
-			// throw runtime exception
+		// and display a last minute text
+		lcd.setText("Bye bye!\nThis is line 2");
+	}
+	catch(I2CError &error)
+	{
+		printf(error.detail());
 
-			if(current_retries < max_retries)
-			{
-				// if number of max retries haven't reached the threshold
-				// then retry again to communicate
-				current_retries += 1;
-				continue;
-			}
-			else
-				// if connection can't be established
-				// print the error (w/ details about the location of it)
-				printf(error.detailError());
-		}
+		return -1;
 	}
 
 	return 0;

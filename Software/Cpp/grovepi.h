@@ -31,6 +31,7 @@ namespace GrovePi
   void SMBusName(char *smbus_name);
 
   void initGrovePi();
+  int initDevice(uint8_t address);
   void setMaxI2CRetries(int _max_i2c_retries);
   void setGrovePiAddress(uint8_t addr);
   void writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1 = 0, uint8_t opt2 = 0);

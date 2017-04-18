@@ -18,37 +18,39 @@
 #include <stdint.h>
 #include "grovepi.h"
 
-class GroveLCD
+namespace GrovePi
 {
-public:
+  class LCD
+  {
+	  public:
 
-GroveLCD();
-void connect();
-bool isConnected();
+		  LCD() {
+		  };
+		  void connect();
 
-void setRGB(uint8_t red, uint8_t green, uint8_t blue);
-void setText(const char *str);
+		  void setRGB(uint8_t red, uint8_t green, uint8_t blue);
+		  void setText(const char *str);
 
-private:
+	  private:
 
-void sendCommand(uint8_t mode, uint8_t command);
-void selectSlave(uint8_t slave);
+		  void sendCommand(uint8_t mode, uint8_t command);
+		  void selectSlave(uint8_t slave);
 
-uint8_t DEVICE_FILE;
-bool connected;
+		  uint8_t DEVICE_FILE;
+		  bool connected;
 
-static uint8_t DISPLAY_RGB_ADDR;
-static uint8_t DISPLAY_TEXT_ADDR;
+		  static uint8_t DISPLAY_RGB_ADDR;
+		  static uint8_t DISPLAY_TEXT_ADDR;
 
-static uint8_t CLEAR_DISPLAY;
-static uint8_t DISPLAY_ON;
-static uint8_t NO_CURSOR;
-static uint8_t ENABLE_2ROWS;
-static uint8_t PROGRAM_MODE;
-static uint8_t NEW_ROW;
-static uint8_t DISPLAY_CHAR;
-static uint8_t MAX_NO_CHARS;
-static char default_error_message[];
-};
+		  static uint8_t CLEAR_DISPLAY;
+		  static uint8_t DISPLAY_ON;
+		  static uint8_t NO_CURSOR;
+		  static uint8_t ENABLE_2ROWS;
+		  static uint8_t PROGRAM_MODE;
+		  static uint8_t NEW_ROW;
+		  static uint8_t DISPLAY_CHAR;
+		  static uint8_t MAX_NO_CHARS;
+  };
+}
 
 #endif
