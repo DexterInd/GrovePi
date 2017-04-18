@@ -55,12 +55,12 @@ int main()
 		{
 			// 1 second the LED is HIGH -> ON
 			digitalWrite(LED_pin, HIGH);
-			printf("[LED ON]\n");
+			printf("[pin %d][LED ON]\n", LED_pin);
 			delay(1000);
 
 			// and another second LED is LOW -> OFF
 			digitalWrite(LED_pin, LOW);
-			printf("[LED OFF]\n");
+			printf("[pin %d][LED OFF]\n", LED_pin);
 			delay(1000);
 		}
 	}

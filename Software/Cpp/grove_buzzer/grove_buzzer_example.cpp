@@ -50,13 +50,13 @@ int main()
 			// turn ON the buzzer for 1000 ms (1 sec)
 			// and put the state on the screen
 			digitalWrite(buzzer_pin, HIGH);
-			printf("[buzzer ON]\n");
+			printf("[pin %d][buzzer ON]\n", buzzer_pin);
 			delay(1000);
 
 			// and then OFF for another 1000 ms (1 sec)
 			// and put the state on the screen
 			digitalWrite(buzzer_pin, LOW);
-			printf("[buzzer OFF]\n");
+			printf("[pin %d][buzzer OFF]\n", buzzer_pin);
 			delay(1000);
 		}
 	}

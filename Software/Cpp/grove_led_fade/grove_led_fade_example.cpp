@@ -58,7 +58,7 @@ int main()
 			// and set the LED brigthness
 			analogWrite(LED_pin, brigthness);
 			float percentage_brightness = 100 * float(brigthness) / 255;
-			printf("[led brigthness = %.2f%%]\n", percentage_brightness);
+			printf("[pin %d][led brigthness = %.2f%%]\n", LED_pin, percentage_brightness);
 
 			// increment brigthness for next iteration
 			brigthness += 10;

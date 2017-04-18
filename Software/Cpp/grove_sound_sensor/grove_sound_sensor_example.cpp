@@ -64,7 +64,7 @@ int main()
 			// check whether we turn the LED ON or OFF
 			// based on the threshold value
 			// and print the sensor value onto the terminal
-			printf("[sensor value = %d]", sensor_value);
+			printf("[pin %d][sensor value = %d]", sound_sensor_pin, sensor_value);
 			if(sensor_value > threshold_value)
 			{
 				digitalWrite(LED_pin, HIGH);

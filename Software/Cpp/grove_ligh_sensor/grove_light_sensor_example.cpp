@@ -62,7 +62,7 @@ int main()
 			sensor_value = analogRead(light_sensor_pin);
 			resistance = (float)(1023 - sensor_value) * 10 / sensor_value;
 
-			printf("[sensor value = %d][resistance = %.2f]", sensor_value, resistance);
+			printf("[led pin %d][light pin %d][sensor value = %d][resistance = %.2f]", LED_pin, light_sensor_pin, sensor_value, resistance);
 
 			// check if the resistance gets beyond the threshold
 			// value in kOhm (check how a light sensor works)

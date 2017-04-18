@@ -29,29 +29,36 @@
 */
 
 #include "grovepi.h"
-//g++ grovepi_us_read.c grovepi.c -Wall
+using namespace GrovePi;
+//g++ grovepi.c grovepi_us_read.c -Wall
 
 int main()
 {
-	bool success = initGrovePi();
-	int pin = 4;
+	int pin = 4; // connected to digital port 4 (D4)
 	int incoming; // variable to hold the data
 
-	// if communication has been established
-	if(success)
+	try
 	{
+		initGrovePi(); // initialize communication with the GrovePi
+
+		// do this indefinitely
 		while(true)
 		{
+			// read the processed data from the GrovePi
 			incoming = ultrasonicRead(pin);
-			printf("[pin %d][ultrasonic read] = %d\n", pin, incoming);
-			if(incoming == -1)
-			{
-				printf("[IO error on I2C]\n");
-				break;
-			}
 
+			// display it
+			printf("[pin %d][ultrasonic read = %d cm]\n", pin, incoming);
+
+			// and wait 50 ms for the ultrasonic sensor to get a new reading
 			delay(50);
 		}
+	}
+	catch(I2CError &error)
+	{
+		printf(error.detail());
+
+		return -1;
 	}
 
 	return 0;

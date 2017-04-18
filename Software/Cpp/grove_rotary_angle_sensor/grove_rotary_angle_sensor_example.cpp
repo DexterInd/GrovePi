@@ -72,8 +72,8 @@ int main()
 			analogWrite(LED_pin, brightness);
 
 			// and display status data onto the terminal
-			printf("[sensor value = %d][voltage = %.2f][degrees = %.1f][brightness = %.2f%%]\n",
-			       sensor_value, voltage, degrees, percentage_brightness);
+			printf("[rotar pin %d][led pin %d][sensor value = %d][voltage = %.2f][degrees = %.1f][brightness = %.2f%%]\n",
+			       potentiometer_pin, LED_pin, sensor_value, voltage, degrees, percentage_brightness);
 		}
 	}
 	catch(I2CError &error)

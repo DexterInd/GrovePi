@@ -50,14 +50,14 @@ int main()
 		{
 			// turn it ON
 			digitalWrite(relay_pin, HIGH);
-			printf("[relay ON]\n");
+			printf("[pin %d][relay ON]\n", relay_pin);
 
 			// for 5 seconds
 			delay(5000);
 
 			// and turn it OFF
 			digitalWrite(relay_pin, LOW);
-			printf("[relay OFF]\n");
+			printf("[pin %d][relay OFF]\n", relay_pin);
 
 			// for another 5 seconds
 			delay(5000);

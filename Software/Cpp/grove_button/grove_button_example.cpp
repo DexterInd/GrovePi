@@ -50,7 +50,7 @@ int main()
 		while(true)
 		{
 			button_state = digitalRead(button_pin); // read the button state
-			printf("[button state = "); // and print it on the terminal screen
+			printf("[pin %d][button state = ", button_pin); // and print it on the terminal screen
 			if(button_state == 0)
 				printf("not pressed]\n");
 			else
