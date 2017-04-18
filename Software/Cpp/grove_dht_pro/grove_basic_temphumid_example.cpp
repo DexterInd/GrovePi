@@ -58,7 +58,7 @@ int main()
 		while(true)
 		{
 			// read the DHT sensor values
-			dht.getReadings(temp, humidity);
+			dht.getSafeData(temp, humidity);
 
 			// and print them on the screen
 			printf("[temp = %.02f C][humidity = %.02f%%]\n", temp, humidity);
@@ -70,6 +70,7 @@ int main()
 	}
 	catch(I2CError &error)
 	{
+		// I2C error while reading / writing
 		printf(error.detail());
 		return -1;
 	}
