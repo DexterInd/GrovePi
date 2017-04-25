@@ -36,7 +36,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_button.cpp -o grove_button.exe
+// g++ -Wall grovepi.cpp grove_button.cpp -o grove_button.out
 
 int main()
 {

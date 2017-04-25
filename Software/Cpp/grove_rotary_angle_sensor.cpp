@@ -37,7 +37,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_rotary_angle_sensor.cpp -o grove_rotary_angle_sensor.exe
+// g++ -Wall grovepi.cpp grove_rotary_angle_sensor.cpp -o grove_rotary_angle_sensor.out
 
 int main()
 {

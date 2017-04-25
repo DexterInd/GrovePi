@@ -41,7 +41,7 @@ using GrovePi::DHT;
 using GrovePi::delay;
 using GrovePi::I2CError;
 
-//g++ -Wall grovepi.cpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.exe
+//g++ -Wall grovepi.cpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.out
 
 int main()
 {

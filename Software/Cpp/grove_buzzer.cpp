@@ -35,7 +35,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_buzzer.cpp -o grove_buzzer.exe
+// g++ -Wall grovepi.cpp grove_buzzer.cpp -o grove_buzzer.out
 
 int main()
 {

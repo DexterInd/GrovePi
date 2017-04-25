@@ -38,7 +38,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_light_sensor.cpp -o grove_ligh_sensor.exe
+// g++ -Wall grovepi.cpp grove_light_sensor.cpp -o grove_ligh_sensor.out
 
 int main()
 {

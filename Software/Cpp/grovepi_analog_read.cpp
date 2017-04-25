@@ -31,7 +31,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grovepi_analog_read.cpp -o grovepi_analog_read.exe
+// g++ -Wall grovepi.cpp grovepi_analog_read.cpp -o grovepi_analog_read.out
 
 int main()
 {

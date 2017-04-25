@@ -31,7 +31,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grovepi_analog_write.cpp -o grovepi_analog_write.exe
+// g++ -Wall grovepi.cpp grovepi_analog_write.cpp -o grovepi_analog_write.out
 
 int main()
 {

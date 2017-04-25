@@ -36,7 +36,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_led_fade.cpp -o grove_led_fade.exe
+// g++ -Wall grovepi.cpp grove_led_fade.cpp -o grove_led_fade.out
 
 int main()
 {

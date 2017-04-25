@@ -39,7 +39,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_sound_sensor.cpp -o grove_sound_sensor.exe
+// g++ -Wall grovepi.cpp grove_sound_sensor.cpp -o grove_sound_sensor.out
 
 int main()
 {

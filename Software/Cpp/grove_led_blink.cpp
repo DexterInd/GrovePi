@@ -35,7 +35,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_led_blink.cpp -o grove_led_blink.exe
+// g++ -Wall grovepi.cpp grove_led_blink.cpp -o grove_led_blink.out
 
 int main()
 {

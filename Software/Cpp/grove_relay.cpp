@@ -36,7 +36,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.exe
+// g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.out
 
 int main()
 {

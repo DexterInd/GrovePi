@@ -31,7 +31,7 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grovepi_digital_read.cpp -o grovepi_digital_read.exe
+// g++ -Wall grovepi.cpp grovepi_digital_read.cpp -o grovepi_digital_read.out
 
 int main()
 {
