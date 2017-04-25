@@ -114,7 +114,10 @@ class RFLinker:
         crc_to_bytes = []
         for each_char in crc32:
             crc_to_bytes.append(ord(each_char) - self.crc_offset)
-        unpacked_crc = struct.unpack('!I', bytes(crc_to_bytes))[0]
+        try:
+            unpacked_crc = struct.unpack('!I', bytes(crc_to_bytes))[0]
+        except ValueError:
+            raise IOError('[transmission error - cannot unpack CRC32]')
 
         if unpacked_crc != binascii.crc32(incoming_message.encode('utf-8')):
             raise IOError('[transmission error - CRC32 does not match]')
