@@ -11,14 +11,17 @@ class RFLinker:
     # is fragmented
     #
     # max_bad_readings = 32 represents how many times we wait for a valid byte data before giving up
-    def __init__(self, port = '/dev/ttyS0', chunk_size = 32, max_bad_readings = 32):
+    #
+    # retries = 20 number of times it starts the process of reading a message before giving up
+    def __init__(self, port = '/dev/ttyS0', chunk_size = 32, max_bad_readings = 32, retries = 20):
         self.serial = serial.Serial(port, baudrate = 1200)
+        self.chunk_size = chunk_size
         self.max_bad_readings = max_bad_readings
+        self.retries = retries
         self.display_verbose = False # whether we want or not feedback on the screen
 
         self.delimiter = chr(2) # new transmission delimiter -> the 1st thing we search when reading
         self.start_condition = chr(1) + chr(27) # new transmission start condition
-        self.chunk_size = chunk_size
         self.crc_offset = 256 # how much we offset crc32's bytes by adding this value so that we can send data over the air
 
         self.end_condition = '\r\n' # CR + LF for ending a transmssion
@@ -85,6 +88,17 @@ class RFLinker:
     def setChunkSize(self, chunk_size):
         if chunk_size > 0:
             self.chunk_size = chunk_size
+
+    # function for setting retries variable
+    # it specifies how many times it tries to
+    # start a transmission before giving up
+    def setMaxRetries(self, max_retries):
+        if max_retries > 0:
+            self.retries = max_retries
+
+    def setMaxBadReadings(self, max_bad_readings):
+        if max_bad_readings > 0:
+            self.max_bad_readings = max_bad_readings
 
     # function we call from the user-program to send messages
     def writeMessage(self, message):
@@ -182,9 +196,7 @@ class RFLinker:
                 raise IOError('[chunks out of order - abording reading operation]')
 
     # function for reading incoming messages
-    # retries = 20 is a default argument which specifies how many times
-    # it tries to start reading data before giving up
-    def readMessage(self, retries = 20):
+    def readMessage(self):
         current_count = 0
         message = ""
         # we need to flush the input
@@ -202,7 +214,7 @@ class RFLinker:
             except serial.SerialTimeoutException:
                 return message
             except IOError:
-                if current_count == retries:
+                if current_count == self.retries:
                     return message
             except UnicodeDecodeError:
                 continue
