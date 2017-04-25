@@ -1,5 +1,4 @@
-###
-License
+### License
 
 The MIT License (MIT)
 
@@ -23,6 +22,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
 ---
 # GrovePi C++ library
 
@@ -31,6 +31,7 @@ See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 
 ### To compile use:
 `g++ -Wall grovepi.cpp [dependencies[,..]].cpp -o [program_name].out`
+
 `g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.exe`
 
 ### Then run the executable:
