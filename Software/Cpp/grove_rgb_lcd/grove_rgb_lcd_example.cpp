@@ -39,7 +39,8 @@
 
 using namespace GrovePi;
 
-//g++ -Wall grovepi.cpp grove_rgb_lcd.cpp grove_rgb_lcd_example.cpp -o grove_rgb_lcd_example.out
+//g++ -Wall grovepi.cpp grove_rgb_lcd.cpp grove_rgb_lcd_example.cpp -o grove_rgb_lcd_example.out -> without package installed
+//g++ -Wall -lgrovepicpp grove_rgb_lcd.cpp grove_rgb_lcd_example.cpp -o grove_rgb_lcd_example.out -> with package installed
 
 int main()
 {

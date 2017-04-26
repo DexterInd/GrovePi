@@ -31,7 +31,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-//g++ -Wall grovepi_us_read.cpp grovepi.cpp -o grovepi_us_read.out
+//g++ -Wall grovepi_us_read.cpp grovepi.cpp -o grovepi_us_read.out -> without package installed
+//g++ -Wall -lgrovepicpp grovepi_us_read.cpp -o grovepi_us_read.out -> with package installed
 
 int main()
 {

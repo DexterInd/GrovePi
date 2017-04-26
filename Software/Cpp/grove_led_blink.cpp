@@ -35,7 +35,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_led_blink.cpp -o grove_led_blink.out
+// g++ -Wall grovepi.cpp grove_led_blink.cpp -o grove_led_blink.out -> without package installed
+// g++ -Wall -lgrovepicpp grove_led_blink.cpp -o grove_led_blink.out -> with package installed
 
 int main()
 {

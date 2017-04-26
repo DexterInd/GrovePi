@@ -29,24 +29,39 @@ THE SOFTWARE.
 This library provides the basic functions for using the GrovePi in C++.
 See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 
-### To install:
+### To install package:
 First of all, you have to `cd` to `../GrovePi/Software/Cpp`
 ```
-$ tar -xzvf grovepicpplib_0.1.tar.gz
+$ tar -xzvf grovepicpp_0.1.tar.gz
 $ cd grovepicpplib_0.1
-$ sudo dpkg -i ./grovepicpplib_0.1.deb
-$ sudo ldconfig
+$ sudo dpkg --install ./grovepicpp_0.1.deb
 ```
 
-### To uninstall:
+The package contains the following sources:
+* grovepi.cpp
+* grove_dht_pro.cpp
+* grove_rgb_lcd.cpp
+
+### To uninstall package:
 ```
-$ sudo dpkg --purge grovepicpplib
+$ sudo dpkg --remove grovepicpplib
 ```
 
-### To compile use:
-`g++ -Wall grovepi.cpp [dependencies[,..]].cpp -o [program_name].out`
+### To compile with package installed:
+```
+g++ -Wall [dependencies[,..]].cpp -lgrovepicpp -o [program_name].out// the general format
+```
+```
+g++ -Wall grove_relay.cpp -lgrovepicpp -o grove_relay.out // a trivial example
+```
 
-`g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.exe`
+### To compile without package:
+```
+g++ -Wall grovepi.cpp [dependencies[,..]].cpp -o [program_name].out // the general format
+```
+```
+g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.out // a trivial example
+```
 
 ### Then run the executable:
 ```

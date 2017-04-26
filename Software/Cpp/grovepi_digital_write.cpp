@@ -31,7 +31,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grovepi_digital_write.cpp -o grovepi_digital_write.out
+// g++ -Wall grovepi.cpp grovepi_digital_write.cpp -o grovepi_digital_write.out -> without package installed
+// g++ -Wall -lgrovepicpp grovepi_digital_write.cpp -o grovepi_digital_write.out -> with package installed
 
 int main()
 {

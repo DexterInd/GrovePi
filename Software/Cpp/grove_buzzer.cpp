@@ -35,7 +35,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_buzzer.cpp -o grove_buzzer.out
+// g++ -Wall grovepi.cpp grove_buzzer.cpp -o grove_buzzer.out -> without package installed
+// g++ -Wall -lgrovepicpp grove_buzzer.cpp -o grove_buzzer.out -> with package installed
 
 int main()
 {
