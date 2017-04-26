@@ -29,6 +29,20 @@ THE SOFTWARE.
 This library provides the basic functions for using the GrovePi in C++.
 See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 
+### To install:
+First of all, you have to `cd` to `../GrovePi/Software/Cpp`
+```
+$ tar -xzvf grovepicpplib_0.1.tar.gz
+$ cd grovepicpplib_0.1
+$ sudo dpkg -i ./grovepicpplib_0.1.deb
+$ sudo ldconfig
+```
+
+### To uninstall:
+```
+$ sudo dpkg --purge grovepicpplib
+```
+
 ### To compile use:
 `g++ -Wall grovepi.cpp [dependencies[,..]].cpp -o [program_name].out`
 

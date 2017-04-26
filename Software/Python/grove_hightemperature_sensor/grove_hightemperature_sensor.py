@@ -1,6 +1,9 @@
 import grovepi
 import math
 
+# take a look in the datasheet
+# http://www.mouser.com/catalog/specsheets/Seeed_111020002.pdf
+
 # class for the K-Type temperature sensor (w/ long probe/sonde)
 class HighTemperatureSensor:
 
@@ -41,7 +44,13 @@ class HighTemperatureSensor:
         voltage_ratio = 5.0 / 3.3
 
         # and multiply what we read by that ratio
-        analog_value = grovepi.analogRead(self.temperature_pin) * voltage_ratio
+        # and read it for about 12 times -> this way we get smoother readings
+        # the reason we average it is because the table we provided isn't big enough
+        # and as a consequence you'd get values like (20 degrees, 24 degrees and so on)
+        analog_sum = 0
+        for step in range(12):
+            analog_sum += grovepi.analogRead(self.temperature_pin)
+        analog_value = (analog_sum / 12) * voltage_ratio
         # see the datasheet for more information
         calculated_resistance = (1023 - analog_value) * 10000 / analog_value
         calculated_temperature = 1 / (math.log(calculated_resistance / 10000) / 3975 + 1 / 298.15) - 273.15
