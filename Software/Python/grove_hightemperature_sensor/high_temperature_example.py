@@ -54,9 +54,9 @@ def Main():
         probe_temperature = sensor.getTemperature()
 
         # print it in a fashionable way
-        print('[room temperature: {:f}°C][probe temperature: {:f}°C]'.format(room_temperature, probe_temperature))
-        # and wait for 50 ms before taking another measurement - so we don't overflow the terminal
-        sleep(0.05)
+        print('[room temperature: {:5.2f}°C][probe temperature: {:5.2f}°C]'.format(room_temperature, probe_temperature))
+        # and wait for 250 ms before taking another measurement - so we don't overflow the terminal
+        sleep(0.25)
 
 
 if __name__ == "__main__":
