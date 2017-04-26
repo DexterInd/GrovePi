@@ -109,7 +109,7 @@ install_dependencies() {
     echo " "
 	feedback "Installing Dependencies"
 	echo "======================="
-	sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus python3-scipy arduino minicom python-dev -y
+	sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev -y
 	sudo apt-get purge python-rpi.gpio -y
 	sudo apt-get purge python3-rpi.gpio -y
 	sudo apt-get install python-rpi.gpio -y

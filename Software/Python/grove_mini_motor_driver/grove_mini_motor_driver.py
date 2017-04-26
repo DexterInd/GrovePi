@@ -2,6 +2,9 @@ from scipy.interpolate import interp1d
 from sys import platform
 import datetime
 
+left_channel = 0x60
+right_channel = 0x62
+
 # function for returning a SMBus object
 # checks the Rpi version before it selects the bus
 def getNewSMBus():
@@ -113,7 +116,7 @@ class DRV8830:
 # class for managing the 2 DRV8830 drivers the Grove Mini Motor Driver has
 class MiniMotorDriver:
     # obviously, we need the two I2C addresses of the DRV8830 drivers
-    # the 2 addresses are (and not only -> the addresses can be physically changed): 0x60 & 0x62
+    # the 2 addresses are: 0x60 & 0x62
     def __init__(self, ch1, ch2, _bus = None):
         if _bus is None:
             self.bus = getNewSMBus()

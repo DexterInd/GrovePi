@@ -34,6 +34,7 @@ THE SOFTWARE.
 '''
 
 from grove_mini_motor_driver import MiniMotorDriver
+from grove_mini_motor_driver import left_channel, right_channel
 from time import sleep
 import sys
 
@@ -56,13 +57,6 @@ import sys
 
 
 def Main():
-
-    # using the I2C addresses we find in the datasheet
-    # the polarity of the engines isn't important since
-    # this motor driver can go forward or backwards
-    left_channel = 0x60
-    right_channel = 0x62
-
     # initialize an object of the motor driver class
     # with the appropiate channel address
     # we can also add a 3rd argument which is a SMBus objeclt

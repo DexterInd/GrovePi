@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf8 -*-
 #
 # GrovePi Example for using the Grove - LCD RGB Backlight without erasing the screen(http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
 #
