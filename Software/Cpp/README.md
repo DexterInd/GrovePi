@@ -44,7 +44,7 @@ The package contains the following sources:
 
 ### To uninstall package:
 ```
-$ sudo dpkg --remove grovepicpplib
+$ sudo dpkg --remove grovepicpp
 ```
 
 ### To compile with package installed:
