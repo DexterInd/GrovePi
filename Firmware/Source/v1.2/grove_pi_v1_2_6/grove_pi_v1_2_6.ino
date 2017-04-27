@@ -13,6 +13,11 @@
 #include "Encoder.h"
 #include "TimerOne.h"
 #include "VirtualWire.h"
+#include "Timer.h"
+#include "S208T02.h"
+
+
+Timer t;
 
 MMA7660 acc;
 DS1307 clock;
@@ -41,6 +46,7 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define tx433_control_set_buffer_subcmd     2
 #define tx433_control_send_buffer_subcmd    3
 #define tx433_buffer_max_size   64
+#define POWER_FREQ	20 //for 50Hz power requency
 
 int cmd[5];
 int index=0;
@@ -90,12 +96,29 @@ void setup()
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
 	attachInterrupt(0,readPulseDust,CHANGE);
+	for(uint8_t i=0;i<6;i++){
+			fan[i].begin();
+			fan[i].setPin(2+i);	
+		}
+	}	
+	delay(150);
+	tevery = t.every(POWER_FREQ, FanStatus);
 }
+
+void FanStatus()
+{
+  	for(uint8_t i=0;i<6;i++){
+			fan[i].checkFanStatus();			
+		}
+	}	
+}
+
 int pin;
 int j;
 void loop()
 {
   long dur,RangeCm;
+  t.update();
   if(index==4)
   {
     flag=1;
@@ -181,6 +204,16 @@ void loop()
       b[2]=accv[1];
       b[3]=accv[2];
     }
+	
+	//SSD Relay
+    if(cmd[0]==21)
+    {
+      t.stop(tevery);
+	  fan[cmd[1]].controlFanSpeed(cmd[2]);
+      fan[cmd[1]].setFanControllerState(cmd[3]);      
+      tevery = t.every(POWER_FREQ, FanStatus);
+    }
+	
     //RTC tine read
     else if(cmd[0]==30)
     {
