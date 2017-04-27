@@ -1,11 +1,11 @@
 GrovePi C library
-v0.1
+v0.2
 
 This library provides the basic functions for using the GrovePi in C.  See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 
 To compile use:
-gcc programe_name.c grovepi.c -Wall
-e.g.: gcc grovepi_analog_read.c grovepi.c -Wall
+g++ programe_name.c grovepi.c -Wall
+e.g.: g++ grovepi_analog_read.c grovepi.c -Wall
 
 and then run the executable:
 ./a.out
