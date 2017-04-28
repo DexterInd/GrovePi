@@ -36,8 +36,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.out -> without package installed
-// g++ -Wall -lgrovepicpp grove_relay.cpp -o grove_relay.out -> with package installed
+// g++ -Wall grovepi.cpp grove_relay.cpp -o grove_relay.out -> without grovepicpp package installed
+// g++ -Wall -lgrovepicpp grove_relay.cpp -o grove_relay.out -> with grovepicpp package installed
 
 int main()
 {

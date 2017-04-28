@@ -41,8 +41,8 @@ using GrovePi::DHT;
 using GrovePi::delay;
 using GrovePi::I2CError;
 
-//g++ -Wall grovepi.cpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.out -> without package installed
-//g++ -Wall -lgrovepicpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.out -> with package installed
+//g++ -Wall grovepi.cpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.out -> without grovepicpp package installed
+//g++ -Wall -lgrovepicpp grove_dht_pro.cpp grove_dht_example.cpp -o grove_dht_example.out -> with grovepicpp package installed
 
 int main()
 {

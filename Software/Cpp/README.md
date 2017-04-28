@@ -33,7 +33,7 @@ See more about the GrovePi here:  https://www.nuget.org/packages/GrovePi/
 First of all, you have to `cd` to `../GrovePi/Software/Cpp`
 ```
 $ tar -xzvf grovepicpp_0.1.1.tar.gz
-$ cd grovepicpplib_0.1.1
+$ cd grovepicpp_0.1.1
 $ sudo dpkg --install ./grovepicpp_0.1.1.deb
 ```
 

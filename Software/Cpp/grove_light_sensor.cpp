@@ -38,8 +38,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_light_sensor.cpp -o grove_ligh_sensor.out -> without package installed
-// g++ -Wall -lgrovepicpp grove_light_sensor.cpp -o grove_ligh_sensor.out -> with package installed
+// g++ -Wall grovepi.cpp grove_light_sensor.cpp -o grove_ligh_sensor.out -> without grovepicpp package installed
+// g++ -Wall -lgrovepicpp grove_light_sensor.cpp -o grove_ligh_sensor.out -> with grovepicpp package installed
 
 int main()
 {

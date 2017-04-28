@@ -31,8 +31,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grovepi_analog_write.cpp -o grovepi_analog_write.out -> without package installed
-// g++ -Wall -lgrovepicpp grovepi_analog_write.cpp -o grovepi_analog_write.out -> with package installed
+// g++ -Wall grovepi.cpp grovepi_analog_write.cpp -o grovepi_analog_write.out -> without grovepicpp package installed
+// g++ -Wall -lgrovepicpp grovepi_analog_write.cpp -o grovepi_analog_write.out -> with grovepicpp package installed
 
 int main()
 {

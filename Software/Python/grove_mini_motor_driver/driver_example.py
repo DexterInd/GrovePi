@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 #
-# GrovePi Example for using the Grove - LCD RGB Backlight without erasing the screen(http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
-#
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
 # Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
