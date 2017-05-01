@@ -104,7 +104,7 @@ Extract the `tar package` and `cd` into its directory. The folders' hierarchy is
 ----------
 
 
-![archive folder structure](tar_archive.png)
+![archive folder structure](tar_archive.PNG)
 
 
 ----------
