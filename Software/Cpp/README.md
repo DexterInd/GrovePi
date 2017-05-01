@@ -94,14 +94,9 @@ $ ./[program_name].out
 * the library is included in `GrovePi` namespace, so don't forget to use the resolution operator or the `using` command.
 
 
---------
-
 # How to create a deb package:
 
 Extract the `tar package` and `cd` into its directory. The folders' hierarchy is this.
-
-
-----------
 
 
 ![archive folder structure](tar_archive.PNG)
