@@ -1,3 +1,6 @@
+
+
+
 ### License
 
 The MIT License (MIT)
@@ -89,3 +92,68 @@ $ ./[program_name].out
 * it's currently not supported to use multiple I2C devices with this library, unless you reinitialize communication with the device you want to talk to (w/ `initgrovePi()` or `initDevice(uint8_t address)`
 * for any of the given functions in this library, if an error occurs on the I2C line, a `GrovePi::I2CError()` is thrown. `GrovePi::I2CError()` is derived from `std::runtime_error`
 * the library is included in `GrovePi` namespace, so don't forget to use the resolution operator or the `using` command.
+
+
+--------
+
+# How to create a deb package:
+
+Extract the `tar package` and `cd` into its directory. The folders' hierarchy is this.
+
+
+----------
+
+
+![archive folder structure](tar_archive.png)
+
+
+----------
+
+
+You'll see that in the `source` folder there are the source files along with the `.o` object files and `.so` files (which are the shared libraries).
+
+In order to generate the **shared libraries** we need to follow the next steps
+### **Step 1**
+ Compile all the `.cpp`  files into position independent code (object files) which are required for creating a shared library:
+
+    g++ -C -Wall -Werror -fpic [cppfile]
+Run the following command to create a shared library:
+
+    g++ -shared -o libshared.so [list of .o files]
+The name of the library **must** have at all times the prefix `lib` and the suffix `.so`. The rest of it is the name of the library. This means that this `libgrovepicpp.so`  file name suggests that our library is called `grovepicpp`.
+
+After we're done with it, we have to copy the shared library to the `grovepicpp_x.y.z/usr/lib` folder.
+
+### **Step 2**
+Copy all the header files from the `source` folder to `grovepicpp_x.y.z/usr/include` (make sure you clean the `include` folder).
+
+### **Step 3**
+Open `control` file from `grovepicpp_x.y.z/DEBIAN/` folder and modify the version accordingly.
+Let's say we have a version like this: `0.2.1`:
+
+ 1. the first digit represents a major release: like a complete redesign or architecture. It's generally accepted that `0` as a "major release" actually means that the release it's yet to be completed. We'll have it this way as long as we don't have a versioning scheme in all of our repo(s)
+ 2. the second digit represents a new feature added to the current architectural scheme
+ 3. the third digit represents a bug-fix / a really small change / and so on.
+
+Also, please modify all the other folders name according to the version number.
+
+### **Step 4**
+Go at the directory level where you can see the 2 main folders: `grovepicpp_x.y.z` & `source`.
+We need to create the actual package and and we'll type:
+
+    dpkg-deb --build grovepicpp_x.y.z/
+
+
+### **Step 5**
+
+`cd` out of that folder and archive the folder (with its all files) with the command:
+
+    tar -csvf grovepicpp_x.y.z.tar.gz grovepicpp_x.y.z/
+
+
+
+
+----------
+
+
+### Voilà! You now have a package ready to be delivered.
