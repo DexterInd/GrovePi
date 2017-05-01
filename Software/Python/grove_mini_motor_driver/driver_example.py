@@ -117,6 +117,6 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # in case there's an IO error aka I2C
-except IOError:l
+except IOError:
         print('[IO Error]')
         sys.exit(0)
