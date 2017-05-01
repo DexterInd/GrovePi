@@ -119,8 +119,16 @@ The name of the library **must** have at all times the prefix `lib` and the suff
 
 After we're done with it, we have to copy the shared library to the `grovepicpp_x.y.z/usr/lib` folder.
 
+
+----------
+
+
 ### **Step 2**
 Copy all the header files from the `source` folder to `grovepicpp_x.y.z/usr/include` (make sure you clean the `include` folder).
+
+
+----------
+
 
 ### **Step 3**
 Open `control` file from `grovepicpp_x.y.z/DEBIAN/` folder and modify the version accordingly.
@@ -132,11 +140,19 @@ Let's say we have a version like this: `0.2.1`:
 
 Also, please modify all the other folders name according to the version number.
 
+
+----------
+
+
 ### **Step 4**
 Go at the directory level where you can see the 2 main folders: `grovepicpp_x.y.z` & `source`.
 We need to create the actual package and and we'll type:
 
     dpkg-deb --build grovepicpp_x.y.z/
+
+
+
+----------
 
 
 ### **Step 5**
