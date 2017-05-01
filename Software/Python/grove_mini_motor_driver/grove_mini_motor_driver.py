@@ -1,4 +1,3 @@
-from scipy.interpolate import interp1d
 from sys import platform
 import datetime
 
@@ -27,6 +26,19 @@ def getNewSMBus():
 # function for returning a formatted time date
 def getTime():
     return datetime.datetime.now().strftime("%m-%b-%Y %H:%M:%S.%f")
+
+# function for mapping a value which goes from
+# left_min to left_max to right_min & right_max
+def translateValues(value, left_min, left_max, right_min, right_max):
+    # figure out how 'wide' each range is
+    left_span = left_max - left_min
+    right_span = right_max - right_min
+
+    # convert the left range into a 0-1 range (float)
+    value_scaled = float(value - left_min) / float(left_span)
+
+    # convert the 0-1 range into a value in the right range.
+    return right_min + (value_scaled * right_span)
 
 # class for the DRV8830 driver
 # the Grove Mini Motor driver is made of 2 DRV8830 drivers
@@ -63,8 +75,6 @@ class DRV8830:
         self.MIN_SPEED = 0x06
         # maximum speed in hexa
         self.MAX_SPEED = 0x3F
-        # we interpolate the values in order to map the hexadecimal values to percentage values
-        self.MAPPED_SPEED = interp1d([0, 100], [self.MIN_SPEED, self.MAX_SPEED])
 
         # dictionary for the fault register
         self.FAULT_TABLE = {
@@ -80,7 +90,7 @@ class DRV8830:
     # state might be = {STANDBY, REVERSE, FORWARD, BRAKE}
     # percentage_speed can be = 0 -> 100 (represents the percentage of the maximum available thrust)
     def motorWrite(self, state, percentage_speed = 0):
-        calculated_speed = int(self.MAPPED_SPEED(percentage_speed))
+        calculated_speed = int(translateValues(percentage_speed, 0, 100, self.MIN_SPEED, self.MAX_SPEED))
         register_value = (calculated_speed << 2) + state
 
         self.bus.write_byte_data(self.address, self.CONTROL_REG, register_value)
