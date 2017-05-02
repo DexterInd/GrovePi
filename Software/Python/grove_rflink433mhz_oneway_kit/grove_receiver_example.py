@@ -34,6 +34,10 @@ THE SOFTWARE.
 import grove_rflink433mhz
 import sys
 
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+
 def Main():
     # instantiate a RFLinker object
     # default arguments are

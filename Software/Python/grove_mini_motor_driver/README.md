@@ -1,4 +1,4 @@
-It only runs with **Python 3**! 
+Library written for **Python 3**!
 
 Possible fault warnings:
 * undervoltage lockout

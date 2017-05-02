@@ -3,6 +3,8 @@ Link to the Grove 433Mhz Simple RF Link Kit datasheet :
 * http://wiki.seeedstudio.com/images/9/95/ADI%3BACTR433A.pdf
 * http://wiki.seeedstudio.com/images/1/1a/1110010P1.pdf
 
+Library written for **Python 3**!
+
 ---
 
 You'll need 2 Raspberry's in order to test the given example programs.

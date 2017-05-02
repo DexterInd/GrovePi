@@ -52,6 +52,9 @@ import sys
 # [04-Apr-2017 19:25:08.330140][right motor warning][overtemperature condition]
 # [04-Apr-2017 19:38:54.781218][right motor warning][unknown condition]
 
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
 
 
 def Main():

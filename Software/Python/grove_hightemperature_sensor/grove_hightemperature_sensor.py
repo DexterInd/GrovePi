@@ -1,6 +1,8 @@
 import grovepi
 import math
 
+# Library written for Python 3!
+
 # take a look in the datasheet
 # http://www.mouser.com/catalog/specsheets/Seeed_111020002.pdf
 

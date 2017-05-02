@@ -2,6 +2,8 @@ import serial
 import binascii
 import struct
 
+# Library written for Python 3!
+
 class RFLinker:
 
     # port = '/dev/ttyS0' - it's the default and only UART port on the Raspberry

@@ -37,6 +37,10 @@ import grove_rflink433mhz
 from time import sleep
 import sys
 
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+
 # in order to get a feedback of what this example does
 # please use another setup consisted of a raspberry + receiver
 # to print out the transmitted data -> use the other example program for it

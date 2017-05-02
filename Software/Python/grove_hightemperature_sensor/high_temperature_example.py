@@ -36,6 +36,10 @@ import grove_hightemperature_sensor as grovepi # our library
 from time import sleep # and for the sleep function
 import sys # we need this for the exception throwing stuff
 
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+# Don't forget to run it with Python 3 !!
+
 def Main():
     room_temperature_pin = 15 # this is equal to A1
     probe_temperature_pin = 14 # this is equal to A0

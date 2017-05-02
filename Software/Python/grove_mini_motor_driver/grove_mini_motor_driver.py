@@ -1,6 +1,8 @@
 from sys import platform
 import datetime
 
+# Library written for Python 3!
+
 left_channel = 0x60
 right_channel = 0x62
 
