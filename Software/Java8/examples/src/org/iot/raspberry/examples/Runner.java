@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.iot.raspberry.grovepi.GrovePi;
-import org.iot.raspberry.grovepi.dio.GrovePiDio;
 import org.iot.raspberry.grovepi.pi4j.GrovePi4J;
 
 public class Runner {
@@ -38,9 +37,6 @@ public class Runner {
     String mode = args[0];
     GrovePi grovePi;
     switch (mode.toLowerCase()) {
-      case "dio":
-        grovePi = new GrovePiDio();
-        break;
       case "pi4j":
         grovePi = new GrovePi4J();
         break;
