@@ -41,14 +41,17 @@ THE SOFTWARE.
 # Author	Date      		Comments
 # Karan		13 Feb 2014  	Initial Authoring
 # 			11 Nov 2016		I2C retries added for faster IO
-#							DHT function updated to look for nan's 
+#							DHT function updated to look for nan's
 
 import sys
 import time
 import math
 import struct
+import threading
+import numpy
+import datetime
 
-debug =0
+debug = 0
 
 if sys.version_info<(3,0):
 	p_version=2
@@ -328,6 +331,114 @@ def dht(pin, module_type):
 		return [t, hum]
 	else:
 		return [float('nan'),float('nan')]
+
+def statisticalNoiseReduction(values, std_factor_threshold):
+	mean = numpy.mean(values)
+	standard_deviation = numpy.std(values)
+
+	if standard_deviation == 0:
+		return values
+
+	filtered_values = [element for element in values if element > mean - std_factor_threshold * standard_deviation]
+	filtered_values = [element for element in filtered_values if element < mean + std_factor_threshold * standard_deviation]
+
+	return filtered_values
+
+class Dht(threading.Thread):
+	def __init__(self, pin, sensor_type, refresh_period = 10.0, debugging = False):
+		self.threading.Thread.__init__(name = "DHT filtering")
+
+		self.pin = pin
+		self.sensor_type = sensor_type
+		self.refresh_period = refresh_period
+		self.debugging = debugging
+		self.event_stopper = threading.Event()
+
+		self.blue_sensor = 0
+		self.white_sensor = 1
+		self.filtering_aggresiveness = 2
+
+		self.lock = threading.Lock()
+
+		self.filtered_temperature = []
+		self.filtered_humidity = []
+
+	def setRefreshPeriod(self, time):
+		self.refresh_period = time
+
+	def setDhtPin(self, pin):
+		self.pin = pin
+
+	def setAsWhiteSensor(self):
+		self.sensor_type = self.white_sensor
+
+	def setAsBlueSensor(self):
+		self.sensor_type = self.blue_sensor
+
+	def clearBuffer(self):
+		self.filtered_humidity = []
+		self.filtered_temperature = []
+
+	def setFilteringAggresiveness(self, filtering_aggresiveness):
+		self.filtering_aggresiveness = 2
+
+	def stop(self):
+		self.event_stopper.set()
+
+	def __str__(self):
+		if len(self.filtered_humidity > 0):
+			print('[{}][temperature = {:.01f}][humidity = {:.01f}]'.format(
+			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+			self.filtered_temperature.pop(),
+			self.filtered_humidity.pop()))
+
+	def feedMe(self):
+		if len(self.filtered_humidity > 0):
+			return (self.filtered_temperature.pop(), self.filtered_humidity.pop())
+		else
+			return (None, None)
+
+	def run(self):
+		values = []
+
+		while not self.event_stopper.is_set():
+			counter = 0
+			while counter < self.refresh_period and not self.event_stopper.is_set():
+				temp = None
+				humidity = None
+
+				try:
+					[temp, humidity] = dht(sensor, self.sensor_type)
+
+					if math.isnan(temp) is False and math.isnan(humidity) is False:
+						new_entry = {"temp" : temp, "hum" : humidity}
+						values.append(new_entry)
+
+					else:
+						raise RuntimeWarning("[dht sensor][we've caught a NaN]")
+
+					temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values]), self.filtering_aggresiveness)
+					humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values]), self.filtering_aggresiveness)
+
+					self.lock.acquire()
+					self.filtered_temperature.append(temp)
+					self.filtered_humidity.append(humidity)
+					self.lock.release()
+
+				except IOError:
+					if self.debugging is True:
+						print("[dht sensor][we've got an IO error]")
+
+				except RuntimeError as error:
+					if self.debugging is True:
+						print(error.what())
+
+				finally:
+					time.sleep(1)
+
+		if self.debugging is True:
+			print("[dht sensor][called for joining thread]")
+
 
 # Grove LED Bar - initialise
 # orientation: (0 = red to green, 1 = green to red)

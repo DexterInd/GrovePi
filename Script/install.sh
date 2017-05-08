@@ -60,6 +60,7 @@ display_welcome_msg() {
 	echo "   - python3-smbus    Python3 bindings for Linux SMBus access through i2c-dev"
 	echo "   - arduino          AVR development board IDE and built-in libraries"
 	echo "   - minicom          friendly menu driven serial communication program"
+  echo "   - numpy            is the fundamental package for scientific computing with Python"
 	echo "2) Clone, build wiringPi in GrovePi/Script and install it"
 	echo "3) Removes I2C and SPI from modprobe blacklist /etc/modprobe.d/raspi-blacklist.conf"
 	echo "4) Adds I2C-dev, i2c-bcm2708 and spi-dev to /etc/modules"
@@ -115,6 +116,8 @@ install_dependencies() {
 	sudo apt-get install python-rpi.gpio -y
 	sudo apt-get install python3-rpi.gpio -y
 	sudo pip install -U RPi.GPIO
+  sudo pip2 install numpy
+  sudo pip3 install numpy
 
     feedback "Dependencies installed"
 }
