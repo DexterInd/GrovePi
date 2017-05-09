@@ -399,8 +399,10 @@ class Dht(threading.Thread):
 	# clears the buffer of filtered data
 	# useful when you got too much data inside of it
 	def clearBuffer(self):
+		self.lock.acquire()
 		self.filtered_humidity = []
 		self.filtered_temperature = []
+		self.lock.release()
 
 	# sets how aggresive the filtering has to be
 	# read more about [statisticalNoiseReduction] function, because
@@ -438,15 +440,23 @@ class Dht(threading.Thread):
 	# returns a tuple with the (temperature, humidity) format
 	# if there's nothing in the buffer, then it returns (None, None)
 	def feedMe(self):
-		if len(self.filtered_humidity) > 0:
-			return (self.filtered_temperature.pop(), self.filtered_humidity.pop())
+
+		if self.length() > 0:
+			self.lock.acquire()
+			temp = self.filtered_temperature.pop()
+			hum = self.filtered_humidity.pop()
+			self.lock.release()
+			return (temp, hum)
 		else:
 			return (None, None)
 
 	# returns the length of the buffer
 	# the buffer is filled with filtered data
 	def length(self):
-		return len(self.filtered_humidity)
+		self.lock.acquire()
+		length = len(self.filtered_humidity)
+		self.lock.release()
+		return length
 
 	# we've overwritten the Thread.run method
 	# so we can process / filter data inside of it
