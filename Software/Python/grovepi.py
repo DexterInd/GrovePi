@@ -346,7 +346,7 @@ def statisticalNoiseReduction(values, std_factor_threshold):
 
 class Dht(threading.Thread):
 	def __init__(self, pin, sensor_type, refresh_period = 10.0, debugging = False):
-		self.threading.Thread.__init__(name = "DHT filtering")
+		super(Dht, self).__init__(name = "DHT filtering")
 
 		self.pin = pin
 		self.sensor_type = sensor_type
@@ -357,6 +357,7 @@ class Dht(threading.Thread):
 		self.blue_sensor = 0
 		self.white_sensor = 1
 		self.filtering_aggresiveness = 2
+		self.callbackfunc = None
 
 		self.lock = threading.Lock()
 
@@ -379,23 +380,30 @@ class Dht(threading.Thread):
 		self.filtered_humidity = []
 		self.filtered_temperature = []
 
-	def setFilteringAggresiveness(self, filtering_aggresiveness):
-		self.filtering_aggresiveness = 2
+	def setFilteringAggresiveness(self, filtering_aggresiveness = 2):
+		self.filtering_aggresiveness
+
+	def setCallbackFunction(self, callbackfunc, *args):
+		self.callbackfunc = callbackfunc
+		self.args = args
 
 	def stop(self):
 		self.event_stopper.set()
 
 	def __str__(self):
-		if len(self.filtered_humidity > 0):
-			print('[{}][temperature = {:.01f}][humidity = {:.01f}]'.format(
+		string = ""
+		if len(self.filtered_humidity) > 0:
+			string = '[{}][temperature = {:.01f}][humidity = {:.01f}]'.format(
 			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 			self.filtered_temperature.pop(),
-			self.filtered_humidity.pop()))
+			self.filtered_humidity.pop())
+
+		return string
 
 	def feedMe(self):
-		if len(self.filtered_humidity > 0):
+		if len(self.filtered_humidity) > 0:
 			return (self.filtered_temperature.pop(), self.filtered_humidity.pop())
-		else
+		else:
 			return (None, None)
 
 	def run(self):
@@ -408,7 +416,7 @@ class Dht(threading.Thread):
 				humidity = None
 
 				try:
-					[temp, humidity] = dht(sensor, self.sensor_type)
+					[temp, humidity] = dht(self.pin, self.sensor_type)
 
 					if math.isnan(temp) is False and math.isnan(humidity) is False:
 						new_entry = {"temp" : temp, "hum" : humidity}
@@ -417,24 +425,30 @@ class Dht(threading.Thread):
 					else:
 						raise RuntimeWarning("[dht sensor][we've caught a NaN]")
 
-					temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values]), self.filtering_aggresiveness)
-					humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values]), self.filtering_aggresiveness)
-
-					self.lock.acquire()
-					self.filtered_temperature.append(temp)
-					self.filtered_humidity.append(humidity)
-					self.lock.release()
-
 				except IOError:
 					if self.debugging is True:
 						print("[dht sensor][we've got an IO error]")
 
-				except RuntimeError as error:
+				except RuntimeWarning as error:
 					if self.debugging is True:
-						print(error.what())
+						print(str(error))
 
 				finally:
 					time.sleep(1)
+					counter += 1
+
+			temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values], self.filtering_aggresiveness))
+			humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values], self.filtering_aggresiveness))
+
+			self.lock.acquire()
+			self.filtered_temperature.append(temp)
+			self.filtered_humidity.append(humidity)
+			self.lock.release()
+
+			if not self.callbackfunc is None:
+				self.callbackfunc(*self.args)
+
+			values = []
 
 		if self.debugging is True:
 			print("[dht sensor][called for joining thread]")
