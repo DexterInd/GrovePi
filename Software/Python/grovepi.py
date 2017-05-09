@@ -155,7 +155,7 @@ ir_recv_pin_cmd=[22]
 dus_sensor_read_cmd=[10]
 dust_sensor_en_cmd=[14]
 dust_sensor_dis_cmd=[15]
-encoder_read_cmd=[11] 
+encoder_read_cmd=[11]
 encoder_en_cmd=[16]
 encoder_dis_cmd=[17]
 flow_read_cmd=[12]
@@ -307,19 +307,19 @@ def dht(pin, module_type):
 	except (TypeError, IndexError):
 		return [-1,-1]
 	# data returned in IEEE format as a float in 4 bytes
-	
+
 	if p_version==2:
 		h=''
 		for element in (number[1:5]):
 			h+=chr(element)
-			
+
 		t_val=struct.unpack('f', h)
 		t = round(t_val[0], 2)
 
 		h = ''
 		for element in (number[5:9]):
 			h+=chr(element)
-		
+
 		hum_val=struct.unpack('f',h)
 		hum = round(hum_val[0], 2)
 	else:
@@ -332,7 +332,14 @@ def dht(pin, module_type):
 	else:
 		return [float('nan'),float('nan')]
 
-def statisticalNoiseReduction(values, std_factor_threshold):
+# provide an array of data for filtering through [values]
+# [std_factor_threshold] represents the multiplier of the calculated standard_deviation
+# through [std_factor_threshold] we set an upper & lower threshold for these data values
+# therefore this function removes outlier values which go beyond the calculated threshold
+# the default [std_factor_threshold] should be enough for most sensor filterings
+# the bigger the [std_factor_threshold] the more strict is the filtering
+# the lower the [std_factor_threshold] the lest strict is the filtering
+def statisticalNoiseReduction(values, std_factor_threshold = 2):
 	mean = numpy.mean(values)
 	standard_deviation = numpy.std(values)
 
@@ -344,12 +351,19 @@ def statisticalNoiseReduction(values, std_factor_threshold):
 
 	return filtered_values
 
+# class for the Grove DHT Pro sensor
+# the class instance runs on a separate thread
+# the separate thread reads the data of the sensor
+# while in the main thread we can trigger actions based on what we read
 class Dht(threading.Thread):
-	def __init__(self, pin, sensor_type, refresh_period = 10.0, debugging = False):
+	# [pin] is the digital port to which the DHT sensor is connected
+	# [refresh_period] is the amount of time it reads data before it filters it
+	# [debugging] is True/False depending on whether you want on-screen debugging
+	# The default sensor we're using is the Grove Dht Pro Blue module (you can change it to the white one)
+	def __init__(self, pin, refresh_period = 10.0, debugging = False):
 		super(Dht, self).__init__(name = "DHT filtering")
 
 		self.pin = pin
-		self.sensor_type = sensor_type
 		self.refresh_period = refresh_period
 		self.debugging = debugging
 		self.event_stopper = threading.Event()
@@ -358,38 +372,59 @@ class Dht(threading.Thread):
 		self.white_sensor = 1
 		self.filtering_aggresiveness = 2
 		self.callbackfunc = None
+		self.sensor_type = self.blue_sensor
 
 		self.lock = threading.Lock()
 
 		self.filtered_temperature = []
 		self.filtered_humidity = []
 
+	# sets for how much time (in seconds) we read data before we filter it
+	# the bigger the period of time, the better is the data filtered
 	def setRefreshPeriod(self, time):
 		self.refresh_period = time
 
+	# sets the digital port
 	def setDhtPin(self, pin):
 		self.pin = pin
 
+	# use the white sensor module
 	def setAsWhiteSensor(self):
 		self.sensor_type = self.white_sensor
 
+	# use the blue sensor module
 	def setAsBlueSensor(self):
 		self.sensor_type = self.blue_sensor
 
+	# clears the buffer of filtered data
+	# useful when you got too much data inside of it
 	def clearBuffer(self):
 		self.filtered_humidity = []
 		self.filtered_temperature = []
 
+	# sets how aggresive the filtering has to be
+	# read more about [statisticalNoiseReduction] function, because
+	# we're basically setting the parameter for it
 	def setFilteringAggresiveness(self, filtering_aggresiveness = 2):
 		self.filtering_aggresiveness
 
+	# callback function
+	# whenever we have newly filtered data
+	# it calls the parameter-sent function
+	# you can also send variable-length parameters for the
+	# callback function through [*args] parameter
 	def setCallbackFunction(self, callbackfunc, *args):
 		self.callbackfunc = callbackfunc
 		self.args = args
 
+	# stops the current thread from running
 	def stop(self):
 		self.event_stopper.set()
+		self.join()
 
+	# is useful when you want to print the data using
+	# the built-in [print] function
+	# it prints a nicely formatted text with the data
 	def __str__(self):
 		string = ""
 		if len(self.filtered_humidity) > 0:
@@ -400,12 +435,22 @@ class Dht(threading.Thread):
 
 		return string
 
+	# returns a tuple with the (temperature, humidity) format
+	# if there's nothing in the buffer, then it returns (None, None)
 	def feedMe(self):
 		if len(self.filtered_humidity) > 0:
 			return (self.filtered_temperature.pop(), self.filtered_humidity.pop())
 		else:
 			return (None, None)
 
+	# returns the length of the buffer
+	# the buffer is filled with filtered data
+	def length(self):
+		return len(self.filtered_humidity)
+
+	# we've overwritten the Thread.run method
+	# so we can process / filter data inside of it
+	# you don't need to care about it
 	def run(self):
 		values = []
 
@@ -437,6 +482,7 @@ class Dht(threading.Thread):
 					time.sleep(1)
 					counter += 1
 
+			# the next following lines insert the filtered data inside 2 lists
 			temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values], self.filtering_aggresiveness))
 			humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values], self.filtering_aggresiveness))
 
@@ -445,6 +491,7 @@ class Dht(threading.Thread):
 			self.filtered_humidity.append(humidity)
 			self.lock.release()
 
+			# function for callbacking the supplied function
 			if not self.callbackfunc is None:
 				self.callbackfunc(*self.args)
 
@@ -635,19 +682,19 @@ def ir_read_signal():
 		return [-1]*21
 	except IOError:
 		return [-1]*21
-		
+
 # Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
 def ir_recv_pin(pin):
 	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
-	
+
 def dust_sensor_en():
 	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
 	time.sleep(.2)
-	
+
 def dust_sensor_dis():
 	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
 	time.sleep(.2)
-	
+
 def dustSensorRead():
 	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
 	time.sleep(.2)
@@ -663,15 +710,15 @@ def dustSensorRead():
 	else:
 		return [-1,-1]
 	print (data_back)
-	
+
 def encoder_en():
 	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])
 	time.sleep(.2)
-	
+
 def encoder_dis():
 	write_i2c_block(address, encoder_dis_cmd + [unused, unused, unused])
 	time.sleep(.2)
-	
+
 def encoderRead():
 	write_i2c_block(address, encoder_read_cmd + [unused, unused, unused])
 	time.sleep(.2)
@@ -681,15 +728,15 @@ def encoderRead():
 		return [data_back[0],data_back[1]]
 	else:
 		return [-1,-1]
-		
+
 def flowDisable():
 	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
 	time.sleep(.2)
-	
+
 def flowEnable():
 	write_i2c_block(address, flow_en_cmd + [unused, unused, unused])
 	time.sleep(.2)
-	
+
 def flowRead():
 	write_i2c_block(address, flow_read_cmd + [unused, unused, unused])
 	time.sleep(.2)
