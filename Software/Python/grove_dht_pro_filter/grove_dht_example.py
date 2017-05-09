@@ -40,7 +40,7 @@ import sys
 # Don't forget to run it with Python 3 !!
 
 # Please read the source file(s) for more explanations
-# You'll get to see that the source file(s) are explained through comments
+# Source file(s) are more comprehensive
 
 dht = Dht()
 
@@ -63,18 +63,18 @@ def Main():
     # using the blue kind of sensor
     # there's also the white one which can be set by calling [dht.setAsWhiteSensor()] function
     dht.setAsBlueSensor()
-    # sets the period in seconds
-    # after every each period, the algorithm filters the values it recorded in the buffer
-    # and then it calls the callback function (if provided)
+    # specifies for how long we record data before we filter it
+    # it's better to have larger periods of time,
+    # because the statistical algorithm has a vaster pool of values
     dht.setRefreshPeriod(12)
-    # set the filtering aggresiveness
-    # the smaller is the parameter, the more aggresive is the filtering process
-    # it's vice versa with higher-valued parameters
-    # by default, it's set at 2.0
+    # the bigger is the filtering factor (as in the filtering aggresiveness)
+    # the less strict is the algorithm when it comes to filtering
+    # it's also valid vice-versa
+    # the factor must be greater than 0
+    # it's recommended to leave its default value unless there is a better reason
     dht.setFilteringAggresiveness(2.1)
-    # whenever we get a new filtered data, it calls the argument-passed function
-    # you can also provide a variable length parameters to the callback function
-    # through the same function
+    # every time the Dht object loads new filtered data inside the buffer
+    # a callback is what it follows
     dht.setCallbackFunction(callbackFunc)
 
     # start the thread for gathering data

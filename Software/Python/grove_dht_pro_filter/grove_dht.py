@@ -28,15 +28,11 @@ def statisticalNoiseReduction(values, std_factor_threshold = 2):
 	return filtered_values
 '''
 
-# class for the Grove DHT Pro sensor
-# the class instance runs on a separate thread
-# the separate thread reads the data of the sensor
-# while in the main thread we can trigger actions based on what we read
+# class for the Grove DHT sensor
+# it was designed so that on a separate thread the values from the DHT sensor are read
+# on the same separate thread, the filtering process takes place
 class Dht(threading.Thread):
-	# [pin] is the digital port to which the DHT sensor is connected and the it defaultly points to digital port 4
-	# [refresh_period] is the amount of time it reads data before it filters it
-	# [debugging] is True/False depending on whether you want on-screen debugging
-	# The default sensor we're using is the Grove Dht Pro Blue module (you can change it to the white one)
+	# refresh_period specifies for how long data is captured before it's filtered
 	def __init__(self, pin = 4, refresh_period = 10.0, debugging = False):
 		super(Dht, self).__init__(name = "DHT filtering")
 
@@ -56,8 +52,7 @@ class Dht(threading.Thread):
 		self.filtered_temperature = []
 		self.filtered_humidity = []
 
-	# sets for how much time (in seconds) we read data before we filter it
-	# the bigger the period of time, the better is the data filtered
+	# refresh_period specifies for how long data is captured before it's filtered
 	def setRefreshPeriod(self, time):
 		self.refresh_period = time
 
@@ -73,25 +68,21 @@ class Dht(threading.Thread):
 	def setAsBlueSensor(self):
 		self.sensor_type = self.blue_sensor
 
-	# clears the buffer of filtered data
-	# useful when you got too much data inside of it
+	# removes the processed data from the buffer
 	def clearBuffer(self):
 		self.lock.acquire()
 		self.filtered_humidity = []
 		self.filtered_temperature = []
 		self.lock.release()
 
-	# sets how aggresive the filtering has to be
-	# read more about [statisticalNoiseReduction] function, because
-	# we're basically setting the parameter for it
+	# the bigger the parameter, the less strict is the filtering process
+	# it's also vice-versa
 	def setFilteringAggresiveness(self, filtering_aggresiveness = 2):
-		self.filtering_aggresiveness
+		self.filtering_aggresiveness = filtering_aggresiveness
 
-	# callback function
-	# whenever we have newly filtered data
-	# it calls the parameter-sent function
-	# you can also send variable-length parameters for the
-	# callback function through [*args] parameter
+	# whenever there's new data processed
+	# a callback takes place
+	# arguments can also be sent
 	def setCallbackFunction(self, callbackfunc, *args):
 		self.callbackfunc = callbackfunc
 		self.args = args
@@ -101,9 +92,8 @@ class Dht(threading.Thread):
 		self.event_stopper.set()
 		self.join()
 
-	# is useful when you want to print the data using
-	# the built-in [print] function
-	# it prints a nicely formatted text with the data
+	# replaces the need to custom-create code for outputting logs/data
+	# print(dhtObject) can be used instead
 	def __str__(self):
 		string = ""
 		if len(self.filtered_humidity) > 0:
@@ -135,21 +125,25 @@ class Dht(threading.Thread):
 		self.lock.release()
 		return length
 
-	# we've overwritten the Thread.run method
-	# so we can process / filter data inside of it
-	# you don't need to care about it
+	# you musn't call this function from the user-program
+	# this one is called by threading.Thread's start function
 	def run(self):
 		values = []
 
+		# while we haven't called stop function
 		while not self.event_stopper.is_set():
 			counter = 0
+
+			# while we haven't done a cycle (period)
 			while counter < self.refresh_period and not self.event_stopper.is_set():
 				temp = None
 				humidity = None
 
+				# read data
 				try:
 					[temp, humidity] = dht(self.pin, self.sensor_type)
 
+					# check for NaN errors
 					if math.isnan(temp) is False and math.isnan(humidity) is False:
 						new_entry = {"temp" : temp, "hum" : humidity}
 						values.append(new_entry)
@@ -157,31 +151,36 @@ class Dht(threading.Thread):
 					else:
 						raise RuntimeWarning("[dht sensor][we've caught a NaN]")
 
+				# in case we have an I2C error
 				except IOError:
 					if self.debugging is True:
 						print("[dht sensor][we've got an IO error]")
 
+				# intented to catch NaN errors
 				except RuntimeWarning as error:
 					if self.debugging is True:
 						print(str(error))
 
 				finally:
+					# the DHT can be read once a second
 					time.sleep(1)
 					counter += 1
 
-			# the next following lines insert the filtered data inside 2 lists
+			# remove outliers
 			temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values], self.filtering_aggresiveness))
 			humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values], self.filtering_aggresiveness))
 
+			# insert into the filtered buffer
 			self.lock.acquire()
 			self.filtered_temperature.append(temp)
 			self.filtered_humidity.append(humidity)
 			self.lock.release()
 
-			# function for callbacking the supplied function
+			# if we have set a callback then call that function w/ its parameters
 			if not self.callbackfunc is None:
 				self.callbackfunc(*self.args)
 
+			# reset the values for the next iteration/period
 			values = []
 
 		if self.debugging is True:
