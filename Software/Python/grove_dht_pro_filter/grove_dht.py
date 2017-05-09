@@ -3,6 +3,7 @@ import numpy
 import datetime
 import math
 from grovepi import dht
+from grovepi import statisticalNoiseReduction
 import time
 
 
