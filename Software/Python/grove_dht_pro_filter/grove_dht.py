@@ -8,21 +8,21 @@ import time
 
 
 '''
-# provide an array of data for filtering through [values]
-# [std_factor_threshold] represents the multiplier of the calculated standard_deviation
-# through [std_factor_threshold] we set an upper & lower threshold for these data values
-# therefore this function removes outlier values which go beyond the calculated threshold
-# the default [std_factor_threshold] should be enough for most sensor filterings
-# the bigger the [std_factor_threshold] the more strict is the filtering
-# the lower the [std_factor_threshold] the lest strict is the filtering
+# after a list of numerical values is provided
+# the function returns a list with the outlier(or extreme) values removed
+# make the std_factor_threshold bigger so that filtering becomes less strict
+# and make the std_factor_threshold smaller to get the opposite
 def statisticalNoiseReduction(values, std_factor_threshold = 2):
 	mean = numpy.mean(values)
 	standard_deviation = numpy.std(values)
 
+	# just return if we only got constant values
 	if standard_deviation == 0:
 		return values
 
+	# remove outlier values which are less than the average but bigger than the calculated threshold
 	filtered_values = [element for element in values if element > mean - std_factor_threshold * standard_deviation]
+	# the same but in the opposite direction
 	filtered_values = [element for element in filtered_values if element < mean + std_factor_threshold * standard_deviation]
 
 	return filtered_values
