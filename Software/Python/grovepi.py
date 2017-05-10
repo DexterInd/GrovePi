@@ -330,14 +330,14 @@ def dht(pin, module_type):
 	else:
 		return [float('nan'),float('nan')]
 
-# provide an array of data for filtering through [values]
-# [std_factor_threshold] represents the multiplier of the calculated standard_deviation
-# through [std_factor_threshold] we set an upper & lower threshold for these data values
-# therefore this function removes outlier values which go beyond the calculated threshold
-# the default [std_factor_threshold] should be enough for most sensor filterings
-# the bigger the [std_factor_threshold] the more strict is the filtering
-# the lower the [std_factor_threshold] the lest strict is the filtering
+# after a list of numerical values is provided
+# the function returns a list with the outlier(or extreme) values removed
+# make the std_factor_threshold bigger so that filtering becomes less strict
+# and make the std_factor_threshold smaller to get the opposite
 def statisticalNoiseReduction(values, std_factor_threshold = 2):
+	if len(values) == 0:
+		return []
+		
 	mean = numpy.mean(values)
 	standard_deviation = numpy.std(values)
 

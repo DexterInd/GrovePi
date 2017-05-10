@@ -13,6 +13,9 @@ import time
 # make the std_factor_threshold bigger so that filtering becomes less strict
 # and make the std_factor_threshold smaller to get the opposite
 def statisticalNoiseReduction(values, std_factor_threshold = 2):
+	if len(values) == 0:
+		return []
+
 	mean = numpy.mean(values)
 	standard_deviation = numpy.std(values)
 
@@ -96,11 +99,13 @@ class Dht(threading.Thread):
 	# print(dhtObject) can be used instead
 	def __str__(self):
 		string = ""
+		self.lock.acquire()
 		if len(self.filtered_humidity) > 0:
 			string = '[{}][temperature = {:.01f}][humidity = {:.01f}]'.format(
 			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 			self.filtered_temperature.pop(),
 			self.filtered_humidity.pop())
+		self.lock.release()
 
 		return string
 
@@ -151,6 +156,8 @@ class Dht(threading.Thread):
 					else:
 						raise RuntimeWarning("[dht sensor][we've caught a NaN]")
 
+					counter += 1
+
 				# in case we have an I2C error
 				except IOError:
 					if self.debugging is True:
@@ -164,21 +171,21 @@ class Dht(threading.Thread):
 				finally:
 					# the DHT can be read once a second
 					time.sleep(1)
-					counter += 1
 
-			# remove outliers
-			temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values], self.filtering_aggresiveness))
-			humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values], self.filtering_aggresiveness))
+			if len(values) > 0:
+				# remove outliers
+				temp = numpy.mean(statisticalNoiseReduction([x["temp"] for x in values], self.filtering_aggresiveness))
+				humidity = numpy.mean(statisticalNoiseReduction([x["hum"] for x in values], self.filtering_aggresiveness))
 
-			# insert into the filtered buffer
-			self.lock.acquire()
-			self.filtered_temperature.append(temp)
-			self.filtered_humidity.append(humidity)
-			self.lock.release()
+				# insert into the filtered buffer
+				self.lock.acquire()
+				self.filtered_temperature.append(temp)
+				self.filtered_humidity.append(humidity)
+				self.lock.release()
 
-			# if we have set a callback then call that function w/ its parameters
-			if not self.callbackfunc is None:
-				self.callbackfunc(*self.args)
+				# if we have set a callback then call that function w/ its parameters
+				if not self.callbackfunc is None:
+					self.callbackfunc(*self.args)
 
 			# reset the values for the next iteration/period
 			values = []
