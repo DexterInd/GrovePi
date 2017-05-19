@@ -6,6 +6,10 @@
 #include "Encoder.h"
 #include "TimerOne.h"
 
+// Note that RCSwitch.h is a patched version of the one from the https://github.com/sui77/rc-switch repository.
+// Additional functions have been added to get a numerical version of radio sequences sent/received.
+#include "RCSwitch.h"
+
 DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
@@ -24,6 +28,15 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define flow_read_cmd           12
 #define flow_en_cmd				18
 #define flow_dis_cmd       		13
+
+#define rc_switch_send_cmd       110
+#define rc_switch_subscribe_cmd  111
+#define rc_switch_read_cmd		112
+#define rc_switch_typeA          0
+#define rc_switch_typeB          1
+#define rc_switch_typeC          2
+#define rc_switch_typeD          3
+#define rc_switch_max_sub        8 // Max number of switch subscriptions
 
 int cmd[5];
 int index=0;
@@ -60,6 +73,23 @@ int flow_run_bk=0;
 long flow_read_start;
 byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background 
 
+// 433MHz RCSwitch variables
+RCSwitch rc_switch; // Library instance
+// TODO define constants for on/off
+uint8_t rc_switch_state; // Desired state of the remote-controlled switch. 0=OFF, 1=ON
+uint8_t rc_switch_type; // Remote-controlled switch type. 0 == type A, 1 == type B, 2 == type C, 3 == type D.
+char rc_switch_typeA_group [6]; // For type A switches, group DIP setting as a binary string ("00110" == OFF OFF ON ON OFF)
+char rc_switch_typeA_device [6]; // For type A switches, device DIP setting as a binary string ("00110" == OFF OFF ON ON OFF)
+struct rc_switch_subscription_struct { // Struct describing a subscription to a set of on/off codes
+	unsigned long onCode = 0;
+	unsigned long offCode = 0;
+	byte lastStatus = 255; // 255: unknown
+};
+struct rc_switch_subscription_struct rc_switch_subscription[rc_switch_max_sub - 1]; // Subscription storage
+uint8_t rc_switch_subscription_number;
+boolean rc_switch_run_bk = false;
+unsigned long rc_switch_code;
+
 void setup()
 {
     // Serial.begin(38400);         // start serial for output
@@ -67,7 +97,6 @@ void setup()
 
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-	attachInterrupt(0,readPulseDust,CHANGE);
 }
 int pin;
 int j;
@@ -536,6 +565,511 @@ void loop()
 			detachInterrupt(0);
 			cmd[0]=0;
 		}
+		/* Command 110 - 433MHz transmitter: send command to radio-controlled switch or socket.
+         *
+         * Based on the RCSwitch library (https://github.com/sui77/rc-switch)
+         * This library supports 4 types of switches, with different parameters.
+         * For each of these, the firmware expects different parameters, as follows:
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type A switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: send command to RC switch.                  |
+         * |         |         | Decimal value: 110                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz transmitter module is connected. |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 4   | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Requested switch state.                                   |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type A: 00                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 4   | Group DIP switch.                                         |
+         * |         |         | Ex: OFF-ON-ON-ON-OFF --> 01110                            |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 4   | Device DIP switch.                                        |
+         * |         |         | Ex: OFF-ON-ON-ON-OFF --> 01110                            |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         *
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type B switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: send command to RC switch.                  |
+         * |         |         | Decimal value: 110                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz transmitter module is connected. |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 4   | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Requested switch state.                                   |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type B: 01                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Group id (1 - 4).                                         |
+         * |         |         | Ex: 3 --> 0000 0011                                       |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 7   | Device id (1 - 4).                                        |
+         * |         |         | Ex: 3 --> 0000 0011                                       |
+         * +---------+---------+-----------------------------------------------------------+
+         *
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type C switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: send command to RC switch.                  |
+         * |         |         | Decimal value: 110                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz transmitter module is connected. |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 4   | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Requested switch state.                                   |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type C: 10                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Device family ('a' - 'f'), as the ASCII code of the       |
+         * |         |         | desired letter.                                           |
+         * |         |         | Ex: 'b' --> 0110 0001                                     |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 1   | Device id (1 - 4), minus 1.                               |
+         * |         |         | Ex: device #3 --> 10                                      |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 2 - 3   | Device group (1 - 4), minus 1.                            |
+         * |         |         | Ex: group #1 --> 00                                       |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         *
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type D switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: send command to RC switch.                  |
+         * |         |         | Decimal value: 110                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz transmitter module is connected. |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 4   | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Requested switch state.                                   |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type D: 11                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Device family ('A' - 'D'), as the ASCII code of the       |
+         * |         |         | desired letter.                                           |
+         * |         |         | Ex: 'C' --> 0100 0011                                     |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 7   | Device id (1 - 3).                                        |
+         * |         |         | Ex: 3 --> 0000 0011                                       |
+         * +---------+---------+-----------------------------------------------------------+
+         */
+		else if (cmd[0]==rc_switch_send_cmd) {
+			if (run_once == 1) {// Ensure we do not repeatedly execute this command while waiting for another one
+
+				// Apply bit-mask to recover data from the 2nd command byte
+                // pin: bit 0 of 2nd byte. 0 --> pin 2. 1 --> pin 3.
+				pin = 2 + (cmd[1] & 1);
+				// state (on/off) : bit 5
+				rc_switch_state = uint8_t(cmd[1] >> 5 & 1);
+				// remote switch type: 4 possible types encoded in bits 6-7
+				rc_switch_type = uint8_t(cmd[1] >> 6);
+
+				// Enable radio
+				rc_switch.enableTransmit(pin);
+
+				// Handle remaining bytes depending on the switch type
+				switch (rc_switch_type) {
+					case rc_switch_typeA: {
+						// For this type of remote controlled switches, the RCSwitch library requires 2 parameters, group and
+						// device, as 5-chars binary strings, padded with zeroes. These parameters should match DIP switches present
+						// on the switch device.
+						// Ex: a DIP switch set as OFF-ON-ON-ON-OFF is represented by the parameter string "01110"
+
+						// Conversion of the group parameter in the appropriate format
+						for (i = 4; i >= 0; --i) {
+							rc_switch_typeA_group[4 - i] = (cmd[2] & (1 << i) ? '1' : '0');
+						}
+						rc_switch_typeA_group[5] = '\0';
+
+						// Conversion of the device parameter in the appropriate format
+						for (i = 4; i >= 0; --i) {
+							rc_switch_typeA_device[4 - i] = (cmd[3] & (1 << i) ? '1' : '0');
+						}
+						rc_switch_typeA_device[5] = '\0';
+
+
+						if (rc_switch_state == 0) {
+							rc_switch.switchOff(rc_switch_typeA_group, rc_switch_typeA_device);
+							rc_switch_code = rc_switch.switchOffCode(rc_switch_typeA_group, rc_switch_typeA_device);
+						} else {
+							rc_switch.switchOn(rc_switch_typeA_group, rc_switch_typeA_device);
+							rc_switch_code = rc_switch.switchOnCode(rc_switch_typeA_group, rc_switch_typeA_device);
+						}
+						break;
+					}
+					case rc_switch_typeB: {
+						// For this type of remote controlled switches, the RCSwitch library requires two parameters:
+						// group as an int [1..4] --> directly passed in 3rd byte cmd[2]
+						// device as an int [1..4] --> directly passed in 4th byte cmd[3]
+						if (rc_switch_state == 0) {
+							rc_switch.switchOff(cmd[2], cmd[3]);
+							rc_switch_code = rc_switch.switchOffCode(cmd[2], cmd[3]);
+						} else {
+							rc_switch.switchOn(cmd[2], cmd[3]);
+							rc_switch_code = rc_switch.switchOnCode(cmd[2], cmd[3]);
+						}
+						break;
+					}
+					case rc_switch_typeC: {
+						// For this type of remote controlled switches, the RCSwitch library requires three parameters:
+						// family code as a char ['a'..'f'] --> directly passed in 3rd byte cmd[2]
+						// group as int [1..4] --> this value minus one is passed using bits 2 and 3 of the 4th byte cmd[3]
+						// device as int [1..4] --> this value minus one is passed using bits 0 and 1 of the 4th byte cmd[3]
+						if (rc_switch_state == 0) {
+							rc_switch.switchOff(char(cmd[2]), 1 + (cmd[3] >> 2 & 3), 1 + (cmd[3] & 3));
+							rc_switch_code = rc_switch.switchOffCode(char(cmd[2]), 1 + (cmd[3] >> 2 & 3), 1 + (cmd[3] & 3));
+						} else {
+							rc_switch.switchOn(char(cmd[2]), 1 + (cmd[3] >> 2 & 3), 1 + (cmd[3] & 3));
+							rc_switch_code = rc_switch.switchOnCode(char(cmd[2]), 1 + (cmd[3] >> 2 & 3), 1 + (cmd[3] & 3));
+						}
+						break;
+					}
+					case rc_switch_typeD: {
+						// For this type of remote controlled switches, the RCSwitch library requires two parameters:
+						// group as a char ['A'..'D'] --> directly passed in 3rd byte cmd[2]
+						// device as an int [1..3] --> directly passed in 4th byte cmd[3]
+						if (rc_switch_state == 0) {
+							rc_switch.switchOff(char(cmd[2]), cmd[3]);
+							rc_switch_code = rc_switch.switchOffCode(char(cmd[2]), cmd[3]);
+						} else {
+							rc_switch.switchOn(char(cmd[2]), cmd[3]);
+							rc_switch_code = rc_switch.switchOffCode(char(cmd[2]), cmd[3]);
+						}
+						break;
+					}
+					default: {
+						// Unknown switch type --> do nothing
+					}
+				}
+				// Disable radio
+				rc_switch.disableTransmit();
+			}
+			cmd[0] = 0;
+			run_once = 0;
+		}
+        /* Command 111 - 433MHz receiver: subscribe to radio commands
+         *
+         * Based on the RCSwitch library (https://github.com/sui77/rc-switch)
+         * This library supports 4 types of switches, with different parameters.
+         * For each of these, the firmware expects different parameters, as follows:
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type A switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: subscribe to RC switch commands.            |
+         * |         |         | Decimal value: 111                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz receiver module is connected.    |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 3   | Subscription number                                       |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4       | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Initial state.                                            |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type A: 00                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 4   | Group DIP switch.                                         |
+         * |         |         | Ex: OFF-ON-ON-ON-OFF --> 01110                            |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 4   | Device DIP switch.                                        |
+         * |         |         | Ex: OFF-ON-ON-ON-OFF --> 01110                            |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         *
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type B switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: subscribe to RC switch commands.            |
+         * |         |         | Decimal value: 111                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz receiver module is connected.    |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 3   | Subscription number                                       |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4       | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Initial state.                                            |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type B: 01                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Group id (1 - 4).                                         |
+         * |         |         | Ex: 3 --> 0000 0011                                       |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 7   | Device id (1 - 4).                                        |
+         * |         |         | Ex: 3 --> 0000 0011                                       |
+         * +---------+---------+-----------------------------------------------------------+
+         *
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type C switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: subscribe to RC switch commands.            |
+         * |         |         | Decimal value: 111                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz receiver module is connected.    |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 3   | Subscription number                                       |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4       | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Initial state.                                            |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type C: 10                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Device family ('a' - 'f'), as the ASCII code of the       |
+         * |         |         | desired letter.                                           |
+         * |         |         | Ex: 'b' --> 0110 0001                                     |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 1   | Device id (1 - 4), minus 1.                               |
+         * |         |         | Ex: device #3 --> 10                                      |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 2 - 3   | Device group (1 - 4), minus 1.                            |
+         * |         |         | Ex: group #1 --> 00                                       |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         *
+         *
+         * +-------------------------------------------------------------------------------+
+         * | Type D switch                                                                 |
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: subscribe to RC switch commands.            |
+         * |         |         | Decimal value: 111                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Pin on which the 433 MHz receiver module is connected.    |
+         * |         |         | 0 -> D2 / 1 -> D3                                         |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 3   | Subscription number                                       |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4       | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 5       | Initial state.                                            |
+         * |         |         | 0 = off / 1 = on                                          |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 6 - 7   | RC switch type.                                           |
+         * |         |         | Type D: 11                                                |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Device family ('A' - 'D'), as the ASCII code of the       |
+         * |         |         | desired letter.                                           |
+         * |         |         | Ex: 'C' --> 0100 0011                                     |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 7   | Device id (1 - 3).                                        |
+         * |         |         | Ex: 3 --> 0000 0011                                       |
+         * +---------+---------+-----------------------------------------------------------+
+         */
+		else if (cmd[0]==rc_switch_subscribe_cmd) {
+			if (run_once == 1) {// Ensure we do not repeatedly execute this command while waiting for another one
+
+                // Apply bit-mask to recover data from the 2nd command byte
+                // pin: bit 0. 0 --> pin 2 / 1 --> pin 3
+                pin = 2 + (cmd[1] & 1);
+
+                // subscription number: bits 1-3
+                rc_switch_subscription_number = uint8_t(cmd[1] >> 1 & 7);
+
+                // initial state (on/off): bit 5
+                rc_switch_state = uint8_t(cmd[1] >> 5 & 1);
+
+                // remote switch type: 4 possible types encoded in bits 6-7
+                rc_switch_type = uint8_t(cmd[1] >> 6);
+
+				// Enable radio if it is not already done
+                if (!rc_switch_run_bk) {
+                    rc_switch.enableReceive(digitalPinToInterrupt(pin));
+                    rc_switch_run_bk = true;
+                }
+
+                // Handle remaining bytes depending on the switch type
+                switch (rc_switch_type) {
+                    case rc_switch_typeA: {
+                        // For this type of remote controlled switches, the RCSwitch library requires 2 parameters, group and
+                        // device, as 5-chars binary strings, padded with zeroes. These parameters should match DIP switches present
+                        // on the switch device.
+                        // Ex: a DIP switch set as OFF-ON-ON-ON-OFF is represented by the parameter string "01110"
+
+                        // Conversion of the group parameter in the appropriate format
+                        for (i = 4; i >= 0; --i) {
+                            rc_switch_typeA_group[4 - i] = (cmd[2] & (1 << i) ? '1' : '0');
+                        }
+                        rc_switch_typeA_group[5] = '\0';
+
+                        // Conversion of the device parameter in the appropriate format
+                        for (i = 4; i >= 0; --i) {
+                            rc_switch_typeA_device[4 - i] = (cmd[3] & (1 << i) ? '1' : '0');
+                        }
+                        rc_switch_typeA_device[5] = '\0';
+
+                        // Store subscription
+                        rc_switch_subscription[rc_switch_subscription_number].offCode =
+                                rc_switch.switchOffCode(rc_switch_typeA_group, rc_switch_typeA_device);
+                        rc_switch_subscription[rc_switch_subscription_number].onCode =
+                                rc_switch.switchOnCode(rc_switch_typeA_group, rc_switch_typeA_device);
+                        rc_switch_subscription[rc_switch_subscription_number].lastStatus = rc_switch_state;
+
+                        break;
+                    }
+                    case rc_switch_typeB: {
+                        // For this type of remote controlled switches, the RCSwitch library requires two parameters:
+                        // group as an int [1..4] --> directly passed in 3rd byte cmd[2]
+                        // device as an int [1..4] --> directly passed in 4th byte cmd[3]
+
+                        // Store subscription
+                        rc_switch_subscription[rc_switch_subscription_number].offCode =
+                                rc_switch.switchOffCode(cmd[2], cmd[3]);
+                        rc_switch_subscription[rc_switch_subscription_number].onCode =
+                                rc_switch.switchOnCode(cmd[2], cmd[3]);
+
+						rc_switch_subscription[rc_switch_subscription_number].lastStatus = rc_switch_state;
+						break;
+                    }
+                    case rc_switch_typeC: {
+                        // For this type of remote controlled switches, the RCSwitch library requires three parameters:
+                        // family code as a char ['a'..'f'] --> directly passed in 3rd byte cmd[2]
+                        // group as int [1..4] --> this value minus one is passed using bits 2 and 3 of the 4th byte cmd[3]
+                        // device as int [1..4] --> this value minus one is passed using bits 0 and 1 of the 4th byte cmd[3]
+
+                        // Store subscription
+                        rc_switch_subscription[rc_switch_subscription_number].offCode =
+                                rc_switch.switchOffCode(char(cmd[2]), 1 + (cmd[3] >> 2 & 3), 1 + (cmd[3] & 3));
+                        rc_switch_subscription[rc_switch_subscription_number].onCode =
+                                rc_switch.switchOnCode(char(cmd[2]), 1 + (cmd[3] >> 2 & 3), 1 + (cmd[3] & 3));
+                        rc_switch_subscription[rc_switch_subscription_number].lastStatus = rc_switch_state;
+                        break;
+                    }
+                    case rc_switch_typeD: {
+                        // For this type of remote controlled switches, the RCSwitch library requires two parameters:
+                        // group as a char ['A'..'D'] --> directly passed in 3rd byte cmd[2]
+                        // device as an int [1..3] --> directly passed in 4th byte cmd[3]
+
+                        // Store subscription
+                        rc_switch_subscription[rc_switch_subscription_number].offCode =
+                                rc_switch.switchOffCode(char(cmd[2]), cmd[3]);
+                        rc_switch_subscription[rc_switch_subscription_number].onCode =
+                                rc_switch.switchOnCode(char(cmd[2]), cmd[3]);
+                        rc_switch_subscription[rc_switch_subscription_number].lastStatus = rc_switch_state;
+                        break;
+                    }
+                    default: {
+                        // Unknown switch type --> do nothing
+                    }
+
+                }
+			}
+			cmd[0] = 0;
+			run_once = 0;
+		}
+        /* Command 112 - 433MHz receiver: read last status
+         *
+         * Retrieve last received command for a subscription slot
+         *
+         * +---------+---------+-----------------------------------------------------------+
+         * | Byte    | Bits    | Description                                               |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      1  | 0 - 7   | Command byte: subscribe to RC switch commands.            |
+         * |         |         | Decimal value: 112                                        |
+         * +---------+---------+-----------------------------------------------------------+
+         * |      2  | 0       | Unused                                                    |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 1 - 3   | Subscription number                                       |
+         * |         |         |                                                           |
+         * |         +---------+-----------------------------------------------------------+
+         * |         | 4 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       3 | 0 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         * |       4 | 0 - 7   | Unused                                                    |
+         * |         |         |                                                           |
+         * +---------+---------+-----------------------------------------------------------+
+         */
+        else if (cmd[0]==rc_switch_read_cmd) {
+			if (run_once == 1) { // Ensure we do not repeatedly execute this command while waiting for another one
+
+                // Apply bit-mask to recover data from the 2nd command byte
+                // subscription number: bits 1-3
+                rc_switch_subscription_number = uint8_t(cmd[1] >> 1 & 7);
+                val = rc_switch_subscription[rc_switch_subscription_number].lastStatus;
+            }
+			run_once = 0;
+		}
 	}
     //Dust sensor can run in background so has a dedicated if condition
     if(dust_run_bk)
@@ -585,6 +1119,23 @@ void loop()
             flow_read_start=millis();
         }
     }
+
+	if(rc_switch_run_bk)
+	{
+		// Check if we have received a radio command
+		if (rc_switch.available())
+		{
+			// Check if we have to update one of our subscriptions
+			for (j = 0; j < rc_switch_max_sub; j++) {
+				if (rc_switch_subscription[j].offCode == rc_switch.getReceivedValue()) {
+					rc_switch_subscription[j].lastStatus = 0;
+				} else if (rc_switch_subscription[j].onCode == rc_switch.getReceivedValue()) {
+					rc_switch_subscription[j].lastStatus = 1;
+				}
+			}
+			rc_switch.resetAvailable();
+		}
+	}
 }
 
 void receiveData(int byteCount)
@@ -637,6 +1188,11 @@ void sendData()
     Wire.write(flow_val,3);     
     flow_val[0]=0;
 	cmd[0]=0;
+  }
+  if(cmd[0]==rc_switch_read_cmd)
+  {
+    Wire.write(val);
+    cmd[0]=0;
   }
   
 }

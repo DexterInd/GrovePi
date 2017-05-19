@@ -158,6 +158,11 @@ encoder_dis_cmd=[17]
 flow_read_cmd=[12]
 flow_disable_cmd=[13]
 flow_en_cmd=[18]
+
+rcswitch_send_cmd=[110]
+rcswitch_sub_cmd=[111]
+rcswitch_read_cmd=[112]
+
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 retries = 10
