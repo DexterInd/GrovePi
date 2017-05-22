@@ -51,10 +51,3 @@ Release
 # Visual Studio files
 *.pyc
 *.pfx
-
-# Jetbrains files
-.idea
-
-# CMake files
-cmake*/
-CMakeLists.txt
