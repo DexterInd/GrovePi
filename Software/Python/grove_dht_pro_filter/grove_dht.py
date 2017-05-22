@@ -1,9 +1,9 @@
-import threading
-import numpy
+import threading # we need threads for processing data seperately from the main thread
+import numpy # for statistical computations
 import datetime
-import math
-from grovepi import dht
-from grovepi import statisticalNoiseReduction
+import math # for NaNs
+from grovepi import dht # we built on top of the base function found in the grovepi library
+from grovepi import statisticalNoiseReduction # importing function which is meant for removing outliers from a given set
 import time
 
 
@@ -55,6 +55,9 @@ class Dht(threading.Thread):
 		self.filtered_temperature = []
 		self.filtered_humidity = []
 
+		self.last_temperature = None
+		self.last_humidity = None
+
 	# refresh_period specifies for how long data is captured before it's filtered
 	def setRefreshPeriod(self, time):
 		self.refresh_period = time
@@ -100,12 +103,22 @@ class Dht(threading.Thread):
 	def __str__(self):
 		string = ""
 		self.lock.acquire()
+		# check if we have values in the buffer
 		if len(self.filtered_humidity) > 0:
+			self.last_temperature = self.filtered_temperature.pop()
+			self.last_humidity = self.filtered_humidity.pop()
+		self.lock.release()
+
+		# retrieve the last read value
+		if not self.last_humidity is None:
 			string = '[{}][temperature = {:.01f}][humidity = {:.01f}]'.format(
 			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-			self.filtered_temperature.pop(),
-			self.filtered_humidity.pop())
-		self.lock.release()
+			self.last_temperature, self.last_humidity)
+
+		# otherwise it means we haven't got values yet
+		else:
+			string = '[{}][waiting for buffer to fill]'.format(
+			datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 		return string
 

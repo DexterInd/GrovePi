@@ -31,59 +31,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from grove_dht import Dht
-import signal
-import sys
+from grove_dht import Dht # from a custom made grovepi-based library import our needed class
+from time import sleep # we need to use the sleep function to delay readings
 
 # Don't forget to run it with Python 3 !!
 # Don't forget to run it with Python 3 !!
 # Don't forget to run it with Python 3 !!
 
-# Please read the source file(s) for more explanations
-# Source file(s) are more comprehensive
+dht_pin = 4 # use Digital Port 4 found on GrovePi
+dht_sensor = Dht(dht_pin) # instantiate a dht class with the appropriate pin
 
-dht = Dht()
+dht_sensor.start() # start collecting from the DHT sensor
 
-def signal_handler(signal, frame):
-    global dht
-    dht.stop()
+try:
+    # do this indefinitely
+    while True:
 
-def callbackFunc():
-    global dht
-    print(dht)
+        print(dht_sensor) # prints values in a nice format
+        sleep(0.8) # wait around 800 ms before the next iteration
 
-def Main():
-    print("[program is running][please wait]")
-
-    global dht
-    digital_port = 4
-
-    # set the digital port for the DHT sensor
-    dht.setDhtPin(digital_port)
-    # using the blue kind of sensor
-    # there's also the white one which can be set by calling [dht.setAsWhiteSensor()] function
-    dht.setAsBlueSensor()
-    # specifies for how long we record data before we filter it
-    # it's better to have larger periods of time,
-    # because the statistical algorithm has a vaster pool of values
-    dht.setRefreshPeriod(12)
-    # the bigger is the filtering factor (as in the filtering aggresiveness)
-    # the less strict is the algorithm when it comes to filtering
-    # it's also valid vice-versa
-    # the factor must be greater than 0
-    # it's recommended to leave its default value unless there is a better reason
-    dht.setFilteringAggresiveness(2.1)
-    # every time the Dht object loads new filtered data inside the buffer
-    # a callback is what it follows
-    dht.setCallbackFunction(callbackFunc)
-
-    # start the thread for gathering data
-    dht.start()
-
-    # if you want to stop the thread just
-    # call dht.stop() and you're done
-
-
-if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal_handler)
-    Main()
+# when pressing CTRL-C
+except KeyboardInterrupt:
+    dht_sensor.stop() # stop gathering data
