@@ -9,7 +9,7 @@ rc = rcswitch.Grove433mhzRxRCSwitch(rx_pin)
 
 # Subscribe to commands sent to a type B remote, with a group 2, device 3 settings.
 # Subscription uses slot #1.
-rc.subscribe_type_b(1, rc.STATE_OFF, 2, 3)
+rc.subscribe_type_b(1, 2, 3, rc.STATE_OFF)
 
 time.sleep(1);
 

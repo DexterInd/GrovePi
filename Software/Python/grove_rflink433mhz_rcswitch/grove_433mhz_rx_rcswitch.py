@@ -41,7 +41,7 @@ class Grove433mhzRxRCSwitch:
         """
         self.rx_pin = rx_pin
 
-    def subscribe_type_a(self, subscription_number, group, device, initial_state=STATE_UNKNOWN):
+    def subscribe_type_a(self, subscription_number, group, device, initial_state):
         """Subscribe to commands normally sent to a type A device.
         
         Type A devices addresses are typically set by 5 DIP switches.
@@ -99,7 +99,7 @@ class Grove433mhzRxRCSwitch:
                                  int(group, 2),
                                  int(device, 2)])
 
-    def subscribe_type_b(self, subscription_number, group, device, initial_state=STATE_UNKNOWN):
+    def subscribe_type_b(self, subscription_number, group, device, initial_state):
         """Subscribe to commands normally sent to a type B device.
         
         Type B devices addresses are typically set by two rotary or sliding switches, numbered from 1 to 4.
@@ -152,7 +152,7 @@ class Grove433mhzRxRCSwitch:
                                  group,
                                  device])
 
-    def subscribe_type_c(self, subscription_number, family, group, device, initial_state=STATE_UNKNOWN):
+    def subscribe_type_c(self, subscription_number, family, group, device, initial_state):
         """Subscribe to commands normally sent to a type C device.
         
         :param subscription_number: subscription slot to use. Can be any value from 0 to 7.
@@ -212,7 +212,7 @@ class Grove433mhzRxRCSwitch:
                                  ord(family),
                                  (group - 1) * 4 + (device - 1)])
 
-    def subscribe_type_d(self, subscription_number, group, device, initial_state=STATE_UNKNOWN):
+    def subscribe_type_d(self, subscription_number, group, device, initial_state):
         """Subscribe to commands normally sent to a type D device.
                 
         :param subscription_number: subscription slot to use. Can be any value from 0 to 7.
