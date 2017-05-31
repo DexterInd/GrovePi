@@ -57,7 +57,7 @@ namespace MiniMotorDriver
         {
             deferral = taskInstance.GetDeferral();
 
-            motor = DeviceFactory.Build.MiniMotorDriver();
+            motor = DeviceFactory.Build.MiniMotorDriver(0xD0, 0xC0);
             timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(Timer_tick), TimeSpan.FromSeconds(.2));
 
         }
