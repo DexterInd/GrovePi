@@ -4,7 +4,7 @@
     <DeviceId>30F105C9-681E-420b-A277-7C086EAD8A4E</DeviceId>
     <UseEmulator>false</UseEmulator>
     <RemoteDebugEnabled>true</RemoteDebugEnabled>
-    <RemoteDebugMachine>192.168.1.104</RemoteDebugMachine>
+    <RemoteDebugMachine>192.168.190.178</RemoteDebugMachine>
     <AuthenticationMode>Universal</AuthenticationMode>
   </PropertyGroup>
 </Project>
