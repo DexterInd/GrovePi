@@ -36,7 +36,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_led_fade.cpp -o grove_led_fade.exe
+// sudo g++ -Wall grovepi.cpp grove_led_fade.cpp -o grove_led_fade.out -> without grovepicpp package installed
+// sudo g++ -Wall -lgrovepicpp grove_led_fade.cpp -o grove_led_fade.out -> with grovepicpp package installed
 
 int main()
 {

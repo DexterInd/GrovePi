@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf8 -*-
+#
+# GrovePi Example for using the Grove - LCD RGB Backlight without erasing the screen(http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
@@ -32,52 +33,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import grove_hightemperature_sensor as grovepi # our library
-from time import sleep # and for the sleep function
-import sys # we need this for the exception throwing stuff
+import grove_rflink433mhz
+from time import sleep
+import sys
 
 # Don't forget to run it with Python 3 !!
 # Don't forget to run it with Python 3 !!
 # Don't forget to run it with Python 3 !!
+
+# in order to get a feedback of what this example does
+# please use another setup consisted of a raspberry + receiver
+# to print out the transmitted data -> use the other example program for it
 
 def Main():
-    room_temperature_pin = 15 # this is equal to A1
-    probe_temperature_pin = 14 # this is equal to A0
-    # so you have to connect the sensor to A0 port
+    # instantiate a RFLinker object
+    # default arguments are
+    # port = '/dev/ttyS0' -> you've got only one on each raspberry
+    # chunk_size = 32 -> the max number of data bytes you can send per fragment - you can ignore it
+    # max_bad_readings = 32 -> the number of bad characters read before giving up on a read operation
+    # keep in mind that there is environment pollution, so the RF module will get many fake 'transmissions'
+    transmitter = grove_rflink433mhz.RFLinker()
+    # the message we want to broadcast
+    message_to_broadcast = "This is a RFLink test"
 
-    # instatiate a HighTemperatureSensor object
-    sensor = grovepi.HighTemperatureSensor(room_temperature_pin, probe_temperature_pin)
-
-    # and do this indefinitely
+    # and broadcast it indefinitely
     while True:
-        # read the room temperature
-        room_temperature = sensor.getRoomTemperature()
-        # and also what's important to us: the temperature at the tip of the K-Type sensor
-        probe_temperature = sensor.getTemperature()
+        transmitter.writeMessage(message_to_broadcast)
 
-        # print it in a fashionable way
-        print('[room temperature: {:5.2f}°C][probe temperature: {:5.2f}°C]'.format(room_temperature, probe_temperature))
-        # and wait for 250 ms before taking another measurement - so we don't overflow the terminal
-        sleep(0.25)
-
+        print('[message sent][{}]'.format(message_to_broadcast))
+        # the delay is not necessary for the transmission of data
+        # but for not overflowing the terminal
+        sleep(0.02)
 
 if __name__ == "__main__":
     try:
+        # it's the above function we call
         Main()
 
     # in case CTRL-C / CTRL-D keys are pressed (or anything else that might interrupt)
     except KeyboardInterrupt:
         print('[Keyboard interrupted]')
-        sys.exit(0)
-
-    # in case there's an IO error aka I2C
-    except IOError:
-        print('[IO Error]')
-        sys.exit(0)
-
-    # in case we have a math error (like division by 0 - can happen depending on the read values)
-    # or if the values exceed a certain threshold
-    # experiment and you'll see
-    except ValueError as e:
-        print('[{}]'.format(str(e)))
         sys.exit(0)

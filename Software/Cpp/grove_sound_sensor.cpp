@@ -39,7 +39,8 @@
 #include "grovepi.h"
 using namespace GrovePi;
 
-// g++ -Wall grovepi.cpp grove_sound_sensor.cpp -o grove_sound_sensor.exe
+// sudo g++ -Wall grovepi.cpp grove_sound_sensor.cpp -o grove_sound_sensor.out -> without grovepicpp package installed
+// sudo g++ -Wall -lgrovepicpp grove_sound_sensor.cpp -o grove_sound_sensor.out -> with grovepicpp package installed
 
 int main()
 {

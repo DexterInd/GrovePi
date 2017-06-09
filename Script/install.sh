@@ -32,17 +32,17 @@ identify_cie() {
 }
 
 identify_robot() {
-	echo "  _____                    _____ _ " 
+	echo "  _____                    _____ _ "
 	echo " / ____|                  |  __ (_)  "
 	echo "| |  __ _ __ _____   _____| |__) |   "
 	echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
 	echo "| |__| | | | (_) \ V /  __/ |   | |  "
 	echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
-                                     
+
 	feedback "Welcome to GrovePi Installer."
 }
 
-display_welcome_msg() {	
+display_welcome_msg() {
 	echo " "
 	echo "Requirements:"
 	echo "1) Must be connected to the internet"
@@ -92,7 +92,7 @@ check_internet() {
     if ! quiet_mode ; then
         feedback "Check for internet connectivity..."
         feedback "=================================="
-        wget -q --tries=2 --timeout=20 --output-document=/dev/null https://raspberrypi.org 
+        wget -q --tries=2 --timeout=20 --output-document=/dev/null https://raspberrypi.org
         if [ $? -eq 0 ];then
             echo "Connected to the Internet"
         else
@@ -123,7 +123,7 @@ install_wiringpi() {
     # Check if WiringPi Installed
 
     # using curl piped to bash does not leave a file behind. no need to remove it
-    # we can do either the curl - it works just fine 
+    # we can do either the curl - it works just fine
     # sudo curl https://raw.githubusercontent.com/DexterInd/script_tools/master/update_wiringpi.sh | bash
     # or call the version that's already on the SD card
     sudo bash $DEXTERSCRIPT/update_wiringpi.sh
@@ -132,7 +132,7 @@ install_wiringpi() {
     # remove wiringPi directory if present
     if [ -d wiringPi ]
     then
-        sudo rm -r wiringPi 
+        sudo rm -r wiringPi
     fi
     # End check if WiringPi installed
     echo " "
@@ -213,7 +213,7 @@ install_python_libs(){
 	echo "cfr. https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=123081"
 
 	echo " "
-	
+
 	sudo apt-get install python-smbus -y
 
 	echo " "
@@ -228,7 +228,7 @@ install_python_libs(){
 		echo "/usr/lib/python2.7/dist-packages not found, exiting"
 		exit 1
 	fi
-	echo "Done" 
+	echo "Done"
 }
 
 call_for_reboot() {
