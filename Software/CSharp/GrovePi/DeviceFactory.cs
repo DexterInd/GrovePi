@@ -41,6 +41,7 @@ namespace GrovePi
         IMiniMotorDriver MiniMotorDriver();
         IMiniMotorDriver MiniMotorDriver(int ch1Address1, int ch2Address2);
         IOLEDDisplay9696 OLEDDisplay9696();
+        IOLEDDisplay128X64 OLEDDisplay128X64();
         IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345();
     }
 
@@ -54,12 +55,14 @@ namespace GrovePi
         private const byte MiniMotorDriverCH1I2cAddress = 0xC4;
         private const byte MiniMotorDriverCH2I2cAddress = 0xC0;
         private const byte OLED96_96I2cAddress = 0x3C;
+        private const byte OLED128_64I2cAddress = 0x3C;
         private const byte ThreeAxisAccelemeterADXL345I2cAddress = 0x53;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
         private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
         private MiniMotorDriver _miniMotorDriver;
         private OLEDDisplay9696 _oledDisplay9696;
+        private OLEDDisplay128X64 _oledDisplay128X64;
         private ThreeAxisAccelerometerADXL345 _ThreeAxisAccelerometerADXL345;
 
         public IGrovePi GrovePi()
@@ -180,6 +183,11 @@ namespace GrovePi
         public IOLEDDisplay9696 OLEDDisplay9696()
         {
             return BuildOLEDDisplayImpl();
+        }
+
+        public IOLEDDisplay128X64 OLEDDisplay128X64()
+        {
+            return BuildOLEDDisplay128X64Impl();
         }
 
         public IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345()
@@ -321,6 +329,27 @@ namespace GrovePi
                 return new OLEDDisplay9696(device);
             }).Result;
             return _oledDisplay9696;
+        }
+
+        private OLEDDisplay128X64 BuildOLEDDisplay128X64Impl()
+        {
+            if (_oledDisplay128X64 != null)
+            {
+                return _oledDisplay128X64;
+            }
+            var connectionSettings = new I2cConnectionSettings(OLED128_64I2cAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _oledDisplay128X64 = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, connectionSettings);
+                return new OLEDDisplay128X64(device);
+            }).Result;
+            return _oledDisplay128X64;
         }
 
         private ThreeAxisAccelerometerADXL345 BuildThreeAxisAccelerometerADXL345Impl()

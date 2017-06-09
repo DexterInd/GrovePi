@@ -54,6 +54,7 @@
     <Compile Include="DeviceFactory.cs" />
     <Compile Include="GrovePi.cs" />
     <Compile Include="I2CDevices\MiniMotorDriver.cs" />
+    <Compile Include="I2CDevices\OLEDDisplay128X64.cs" />
     <Compile Include="I2CDevices\OLEDDisplay9696.cs" />
     <Compile Include="I2CDevices\RgbLcdDisplay.cs" />
     <Compile Include="I2CDevices\SixAxisAccelerometerAndCompass.cs" />
