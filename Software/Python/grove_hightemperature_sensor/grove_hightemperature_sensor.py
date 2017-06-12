@@ -22,7 +22,6 @@ class HighTemperatureSensor:
             self.__interpolateTable(table)
             self.__amp_av = table["amp_factor"]
             self.__vol_offset = table["amp_offset"]
-            print('innit')
 
         except:
             self.sensor_table = None
@@ -84,9 +83,7 @@ class HighTemperatureSensor:
             probe_tip_voltage = self.__getThermocoupleVoltage()
             degrees_from_table = self.voltage_to_degrees_table(probe_tip_voltage)
 
-            print("probe")
-
-            return degrees_from_table
+            return float(degrees_from_table)
 
         else:
 

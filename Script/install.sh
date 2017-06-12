@@ -114,6 +114,8 @@ install_dependencies() {
 	sudo apt-get purge python3-rpi.gpio -y
 	sudo apt-get install python-rpi.gpio -y
 	sudo apt-get install python3-rpi.gpio -y
+  sudo apt-get install python-scipy -y
+  sudo apt-get install python3-scipy -y
 	sudo pip install -U RPi.GPIO
 
     feedback "Dependencies installed"
