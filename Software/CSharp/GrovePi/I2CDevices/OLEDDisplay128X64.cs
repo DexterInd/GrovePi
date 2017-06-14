@@ -1,7 +1,7 @@
 ﻿/*
- * Ten Wong (wangtengoo7@gmail.com)
+ * Ten Wong (wangtengoo7@gmail.com) 2017 Seeed technology inc.
  * Refer to: https://github.com/Seeed-Studio/OLED_Display_128X64
- * Copyright (c) 2017 seeed technology inc.
+ * MIT License
  */
 using System;
 using Windows.Devices.I2c;
@@ -165,7 +165,7 @@ namespace GrovePi.I2CDevices
             {0x00,0x00,0x7F,0x00,0x00,0x00,0x00,0x00},
             {0x00,0x41,0x36,0x08,0x00,0x00,0x00,0x00},
             {0x00,0x02,0x01,0x01,0x02,0x01,0x00,0x00},
-            {0x00,0x02,0x05,0x05,0x02,0x00,0x00,0x00} 
+            {0x00,0x02,0x05,0x05,0x02,0x00,0x00,0x00}
         };
 
         internal I2cDevice DirectAccess { get; }
@@ -262,7 +262,7 @@ namespace GrovePi.I2CDevices
             byte i = 0;
             for (i = 0; i < 8; i++)
             {
-                //read bytes from code memory  
+                //read bytes from code memory
                 sendData(BasicFont[c-32, i]); //font array starts at 0, ASCII starts at 32. Hence the translation
             }
         }
@@ -334,8 +334,8 @@ namespace GrovePi.I2CDevices
                 putChar('.');
                 f += 1;
             }
-            decy = floatNumber - temp;//decimal part, 
-            for (int i = 0; i < deci; i++)//4 
+            decy = floatNumber - temp;//decimal part,
+            for (int i = 0; i < deci; i++)//4
             {
                 decy *= 10;// for the next decimal
                 temp = (int)decy;//get the decimal
@@ -372,8 +372,8 @@ namespace GrovePi.I2CDevices
                 putChar('.');
                 f += 1;
             }
-            decy = floatNumber - temp;//decimal part, 
-            for (int i = 0; i < deci; i++)//4 
+            decy = floatNumber - temp;//decimal part,
+            for (int i = 0; i < deci; i++)//4
             {
                 decy *= 10;// for the next decimal
                 temp = (int)decy;//get the decimal
@@ -389,7 +389,7 @@ namespace GrovePi.I2CDevices
             byte localAddressMode = addressingMode;
             if (addressingMode != HORIZONTAL_MODE)
             {
-                //Bitmap is drawn in horizontal mode  
+                //Bitmap is drawn in horizontal mode
                 setHorizontalMode();
             }
 
@@ -415,7 +415,7 @@ namespace GrovePi.I2CDevices
             }
             else
             {
-                //Scroll Left  
+                //Scroll Left
                 sendCommand(0x27);
 
             }
