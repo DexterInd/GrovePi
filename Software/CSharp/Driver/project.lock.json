@@ -14987,23 +14987,23 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\Driver\\Driver.csproj",
+      "projectUniqueName": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\Driver\\Driver.csproj",
       "projectName": "Driver",
-      "projectPath": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\Driver\\Driver.csproj",
-      "projectJsonPath": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\Driver\\project.json",
+      "projectPath": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\Driver\\Driver.csproj",
+      "projectJsonPath": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\Driver\\project.json",
       "projectStyle": "ProjectJson",
       "frameworks": {
         "uap10.0": {
           "projectReferences": {
-            "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj": {
-              "projectPath": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj"
+            "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj": {
+              "projectPath": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj"
             }
           }
         }
       }
     },
     "dependencies": {
-      "Microsoft.NETCore.UniversalWindowsPlatform": "[5.3.3, )"
+      "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3"
     },
     "frameworks": {
       "uap10.0": {}

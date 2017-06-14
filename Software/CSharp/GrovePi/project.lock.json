@@ -14961,14 +14961,14 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj",
+      "projectUniqueName": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj",
       "projectName": "GrovePi",
-      "projectPath": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj",
-      "projectJsonPath": "Y:\\Documents\\Github\\GrovePi\\Software\\CSharp\\GrovePi\\project.json",
+      "projectPath": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\GrovePi\\GrovePi.csproj",
+      "projectJsonPath": "C:\\VS\\Test\\GrovePi\\Software\\CSharp\\GrovePi\\project.json",
       "projectStyle": "ProjectJson"
     },
     "dependencies": {
-      "Microsoft.NETCore.UniversalWindowsPlatform": "[5.3.3, )"
+      "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3"
     },
     "frameworks": {
       "uap10.0": {}
