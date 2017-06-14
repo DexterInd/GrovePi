@@ -22,24 +22,24 @@ Now, take the values that were measured with the professional thermometer and ge
 I.e: In `thermocouple_table.json` file, `90 °C` corresponds to `3.682`.
 
 Now, lets assign the following variables to each of these values:
-`i1` = the translated value (from the table) we got when we measured the hot water w/ the **professional thermometer**.
-`i2` = the translated value (from the table) we got when we measured the cold water w/ the **professional thermometer**.
-`o1` = the translated value (from the table) we got when we measured the hot water w/ **our sensor**.
-`o2` = the translated value (from the table) we got when we measured the cold water w/ **our sensor**.
+* `i1` = the translated value (from the table) we got when we measured the hot water w/ the **professional thermometer**.
+* `i2` = the translated value (from the table) we got when we measured the cold water w/ the **professional thermometer**.
+* `o1` = the translated value (from the table) we got when we measured the hot water w/ **our sensor**.
+* `o2` = the translated value (from the table) we got when we measured the cold water w/ **our sensor**.
 
 ## Step 4
 
 Let's calculate an `offset` and a `factor`. We will insert the calculated values in our table.
 
 First, lets calculated the `offset`.
-`offset` = `(i1 * o2 - i2 * o1) / (o2 - o1)`
+* `offset` = `(i1 * o2 - i2 * o1) / (o2 - o1)`
 
 And then, we get to calculate the `factor`. Use the `offset` value for calculating the `factor`.
-`factor` = `(i1 - offset) / o1`
+* `factor` = `(i1 - offset) / o1`
 
 ## Step 5
 
-Open up `thermocouple_table.json` file and replace the following values:
+Open up `thermocouple_table.json` file and update the following values:
 * For `amp_offset` set the value we got for `offset` - it's preferable to have up to 6-7 digits in precision.
 * For `amp_factor` set the value we got for `factor` - it's preferable to have up to 6-7 digits in precision.
 
@@ -48,7 +48,7 @@ Save the modifications.
 ## Step 6
 
 Run the `high_temperature_example.py` program. 
-It's going to use the newly updated balues.
+It's going to use the newly updated values.
 
 ------
 ###### `Note 1`: Calibrate the sensor when the values don't match with a professional thermometer by a long shot (i.e. 10 degrees). The sensor has already been calibrated, but who knows.
