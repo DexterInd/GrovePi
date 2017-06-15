@@ -32,10 +32,10 @@ Now, lets assign the following values to each of these variables:
 Let's calculate an `offset` and a `factor`. We will insert the calculated values in our table (`thermocouple_table.json` file).
 
 First, lets calculated the `offset`.
-* `offset` = `(i1 * o2 - i2 * o1) / (o2 - o1)`
+* `offset` = `(o1 * i2 - i1 * o2) / (i2 - i1)`
 
 And then, we get to calculate the `factor`. Use the `offset` value for calculating the `factor`.
-* `factor` = `(i1 - offset) / o1`
+* `factor` = `(o1 - offset) / i1`
 
 ## Step 5
 
