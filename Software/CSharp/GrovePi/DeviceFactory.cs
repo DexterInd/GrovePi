@@ -39,7 +39,9 @@ namespace GrovePi
         IPIRMotionSensor PIRMotionSensor(Pin pin);
         IGasSensorMQ2 GasSensorMQ2(Pin pin);
         IMiniMotorDriver MiniMotorDriver();
+        IMiniMotorDriver MiniMotorDriver(int ch1Address1, int ch2Address2);
         IOLEDDisplay9696 OLEDDisplay9696();
+        IOLEDDisplay128X64 OLEDDisplay128X64();
         IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345();
     }
 
@@ -47,18 +49,20 @@ namespace GrovePi
     {
         private const string I2CName = "I2C1"; /* For Raspberry Pi 2, use I2C1 */
         private const byte GrovePiAddress = 0x04;
-        private const byte DisplayRgbI2CAddress = 0x62;
-        private const byte DisplayTextI2CAddress = 0x3e;
+        private const byte DisplayRgbI2CAddress = 0xC4;
+        private const byte DisplayTextI2CAddress = 0x7C;
         private const byte SixAxisAccelerometerI2CAddress = 0x1e;
-        private const byte MiniMotorDriverI2cAddress1 = 0x62;  // 0xC4
-        private const byte MiniMotorDriverI2cAddress2 = 0x60;  // 0xC0
+        private const byte MiniMotorDriverCH1I2cAddress = 0xC4;
+        private const byte MiniMotorDriverCH2I2cAddress = 0xC0;
         private const byte OLED96_96I2cAddress = 0x3C;
+        private const byte OLED128_64I2cAddress = 0x3C;
         private const byte ThreeAxisAccelemeterADXL345I2cAddress = 0x53;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
         private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
         private MiniMotorDriver _miniMotorDriver;
         private OLEDDisplay9696 _oledDisplay9696;
+        private OLEDDisplay128X64 _oledDisplay128X64;
         private ThreeAxisAccelerometerADXL345 _ThreeAxisAccelerometerADXL345;
 
         public IGrovePi GrovePi()
@@ -168,17 +172,22 @@ namespace GrovePi
 
         public IMiniMotorDriver MiniMotorDriver()
         {
-            return BuildMiniMotorDriverImpl(MiniMotorDriverI2cAddress1, MiniMotorDriverI2cAddress2);
+            return BuildMiniMotorDriverImpl(MiniMotorDriverCH1I2cAddress, MiniMotorDriverCH2I2cAddress);
         }
 
-        public IMiniMotorDriver MiniMotorDriver(int address1, int address2)
+        public IMiniMotorDriver MiniMotorDriver(int ch1Address, int ch2Address)
         {
-            return BuildMiniMotorDriverImpl(address1, address2);
+            return BuildMiniMotorDriverImpl(ch1Address, ch2Address);
         }
 
         public IOLEDDisplay9696 OLEDDisplay9696()
         {
             return BuildOLEDDisplayImpl();
+        }
+
+        public IOLEDDisplay128X64 OLEDDisplay128X64()
+        {
+            return BuildOLEDDisplay128X64Impl();
         }
 
         public IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345()
@@ -229,12 +238,12 @@ namespace GrovePi
             }
 
             /* Initialize the I2C bus */
-            var rgbConnectionSettings = new I2cConnectionSettings(rgbAddress)
+            var rgbConnectionSettings = new I2cConnectionSettings(rgbAddress>>1)
             {
                 BusSpeed = I2cBusSpeed.StandardMode
             };
 
-            var textConnectionSettings = new I2cConnectionSettings(textAddress)
+            var textConnectionSettings = new I2cConnectionSettings(textAddress>>1)
             {
                 BusSpeed = I2cBusSpeed.StandardMode
             };
@@ -274,18 +283,19 @@ namespace GrovePi
             return _sixAxisAccelerometerAndCompass;
         }
 
-        private MiniMotorDriver BuildMiniMotorDriverImpl(int miniMotorDriverAddress1, int miniMotorDriverAddress2)
+        private MiniMotorDriver BuildMiniMotorDriverImpl(int ch1Address, int ch2Address)
         {
+
             if (_miniMotorDriver != null)
             {
                 return _miniMotorDriver;
             }
 
-            var motor1ConnectionSettings = new I2cConnectionSettings(MiniMotorDriverI2cAddress1)
+            var motor1ConnectionSettings = new I2cConnectionSettings(ch1Address>>1)
             {
                 BusSpeed = I2cBusSpeed.StandardMode
             };
-            var motor2ConnectionSettings = new I2cConnectionSettings(MiniMotorDriverI2cAddress2)
+            var motor2ConnectionSettings = new I2cConnectionSettings(ch2Address>>1)
             {
                 BusSpeed = I2cBusSpeed.StandardMode
             };
@@ -319,6 +329,27 @@ namespace GrovePi
                 return new OLEDDisplay9696(device);
             }).Result;
             return _oledDisplay9696;
+        }
+
+        private OLEDDisplay128X64 BuildOLEDDisplay128X64Impl()
+        {
+            if (_oledDisplay128X64 != null)
+            {
+                return _oledDisplay128X64;
+            }
+            var connectionSettings = new I2cConnectionSettings(OLED128_64I2cAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode
+            };
+
+            _oledDisplay128X64 = Task.Run(async () =>
+            {
+                var dis = await GetDeviceInfo();
+
+                var device = await I2cDevice.FromIdAsync(dis[0].Id, connectionSettings);
+                return new OLEDDisplay128X64(device);
+            }).Result;
+            return _oledDisplay128X64;
         }
 
         private ThreeAxisAccelerometerADXL345 BuildThreeAxisAccelerometerADXL345Impl()

@@ -53,7 +53,7 @@ def Main():
         # read the room temperature
         room_temperature = sensor.getRoomTemperature()
         # and also what's important to us: the temperature at the tip of the K-Type sensor
-        probe_temperature = sensor.getTemperature()
+        probe_temperature = sensor.getProbeTemperature()
 
         # print it in a fashionable way
         print('[room temperature: {:5.2f}°C][probe temperature: {:5.2f}°C]'.format(room_temperature, probe_temperature))
