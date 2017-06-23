@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# Connect the Grove DHT Sensor (Blue One) to Port 4 in this example.
 #
 # Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
