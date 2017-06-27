@@ -47,8 +47,9 @@ import sys
 import time
 import math
 import struct
+import numpy
 
-debug =0
+debug = 0
 
 if sys.version_info<(3,0):
 	p_version=2
@@ -328,6 +329,26 @@ def dht(pin, module_type):
 		return [t, hum]
 	else:
 		return [float('nan'),float('nan')]
+
+# after a list of numerical values is provided
+# the function returns a list with the outlier(or extreme) values removed
+# make the std_factor_threshold bigger so that filtering becomes less strict
+# and make the std_factor_threshold smaller to get the opposite
+def statisticalNoiseReduction(values, std_factor_threshold = 2):
+	if len(values) == 0:
+		return []
+		
+	mean = numpy.mean(values)
+	standard_deviation = numpy.std(values)
+
+	if standard_deviation == 0:
+		return values
+
+	filtered_values = [element for element in values if element > mean - std_factor_threshold * standard_deviation]
+	filtered_values = [element for element in filtered_values if element < mean + std_factor_threshold * standard_deviation]
+
+	return filtered_values
+
 
 # Grove LED Bar - initialise
 # orientation: (0 = red to green, 1 = green to red)
