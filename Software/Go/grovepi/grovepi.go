@@ -13,7 +13,6 @@ const (
 	A0 = 0
 	A1 = 1
 	A2 = 2
-
 	D2 = 2
 	D3 = 3
 	D4 = 4
@@ -29,19 +28,10 @@ const (
 	CommandDigitalWrite = 2
 	CommandAnalogRead   = 3
 	CommandAnalogWrite  = 4
-	CommandPinMode      = 5
 	CommandDHTRead      = 40
 )
 
-// PinMode determines the pinmode for the GrovePi
-type PinMode byte
-
-// InputPin is the pinmode for input
-// OutputPin is the pinmode for output
-const (
-	InputPin  PinMode = 0
-	OutputPin         = 1
-)
+// put check to see if available pin is in range
 
 // GrovePi struct is used for handling the connection with board
 type GrovePi struct {
@@ -49,8 +39,8 @@ type GrovePi struct {
 	i2cDevice hwio.I2CDevice
 }
 
-// Init initializes the GrovePi
-func Init(address int) (*GrovePi, error) {
+// NewGrovePi initializes the GrovePi
+func NewGrovePi(address int) (*GrovePi, error) {
 	grovePi := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
 	if err != nil {
@@ -92,15 +82,16 @@ func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 }
 
 // DigitalRead reads digitally to the GrovePi
-func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
+func (grovePi *GrovePi) DigitalRead(pin byte) ([]byte, error) {
 	b := []byte{CommandDigitalRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	time.Sleep(100 * time.Millisecond)
 
-	return grovePi.i2cDevice.ReadByte(1)
+	// TODO set size via parameter, it's better
+	return grovePi.i2cDevice.Read(1, 1)
 }
 
 // DigitalWrite writes digitally to the GrovePi
@@ -111,19 +102,19 @@ func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	return err
 }
 
-// PinMode sets the GrovePi pinmode
-func (grovePi *GrovePi) PinMode(pin byte, mode PinMode) error {
-	b := []byte{CommandPinMode, pin, byte(mode), 0}
+// DHTRead returns temperature and humidity from DHT sensor
+func (grovePi *GrovePi) DHTRead(pin byte) (float32, float32, error) {
+	cmd := []byte{CommandDHTRead, pin, 0, 0}
 
-	err := grovePi.i2cDevice.Write(1, b)
+	// prepare and read raw data
+	err := grovePi.i2cDevice.Write(1, cmd)
+	if err != nil {
+		return 0, 0, err
+	}
+	time.Sleep(600 * time.Millisecond)
+	grovePi.i2cDevice.ReadByte(1)
 	time.Sleep(100 * time.Millisecond)
-	return err
-}
-
-// ReadDHT returns temperature and humidity from DHT sensor
-func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
-	b := []byte{CommandDHTRead, pin, 0, 0}
-	rawdata, err := grovePi.readDHTRawData(b)
+	rawdata, err := grovePi.i2cDevice.Read(1, 9)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -135,16 +126,4 @@ func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
 	h := math.Float32frombits(humidityData)
 
 	return t, h, nil
-}
-
-func (grovePi *GrovePi) readDHTRawData(cmd []byte) ([]byte, error) {
-	err := grovePi.i2cDevice.Write(1, cmd)
-	if err != nil {
-		return nil, err
-	}
-	time.Sleep(600 * time.Millisecond)
-	grovePi.i2cDevice.ReadByte(1)
-	time.Sleep(100 * time.Millisecond)
-
-	return grovePi.i2cDevice.Read(1, 9)
 }
