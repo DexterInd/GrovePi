@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 from grove_dht import Dht # from a custom made grovepi-based library import our needed class
 from time import sleep # we need to use the sleep function to delay readings
+import datetime # that's for printing the current date
 
 # Don't forget to run it with Python 3 !!
 # Don't forget to run it with Python 3 !!
@@ -53,9 +54,9 @@ try:
 
         # if any of the read values is a None type, then it means there're no available values
         if not temperature is None:
-            string = '[temperature = {:.01f}][humidity = {:.01f}]'.format(temperature, humidity)
+            string += '[temperature = {:.01f}][humidity = {:.01f}]'.format(temperature, humidity)
         else:
-            string = '[waiting for buffer to fill]'
+            string += '[waiting for buffer to fill]'
 
         print(string)
         sleep(0.8) # wait around 800 ms before the next iteration
