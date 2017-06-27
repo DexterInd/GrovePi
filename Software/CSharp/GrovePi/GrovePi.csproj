@@ -83,6 +83,7 @@
     <Compile Include="Sensors\TemperatureAndHumiditySensor.cs" />
     <Compile Include="Sensors\TemperatureSensor.cs" />
     <Compile Include="Sensors\UltrasonicRangerSensor.cs" />
+    <Compile Include="Sensors\WaterAtomizer.cs" />
     <Content Include="Properties\client.winU.rd.xml" />
   </ItemGroup>
   <ItemGroup>

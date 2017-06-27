@@ -1,9 +1,9 @@
-﻿using System;
+﻿using GrovePi.I2CDevices;
+using GrovePi.Sensors;
+using System;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
-using GrovePi.I2CDevices;
-using GrovePi.Sensors;
 
 namespace GrovePi
 {
@@ -43,6 +43,7 @@ namespace GrovePi
         IOLEDDisplay9696 OLEDDisplay9696();
         IOLEDDisplay128X64 OLEDDisplay128X64();
         IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345();
+        IWaterAtomizer WaterAtomizer(Pin pin);
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -321,7 +322,7 @@ namespace GrovePi
                 BusSpeed = I2cBusSpeed.StandardMode
             };
 
-            _oledDisplay9696 = Task.Run(async () => 
+            _oledDisplay9696 = Task.Run(async () =>
             {
                 var dis = await GetDeviceInfo();
 
@@ -390,6 +391,11 @@ namespace GrovePi
         public IGasSensorMQ2 GasSensorMQ2(Pin pin)
         {
             return DoBuild(x => new GasSensorMQ2(x, pin));
+        }
+
+        public IWaterAtomizer WaterAtomizer(Pin pin)
+        {
+            return DoBuild(x => new WaterAtomizer(x, pin));
         }
     }
 }
