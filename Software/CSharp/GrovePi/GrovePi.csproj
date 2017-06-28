@@ -62,6 +62,7 @@
     <Compile Include="Sensors\AirQualitySensor.cs" />
     <Compile Include="Sensors\ButtonSensor.cs" />
     <Compile Include="Sensors\Buzzer.cs" />
+    <Compile Include="I2CDevices\SHTTemperatureAndHumiditySensor.cs" />
     <Compile Include="Sensors\GasSensorMQ2.cs" />
     <Compile Include="Sensors\Led.cs" />
     <Compile Include="Pin.cs" />
