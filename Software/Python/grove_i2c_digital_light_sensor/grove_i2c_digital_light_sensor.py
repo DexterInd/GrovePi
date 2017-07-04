@@ -6,7 +6,7 @@
 #
 # Read http://www.dexterindustries.com/topic/greehouse-project/ for the forum discussion about the sensor
 
-import time
+from time import sleep
 import smbus
 from Adafruit_I2C import Adafruit_I2C
 import RPi.GPIO as GPIO
@@ -89,7 +89,7 @@ else:
 i2c = Adafruit_I2C(TSL2561_Address)
 
 debug = False
-cooldown_time = 0.005
+cooldown_time = 0.005 # measured in seconds
 packageType = 0 # 0=T package, 1=CS package
 gain = 0        # current gain: 0=1x, 1=16x [dynamically selected]
 gain_m = 1      # current gain, as multiplier
@@ -150,7 +150,7 @@ def setTintAndGain():
 	writeRegister(TSL2561_Timing, timing | gain << 4)
 
 def readLux():
-	time.sleep(float(timing_ms + 1) / 1000)
+	sleep(float(timing_ms + 1) / 1000)
 
 	ch0_low  = readRegister(TSL2561_Channel0L)
 	ch0_high = readRegister(TSL2561_Channel0H)
@@ -304,7 +304,7 @@ def main():
 	init()
 	while (True):
 		print("Lux: %i [Vis+IR=%i, IR=%i @ Gain=%ix, Timing=%.1fms]" % (readVisibleLux(), channel0, channel1, gain_m, timing_ms))
-		time.sleep(1)
+		sleep(1)
 
 if __name__ == "__main__":
         main()
