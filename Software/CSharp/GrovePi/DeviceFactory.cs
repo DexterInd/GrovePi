@@ -1,9 +1,9 @@
-﻿using System;
+﻿using GrovePi.I2CDevices;
+using GrovePi.Sensors;
+using System;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
-using GrovePi.I2CDevices;
-using GrovePi.Sensors;
 
 namespace GrovePi
 {
@@ -43,6 +43,8 @@ namespace GrovePi
         IOLEDDisplay9696 OLEDDisplay9696();
         IOLEDDisplay128X64 OLEDDisplay128X64();
         IThreeAxisAccelerometerADXL345 ThreeAxisAccelerometerADXL345();
+        IWaterAtomizer WaterAtomizer(Pin pin);
+        ISHTTemperatureAndHumiditySensor SHTTemperatureAndHumiditySensor();
     }
 
     internal class DeviceBuilder : IBuildGroveDevices
@@ -57,6 +59,7 @@ namespace GrovePi
         private const byte OLED96_96I2cAddress = 0x3C;
         private const byte OLED128_64I2cAddress = 0x3C;
         private const byte ThreeAxisAccelemeterADXL345I2cAddress = 0x53;
+        private const byte SHT31TemperatureAndHumidityI2CAddress = 0x44;
         private GrovePi _device;
         private RgbLcdDisplay _rgbLcdDisplay;
         private SixAxisAccelerometerAndCompass _sixAxisAccelerometerAndCompass;
@@ -64,6 +67,7 @@ namespace GrovePi
         private OLEDDisplay9696 _oledDisplay9696;
         private OLEDDisplay128X64 _oledDisplay128X64;
         private ThreeAxisAccelerometerADXL345 _ThreeAxisAccelerometerADXL345;
+        private SHTTemperatureAndHumiditySensor _shtTemperatureAndHumiditySensor;
 
         public IGrovePi GrovePi()
         {
@@ -321,7 +325,7 @@ namespace GrovePi
                 BusSpeed = I2cBusSpeed.StandardMode
             };
 
-            _oledDisplay9696 = Task.Run(async () => 
+            _oledDisplay9696 = Task.Run(async () =>
             {
                 var dis = await GetDeviceInfo();
 
@@ -373,6 +377,27 @@ namespace GrovePi
             return _ThreeAxisAccelerometerADXL345;
         }
 
+        private SHTTemperatureAndHumiditySensor BuildSHTTemperatureAndHumiditySensorImpl()
+        {
+            if (_shtTemperatureAndHumiditySensor != null)
+            {
+                return _shtTemperatureAndHumiditySensor;
+            }
+
+            var _shtTemperatureAndHumiditySensorSettings = new I2cConnectionSettings(SHT31TemperatureAndHumidityI2CAddress)
+            {
+                BusSpeed = I2cBusSpeed.StandardMode,
+                SlaveAddress = SHT31TemperatureAndHumidityI2CAddress
+            };
+
+            _shtTemperatureAndHumiditySensor = Task.Run(async () => {
+                var dis = await GetDeviceInfo();
+                var shtSensor = await I2cDevice.FromIdAsync(dis[0].Id, _shtTemperatureAndHumiditySensorSettings);
+                return new SHTTemperatureAndHumiditySensor(shtSensor, SHTModel.Sht31, MeasurementMode.MediumRepeat);
+            }).Result;
+            return _shtTemperatureAndHumiditySensor;
+        }
+
         private static async Task<DeviceInformationCollection> GetDeviceInfo()
         {
             //Find the selector string for the I2C bus controller
@@ -390,6 +415,16 @@ namespace GrovePi
         public IGasSensorMQ2 GasSensorMQ2(Pin pin)
         {
             return DoBuild(x => new GasSensorMQ2(x, pin));
+        }
+
+        public IWaterAtomizer WaterAtomizer(Pin pin)
+        {
+            return DoBuild(x => new WaterAtomizer(x, pin));
+        }
+
+        public ISHTTemperatureAndHumiditySensor SHTTemperatureAndHumiditySensor()
+        {
+            return BuildSHTTemperatureAndHumiditySensorImpl();
         }
     }
 }

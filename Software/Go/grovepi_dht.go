@@ -1,22 +1,23 @@
 package main
 
 import (
-	"./grovepi"
 	"fmt"
-	"time"
+	// To be replaced with a proper repo path
+	"./grove"
 )
 
 func main() {
-	var g grovepi.GrovePi
-	g = *grovepi.InitGrovePi(0x04)
+	g := *grovepi.NewGrovePi(0x04)
+	defer g.Close()
+
 	for {
-		time.Sleep(2 * time.Second)
 		t, h, err := g.ReadDHT(grovepi.D4)
+
 		if err != nil {
-			fmt.Println(err)
+			panic(err)
 		}
-		fmt.Println(t)
-		fmt.Println(h)
+
+		fmt.Printf("Temperature: %f - Humidity: %f\n", t, h)
 	}
-	g.CloseDevice()
+
 }
