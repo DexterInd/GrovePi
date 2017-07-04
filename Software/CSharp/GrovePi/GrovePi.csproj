@@ -62,6 +62,7 @@
     <Compile Include="Sensors\AirQualitySensor.cs" />
     <Compile Include="Sensors\ButtonSensor.cs" />
     <Compile Include="Sensors\Buzzer.cs" />
+    <Compile Include="I2CDevices\SHTTemperatureAndHumiditySensor.cs" />
     <Compile Include="Sensors\GasSensorMQ2.cs" />
     <Compile Include="Sensors\Led.cs" />
     <Compile Include="Pin.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Sensors\TemperatureAndHumiditySensor.cs" />
     <Compile Include="Sensors\TemperatureSensor.cs" />
     <Compile Include="Sensors\UltrasonicRangerSensor.cs" />
+    <Compile Include="Sensors\WaterAtomizer.cs" />
     <Content Include="Properties\client.winU.rd.xml" />
   </ItemGroup>
   <ItemGroup>

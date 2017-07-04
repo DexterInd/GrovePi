@@ -12,11 +12,14 @@ from scipy.interpolate import interp1d
 # class for the K-Type temperature sensor (w/ long probe/sonde)
 class HighTemperatureSensor:
 
-    # initialize the object with the appropriate sensor pins on the GrovePi
-    def __init__(self, _temperature_pin, _thermocouple_pin):
+    # initialize the object with the appropriate sensor pins on the GrovePi and configuration JSON
+    def __init__(self, _temperature_pin, _thermocouple_pin, _json_path = None):
+        
+        if(_json_path is None):
+            _json_path = 'thermocouple_table.json'
 
         try:
-            with open('thermocouple_table.json') as table_file:
+            with open(_json_path) as table_file:
                 table = json.load(table_file)
 
             self.__interpolateTable(table)
