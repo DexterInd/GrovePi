@@ -32,6 +32,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+
+try:
+	with open('package_description.rst', 'r') as file_description:
+		description = file_description.read()
+
+except IOError:
+	print(str(IOError))
+	print("make sure you have [package_description.rst] file in the same directory as [setup.py]")
+
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
 setuptools.setup(
@@ -39,8 +48,7 @@ setuptools.setup(
     version = "1.0.0",
 
     description = "Drivers for using the GrovePi+ in Python",
-    long_description = "This package contains the [grovepi] module.\n " \
-						"This package can be used for interfacing with the GrovePi+ platform from within your Raspberry Pi environment.",
+    long_description = description,
 
     author = "Dexter Industries",
     author_email = "contact@dexterindustries.com",
