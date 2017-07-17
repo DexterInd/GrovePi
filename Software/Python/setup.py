@@ -65,9 +65,9 @@ setuptools.setup(
     'Topic :: Software Development :: Embedded Systems',
     'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    url = "https://github.com/DexterInd/GoPiGo3",
+    url = "https://github.com/DexterInd/GrovePi",
 
-    keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education'],
+    keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education', 'iot', 'internet of things', 'prototyping'],
 
     py_modules = ['grovepi'],
     install_requires = ['numpy']
