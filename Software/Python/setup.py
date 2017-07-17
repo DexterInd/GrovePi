@@ -35,10 +35,32 @@ THE SOFTWARE.
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
 setuptools.setup(
-	name="grovepi",
-	description="Drivers and examples for using the GrovePi in Python",
-	author="Dexter Industries",
-	url="http://www.dexterindustries.com/GrovePi/",
-	py_modules=['grovepi'],
-	#install_requires=open('requirements.txt').readlines(),
+    name = "grovepi",
+    version = "1.0.0",
+
+    description = "Drivers for using the GrovePi+ in Python",
+    long_description = "This package contains the [grovepi] module.\n " \
+						"This package can be used for interfacing with the GrovePi+ platform from within your Raspberry Pi environment.",
+
+    author = "Dexter Industries",
+    author_email = "contact@dexterindustries.com",
+
+    license = 'MIT',
+    classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Education',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 3',
+    'Topic :: Software Development :: Embedded Systems',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    url = "https://github.com/DexterInd/GoPiGo3",
+
+    keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education'],
+
+    py_modules = ['grovepi'],
+    install_requires = ['numpy']
 )
