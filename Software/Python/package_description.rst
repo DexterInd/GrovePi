@@ -1,5 +1,4 @@
-This package contains the grovepi module which gives the user the possibility
-of interfacing with the `GrovePi+` board.
+This is the python library for GrovePi+, which is an open source platform for connecting `Grove Sensors <https://www.dexterindustries.com/GrovePi/supported-sensors/>`_ to the Raspberry Pi.
 
 Please visit:
 
