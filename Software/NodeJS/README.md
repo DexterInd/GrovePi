@@ -7,6 +7,12 @@ GrovePi is an open source platform for connecting Grove Sensors to the Raspberry
 
 Before to start you should install Node.js on your RaspberryPi and clone the repo on your local environment.
 Be sure to have npm installed and then you can proceed installing the package.
+To install node.js you can do the following:
+
+```bash
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+sudo apt-get install nodejs
+```
 
 Go inside your Node.js application folder and type
 ```bash
