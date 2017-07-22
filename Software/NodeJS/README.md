@@ -7,9 +7,6 @@ GrovePi is an open source platform for connecting Grove Sensors to the Raspberry
 
 Before to start you should install Node.js on your RaspberryPi and clone the repo on your local environment.
 Be sure to have npm installed and then you can proceed installing the package.
-To install node.js you can do the following:
-curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-sudo apt-get install nodejs
 
 Go inside your Node.js application folder and type
 ```bash
@@ -34,9 +31,12 @@ var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
 var AirQualityAnalogSensor = GrovePi.sensors.AirQualityAnalog
 var DHTDigitalSensor = GrovePi.sensors.DHTDigital
 var LightAnalogSensor = GrovePi.sensors.LightAnalog
+var DigitalButtonSensor = GrovePi.sensors.DigitalButton
+var LoudnessAnalogSensor = GrovePi.sensors.LoudnessAnalog
+var RotaryAngleAnalogSensor = GrovePi.sensors.RotaryAnalog
 ```
 
-Now you can instanciate the GrovePi and your sensors/components, for example:
+Now you can instantiate the GrovePi and your sensors/components, for example:
 ```javascript
 var board = new Board({
     debug: true,
@@ -87,7 +87,7 @@ When you are ready to go you should call the init method
 board.init()
 ```
 
-Each sensor/component has 3 methods to get access to the data:
+Each sensor/component has at least 3 methods to get access to the data:
 - **read()** - Read data from the sensor/component
 - **stream(delay, callback)** - Start a stream with the sensor/component, each N milliseconds (delay) sends data to the callback. You can use stopStream() to close the connection.
 - **watch(delay)** - Start a polling routine which will fire a "change" event only when there are new data coming from the sensor/component. The internal timer will use the given delay value or 100 milliseconds as default. You can use stopWatch() to stop the polling.
@@ -95,7 +95,12 @@ Each sensor/component has 3 methods to get access to the data:
 And 1 method to write data:
 - **write(value)** - Write a value on the sensor/component
 
-You'll find a more complex example in the "basicTest.js" file under the "tests" folder.
+Some sensors expose additional methods
+- *DigitalButton* sensor exposes a **down** event which has a single argument on the callback. This argument will have the value **singlepress* or **longpress**, depending on how long the user has been pressing the button.
+- *RotaryAngleAnalogSensor* overrides the **read** method to provide noise-less output, since there are cases in which the sensor may incorrectly report that its value has changed. The sensor will return a value from 0 to 100. User also needs to call the **start** method for this sensor.
+- *LoudnessAnalogSensor* provides a **readAvgMax** method which will return average and maximum values coming from the sensor for a period of time. This period restarts every time you call the **readAvgMax** method, so it is supposed that the method is called repeatedly in a timely manner (e.g. with a **setInterval** callback). User has to call the **start** method for the monitoring to begin.
+
+You'll find more complex examples in the "basicTest.js" file under the "tests" folder of the repository.
 
 ## License
 
