@@ -14,7 +14,7 @@ DustDigitalSensor.prototype.read = function () {
   if (write) {
     this.board.wait(200)
     bytes = this.board.readBytes()
-    console.log(bytes[0] + ' ' + bytes[1] + ' ' + bytes[2] + ' ' + bytes[3])
+    //console.log(bytes[0] + ' ' + bytes[1] + ' ' + bytes[2] + ' ' + bytes[3])
     if (bytes instanceof Buffer && bytes[0] != 0)
       return [bytes[0], (bytes[3] * 256 * 256 + bytes[2] * 256 + bytes[1])]
     else
