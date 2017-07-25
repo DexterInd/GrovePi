@@ -9,6 +9,7 @@ var LightAnalogSensor = GrovePi.sensors.LightAnalog
 var DigitalButtonSensor = GrovePi.sensors.DigitalButton
 var LoudnessAnalogSensor = GrovePi.sensors.LoudnessAnalog
 var RotaryAngleAnalogSensor = GrovePi.sensors.RotaryAnalog
+var DustDigitalSensor = GrovePi.sensors.dustDigital
 
 var board
 
@@ -19,9 +20,10 @@ var testOptions = {
   airQuality: false,
   dhtDigital: false,
   lightAnalog: false,
-  digitalButton: false,
+  digitalButton: true,
   loudnessAnalog: false,
   rotaryAngle: true,
+  dust: true,
   customAccelerationReading: false
 }
 
@@ -117,7 +119,7 @@ function start() {
             //res will be either singlepress or longpress
             console.log('Button onDown, data=' + res)
           })
-          button.watch()
+          buttonSensor.watch()
         }
 
         if (testOptions.rotaryAngle) {
@@ -129,6 +131,16 @@ function start() {
           rotaryAngleSensor.on('data', function (res) {
             console.log('Rotary onData value=' + res)
           })
+        }
+
+        if (testOptions.dust) {
+          var dustSensor = new DustDigitalSensor(2)
+          //digital port 2
+          // Dust Digital Sensor
+          console.log('Dust Digital Sensor (start monitoring - reporting results every 30s)')
+          //we must get results every 30 seconds
+          dustSensor.start()
+          setInterval(dustSensorGetAvgMax, 30 * 1000, dustSensor)
         }
 
         if (testOptions.customAccelerationReading) {
@@ -147,6 +159,14 @@ function start() {
 function loudnessSensorGetAvgMax(loudnessSensor) {
   var res = loudnessSensor.readAvgMax()
   console.log('Loudness avg value=' + res.avg + ' and max value=' + res.max)
+}
+
+function dustSensorGetAvgMax(dustSensor) {
+  var res = dustSensor.readAvgMax()
+  //avg and max will be the same in this test
+  //since we're gathering them over 30 seconds
+  //but that's the same pediod this loop runs
+  console.log('Dust avg value=' + res.avg + ' and max value=' + res.max)
 }
 
 function customAccelerationReading() {
