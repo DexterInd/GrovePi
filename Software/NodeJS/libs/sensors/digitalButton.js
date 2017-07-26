@@ -1,4 +1,4 @@
-var DigitalSensor = require('./base/digitalSensor')
+var DigitalInput = require('./base/digitalSensor')
 
 const buttonMode = {
     UP: 0,

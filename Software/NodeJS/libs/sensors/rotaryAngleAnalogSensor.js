@@ -1,4 +1,5 @@
 var AnalogSensor = require('./base/analogSensor')
+var helpers = require('./helpers')
 const FULL_ANGLE = 300
 
 //RotaryAngleSensor
@@ -29,10 +30,10 @@ const convertDHTToDegrees = function (value) {
     let adc_ref = 5
     let grove_vcc = 5
   
-    let voltage = round((value) * adc_ref / 1023, 2)
+    let voltage = helpers.round((value) * adc_ref / 1023, 2)
 
     //Calculate rotation in degrees(0 to 300)
-    return round((voltage * FULL_ANGLE) / grove_vcc, 2)
+    return helpers.round((voltage * FULL_ANGLE) / grove_vcc, 2)
 }
 
 RotaryAngleAnalogSensor.prototype.start = function () {
@@ -68,16 +69,6 @@ function loop() {
             previousData = result
         }
     }
-}
-
-function round(number, precision) {
-    if (isNaN(number)) return 'N/A'
-
-    let prec = precision || 2
-    var factor = Math.pow(10, prec)
-    var tempNumber = number * factor
-    var roundedTempNumber = Math.round(tempNumber)
-    return roundedTempNumber / factor
 }
 
 module.exports = RotaryAngleAnalogSensor
