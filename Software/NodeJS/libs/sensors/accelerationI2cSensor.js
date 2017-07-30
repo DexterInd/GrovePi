@@ -26,3 +26,4 @@ AccelerationI2cSensor.prototype.read = function() {
   }
 }
 
+module.exports = AccelerationI2cSensor
