@@ -6,7 +6,7 @@
 # The GrovePi connects the Raspberry Pi and Grove sensors.  
 # You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 '''
 ## License
@@ -14,7 +14,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 import grovepi
-
+import math
 # Connect the Grove Temperature & Humidity Sensor Pro to digital port D4
 # This example uses the blue colored sensor.
 # SIG,NC,VCC,GND
@@ -51,7 +51,8 @@ while True:
         # This example uses the blue colored sensor. 
         # The first parameter is the port, the second parameter is the type of sensor.
         [temp,humidity] = grovepi.dht(sensor,blue)  
-        print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
+        if math.isnan(temp) == False and math.isnan(humidity) == False:
+            print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
 
     except IOError:
         print ("Error")

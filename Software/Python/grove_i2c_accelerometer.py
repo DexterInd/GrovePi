@@ -4,7 +4,7 @@
 # Find more here:  http://www.seeedstudio.com/depot/Grove-3Axis-Digital-Accelerometer16g-p-1156.html
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 '''
 ## License
@@ -12,7 +12,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

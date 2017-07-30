@@ -1,11 +1,41 @@
 ## GrovePi Firmware version 1.2.6 - Mar 2016
 
+GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  [See more about the GrovePi here.](http://www.dexterindustries.com/grovepi)
+
+##Changes in 1.2.6
+* Support for Chainable RGB LED added
+* Support for 433Mhz RF module added
+* Ultrasonic sensor code updated
+
+## Updating the firmware on your GrovePi
+To Test the 1.2.6 firmware, make the installation script executable and run it 
+
+First make the update script executable:
+
+**sudo chmod +x install_test_firmware_software.sh**
+
+then run it:
+
+**sudo ./firmware_update.sh**
+
+This will install the 1.2.6 firmware on the GrovePi and update the GrovePi python library. 
+## Learn More
+
+See more at the [GrovePi Site](http://www.GrovePi.com/)
+[Dexter Industries](http://www.dexterindustries.com)
+
+##Contributors
+The following github users have contributed to the changes on the firmware and software:
+* @tkumata
+* @nikkoura
+* @KillingJacky
+
 ## License
 
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 ########################################################################                                                                  
-# This example is for is the simplest GPS Script.  It simply reads the
+# This example is for is the simplest GPS Script.  It reads the
 # raw output of the GPS sensor on the GoPiGo or GrovePi and prints it.  
+#
+# GPS SENSOR GOES INTO RPISER PORT
+#
+#####################################################
 #
 # http://www.dexterindustries.com/GoPiGo/ 
 # http://www.dexterindustries.com/GrovePi/                                                                
@@ -9,6 +13,7 @@
 # ------------------------------------------------
 # Author     Date      		Comments
 # John      2/25/2015		Initial Authoring
+# John      6/17/2016		Add some comments.
 # 			                                                         
 # These files have been made available online through a Creative Commons Attribution-ShareAlike 3.0  license.
 # (http://creativecommons.org/licenses/by-sa/3.0/)           

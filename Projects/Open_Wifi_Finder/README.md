@@ -51,7 +51,7 @@ exit 0
 
 Then that's it!  Reboot and test!
  
-Have a question about this example?  [Ask on the forums here.](http://www.dexterindustries.com/forum/?forum=grovepi)
+Have a question about this example?  [Ask on the forums here.](http://forum.dexterindustries.com/c/grovepi)
 
 LICENSE: 
 These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
@@ -70,7 +70,7 @@ Need help? We [have a forum here where you can ask questions or make suggestions
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

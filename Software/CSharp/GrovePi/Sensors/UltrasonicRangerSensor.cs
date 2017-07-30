@@ -22,7 +22,6 @@ namespace GrovePi.Sensors
         public int MeasureInCentimeters()
         {
             var buffer = new byte[4] {CommandAddress, (byte) _pin, Constants.Unused, Constants.Unused};
-            _device.DirectAccess.WritePartial(buffer);
             var result = _device.DirectAccess.WritePartial(buffer);
             if (result.Status != Windows.Devices.I2c.I2cTransferStatus.FullTransfer)
             {

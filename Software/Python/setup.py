@@ -4,7 +4,7 @@
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
 '''
 ## License
@@ -12,7 +12,7 @@
 The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Copyright (C) 2017  Dexter Industries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,13 +32,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+
+try:
+	with open('package_description.rst', 'r') as file_description:
+		description = file_description.read()
+
+except IOError:
+	print(str(IOError))
+	print("make sure you have [package_description.rst] file in the same directory as [setup.py]")
+
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
 setuptools.setup(
-	name="grovepi",
-	description="Drivers and examples for using the GrovePi in Python",
-	author="Dexter Industries",
-	url="http://www.dexterindustries.com/GrovePi/",
-	py_modules=['grovepi'],
-	#install_requires=open('requirements.txt').readlines(),
+    name = "grovepi",
+    version = "1.0.0",
+
+    description = "Drivers for using the GrovePi+ in Python",
+    long_description = description,
+
+    author = "Dexter Industries",
+    author_email = "contact@dexterindustries.com",
+
+    license = 'MIT',
+    classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Education',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 3',
+    'Topic :: Software Development :: Embedded Systems',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    url = "https://github.com/DexterInd/GrovePi",
+
+    keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education', 'iot', 'internet of things', 'prototyping'],
+
+    py_modules = ['grovepi'],
+    install_requires = ['numpy']
 )

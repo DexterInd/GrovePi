@@ -61,3 +61,11 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.html text eol=lf
+*.java text eol=lf
+*.c text eol=lf

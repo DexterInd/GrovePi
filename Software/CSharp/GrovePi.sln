@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrovePi", "GrovePi\GrovePi.csproj", "{A667742A-B887-4B46-8EC1-C671E8BEC5E4}"
 EndProject
@@ -10,19 +10,31 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Debug|ARM.ActiveCfg = Debug|ARM
 		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Debug|ARM.Build.0 = Debug|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Debug|x64.ActiveCfg = Debug|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Debug|x86.ActiveCfg = Debug|ARM
 		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Release|ARM.ActiveCfg = Release|ARM
 		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Release|ARM.Build.0 = Release|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Release|x64.ActiveCfg = Release|ARM
+		{A667742A-B887-4B46-8EC1-C671E8BEC5E4}.Release|x86.ActiveCfg = Release|ARM
 		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|ARM.ActiveCfg = Debug|ARM
 		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|ARM.Build.0 = Debug|ARM
 		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|ARM.Deploy.0 = Debug|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|x64.ActiveCfg = Debug|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Debug|x86.ActiveCfg = Debug|ARM
 		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|ARM.ActiveCfg = Release|ARM
 		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|ARM.Build.0 = Release|ARM
 		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|ARM.Deploy.0 = Release|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|x64.ActiveCfg = Release|ARM
+		{6D24EAD0-AF01-4870-B042-FC782A973C46}.Release|x86.ActiveCfg = Release|ARM
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
