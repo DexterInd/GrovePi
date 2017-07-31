@@ -32,13 +32,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+
+try:
+	with open('package_description.rst', 'r') as file_description:
+		description = file_description.read()
+
+except IOError:
+	print(str(IOError))
+	print("make sure you have [package_description.rst] file in the same directory as [setup.py]")
+
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
 setuptools.setup(
-	name="grovepi",
-	description="Drivers and examples for using the GrovePi in Python",
-	author="Dexter Industries",
-	url="http://www.dexterindustries.com/GrovePi/",
-	py_modules=['grovepi'],
-	#install_requires=open('requirements.txt').readlines(),
+    name = "grovepi",
+    version = "1.0.0",
+
+    description = "Drivers for using the GrovePi+ in Python",
+    long_description = description,
+
+    author = "Dexter Industries",
+    author_email = "contact@dexterindustries.com",
+
+    license = 'MIT',
+    classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Education',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 3',
+    'Topic :: Software Development :: Embedded Systems',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    url = "https://github.com/DexterInd/GrovePi",
+
+    keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education', 'iot', 'internet of things', 'prototyping'],
+
+    py_modules = ['grovepi'],
+    install_requires = ['numpy']
 )
