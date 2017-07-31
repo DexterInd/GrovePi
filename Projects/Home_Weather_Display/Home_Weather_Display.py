@@ -43,7 +43,7 @@ from time import sleep
 from math import isnan
 
 dht_sensor_port = 7 # connect the DHt sensor to port 7
-dht_sensor_type = 1 # use 0 for the blue-colored sensor and 1 for the white-colored sensor
+dht_sensor_type = 0 # use 0 for the blue-colored sensor and 1 for the white-colored sensor
 
 # set green as backlight color
 # we need to do it just once
