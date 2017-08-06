@@ -99,12 +99,13 @@ def setText(text):
 def setText_norefresh(text):
     textCommand(0x02) # return home
     time.sleep(.05)
-	
     textCommand(0x08 | 0x04) # display on, no cursor
     textCommand(0x28) # 2 lines
     time.sleep(.05)
     count = 0
     row = 0
+    while len(text) < 32: #clears the rest of the screen
+        text += ' '
     for c in text:
         if c == '\n' or count == 16:
             count = 0
@@ -116,13 +117,17 @@ def setText_norefresh(text):
                 continue
         count += 1
         bus.write_byte_data(DISPLAY_TEXT_ADDR,0x40,ord(c))
-		
+
 # example code
 if __name__=="__main__":
     setText("Hello world\nThis is an LCD test")
     setRGB(0,128,64)
+    time.sleep(2)
     for c in range(0,255):
+        setText_norefresh("Going to sleep in {}...".format(str(c)))
         setRGB(c,255-c,0)
-        time.sleep(0.01)
+        time.sleep(0.1)
     setRGB(0,255,0)
     setText("Bye bye, this should wrap onto next line")
+
+    
