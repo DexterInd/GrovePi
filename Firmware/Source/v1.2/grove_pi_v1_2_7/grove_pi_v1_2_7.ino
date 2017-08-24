@@ -67,7 +67,6 @@ void setup()
 
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-	attachInterrupt(0,readPulseDust,CHANGE);
 }
 int pin;
 int j;
@@ -655,14 +654,12 @@ void readPulseDust()
   l_status = digitalRead(2);  // Represents if the line is low or high.  
   if(l_status)
   { 
-	 digitalWrite(8,0);
     // If the line is high (1), the pulse just ended
     pulse_end = t;
   }
   else
   {   // If the line is low (0), the pulse just started
     pulse_start = t;
-	digitalWrite(8,1);
   }
   
   if(pulse_end > pulse_start)
