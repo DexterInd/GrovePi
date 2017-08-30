@@ -266,7 +266,7 @@ while True:
 					grove_rgb_lcd.setRGB(rgb[0],rgb[1],rgb[2])
 				elif msg[3:6].lower() == "txt".lower():
 					txt = originalmsg[6:]
-					grove_rgb_lcd.setText(txt)
+					grove_rgb_lcd.setText_norefresh(txt)
 				else:
 					pass
 			if en_debug:
