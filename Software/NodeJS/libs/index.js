@@ -25,5 +25,8 @@ module.exports.GrovePi = {
     , dustDigital: require('./sensors/dustDigitalSensor')
     , encoderDigital: require('./sensors/encoderDigitalSensor')
     , waterFlowDigital: require('./sensors/waterFlowDigitalSensor')
+    , DigitalButton: require('./sensors/digitalButton')
+    , LoudnessAnalog: require('./sensors/loudnessAnalogSensor')     
+    , RotaryAnalog: require('./sensors/rotaryAngleAnalogSensor')
   }
 }
