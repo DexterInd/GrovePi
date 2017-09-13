@@ -245,9 +245,14 @@ call_for_check_kernel() {\
 		# You can find firmware commits here:  https://github.com/Hexxeh/rpi-firmware/commits/master to find the specific commit-id of the firmware.
 		# As of 2017.06 4.4.50 v7+ is the last working version with the smbus.read_i2c_block_data() command in python.  Before updating the kernel check that
 		# the new version works with this function in python.
-		echo "GrovePi requires an older version of the Pi Kernel to work with Jessie.  To proceed, this program"
-		echo "will roll back the kernel."
-		echo "to proceed type y.  To skip type n."
+		feedback "=============================================="
+		feedback "ATTENTION!"
+		feedback "ATTENTION!"
+		feedback "=============================================="
+		feedback "GrovePi requires an older version of the Pi Kernel to work with Jessie.  To proceed, this program"
+		feedback "will roll back the kernel."
+		feedback "To proceed type y.  To skip type n."
+		
 		read kernelconfirm
 		y='y'
 		if [ $kernelconfirm = $y ]; then
