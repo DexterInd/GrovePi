@@ -238,6 +238,7 @@ install_python_libs(){
 
 call_for_check_kernel() {\
     if ! quiet_mode ; then
+		VERSION=$(sed 's/\..*//' /etc/debian_version)
 		#####
 		# Kernel Control - Make sure we're using a stable, working kernel version.
 		# Helpeful guide: https://github.com/Hexxeh/rpi-update#options
