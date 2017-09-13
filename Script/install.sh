@@ -236,6 +236,35 @@ install_python_libs(){
 	echo "Done"
 }
 
+call_for_check_kernel() {\
+    if ! quiet_mode ; then
+		#####
+		# Kernel Control - Make sure we're using a stable, working kernel version.
+		# Helpeful guide: https://github.com/Hexxeh/rpi-update#options
+		# You can find firmware commits here:  https://github.com/Hexxeh/rpi-firmware/commits/master to find the specific commit-id of the firmware.
+		# As of 2017.06 4.4.50 v7+ is the last working version with the smbus.read_i2c_block_data() command in python.  Before updating the kernel check that
+		# the new version works with this function in python.
+		echo "GrovePi requires an older version of the Pi Kernel to work with Jessie.  To proceed, this program"
+		echo "will roll back the kernel."
+		echo "to proceed type y.  To skip type n."
+		read kernelconfirm
+		y='y'
+		if [ $kernelconfirm = $y ]; then
+
+			if [ ! $VERSION -eq '7' ]
+			then
+
+			   sudo rpi-update 52241088c1da59a359110d39c1875cda56496764  # kernel: Bump to 4.4.50 - v7+
+																		 # Verify you have the right firmware version with the command - uname -a
+			else
+			   sudo apt-get install -y raspberrypi-kernel
+			fi
+		else
+			echo "Skipping Kernel Rollback!"
+		fi
+	fi
+}
+
 call_for_reboot() {
     if ! quiet_mode ; then
         feedback " "
@@ -260,6 +289,7 @@ display_welcome_msg
 # sleep 5
 check_internet
 check_root_user
+call_for_check_kernel
 install_dependencies
 install_wiringpi
 install_spi_i2c
