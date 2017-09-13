@@ -10,7 +10,7 @@ public class BlinkingLed implements Example {
 
   @Override
   public void run(GrovePi grovePi, Monitor monitor) throws Exception {
-    GroveDigitalOut led = grovePi.getDigitalOut(4);
+    GroveDigitalOut led = grovePi.getDigitalOut(2);
     boolean state = false;
     while (monitor.isRunning()) {
       state = !state;
