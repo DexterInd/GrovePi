@@ -11,13 +11,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.iot.raspberry.grovepi.GrovePi;
-import org.iot.raspberry.grovepi.dio.GrovePiDio;
 import org.iot.raspberry.grovepi.pi4j.GrovePi4J;
 
 public class Runner {
 
   public static void main(String[] args) throws Exception {
-    Logger.getLogger("DIO").setLevel(Level.WARNING);
     Logger.getLogger("GrovePi").setLevel(Level.WARNING);
     Logger.getLogger("RaspberryPi").setLevel(Level.WARNING);
 
@@ -28,19 +26,23 @@ public class Runner {
       System.out.println("STOPING CURRENT SAMPLE");
       System.exit(0);
     }
+    /*
     if (args.length != 2) {
       System.err.println("You need to provide 2 arguments DIO|PI4J EXAMPLECLASS");
       System.exit(-1);
     }
+    */
+    if (args.length != 1) {
+        System.err.println("You need to provide 1 argument - name of the class");
+        System.exit(-1);
+    }
 
     control.createNewFile();
-
+    
+    /*
     String mode = args[0];
     GrovePi grovePi;
     switch (mode.toLowerCase()) {
-      case "dio":
-        grovePi = new GrovePiDio();
-        break;
       case "pi4j":
         grovePi = new GrovePi4J();
         break;
@@ -50,8 +52,11 @@ public class Runner {
       default:
         throw new IllegalArgumentException("You must provide either DIO or PI4J implementation");
     }
-    Example example = (Example) Class.forName("org.iot.raspberry.examples." + args[1]).newInstance();
-    System.out.println("RUNNING EXAMPLE: " + args[1] + " USING: " + args[0]);
+    */
+    
+    GrovePi grovePi = new GrovePi4J();
+    Example example = (Example) Class.forName("org.iot.raspberry.examples." + args[0]).newInstance();
+    System.out.println("RUNNING EXAMPLE: " + args[0] + " USING: PI4J");
     final ExecutorService runner = Executors.newSingleThreadExecutor();
     final ExecutorService consoleMonitor = Executors.newSingleThreadExecutor();
     final ExecutorService fileMonitor = Executors.newSingleThreadExecutor();

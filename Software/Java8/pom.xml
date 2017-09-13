@@ -12,6 +12,5 @@
 	<modules>
 		<module>GrovePi-spec</module>
 		<module>GrovePi-pi4j</module>
-		<module>GrovePi-dio</module>
 	</modules>
 </project> 
