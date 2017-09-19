@@ -18,8 +18,8 @@ function DigitalButton(pin, longPressDelay) {
     this.on('change', function (res) {
         //user presses the button for the first time
         if (res == 1 && mode === buttonMode.UP) {
-            mode = buttonMode.DOWN
             pressedDateTime = new Date()
+            mode = buttonMode.DOWN
             return
         }
         //user continues to press the button
