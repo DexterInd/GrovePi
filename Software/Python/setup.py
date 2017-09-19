@@ -38,7 +38,7 @@ try:
 		description = file_description.read()
 
 except IOError:
-	description = "Check more on https://pypi.python.org/pypi/gopigo3"
+	description = "Check more on https://pypi.python.org/pypi/grovepi"
 
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
