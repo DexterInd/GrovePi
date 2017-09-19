@@ -5,19 +5,21 @@ const buttonMode = {
     DOWN: 1
 }
 
-let mode = buttonMode.UP //not pressed
+var mode = buttonMode.UP //not pressed
 
-let datetimePressed
+var pressedDateTime
+var currentDateTime
+var milliseconds
 
 //digital button, can throw singlepress and longpress events
-function DigitalButton(pin, longpressDelay) {
+function DigitalButton(pin, longPressDelay) {
     DigitalInput.apply(this, Array.prototype.slice.call(arguments))
-    this.longpressDelay = longpressDelay || 1100
+    this.longPressDelay = longPressDelay || 1100
     this.on('change', function (res) {
         //user presses the button for the first time
         if (res == 1 && mode === buttonMode.UP) {
             mode = buttonMode.DOWN
-            datetimePressed = new Date()
+            pressedDateTime = new Date()
             return
         }
         //user continues to press the button
@@ -25,10 +27,10 @@ function DigitalButton(pin, longpressDelay) {
             //do nothing
             return
         } else { //res == 0 so user has lifted her finger
-            let currentDateTime = new Date()
-            let miliseconds = currentDateTime.getTime() - datetimePressed.getTime()
-            //if less than longgpressDelay miliseconds
-            if (miliseconds <= this.longpressDelay) {
+            currentDateTime = new Date()
+            milliseconds = currentDateTime.getTime() - pressedDateTime.getTime()
+            //if less than longPressDelay milliseconds
+            if (milliseconds <= this.longPressDelay) {
                 this.emit('down', 'singlepress')
             } else {
                 this.emit('down', 'longpress')
