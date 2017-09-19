@@ -38,8 +38,7 @@ try:
 		description = file_description.read()
 
 except IOError:
-	print(str(IOError))
-	print("make sure you have [package_description.rst] file in the same directory as [setup.py]")
+	description = "Check more on https://pypi.python.org/pypi/gopigo3"
 
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
