@@ -38,14 +38,13 @@ try:
 		description = file_description.read()
 
 except IOError:
-	print(str(IOError))
-	print("make sure you have [package_description.rst] file in the same directory as [setup.py]")
+	description = "Check more on https://pypi.python.org/pypi/grovepi"
 
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
 setuptools.setup(
     name = "grovepi",
-    version = "1.0.0",
+    version = "1.0.1",
 
     description = "Drivers for using the GrovePi+ in Python",
     long_description = description,
