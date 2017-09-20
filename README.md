@@ -18,6 +18,13 @@ The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, 2, and 3.
 Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/). 
 We have an extensive library that covers most Grove sensors. You can find it on the Github repo.  You won’t need to hack much at all with our library: get started coding in Python and C now! 
 
+### Quick Install
+In order to quick install the `GrovePi` repository, open up a terminal and type the following command:
+```
+sudo curl -L dexterindustries.com/update_grovepi | bash
+```
+The same command can be used for updating the `GrovePi` to the latest version.
+
 ### Want to use a sensor not in the library yet?  
 Ask us in the [forums](http://forum.dexterindustries.com/c/grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://forum.dexterindustries.com/c/grovepi).
 
