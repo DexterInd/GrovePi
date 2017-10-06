@@ -233,6 +233,15 @@ install_python_libs(){
 		echo "/usr/lib/python2.7/dist-packages not found, exiting"
 		exit 1
 	fi
+	if [ -d /usr/lib/python3/dist-packages ]; then
+		# Usually "/" used as delimter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
+		# confused on expanding REPO_PATH as it finds "/" to be delimeters, hence here "@" is used as delimeter
+		sudo sed -i "s@^/Software@$REPO_PATH&@" $REPO_PATH/Script/grove.pth
+		sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python3/dist-packages/grove.pth
+	else
+		echo "/usr/lib/python3/dist-packages not found, exiting"
+		exit 1
+	fi
 	echo "Done"
 }
 
