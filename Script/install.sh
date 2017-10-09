@@ -225,8 +225,8 @@ install_python_libs(){
 	echo "Making libraries global . . ."
 	echo "============================="
 	if [ -d /usr/lib/python2.7/dist-packages ]; then
-		# Usually "/" used as delimter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
-		# confused on expanding REPO_PATH as it finds "/" to be delimeters, hence here "@" is used as delimeter
+		# Usually "/" used as delimiter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
+		# confused on expanding REPO_PATH as it finds "/" to be delimiter, hence here "@" is used as delimiter
 		sudo sed -i "s@^/Software@$REPO_PATH&@" $REPO_PATH/Script/grove.pth
 		sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
 	else
@@ -234,8 +234,8 @@ install_python_libs(){
 		exit 1
 	fi
 	if [ -d /usr/lib/python3/dist-packages ]; then
-		# Usually "/" used as delimter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
-		# confused on expanding REPO_PATH as it finds "/" to be delimeters, hence here "@" is used as delimeter
+		# Usually "/" used as delimiter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
+		# confused on expanding REPO_PATH as it finds "/" to be delimiter, hence here "@" is used as delimiter
 		sudo sed -i "s@^/Software@$REPO_PATH&@" $REPO_PATH/Script/grove.pth
 		sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python3/dist-packages/grove.pth
 	else
