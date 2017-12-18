@@ -60,7 +60,7 @@ This package provides the tools used to create the invokers.
   * **ButtonInvoker**: Declares the methods that are called when ButtonPressDistinguisher identifies a single, double, and long press respectively.
   * **RotaryInvoker**: Declares a method to call when RotaryAngleDenterminer is updated.
   
-This package uses the Observer design pattern, and can be used to easily incorporate other input sensors into your project.  Simply write a class that implements the InputSensorObserver interface, includes a way of processing the data read from the sensor. 
+This package uses the Observer design pattern, and can be used to easily incorporate other input sensors into your project.  Simply write a class that implements the InputSensorObserver interface and includes a way of processing the data read from the sensor. 
 ### Credits
 
 This GrovePi sensor demonstration is an extension of coursework for CS505 Design Patterns at Central Connecticut State University,
