@@ -1,5 +1,4 @@
 package grovepi.observer;
-
 /*
  * **********************************************************************
  * PROJECT       :  GrovePi Java Library

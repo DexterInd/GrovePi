@@ -46,7 +46,7 @@ Specifically for NetBeans, the process to create and run this as a project is as
 This package provides the tools used to create the invokers.  
 * **InputSensorReader**: Provides a common set of control methods and class variables for subclasses.
 
-  * **DigitalInputReader (extends InputSensorReader)**: Reads sensor data from a GrovePi digital sensor and updates an observed with this data.
+  * **DigitalInputReader (extends InputSensorReader)**: Reads sensor data from a GrovePi digital sensor and updates an observer with this data.
 
   * **AnalogInputReader (extends InputSensorReader)**:  An instance of this class reads sensor data from a GrovePi analog sensor and updates an observer with this data.
 
@@ -55,14 +55,16 @@ This package provides the tools used to create the invokers.
   * **ButtonPressDistinguisher (implements InputSensorObserver)**: Receives updates containing sensor events, analyzes the timing of these events and invokes the appropriate method on this instance's ButtonInvoker object.
 
   * **RotaryAngleDeterminer (implements InputSensorObserver)**: Determines and reports the angular position of the rotary angle sensor.  
+  
 * **Interfaces**:
   * **ButtonInvoker**: Declares the methods that are called when ButtonPressDistinguisher identifies a single, double, and long press respectively.
   * **RotaryInvoker**: Declares a method to call when RotaryAngleDenterminer is updated.
   
+This package uses the Observer design pattern, and can be used to easily incorporate other input sensors into your project.  Simply write a class that implements the InputSensorObserver interface, includes a way of processing the data read from the sensor. 
 ### Credits
 
 This GrovePi sensor demonstration is an extension of coursework for CS505 Design Patterns at Central Connecticut State University,
-Fall 2017, with Dr. Chad Williams.
+Fall 2017, with Dr. Chad Williams.  
 
 Interested in Computer Science at CCSU?:  http://www.ccsu.edu/cs/
 
