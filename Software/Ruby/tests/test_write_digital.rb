@@ -13,11 +13,11 @@ Test    : Write digital value to port D3
 "
 
 while true
-  GrovePi.write_digital_D3 1
+  GrovePi.write_digital GrovePi::D3, 1
   puts '[+] Tick: ON'
   sleep 1
 
-  GrovePi.write_digital_D3 0
+  GrovePi.write_digital GrovePi::D3, 0
   puts '[+] Tock: OFF'
   sleep 1
 

@@ -19,7 +19,7 @@ while true
 
   while i <= 255
     puts i
-    GrovePi.write_analog_D5 i
+    GrovePi.write_analog GrovePi::D5, i
     i += 4
     sleep 0.02
   end
@@ -28,7 +28,7 @@ while true
 
   while i >= 1
     puts i
-    GrovePi.write_analog_D5 i
+    GrovePi.write_analog GrovePi::D5, i
     i -= 4
     sleep 0.02
   end

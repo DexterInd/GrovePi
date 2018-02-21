@@ -13,16 +13,21 @@ module GrovePi
   CMD_READ_FIRMWARE_VERSION = 8
 
   # Arduino pin mappings.
-  PIN_ANALOG_A0 = 14
-  PIN_ANALOG_A1 = 15
-  PIN_ANALOG_A2 = 16
-  PIN_DIGITAL_D2 = 2
-  PIN_DIGITAL_D3 = 3
-  PIN_DIGITAL_D4 = 4
-  PIN_DIGITAL_D5 = 5
-  PIN_DIGITAL_D6 = 6
-  PIN_DIGITAL_D7 = 7
-  PIN_DIGITAL_D8 = 8
+  A0 = 14
+  A1 = 15
+  A2 = 16
+
+  PINS_ANALOG = [A0, A1, A2]
+
+  D2 = 2
+  D3 = 3
+  D4 = 4
+  D5 = 5
+  D6 = 6
+  D7 = 7
+  D8 = 8
+
+  PINS_DIGITAL = [D2, D3, D4, D5, D6, D7, D8]
 
   # Pin modes.
   PIN_MODE_IN = 0
@@ -143,33 +148,15 @@ module GrovePi
   # Functions exposed to the user.
 
   # Analog read functions.
-  def self.read_analog_A0()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_ANALOG_A0, PIN_MODE_IN
-        return self._read_analog PIN_ANALOG_A0
-      rescue Errno::EREMOTEIO
-        next
-      end
+  def self.read_analog(pin)
+    if !PINS_ANALOG.include? pin
+      raise 'Invalid analog pin.'
     end
-  end
 
-  def self.read_analog_A1()
     for i in 0..CONFIG_RETRIES - 1
       begin
-        self._set_pin_mode PIN_ANALOG_A1, PIN_MODE_IN
-        return self._read_analog PIN_ANALOG_A1
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_analog_A2()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_ANALOG_A2, PIN_MODE_IN
-        return self._read_analog PIN_ANALOG_A2
+        self._set_pin_mode pin, PIN_MODE_IN
+        return self._read_analog pin
       rescue Errno::EREMOTEIO
         next
       end
@@ -177,11 +164,15 @@ module GrovePi
   end
 
   # Analog write functions (PWM on digital pins D3, D5 and D6).
-  def self.write_analog_D3(value)
+  def self.write_analog(pin, value)
+    if !PINS_DIGITAL.include? pin
+      raise 'Invalid analog pin. Note: PWM based analog write is applicable on digital ports.'
+    end
+
     for i in 0..CONFIG_RETRIES - 1
       begin
-        self._set_pin_mode PIN_DIGITAL_D3, PIN_MODE_OUT
-        self._write_analog PIN_DIGITAL_D3, value
+        self._set_pin_mode pin, PIN_MODE_OUT
+        self._write_analog pin, value
         return
       rescue Errno::EREMOTEIO
         next
@@ -189,194 +180,38 @@ module GrovePi
     end
   end
 
-  def self.write_analog_D5(value)
+  # Digital read function.
+  def self.read_digital(pin)
+    if !PINS_DIGITAL.include? pin
+      raise 'Invalid digital pin.'
+    end
+
     for i in 0..CONFIG_RETRIES - 1
       begin
-        self._set_pin_mode PIN_DIGITAL_D5, PIN_MODE_OUT
-        self._write_analog PIN_DIGITAL_D5, value
+        self._set_pin_mode pin, PIN_MODE_IN
+        return self._read_digital pin
+      rescue Errno::EREMOTEIO
+        next
+      end
+    end
+  end
+
+  # Digital write function.
+  def self.write_digital(pin, value)
+    if !PINS_DIGITAL.include? pin
+      raise 'Invalid digital pin.'
+    end
+
+    for i in 0..CONFIG_RETRIES - 1
+      begin
+        self._set_pin_mode pin, PIN_MODE_OUT
+        self._write_digital pin, value
         return
       rescue Errno::EREMOTEIO
         next
       end
     end
   end
-
-  def self.write_analog_D6(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D6, PIN_MODE_OUT
-        self._write_analog PIN_DIGITAL_D6, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  # Digital read functions.
-  def self.read_digital_D2()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D2, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D2
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_digital_D3()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D3, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D3
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_digital_D4()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D4, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D4
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_digital_D5()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D5, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D5
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_digital_D6()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D6, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D6
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_digital_D7()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D7, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D7
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.read_digital_D8()
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D8, PIN_MODE_IN
-        return self._read_digital PIN_DIGITAL_D8
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  # Digital write functions.
-  def self.write_digital_D2(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D2, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D2, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.write_digital_D3(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D3, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D3, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.write_digital_D4(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D4, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D4, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.write_digital_D5(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D5, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D5, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.write_digital_D6(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D6, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D6, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.write_digital_D7(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D7, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D7, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  def self.write_digital_D8(value)
-    for i in 0..CONFIG_RETRIES - 1
-      begin
-        self._set_pin_mode PIN_DIGITAL_D8, PIN_MODE_OUT
-        self._write_digital PIN_DIGITAL_D8, value
-        return
-      rescue Errno::EREMOTEIO
-        next
-      end
-    end
-  end
-
-  # TODO: Implement rest of the commands that are supported by the firmware.
 
   # Functions for reading and writing I2C slaves connected to
   # I2C-1, I2C-2 or I2C-3 ports of the GrovePi.
@@ -430,4 +265,6 @@ module GrovePi
       end
     end
   end
+
+  # TODO: Implement rest of the commands that are supported by the firmware.
 end

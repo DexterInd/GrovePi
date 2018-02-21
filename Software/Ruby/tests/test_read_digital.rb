@@ -13,7 +13,7 @@ Test    : Read digital value from port D4
 "
 
 while true
-	digital_value = GrovePi.read_digital_D4
+	digital_value = GrovePi.read_digital GrovePi::D4
 	print "[+] Digital input from port D4 = #{digital_value}\n"
 	sleep 0.5
 end
