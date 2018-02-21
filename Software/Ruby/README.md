@@ -7,9 +7,8 @@ A set of examples can be found in the **tests** directory.
 Check them out for usage.
 
 ## Dependencies
-Ruby **i2c-devices** module must be installed.
-
-```# gem install i2c-devices```
+* Ruby version above 2.0 is required.
+* The Ruby module **i2c-devices** must be installed, ```# gem install i2c-devices```.
 
 ## Current State
 As the initial state of this module the following features are implemented and tested:
