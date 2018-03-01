@@ -10,6 +10,7 @@
 # Nicole	Nov 16			Added Folder support for take_picture 
 # Nicole	Nov 16			Added eSpeak Support
 # Nicole	18 Nov 16		Adding PivotPi support
+# SimonWalters  23 Feb 18   Correct error handling error
 '''
 ## License
 
@@ -379,7 +380,7 @@ while True:
 		running= False
 		print "GrovePi Scratch: Disconnected from Scratch"
 		break
-	except (scratch.scratch.ScratchConnectionError,NameError) as e:
+	except (scratch.ScratchConnectionError,NameError) as e:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
@@ -395,3 +396,6 @@ while True:
 	except:
 		e = sys.exc_info()[0]
 		print "GrovePi Scratch: Error %s" % e
+
+
+
