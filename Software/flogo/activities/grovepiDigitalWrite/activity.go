@@ -47,7 +47,7 @@ func (a *grovePiDWActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *grovePiDWActivity) Eval(context activity.Context) (done bool, err error) {
 
-	var pin , value
+	var pin, value
 	if context.GetInput(ivPin) != nil {
 		pin = context.GetInput(ivPin).(int)
 	}
