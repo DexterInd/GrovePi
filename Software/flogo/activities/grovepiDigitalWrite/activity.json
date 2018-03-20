@@ -1,11 +1,7 @@
 {
   "name": "grovepiDigitalWrite",
   "type": "flogo:activity",
-<<<<<<< HEAD
-  "ref": "github.com/jgrotex/GrovePi/Software/flogo/activity/grovepiDigitalWrite",
-=======
   "ref": "github.com/JGrotex/GrovePi/Software/flogo/activity/grovepiDigitalWrite",
->>>>>>> b202912cf81bd7ba863bb4fa5db49a60c85ea189
   "version": "0.0.1",
   "title": "grovepi Digital Write",
   "description": "Digital Write Activity for GrovePi",
