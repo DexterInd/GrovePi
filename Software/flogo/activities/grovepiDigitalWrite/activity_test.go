@@ -1,4 +1,4 @@
-package grovepi
+package grovepiDigitalWrite
 
 import (
 	"testing"
