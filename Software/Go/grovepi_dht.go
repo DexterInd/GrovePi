@@ -1,14 +1,16 @@
 package main
 
 import (
+	"./grovepi"
+
 	"fmt"
-	// To be replaced with a proper repo path
-	"./grove"
 )
 
 func main() {
-	g := *grovepi.NewGrovePi(0x04)
-	defer g.Close()
+
+	var g grovepi.GrovePi
+	g = *grovepi.InitGrovePi(0x04)
+	defer g.CloseDevice()
 
 	for {
 		t, h, err := g.ReadDHT(grovepi.D4)
