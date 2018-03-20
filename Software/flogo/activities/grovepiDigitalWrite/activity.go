@@ -63,6 +63,7 @@ func (a *grovePiDWActivity) Eval(context activity.Context) (done bool, err error
 		fmt.Println(err)
 	}
 	
+	//write to GrovePi
 	if value { 
 		g.DigitalWrite(pin, 1)
 	} else{

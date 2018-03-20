@@ -48,7 +48,7 @@ func TestGrovePiDW(t *testing.T) {
 	act := NewActivity(getActivityMetadata())
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
-	//setup attrs
+	//setup attrs GrovePi Tester
 	tc.SetInput(ivPin, 3)
 	tc.SetInput(ivValue, true)
 
