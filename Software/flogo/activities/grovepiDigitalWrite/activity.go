@@ -5,7 +5,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/JGrotex/GrovePi/Software/Go/grovepi"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/mrmorphic/hwio"
@@ -59,8 +58,8 @@ func (a *grovePiDWActivity) Eval(context activity.Context) (done bool, err error
 		value = context.GetInput(ivValue).(bool)
 	}
 
-	var g grovepi.GrovePi
-	g = *grovepi.InitGrovePi(0x04)
+	var g *GrovePi
+	g = InitGrovePi(0x04)
 	err = g.PinMode(pin, "output")
 	if err != nil {
 		fmt.Println(err)
@@ -92,11 +91,11 @@ func InitGrovePi(address int) *GrovePi {
 	return grovePi
 }
 
-func (grovePi *GrovePi) CloseDevice() {
+func (grovePi GrovePi) CloseDevice() {
 	grovePi.i2cmodule.Disable()
 }
 
-func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
+func (grovePi GrovePi) DigitalWrite(pin byte, val byte) error {
 	b := []byte{DIGITAL_WRITE, pin, val, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	time.Sleep(100 * time.Millisecond)
@@ -106,7 +105,7 @@ func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	return nil
 }
 
-func (grovePi *GrovePi) PinMode(pin byte, mode string) error {
+func (grovePi GrovePi) PinMode(pin byte, mode string) error {
 	var b []byte
 	if mode == "output" {
 		b = []byte{PIN_MODE, pin, 1, 0}

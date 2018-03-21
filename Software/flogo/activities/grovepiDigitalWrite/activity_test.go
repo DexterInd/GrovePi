@@ -50,7 +50,7 @@ func TestGrovePiDW(t *testing.T) {
 
 	//setup attrs GrovePi Tester
 	tc.SetInput(ivPin, 3)
-	tc.SetInput(ivValue, true)
+	tc.SetInput(ivValue, false)
 
 	act.Eval(tc)
 
