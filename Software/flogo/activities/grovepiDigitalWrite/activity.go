@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/JGrotex/GrovePi/Software/Go/grovepi"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/mrmorphic/hwio"
@@ -14,8 +15,8 @@ import (
 var log = logger.GetLogger("activity-tibco-GrovePi")
 
 const (
-	ivPin   = "pin"
-	ivValue = "value"
+	ivPin     = "pin"
+	ivValue   = "value"
 	ovSuccess = "success"
 
 	//Cmd format
@@ -47,10 +48,12 @@ func (a *grovePiDWActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *grovePiDWActivity) Eval(context activity.Context) (done bool, err error) {
 
-	var pin, value
+	var pin byte
+	var value bool
 
+	log.Debug("Starting Pin Write")
 	if context.GetInput(ivPin) != nil {
-		pin = context.GetInput(ivPin).(int)
+		pin = byte(context.GetInput(ivPin).(int))
 	}
 	if context.GetInput(ivValue) != nil {
 		value = context.GetInput(ivValue).(bool)
@@ -58,15 +61,15 @@ func (a *grovePiDWActivity) Eval(context activity.Context) (done bool, err error
 
 	var g grovepi.GrovePi
 	g = *grovepi.InitGrovePi(0x04)
-	err := g.PinMode(pin, "output")	
+	err = g.PinMode(pin, "output")
 	if err != nil {
 		fmt.Println(err)
 	}
-	
+
 	//write to GrovePi
-	if value { 
+	if value {
 		g.DigitalWrite(pin, 1)
-	} else{
+	} else {
 		g.DigitalWrite(pin, 0)
 	}
 

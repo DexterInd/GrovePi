@@ -54,9 +54,9 @@ func TestGrovePiDW(t *testing.T) {
 
 	act.Eval(tc)
 
-	value := tc.GetOutput(ovSuccess).(bool)
+	success := tc.GetOutput(ovSuccess).(bool)
 
-	if value != 1 {
+	if success != true {
 		t.Fail()
 	}
 }
