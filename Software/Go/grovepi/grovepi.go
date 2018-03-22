@@ -2,9 +2,10 @@ package grovepi
 
 import (
 	"fmt"
-	"github.com/mrmorphic/hwio"
 	"time"
 	"unsafe"
+
+	"github.com/mrmorphic/hwio"
 )
 
 const (
@@ -120,7 +121,7 @@ func (grovePi *GrovePi) PinMode(pin byte, mode string) error {
 }
 
 func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
-	b := []byte{DHT_READ, pin, 1, 0}
+	b := []byte{DHT_READ, pin, 0, 0}
 	rawdata, err := grovePi.readDHTRawData(b)
 	if err != nil {
 		return 0, 0, err
