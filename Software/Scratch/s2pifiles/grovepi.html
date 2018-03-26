@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Worksheet - Physical Computing With Scratch | Raspberry Pi Learning Resources</title>
+    <meta name="description" content="The worksheet for the Physical Computing With Scratch Learning Resource for Raspberry Pi" />
+    <link rel="icon" type="image/png" href="/wp-content/themes/mind-control/images/favicon.png" />
+    <link rel="publisher" href="https://plus.google.com/+RaspberryPi" />
+    <link rel="stylesheet" href="/wp-content/themes/mind-control/css/prism.css" />
+    <link rel="stylesheet" href="./style.css?1482225765" />
+    <link rel="stylesheet" href="./robotoslab.css?family=Roboto+Slab:100,300,400,700">
+    <link rel="stylesheet" href="./robotothin.css?family=Roboto:100italic,100,300italic,300,400italic,400,500italic,500,700italic,700,900italic,900">
+
+    <script>
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-46270871-1']);
+        _gaq.push(['_gat._forceSSL']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : '//www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+    <script src="/wp-content/themes/mind-control/js/prism.js"></script>
+</head>
+
+<body class="learning worksheet learn worksheet ">
+    <div class="container">
+        <header class="header">
+            <a href="/resources/" class="heading" title="Back to raspberrypi.org">Raspberry Pi Learning Resources</a>
+        </header>
+
+        <div class="main">
+
+<article class="content">
+
+    <h1>Physical computing with Scratch</h1>
+<h2>GPIO pins</h2>
+<p>One powerful feature of the Raspberry Pi is the row of GPIO pins along the top edge of the board. GPIO stands for General-Purpose Input/Output. These pins are a physical interface between the Raspberry Pi and the outside world. At the simplest level, you can think of them as switches that you can turn on or off (input) or that the Pi can turn on or off (output).</p>
+<p>The GPIO pins allow the Raspberry Pi to control and monitor the outside world by being connected to electronic circuits. The Pi is able to control LEDs, turning them on or off, run motors, and many other things. It's also able to detect whether a switch has been pressed, the temperature, and light. We refer to this as physical computing.</p>
+<p>There are 40 pins on the Raspberry Pi (26 pins on early models), and they provide various different functions.</p>
+<p>If you have a RasPiO pin label, it can help to identify what each pin is used for. Make sure your pin label is placed with the keyring hole facing the USB ports, pointed outwards.</p>
+<p><img src="./images/raspio-ports.jpg" alt="" /></p>
+<p>If you don't have a pin label, then this guide can help you to identify the pin numbers:</p>
+<p><img src="./images/GPIO.png" alt="" /></p>
+<p>You'll see pins labelled as 3V3, 5V, GND and GP2, GP3, etc:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3V3</td>
+<td>3.3 volts</td>
+<td>Anything connected to these pins will always get 3.3V of power</td>
+</tr>
+<tr>
+<td>5V</td>
+<td>5 volts</td>
+<td>Anything connected to these pins will always get 5V of power</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>ground</td>
+<td>Zero volts, used to complete a circuit</td>
+</tr>
+<tr>
+<td>GP2</td>
+<td>GPIO pin 2</td>
+<td>These pins are for general-purpose use and can be configured as input or output pins</td>
+</tr>
+<tr>
+<td>ID_SC/ID_SD/DNC</td>
+<td>Special purpose pins</td>
+</tr>
+</tbody>
+</table>
+<p><strong>WARNING</strong>: If you follow the instructions, then playing about with the GPIO pins is safe and fun. Randomly plugging wires and power sources into your Pi, however, may destroy it, especially if using the 5V pins. Bad things can also happen if you try to connect things to your Pi that use a lot of power; LEDs are fine, motors are not. If you're worried about this, then you might want to consider using an add-on board such as the <a href="https://shop.pimoroni.com/products/explorer-hat">Explorer HAT</a> until you're confident enough to use the GPIO directly.</p>
+<h2>Lighting an LED</h2>
+<p>You can test whether your GPIO pins and LEDs are working by building the circuit below. You can use any resistor over about 50Ω.</p>
+<ol>
+<li>
+<p>The LED is connected directly to the <strong>GND</strong> pin and the <strong>3V3</strong> pin via the 330 Ohm resistor, and should light up.</p>
+</li>
+<li>Be sure to connect your LED the correct way round; the longer leg should be connected to the 3V3 pin:</li>
+</ol>
+<p><img src="./images/led-3v3.png" alt="Test Circuit" /></p>
+<h2>Using a switchable pin</h2>
+<ol>
+<li>
+<p>To control the LED, you'll need to adapt your circuit to use a switchable pin.</p>
+</li>
+<li>In the diagram below <strong>pin 17</strong> has been used, but you can use any numbered pin you wish.</li>
+</ol>
+<p><img src="./images/led-gpio17.png" alt="Test Circuit" /></p>
+
+</article>
+
+            <div style="clear:both;"></div>
+
+
+        </div>
+    </div>
+</body>
+</html>

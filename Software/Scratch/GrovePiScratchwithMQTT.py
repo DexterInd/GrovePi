@@ -1,16 +1,17 @@
 #!/usr/bin/python
-###############################################################################################################                                                               
+###############################################################################################################															   
 # This library is for using the GrovePi with Scratch
-# http://www.dexterindustries.com/GrovePi/                                                                
+# http://www.dexterindustries.com/GrovePi/																
 # History
 # ------------------------------------------------
-# Author	Date           	Comments
-# Karan		29 June 15     	Initial Authoring                                                        
+# Author	Date		   	Comments
+# Karan		29 June 15	 	Initial Authoring														
 # John		22 Feb 16   	Adding GrovePi Barometer
 # Nicole	Nov 16			Added Folder support for take_picture 
 # Nicole	Nov 16			Added eSpeak Support
 # Nicole	18 Nov 16		Adding PivotPi support
-# SimonW    22 Mar 18       Bug fix in error handling line 383
+# SimonWalters  23 Feb 18   Correct error handling error
+# SimonWalters  02 Mar 18   Added in MQTT support
 '''
 ## License
 
@@ -37,7 +38,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-'''       
+'''	   
 # 
 # Based on the BrickPi Scratch Library written by Jaikrishna
 #
@@ -48,6 +49,30 @@ import scratch,sys,threading,math
 import grovepi
 import time
 import os # to handle folder paths
+import paho.mqtt.client as paho
+
+def on_connect(client, userdata, flags, rc):
+	print("CONNACK received with code %d." % (rc))
+	
+def on_subscribe(client, userdata, mid, granted_qos):
+	print("Subscribed: "+str(mid)+" "+str(granted_qos))
+ 
+def on_message(client, userdata, msg):
+	print(msg.topic+" "+str(msg.payload)) 
+	s.sensorupdate({msg.topic:str(msg.payload)})
+	
+def on_publish(client,userdata,result):
+	#create function for callback
+	print("data published \n")
+
+
+client = paho.Client()
+client.on_connect = on_connect
+client.on_subscribe = on_subscribe
+client.on_message = on_message
+client.on_publish = on_publish
+
+
 
 try:
 	sys.path.insert(0, '/home/pi/Dexter/PivotPi/Software/Scratch/')
@@ -80,7 +105,7 @@ except scratch.ScratchError:
 	print "GrovePi Scratch: Scratch is either not opened or remote sensor connections aren't enabled"
 	#sys.exit(0)
 
-class myThread (threading.Thread):     
+class myThread (threading.Thread):	 
 	def __init__(self, threadID, name, counter):
 		threading.Thread.__init__(self)
 		self.threadID = threadID
@@ -88,9 +113,9 @@ class myThread (threading.Thread):
 		self.counter = counter
 	def run(self):
 		while running:
-			time.sleep(.2)              # sleep for 200 ms
+			time.sleep(.2)			  # sleep for 200 ms
 
-thread1 = myThread(1, "Thread-1", 1)        #Setup and start the thread
+thread1 = myThread(1, "Thread-1", 1)		#Setup and start the thread
 thread1.setDaemon(True)
 
 analog_sensors=['analogRead','rotary','sound','light','moisture']
@@ -275,12 +300,12 @@ while True:
 			
 		# elif msg[:10].lower()=="setOutput".lower():
 		#   if en_grovepi:
-		#       port=int(msg[10:])
-		#       a_read=grovepi.analogRead(port)
-		#       s.sensorupdate({'analogRead':a_read})
+		#	   port=int(msg[10:])
+		#	   a_read=grovepi.analogRead(port)
+		#	   s.sensorupdate({'analogRead':a_read})
 		#   if en_debug:
-		#       print msg
-		#       print "Analog Reading: " + str(a_read)   
+		#	   print msg
+		#	   print "Analog Reading: " + str(a_read)   
 		elif msg.lower()=="READ_IR".lower() or msg.lower()=="IR".lower():
 			print "READ_IR!" 
 			if en_ir_sensor==0:
@@ -340,14 +365,14 @@ while True:
 			if en_grovepi:
 				# We import here to prevent errors thrown.  If the import fails, you just get an error message instead of the communicator crashing.
 				# If user is using multiple sensors and using their own image which does not have the pythonpath set correctly then 
-				#    they'll just not get the output for 1 sensor, and the others will still keep working
+				#	they'll just not get the output for 1 sensor, and the others will still keep working
 				from grove_i2c_barometic_sensor_BMP180 import BMP085 # Barometric pressure sensor.
-				bmp = BMP085(0x77, 1)           #Initialize the pressure sensor (barometer)
+				bmp = BMP085(0x77, 1)		   #Initialize the pressure sensor (barometer)
 				press = bmp.readPressure()/100.0
 				s.sensorupdate({'pressure':press})
 				if en_debug:
 					print "Pressure: " + str(press)
-			if en_debug:        # If Debug is enabled, print the value of msg.
+			if en_debug:		# If Debug is enabled, print the value of msg.
 				print msg
 
 		elif (msg[:5].lower()=="SPEAK".lower()):
@@ -369,7 +394,26 @@ while True:
 			pivotsensors = PivotPiScratch.handlePivotPi(msg)
 			# print "Back from PivotPi",pivotsensors
 			s.sensorupdate(pivotsensors)
-
+		
+		elif (msg[:4].lower() == "mqtt"):
+			print "mqtt messge:",msg
+			splits = msg.lower().split(",")
+			print splits
+			if (splits[0][:11] == "mqttconnect"):
+				try:
+					client.disconnect()
+					client.loop_stop()
+					print "client stopped"
+				except:
+					print "no client running"
+					pass
+				print "carry on"
+				client.connect(splits[0][11:],1883)
+				client.loop_start()
+			elif (splits[0][:13] == "mqttsubscribe"):
+				client.subscribe(splits[0][13:])
+			elif (splits[0][:11] == "mqttpublish"):
+				client.publish(splits[0][11:],splits[1])
 		else:
 			if en_debug:
 				print "Ignoring: ",msg
@@ -380,7 +424,7 @@ while True:
 		running= False
 		print "GrovePi Scratch: Disconnected from Scratch"
 		break
-	except (scratch.ScratchConnectionError,NameError) as e: #bug fix simonw 22Mar18
+	except (scratch.ScratchConnectionError,NameError) as e:
 		while True:
 			#thread1.join(0)
 			print "GrovePi Scratch: Scratch connection error, Retrying"
@@ -396,3 +440,6 @@ while True:
 	except:
 		e = sys.exc_info()[0]
 		print "GrovePi Scratch: Error %s" % e
+
+
+
