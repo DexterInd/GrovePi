@@ -21,7 +21,7 @@ We have an extensive library that covers most Grove sensors. You can find it on 
 ### Quick Install
 In order to quick install the `GrovePi` repository, open up a terminal and type the following command:
 ```
-sudo curl -kL dexterindustries.com/update_grovepi | bash
+curl -kL dexterindustries.com/update_grovepi | sudo bash
 ```
 The same command can be used for updating the `GrovePi` to the latest version.
 
