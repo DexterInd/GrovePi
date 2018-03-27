@@ -25,6 +25,13 @@ curl -kL dexterindustries.com/update_grovepi | sudo bash
 ```
 The same command can be used for updating the `GrovePi` to the latest version.
 
+### Scratch Support
+Once you've done the above command, you can install Scratch support if you want it. This step is optional.
+```sudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh```
+
+If your SD card has Scratch 2.0 installed on it, then this will install GrovePi support for it. 
+GrovePi integration for Scratch 1.4 is also getting installed.
+
 ### Want to use a sensor not in the library yet?  
 Ask us in the [forums](http://forum.dexterindustries.com/c/grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://forum.dexterindustries.com/c/grovepi).
 
