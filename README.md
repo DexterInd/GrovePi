@@ -27,7 +27,9 @@ The same command can be used for updating the `GrovePi` to the latest version.
 
 ### Scratch Support
 Once you've done the above command, you can install Scratch support if you want it. This step is optional.
-```sudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh```
+```
+sudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh
+```
 
 If your SD card has Scratch 2.0 installed on it, then this will install GrovePi support for it. 
 GrovePi integration for Scratch 1.4 is also getting installed.
