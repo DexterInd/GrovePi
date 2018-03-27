@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=xhost +
+Icon=/usr/share/scratch/Media/Costumes/Animals/cat1-b.gif
+Exec=sudo bash /home/pi/Dexter/GrovePi/Software/Scratch/start_local_scratch.sh
+Terminal=false
+Name=GrovePi+ Scratch 1.4
+Comment= Programming system and content development tool
+Categories=Application;Education;Development;
+MimeType=application/x-scratch-project
