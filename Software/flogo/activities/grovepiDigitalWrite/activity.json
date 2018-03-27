@@ -1,7 +1,7 @@
 {
   "name": "grovepiDigitalWrite",
   "type": "flogo:activity",
-  "ref": "github.com/DexterInd/GrovePi/Software/flogo/activity/grovepiDigitalWrite",
+  "ref": "https://github.com/JGrotex/GrovePi/tree/master/Software/flogo/activity/grovepiDigitalWrite",
   "version": "0.0.1",
   "title": "grovepi Digital Write",
   "description": "Digital Write Activity for GrovePi",
