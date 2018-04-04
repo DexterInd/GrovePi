@@ -1,7 +1,6 @@
 package grovepiDigitalWrite
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
@@ -62,7 +61,7 @@ func (a *grovePiDWActivity) Eval(context activity.Context) (done bool, err error
 	g = InitGrovePi(0x04)
 	err = g.PinMode(pin, "output")
 	if err != nil {
-		fmt.Println(err)
+		log.Error("GrovePi :: Set PinMode Error", err)
 	}
 
 	//write to GrovePi
@@ -81,7 +80,8 @@ func InitGrovePi(address int) *GrovePi {
 	grovePi := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
 	if err != nil {
-		fmt.Printf("could not get i2c module: %s\n", err)
+		log.Error("GrovePi :: could not get i2c module Error", err)
+		//fmt.Printf("could not get i2c module: %s\n", err)
 		return nil
 	}
 	grovePi.i2cmodule = m.(hwio.I2CModule)
@@ -98,10 +98,11 @@ func (grovePi GrovePi) CloseDevice() {
 func (grovePi GrovePi) DigitalWrite(pin byte, val byte) error {
 	b := []byte{DIGITAL_WRITE, pin, val, 0}
 	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(100 * time.Millisecond)
 	if err != nil {
+		log.Error("GrovePi :: DigitalWrite Error", err)
 		return err
 	}
+	time.Sleep(100 * time.Millisecond)
 	return nil
 }
 
@@ -113,9 +114,10 @@ func (grovePi GrovePi) PinMode(pin byte, mode string) error {
 		b = []byte{PIN_MODE, pin, 0, 0}
 	}
 	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(100 * time.Millisecond)
 	if err != nil {
+		log.Error("GrovePi :: i2cDevice.Write Error", err)
 		return err
 	}
+	time.Sleep(100 * time.Millisecond)
 	return nil
 }
