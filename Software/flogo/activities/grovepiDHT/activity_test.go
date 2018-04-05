@@ -1,7 +1,10 @@
-package grovepiDigitalWrite
+package grovepiDHT
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"io/ioutil"
 
@@ -36,7 +39,7 @@ func TestCreate(t *testing.T) {
 	}
 }
 
-func TestGrovePiDW(t *testing.T) {
+func TestGrovePiDHT(t *testing.T) {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -48,15 +51,17 @@ func TestGrovePiDW(t *testing.T) {
 	act := NewActivity(getActivityMetadata())
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
-	//setup attrs GrovePi Tester, using Pin 3
-	tc.SetInput(ivPin, 3)
-	tc.SetInput(ivValue, false)
+	//setup attrs GrovePi Tester, using Pin 4
+	tc.SetInput(ivPin, 4)
 
 	act.Eval(tc)
 
-	success := tc.GetOutput(ovSuccess).(bool)
+	temp := tc.GetOutput(ovTemperature).(string)
+	humi := tc.GetOutput(ovHumidity).(string)
 
-	if success != true {
-		t.Fail()
-	}
+	assert.NotNil(t, temp)
+	assert.NotNil(t, humi)
+
+	fmt.Printf("Temperature: %f - Humidity: %f\n", temp, humi)
+
 }

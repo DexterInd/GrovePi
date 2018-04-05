@@ -2,7 +2,7 @@
 Details about TIBCO Flogo can be found on (http://flogo.io)
 
 ## Introduction
-This first Activity can be used easily in any graphically defined Flogo Flow to execute a Digital Write on GrovePi Board.
+This first two Activity can be used easily in any graphically defined Flogo Flow to execute a Digital Write or Read Temperature and Humidity on GrovePi Board.
 
 ![GrovePi in Flogo](screenshots/Flogo-GrovePi-Flow.png "A simple GrovePi Flogo Flow.")
 
@@ -21,6 +21,26 @@ This is visible in the Flow WebUI Server Console, but after a little while you w
 And you can start working with the new Activity.
 
 ![Flogo WebUI Success](screenshots/GrovePi-Extension-Success.png "Flogo WebUI, Extension added.")
+
+## Activity Interfaces
+
+### Digital Write
+
+Input
+- pin           integer pin number
+- value         boolean true/false
+
+Output
+- success       boolean true/false
+
+### DHT Read
+
+Input
+- pin           integer pin number
+
+Output
+- temperature   string
+- humidity      string
 
 ## Remarks
 Based on the GOlang GrovePi Implemenation from Falco Tomasetti and [didrocks](https://github.com/didrocks)
