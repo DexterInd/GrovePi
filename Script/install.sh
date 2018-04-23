@@ -1,10 +1,9 @@
 #! /bin/bash
-curl --silent https://raw.githubusercontent.com/DexterInd/script_tools/master/install_script_tools.sh | bash
 
 PIHOME=/home/pi
 DEXTERSCRIPT=$PIHOME/Dexter/lib/Dexter/script_tools
 USER_ID=$(/usr/bin/id -u)
-USER_NAME=$(/usr/bin/who am i | awk '{ print $1 }')
+USER_NAME=$USER
 SCRIPT_PATH=$(/usr/bin/realpath $0)
 DIR_PATH=$(/usr/bin/dirname ${SCRIPT_PATH} | sed 's/\/Script$//')
 REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
@@ -43,50 +42,9 @@ identify_robot() {
 }
 
 display_welcome_msg() {
-	echo " "
-	echo "Requirements:"
-	echo "1) Must be connected to the internet"
-	echo "2) This script must be run as root user"
-	echo " "
-	echo "Steps:"
-	echo "1) Installs package dependencies:"
-	echo "   - python-pip       alternative Python package installer"
-	echo "   - git              fast, scalable, distributed revision control system"
-	echo "   - libi2c-dev       userspace I2C programming library development files"
-	echo "   - python-serial    pyserial - module encapsulating access for the serial port"
-	echo "   - python-rpi.gpio  Python GPIO module for Raspberry Pi"
-	echo "   - i2c-tools        This Python module allows SMBus access through the I2C /dev"
-	echo "   - python-smbus     Python bindings for Linux SMBus access through i2c-dev"
-	echo "   - python3-smbus    Python3 bindings for Linux SMBus access through i2c-dev"
-	echo "   - arduino          AVR development board IDE and built-in libraries"
-	echo "   - minicom          friendly menu driven serial communication program"
-  echo "   - numpy            is the fundamental package for scientific computing with Python"
-	echo "2) Clone, build wiringPi in GrovePi/Script and install it"
-	echo "3) Removes I2C and SPI from modprobe blacklist /etc/modprobe.d/raspi-blacklist.conf"
-	echo "4) Adds I2C-dev, i2c-bcm2708 and spi-dev to /etc/modules"
-	echo "5) Installs gertboard avrdude_5.10-4_armhf.deb package"
-	echo "6) Runs gertboard setup"
-	echo "   - configures avrdude"
-	echo "   - downloads gertboard known boards and programmers"
-	echo "   - replaces avrsetup with gertboards version"
-	echo "   - in /etc/inittab comments out lines containing AMA0"
-	echo "   - in /boot/cmdline.txt removes: console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1"
-	echo "   - in /usr/share/arduino/hardware/arduino creates backup of boards.txt"
-	echo "   - in /usr/share/arduino/hardware/arduino creates backup of programmers.txt"
-	echo " "
+  echo " "
 	echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
-	echo " "
-	echo "Raspberry Pi wil reboot after completion."
-	echo " "
-	echo " "
-}
-
-check_root_user() {
-    if [[ $EUID -ne 0 ]]; then
-        feedback "FAIL!  This script must be run as such: sudo ./install.sh"
-        exit 1
-    fi
-    echo " "
+  echo " "
 }
 
 check_internet() {
@@ -104,22 +62,21 @@ check_internet() {
 }
 
 install_dependencies() {
-    if ! quiet_mode ; then
-        sudo apt-get update
-    fi
+
+    sudo apt-get update
     echo " "
-	feedback "Installing Dependencies"
-	echo "======================="
-	sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev -y
-	sudo apt-get purge python-rpi.gpio -y
-	sudo apt-get purge python3-rpi.gpio -y
-	sudo apt-get install python-rpi.gpio -y
-	sudo apt-get install python3-rpi.gpio -y
-       sudo apt-get install python-scipy -y
-       sudo apt-get install python3-scipy -y
-	sudo pip install -U RPi.GPIO
-  sudo pip2 install numpy
-  sudo pip3 install numpy
+  	feedback "Installing Dependencies"
+  	echo "======================="
+  	sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev -y
+  	sudo apt-get purge python-rpi.gpio -y
+  	sudo apt-get purge python3-rpi.gpio -y
+  	sudo apt-get install python-rpi.gpio -y
+  	sudo apt-get install python3-rpi.gpio -y
+    sudo apt-get install python-scipy -y
+    sudo apt-get install python3-scipy -y
+  	sudo pip install -U RPi.GPIO
+    sudo pip2 install numpy
+    sudo pip3 install numpy
 
     feedback "Dependencies installed"
 }
@@ -140,6 +97,14 @@ install_wiringpi() {
         sudo rm -r wiringPi
     fi
     # End check if WiringPi installed
+    echo " "
+}
+
+check_root_user() {
+    if [[ $EUID -ne 0 ]]; then
+        feedback "FAIL!  This script must be run as such: sudo ./install.sh"
+        exit 1
+    fi
     echo " "
 }
 
@@ -206,9 +171,9 @@ install_avr() {
 	feedback "=================="
 	source /home/pi/Dexter/lib/Dexter/script_tools/install_avrdude.sh
 	create_avrdude_folder
-    install_avrdude
-    cd $ROBOT_DIR
-    echo "done with AVRDUDE "
+  install_avrdude
+  cd $ROBOT_DIR
+  echo "done with AVRDUDE "
 }
 
 install_python_libs(){
@@ -216,55 +181,13 @@ install_python_libs(){
 	echo "If you see errors related to /etc/inittab, it's fine."
 	echo "/etc/inittab has been deprecated in favor of systemd,"
 	echo "cfr. https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=123081"
-
 	echo " "
 
-	sudo apt-get install python-smbus -y
-
-	echo " "
-	echo "Making libraries global . . ."
-	echo "============================="
-	if [ -d /usr/lib/python2.7/dist-packages ]; then
-		# Usually "/" used as delimiter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
-		# confused on expanding REPO_PATH as it finds "/" to be delimiter, hence here "@" is used as delimiter
-		sudo sed -i "s@^/Software@$REPO_PATH&@" $REPO_PATH/Script/grove.pth
-		sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
-	else
-		echo "/usr/lib/python2.7/dist-packages not found, exiting"
-		exit 1
-	fi
-	if [ -d /usr/lib/python3/dist-packages ]; then
-		# Usually "/" used as delimiter in sed commands but since REPO_PATH variable contains many "/" and sed command gets
-		# confused on expanding REPO_PATH as it finds "/" to be delimiter, hence here "@" is used as delimiter
-		sudo sed -i "s@^/Software@$REPO_PATH&@" $REPO_PATH/Script/grove.pth
-		sudo cp ${DIR_PATH}/Script/grove.pth /usr/lib/python3/dist-packages/grove.pth
-	else
-		echo "/usr/lib/python3/dist-packages not found, exiting"
-		exit 1
-	fi
-	echo "Done"
+	pushd $REPO_PATH/Software/Python
+  sudo python setup.py install --force
+  popd
 }
 
-call_for_reboot() {
-    if ! quiet_mode ; then
-        feedback " "
-        feedback "Please restart the Raspberry Pi for the changes to take effect"
-        feedback " "
-        feedback "Please restart to implement changes!"
-        feedback "  _____  ______  _____ _______       _____ _______ "
-        feedback " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
-        feedback " | |__) | |__  | (___    | |  /  \  | |__) | | |   "
-        feedback " |  _  /|  __|  \___ \   | | / /\ \ |  _  /  | |   "
-        feedback " | | \ \| |____ ____) |  | |/ ____ \| | \ \  | |   "
-        feedback " |_|  \_\______|_____/   |_/_/    \_\_|  \_\ |_|   "
-        feedback " "
-        feedback "Please restart to implement changes!"
-        feedback "To Restart type sudo reboot"
-    fi
-}
-
-identify_cie
-identify_robot
 display_welcome_msg
 # sleep 5
 check_internet
@@ -274,4 +197,3 @@ install_wiringpi
 install_spi_i2c
 install_avr
 install_python_libs
-call_for_reboot
