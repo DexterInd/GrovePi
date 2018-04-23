@@ -60,10 +60,14 @@ optionslist+=("--install-python-package")
 
 # update script_tools first
 # to be replaced with `dexterindustries.com/update_tools` when it's all ready
-curl -kL https://raw.githubusercontent.com/RobertLucian/script_tools/feature/arg-based-installation/install_script_tools.sh | bash -s ${optionslist[@]}
+curl -kL https://raw.githubusercontent.com/RobertLucian/script_tools/feature/arg-based-installation/install_script_tools.sh > $PIHOME/tmp_script_tools.sh
+bash $PIHOME/tmp_script_tools.sh ${optionslist[@]}
+rm $PIHOME/tmp_script_tools.sh
+
+# HAVE TO UNCOMMENT ONCE check_internet makes it to script_tools
 # check if there's internet access,
 # otherwise straight out exit the script
-check_internet
+# check_internet
 
 # needs to be sourced from here when we call this as a standalone
 source /home/pi/$DEXTER/lib/$DEXTER/script_tools/functions_library.sh
