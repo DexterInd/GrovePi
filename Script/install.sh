@@ -166,10 +166,8 @@ install_avr() {
 }
 
 display_welcome_msg
-check_internet
 check_root_user
 install_dependencies
 install_wiringpi
 install_spi_i2c
 install_avr
-install_python_libs
