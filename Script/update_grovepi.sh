@@ -59,7 +59,8 @@ optionslist+=("--install-python-package")
 [[ $installdependencies = "true" ]] && optionslist+=("--update-aptget" "--install-deb-deps")
 
 # update script_tools first
-curl -kL dexterindustries.com/update_tools | bash -s ${optionslist[@]}
+# to be replaced with `dexterindustries.com/update_tools` when it's all ready
+curl -kL https://raw.githubusercontent.com/RobertLucian/script_tools/feature/arg-based-installation/install_script_tools.sh | bash -s ${optionslist[@]}
 # check if there's internet access,
 # otherwise straight out exit the script
 check_internet
