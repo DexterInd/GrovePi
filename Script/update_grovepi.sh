@@ -5,34 +5,114 @@ PIHOME=/home/pi
 DEXTER=Dexter
 DEXTER_PATH=$PIHOME/$DEXTER
 RASPBIAN=$PIHOME/di_update/Raspbian_For_Robots
-curl --silent https://raw.githubusercontent.com/DexterInd/script_tools/master/install_script_tools.sh | bash
+GROVEPI_DIR=$DEXTER_PATH/GrovePi
+
+# whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
+installdependencies=true
+
+# the following 3 options are mutually exclusive
+systemwide=true
+userlocal=false
+envlocal=false
+usepython3exec=true
+
+# the following option tells which branch has to be used
+selectedbranch="master"
+
+declare -a optionslist=("--system-wide")
+# iterate through bash arguments
+for i; do
+  case "$i" in
+    --no-dependencies)
+      installdependencies=false
+      ;;
+    --user-local)
+      userlocal=true
+      systemwide=false
+      declare -a optionslist=("--user-local")
+      ;;
+    --env-local)
+      envlocal=true
+      systemwide=false
+      declare -a optionslist=("--env-local")
+      ;;
+    --system-wide)
+      ;;
+    develop|feature/*|hotfix/*|fix/*|DexterOS*|v*)
+      selectedbranch="$i"
+      ;;
+  esac
+done
+
+# in case the following packages are not installed and `--no-dependencies` option has been used
+if [[ $installdependencies = "false" ]]; then
+  command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Don't use --no-dependencies option. Aborting." >&2; exit 1; }
+  command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 2; }
+  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 3; }
+  command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 4; }
+  command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 5; }
+fi
+
+optionslist+=("$selectedbranch")
+optionslist+=("--install-python-package")
+[[ $usepython3exec = "true" ]] && optionslist+=("--use-python3-exe-too")
+[[ $installdependencies = "true" ]] && optionslist+=("--update-aptget" "--install-deb-deps")
+
+# update script_tools first
+curl -kL dexterindustries.com/update_tools | bash -s ${optionslist[@]}
+# check if there's internet access,
+# otherwise straight out exit the script
+check_internet
 
 # needs to be sourced from here when we call this as a standalone
 source /home/pi/$DEXTER/lib/$DEXTER/script_tools/functions_library.sh
 
-GROVEPI_DIR=$DEXTER_PATH/GrovePi
+# create folders recursively if they don't exist already
+mkdir -p $DEXTER_PATH
+cd $DEXTER_PATH
 
-# Check for a GrovePi directory under "Dexter" folder.  If it doesn't exist, create it.
+# it's simpler and more reliable (for now) to just delete the repo and clone a new one
+# otherwise, we'd have to deal with all the intricacies of git
+sudo rm -rf $GROVEPI_DIR
+git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/GrovePi.git
+cd $GROVEPI_DIR
 
-if [ -d "$GROVEPI_DIR" ]; then
-    echo "GrovePi Directory Exists"
-    cd $GROVEPI_DIR             # Go to directory
-    sudo git fetch origin       # Hard reset the git files
-    sudo git reset --hard  
-    sudo git merge origin/master
-else
-	echo "Cloning"
-    cd $PIHOME/$DEXTER/
-    git clone https://github.com/DexterInd/GrovePi
-    cd GrovePi
+# show some feedback for the GrovePi
+if ! quiet_mode
+  echo "  _____            _                                ";
+  echo " |  __ \          | |                               ";
+  echo " | |  | | _____  _| |_ ___ _ __                     ";
+  echo " | |  | |/ _ \ \/ / __/ _ \ '__|                    ";
+  echo " | |__| |  __/>  <| ||  __/ |                       ";
+  echo " |_____/ \___/_/\_\\\__\___|_|          _            ";
+  echo " |_   _|         | |         | |      (_)           ";
+  echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
+  echo "   | | | '_ \ / _\ | | | / __| __| '__| |/ _ \/ __| ";
+  echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
+  echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
+  echo "                                                    ";
+  echo "                                                    ";
+  echo "  _____                    _____ _ "
+	echo " / ____|                  |  __ (_)  "
+	echo "| |  __ _ __ _____   _____| |__) |   "
+	echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
+	echo "| |__| | | | (_) \ V /  __/ |   | |  "
+	echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
+  feedback "Welcome to GrovePi Installer."
 fi
 
-change_branch $BRANCH   # Change to a branch we're working on in the GrovePi Directory. 
-                        # Variable $BRANCH comes from /upd_script/fetch.sh
-
-feedback "--> Start GrovePi update install."
-feedback "---------------------------------"
-pushd $PIHOME/$DEXTER/GrovePi/Script > /dev/null
+# installing dependencies
+pushd $GROVEPI_DIR/Script > /dev/null
 sudo chmod +x install.sh
-sudo bash ./install.sh
+[[ $installdependencies = "true" ]] && sudo bash ./install.sh
+popd > /dev/null
+
+# installing the package itself
+pushd $GROVEPI_DIR/Software/Python > /dev/null
+[[ $systemwide = "true" ]] && sudo python setup.py install --force \
+            && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
+[[ $userlocal = "true" ]] && python setup.py install --force --user \
+            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
+[[ $envlocal = "true" ]] && python setup.py install --force \
+            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force
 popd > /dev/null

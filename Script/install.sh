@@ -3,7 +3,7 @@
 PIHOME=/home/pi
 DEXTERSCRIPT=$PIHOME/Dexter/lib/Dexter/script_tools
 USER_ID=$(/usr/bin/id -u)
-USER_NAME=$USER
+USER_NAME=$(/usr/bin/who am i | awk '{ print $1 }')
 SCRIPT_PATH=$(/usr/bin/realpath $0)
 DIR_PATH=$(/usr/bin/dirname ${SCRIPT_PATH} | sed 's/\/Script$//')
 REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
@@ -47,23 +47,12 @@ display_welcome_msg() {
   echo " "
 }
 
-check_internet() {
-    if ! quiet_mode ; then
-        feedback "Check for internet connectivity..."
-        feedback "=================================="
-        wget -q --tries=2 --timeout=20 --output-document=/dev/null https://raspberrypi.org
-        if [ $? -eq 0 ];then
-            echo "Connected to the Internet"
-        else
-            echo "Unable to Connect, try again !!!"
-            exit 0
-        fi
-    fi
-}
-
 install_dependencies() {
 
-    sudo apt-get update
+    # the sudo apt-get update is already
+    # done by the script_tools installer in
+    # update_grovepi.sh
+
     echo " "
   	feedback "Installing Dependencies"
   	echo "======================="
@@ -176,20 +165,7 @@ install_avr() {
   echo "done with AVRDUDE "
 }
 
-install_python_libs(){
-	feedback "Install python libraries"
-	echo "If you see errors related to /etc/inittab, it's fine."
-	echo "/etc/inittab has been deprecated in favor of systemd,"
-	echo "cfr. https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=123081"
-	echo " "
-
-	pushd $REPO_PATH/Software/Python
-  sudo python setup.py install --force
-  popd
-}
-
 display_welcome_msg
-# sleep 5
 check_internet
 check_root_user
 install_dependencies
