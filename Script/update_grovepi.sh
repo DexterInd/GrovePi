@@ -83,13 +83,12 @@ else
   echo "Welcome to GrovePi Installer."
 fi
 echo "Updating GrovePi for $selectedbranch branch with the following options:"
-([[ $installdependencies = "true" ]] && echo "--no-dependencies=false") || echo "--no-dependencies=true"
-([[ $updaterepo = "true" ]] && echo "--no-update-aptget=false") || echo "--no-update-aptget=true"
-([[ $install_pkg_scriptools = "true" ]] && echo "--bypass-pkg-scriptools=false") || echo "---bypass-pkg-scriptools=true"
-echo "--user-local=$userlocal"
-echo "--env-local=$envlocal"
-echo "--system-wide=$systemwide"
-echo " "
+([[ $installdependencies = "true" ]] && echo "  --no-dependencies=false") || echo "  --no-dependencies=true"
+([[ $updaterepo = "true" ]] && echo "  --no-update-aptget=false") || echo "  --no-update-aptget=true"
+([[ $install_pkg_scriptools = "true" ]] && echo "  --bypass-pkg-scriptools=false") || echo "  --bypass-pkg-scriptools=true"
+echo "  --user-local=$userlocal"
+echo "  --env-local=$envlocal"
+echo "  --system-wide=$systemwide"
 
 # in case the following packages are not installed and `--no-dependencies` option has been used
 if [[ $installdependencies = "false" ]]; then

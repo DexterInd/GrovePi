@@ -26,3 +26,4 @@ The options that can be appended to this command are:
 * `--system-wide` - install the python package for the GrovePi within the sytem-wide environment with `sudo`: the actual command used is (`sudo python setup.py install --force`).
 
 Important to remember is that `--user-local`, `--env-local` and `--system-wide` options are all mutually-exclusive - they cannot be used together.
+As a last thing, different versions of it can be pulled by appending a corresponding branch name or tag.
