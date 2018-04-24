@@ -61,6 +61,7 @@ if [[ $installdependencies = "false" ]]; then
   command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 5; }
 fi
 
+# create rest of list of arguments for script_tools call
 optionslist+=("$selectedbranch")
 optionslist+=("--install-python-package")
 [[ $usepython3exec = "true" ]] && optionslist+=("--use-python3-exe-too")
