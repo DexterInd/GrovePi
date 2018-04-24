@@ -53,29 +53,27 @@ for i; do
 done
 
 # show some feedback for the GrovePi
-if [[ ! quiet_mode ]]; then
-  echo "  _____            _                                ";
-  echo " |  __ \          | |                               ";
-  echo " | |  | | _____  _| |_ ___ _ __                     ";
-  echo " | |  | |/ _ \ \/ / __/ _ \ '__|                    ";
-  echo " | |__| |  __/>  <| ||  __/ |                       ";
-  echo " |_____/ \___/_/\_\\\__\___|_|          _            ";
-  echo " |_   _|         | |         | |      (_)           ";
-  echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
-  echo "   | | | '_ \ / _\ | | | / __| __| '__| |/ _ \/ __| ";
-  echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
-  echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
-  echo "                                                    ";
-  echo "                                                    ";
-  echo "  _____                    _____ _ "
-  echo " / ____|                  |  __ (_)  "
-  echo "| |  __ _ __ _____   _____| |__) |   "
-  echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
-  echo "| |__| | | | (_) \ V /  __/ |   | |  "
-  echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
-  echo "Welcome to GrovePi Installer."
-  echo " "
-fi
+echo "  _____            _                                ";
+echo " |  __ \          | |                               ";
+echo " | |  | | _____  _| |_ ___ _ __                     ";
+echo " | |  | |/ _ \ \/ / __/ _ \ '__|                    ";
+echo " | |__| |  __/>  <| ||  __/ |                       ";
+echo " |_____/ \___/_/\_\\\__\___|_|          _            ";
+echo " |_   _|         | |         | |      (_)           ";
+echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
+echo "   | | | '_ \ / _\ | | | / __| __| '__| |/ _ \/ __| ";
+echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
+echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
+echo "                                                    ";
+echo "                                                    ";
+echo "  _____                    _____ _ "
+echo " / ____|                  |  __ (_)  "
+echo "| |  __ _ __ _____   _____| |__) |   "
+echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
+echo "| |__| | | | (_) \ V /  __/ |   | |  "
+echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
+echo "Welcome to GrovePi Installer."
+echo " "
 
 # show some feedback on the console
 echo "Updating GrovePi for $selectedbranch branch with the following options:"
@@ -85,6 +83,7 @@ echo "Updating GrovePi for $selectedbranch branch with the following options:"
 echo "--user-local=$userlocal"
 echo "--env-local=$envlocal"
 echo "--system-wide=$systemwide"
+echo " "
 
 # in case the following packages are not installed and `--no-dependencies` option has been used
 if [[ $installdependencies = "false" ]]; then
@@ -102,6 +101,8 @@ optionslist+=("--install-python-package")
 [[ $updaterepo = "true" ]] && optionslist+=("--update-aptget")
 [[ $installdependencies = "true" ]] && optionslist+=("--install-deb-deps")
 [[ $install_pkg_scriptools = "true" ]] && optionslist+=("--install-python-package")
+
+echo "Options used for script_tools script: \"${optionslist[@]}\""
 
 # update script_tools first
 # to be replaced with `dexterindustries.com/update_tools` when it's all ready
