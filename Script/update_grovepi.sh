@@ -76,8 +76,8 @@ echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
 echo " "
 
 # show some feedback on the console
-if [ -f $DEXTERSCRIPT/functions_library ]; then
-  source $DEXTERSCRIPT/functions_library
+if [ -f $DEXTERSCRIPT/functions_library.sh ]; then
+  source $DEXTERSCRIPT/functions_library.sh
   feedback "Welcome to GrovePi Installer."
 else
   echo "Welcome to GrovePi Installer."
@@ -110,8 +110,7 @@ optionslist+=("$selectedbranch")
 echo "Options used for script_tools script: \"${optionslist[@]}\""
 
 # update script_tools first
-# to be replaced with `dexterindustries.com/update_tools` when it's all ready
-curl --silent -kL https://raw.githubusercontent.com/RobertLucian/script_tools/feature/arg-based-installation/install_script_tools.sh > $PIHOME/tmp_script_tools.sh
+curl --silent -kL dexterindustries.com/update_tools > $PIHOME/tmp_script_tools.sh
 echo "Installing script_tools. This might take a while.."
 bash $PIHOME/tmp_script_tools.sh ${optionslist[@]} > /dev/null
 rm $PIHOME/tmp_script_tools.sh
