@@ -10,6 +10,7 @@ GROVEPI_DIR=$DEXTER_PATH/GrovePi
 # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
 installdependencies=true
 updaterepo=true
+install_pkg_scriptools=true
 
 # the following 3 options are mutually exclusive
 systemwide=true
@@ -29,6 +30,9 @@ for i; do
       ;;
     --no-update-aptget)
       updaterepo=false
+      ;;
+    --bypass-pkg-scriptools)
+      install_pkg_scriptools=false
       ;;
     --user-local)
       userlocal=true
@@ -62,6 +66,7 @@ optionslist+=("--install-python-package")
 [[ $usepython3exec = "true" ]] && optionslist+=("--use-python3-exe-too")
 [[ $updaterepo = "true" ]] && optionslist+=("--update-aptget")
 [[ $installdependencies = "true" ]] && optionslist+=("--install-deb-deps")
+[[ $install_pkg_scriptools = "true" ]] && optionslist+=("--install-python-package")
 
 # update script_tools first
 # to be replaced with `dexterindustries.com/update_tools` when it's all ready
