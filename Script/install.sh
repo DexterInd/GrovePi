@@ -59,8 +59,8 @@ install_dependencies() {
   	sudo apt-get install git libi2c-dev i2c-tools arduino minicom -y
     sudo apt-get purge python-rpi.gpio -y
   	sudo apt-get purge python3-rpi.gpio -y
-    sudo apt-get install python-pip python-smbus python-dev python-serial python-rpi.gpio python-scipy
-    sudo apt-get install python3-smbus python3-dev python3-rpi.gpio python3-scipy
+    sudo apt-get install python-pip python-smbus python-dev python-serial python-rpi.gpio python-scipy -y
+    sudo apt-get install python3-smbus python3-dev python3-rpi.gpio python3-scipy -y
   	sudo pip install -U RPi.GPIO
     sudo pip3 install -U RPi.GPIO
     sudo pip2 install numpy

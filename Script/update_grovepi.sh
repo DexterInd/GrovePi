@@ -108,11 +108,11 @@ optionslist+=("$selectedbranch")
 [[ $install_pkg_scriptools = "true" ]] && optionslist+=("--install-python-package")
 
 echo "Options used for script_tools script: \"${optionslist[@]}\""
-echo "This might take a while.."
 
 # update script_tools first
 # to be replaced with `dexterindustries.com/update_tools` when it's all ready
 curl -kL https://raw.githubusercontent.com/RobertLucian/script_tools/feature/arg-based-installation/install_script_tools.sh > $PIHOME/tmp_script_tools.sh
+echo "This might take a while.."
 bash $PIHOME/tmp_script_tools.sh ${optionslist[@]} > /dev/null
 rm $PIHOME/tmp_script_tools.sh
 
