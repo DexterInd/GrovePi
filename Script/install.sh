@@ -56,14 +56,13 @@ install_dependencies() {
     echo " "
   	feedback "Installing Dependencies"
   	echo "======================="
-  	sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-smbus python3-smbus arduino minicom python-dev -y
-  	sudo apt-get purge python-rpi.gpio -y
+  	sudo apt-get install git libi2c-dev i2c-tools arduino minicom -y
+    sudo apt-get purge python-rpi.gpio -y
   	sudo apt-get purge python3-rpi.gpio -y
-  	sudo apt-get install python-rpi.gpio -y
-  	sudo apt-get install python3-rpi.gpio -y
-    sudo apt-get install python-scipy -y
-    sudo apt-get install python3-scipy -y
+    sudo apt-get install python-pip python-smbus python-dev python-serial python-rpi.gpio python-scipy
+    sudo apt-get install python3-smbus python3-dev python3-rpi.gpio python3-scipy
   	sudo pip install -U RPi.GPIO
+    sudo pip3 install -U RPi.GPIO
     sudo pip2 install numpy
     sudo pip3 install numpy
 
