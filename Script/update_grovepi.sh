@@ -72,10 +72,10 @@ echo "| |  __ _ __ _____   _____| |__) |   "
 echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
 echo "| |__| | | | (_) \ V /  __/ |   | |  "
 echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
-echo "Welcome to GrovePi Installer."
 echo " "
 
 # show some feedback on the console
+echo "Welcome to GrovePi Installer."
 echo "Updating GrovePi for $selectedbranch branch with the following options:"
 ([[ $installdependencies = "true" ]] && echo "--no-dependencies=false") || echo "--no-dependencies=true"
 ([[ $updaterepo = "true" ]] && echo "--no-update-aptget=false") || echo "--no-update-aptget=true"
@@ -96,7 +96,6 @@ fi
 
 # create rest of list of arguments for script_tools call
 optionslist+=("$selectedbranch")
-optionslist+=("--install-python-package")
 [[ $usepython3exec = "true" ]] && optionslist+=("--use-python3-exe-too")
 [[ $updaterepo = "true" ]] && optionslist+=("--update-aptget")
 [[ $installdependencies = "true" ]] && optionslist+=("--install-deb-deps")
