@@ -77,11 +77,11 @@ if [[ ! quiet_mode ]]; then
   echo " "
 fi
 
+# show some feedback on the console
 echo "Updating GrovePi for $selectedbranch branch with the following options:"
-echo "--no-dependencies=$installdependencies"
+([[ $installdependencies = "true" ]] && echo "--no-dependencies=false") || echo "--no-dependencies=true"
 ([[ $updaterepo = "true" ]] && echo "--no-update-aptget=false") || echo "--no-update-aptget=true"
-echo "--no-update-aptget=$updaterepo"
-echo "--bypass-pkg-scriptools=$install_pkg_scriptools"
+([[ $install_pkg_scriptools = "true" ]] && echo "--bypass-pkg-scriptools=false") || echo "---bypass-pkg-scriptools=true"
 echo "--user-local=$userlocal"
 echo "--env-local=$envlocal"
 echo "--system-wide=$systemwide"
