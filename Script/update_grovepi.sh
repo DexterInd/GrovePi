@@ -53,7 +53,7 @@ for i; do
 done
 
 # show some feedback for the GrovePi
-if ! quiet_mode
+if [[ ! quiet_mode ]]; then
   echo "  _____            _                                ";
   echo " |  __ \          | |                               ";
   echo " | |  | | _____  _| |_ ___ _ __                     ";
@@ -73,7 +73,7 @@ if ! quiet_mode
   echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
   echo "| |__| | | | (_) \ V /  __/ |   | |  "
   echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
-  feedback "Welcome to GrovePi Installer."
+  echo "Welcome to GrovePi Installer."
   echo " "
 fi
 
