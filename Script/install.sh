@@ -10,37 +10,6 @@ REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
 
 source $DEXTERSCRIPT/functions_library.sh
 
-identify_cie() {
-    if ! quiet_mode
-    then
-        echo "  _____            _                                ";
-        echo " |  __ \          | |                               ";
-        echo " | |  | | _____  _| |_ ___ _ __                     ";
-        echo " | |  | |/ _ \ \/ / __/ _ \ '__|                    ";
-        echo " | |__| |  __/>  <| ||  __/ |                       ";
-        echo " |_____/ \___/_/\_\\\__\___|_|          _            ";
-        echo " |_   _|         | |         | |      (_)           ";
-        echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
-        echo "   | | | '_ \ / _\ | | | / __| __| '__| |/ _ \/ __| ";
-        echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
-        echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
-        echo "                                                    ";
-        echo "                                                    ";
-        echo " "
-    fi
-}
-
-identify_robot() {
-	echo "  _____                    _____ _ "
-	echo " / ____|                  |  __ (_)  "
-	echo "| |  __ _ __ _____   _____| |__) |   "
-	echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
-	echo "| |__| | | | (_) \ V /  __/ |   | |  "
-	echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
-
-	feedback "Welcome to GrovePi Installer."
-}
-
 display_welcome_msg() {
   echo " "
 	echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
