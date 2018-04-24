@@ -6,6 +6,7 @@ DEXTER=Dexter
 DEXTER_PATH=$PIHOME/$DEXTER
 RASPBIAN=$PIHOME/di_update/Raspbian_For_Robots
 GROVEPI_DIR=$DEXTER_PATH/GrovePi
+DEXTERSCRIPT=$DEXTER_PATH/lib/Dexter/script_tools
 
 # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
 installdependencies=true
@@ -75,7 +76,12 @@ echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
 echo " "
 
 # show some feedback on the console
-echo "Welcome to GrovePi Installer."
+if [ -f $DEXTERSCRIPT/functions_library ]; then
+  source $DEXTERSCRIPT/functions_library
+  feedback "Welcome to GrovePi Installer."
+else
+  echo "Welcome to GrovePi Installer."
+fi
 echo "Updating GrovePi for $selectedbranch branch with the following options:"
 ([[ $installdependencies = "true" ]] && echo "--no-dependencies=false") || echo "--no-dependencies=true"
 ([[ $updaterepo = "true" ]] && echo "--no-update-aptget=false") || echo "--no-update-aptget=true"
@@ -102,6 +108,7 @@ optionslist+=("$selectedbranch")
 [[ $install_pkg_scriptools = "true" ]] && optionslist+=("--install-python-package")
 
 echo "Options used for script_tools script: \"${optionslist[@]}\""
+echo "This might take a while.."
 
 # update script_tools first
 # to be replaced with `dexterindustries.com/update_tools` when it's all ready
