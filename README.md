@@ -25,7 +25,7 @@ curl -kL dexterindustries.com/update_grovepi | bash
 ```
 The same command can be used for updating the `GrovePi` to the latest version.
 
-For more details on how you can install/update your `GrovePi`, please check this [README](Script/README.md)
+For more details on how you can install/update your `GrovePi`, please check this [README](Script/README.md).
 
 ### Scratch Support
 Once you've done the above command, you can install Scratch support if you want it. This step is optional.
