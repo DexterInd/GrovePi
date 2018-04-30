@@ -90,9 +90,10 @@ echo "  --user-local=$userlocal"
 echo "  --env-local=$envlocal"
 echo "  --system-wide=$systemwide"
 
+# git is required in all cases
+command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Don't use --no-dependencies option. Aborting." >&2; exit 1; }
 # in case the following packages are not installed and `--no-dependencies` option has been used
 if [[ $installdependencies = "false" ]]; then
-  command -v git >/dev/null 2>&1 || { echo "I require git but it's not installed. Don't use --no-dependencies option. Aborting." >&2; exit 1; }
   command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 2; }
   command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 3; }
   command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Don't use --no-dependencies option. Aborting." >&2; exit 4; }
