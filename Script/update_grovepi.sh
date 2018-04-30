@@ -121,7 +121,7 @@ rm $PIHOME/tmp_script_tools.sh
 # check_internet
 
 # needs to be sourced from here when we call this as a standalone
-source /home/pi/$DEXTER/lib/$DEXTER/script_tools/functions_library.sh
+source $DEXTERSCRIPT/functions_library.sh
 
 # create folders recursively if they don't exist already
 mkdir -p $DEXTER_PATH
