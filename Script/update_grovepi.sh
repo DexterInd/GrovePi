@@ -1,4 +1,9 @@
+#! /bin/bash
 # This script updates the the code repos on Raspbian for Robots.
+
+################################################
+######## Parsing Command Line Arguments ########
+################################################
 
 # definitions needed for standalone call
 PIHOME=/home/pi
@@ -7,6 +12,10 @@ DEXTER_PATH=$PIHOME/$DEXTER
 RASPBIAN=$PIHOME/di_update/Raspbian_For_Robots
 GROVEPI_DIR=$DEXTER_PATH/GrovePi
 DEXTERSCRIPT=$DEXTER_PATH/lib/Dexter/script_tools
+
+# the top-level module name of grovepi package
+# used for detecting whether it's installed or not
+REPO_PACKAGE=grovepi
 
 # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
 installdependencies=true
@@ -108,12 +117,16 @@ optionslist+=("$selectedbranch")
 
 echo "Options used for script_tools script: \"${optionslist[@]}\""
 
+################################################
+######## Cloning GrovePi & Script_Tools  ########
+################################################
+
 # update script_tools first
-curl --silent -kL dexterindustries.com/update_tools > $PIHOME/tmp_script_tools.sh
+curl --silent -kL dexterindustries.com/update_tools > $PIHOME/.tmp_script_tools.sh
 echo "Installing script_tools. This might take a while.."
-bash $PIHOME/tmp_script_tools.sh ${optionslist[@]} > /dev/null
+bash $PIHOME/.tmp_script_tools.sh ${optionslist[@]} > /dev/null
 ret_val=$?
-rm $PIHOME/tmp_script_tools.sh
+rm $PIHOME/.tmp_script_tools.sh
 if [[ $ret_val -ne 0 ]]; then
   echo "script_tools failed installing with exit code $ret_val. Aborting."
   exit 6
@@ -137,6 +150,10 @@ sudo rm -rf $GROVEPI_DIR
 git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/GrovePi.git
 cd $GROVEPI_DIR
 
+################################################
+######## Install Python Packages & Deps ########
+################################################
+
 echo "Installing GrovePi dependencies and package. This might take a while.."
 
 # installing dependencies
@@ -145,14 +162,59 @@ sudo chmod +x install.sh
 [[ $installdependencies = "true" ]] && sudo bash ./install.sh
 popd > /dev/null
 
+remove_python_packages() {
+  # the 1st and only argument
+  # takes the name of the package that needs to removed
+  rm -f $PIHOME/.pypaths
+
+  # get absolute path to python package
+  # saves output to file because we want to have the syntax highlight working
+  # does this for both root and the current user because packages can be either system-wide or local
+  # later on the strings used with the python command can be put in just one string that gets used repeatedly
+  python -c "import pkgutil; import os; \
+              eggs_loader = pkgutil.find_loader('$1'); found = eggs_loader is not None; \
+              output = os.path.dirname(os.path.realpath(eggs_loader.get_filename('$1'))) if found else ''; print(output);" >> $PIHOME/.pypaths
+  sudo python -c "import pkgutil; import os; \
+              eggs_loader = pkgutil.find_loader('$1'); found = eggs_loader is not None; \
+              output = os.path.dirname(os.path.realpath(eggs_loader.get_filename('$1'))) if found else ''; print(output);" >> $PIHOME/.pypaths
+  if [[ $usepython3exec = "true" ]]; then
+    python3 -c "import pkgutil; import os; \
+                eggs_loader = pkgutil.find_loader('$1'); found = eggs_loader is not None; \
+                output = os.path.dirname(os.path.realpath(eggs_loader.get_filename('$1'))) if found else ''; print(output);" >> $PIHOME/.pypaths
+    sudo python3 -c "import pkgutil; import os; \
+                eggs_loader = pkgutil.find_loader('$1'); found = eggs_loader is not None; \
+                output = os.path.dirname(os.path.realpath(eggs_loader.get_filename('$1'))) if found else ''; print(output);" >> $PIHOME/.pypaths
+  fi
+
+  # removing eggs for $1 python package
+  # ideally, easy-install.pth needs to be adjusted too
+  # but pip seems to know how to handle missing packages, which is okay
+  while read path;
+  do
+    if [ ! -z "${path}" -a "${path}" != " " ]; then
+      echo "Removing ${path} egg"
+      sudo rm -f "${path}"
+    fi
+  done < $PIHOME/.pypaths
+}
+
+install_python_packages() {
+  [[ $systemwide = "true" ]] && sudo python setup.py install \
+              && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install
+  [[ $userlocal = "true" ]] && python setup.py install --user \
+              && [[ $usepython3exec = "true" ]] && python3 setup.py install --user
+  [[ $envlocal = "true" ]] && python setup.py install \
+              && [[ $usepython3exec = "true" ]] && python3 setup.py install
+}
+
+# feedback "Removing \"$REPO_PACKAGE\" and \"$DHT_PACKAGE\" to make space for new ones"
+feedback "Removing \"$REPO_PACKAGE\" to make space for the new one"
+remove_python_packages "$REPO_PACKAGE"
+# remove_python_packages "$DHT_PACKAGE"
+
 # installing the package itself
 pushd $GROVEPI_DIR/Software/Python > /dev/null
-[[ $systemwide = "true" ]] && sudo python setup.py install --force \
-            && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install --force
-[[ $userlocal = "true" ]] && python setup.py install --force --user \
-            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force --user
-[[ $envlocal = "true" ]] && python setup.py install --force \
-            && [[ $usepython3exec = "true" ]] && python3 setup.py install --force
+install_python_packages
 popd > /dev/null
 
 exit 0
