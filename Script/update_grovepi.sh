@@ -141,7 +141,12 @@ fi
 source $DEXTERSCRIPT/functions_library.sh
 
 # create folders recursively if they don't exist already
-mkdir -p $DEXTER_PATH
+# we use sudo for creating the dir(s) because on older versions of R4R
+# the sudo command is used, and hence we need to be sure we have write permissions.
+sudo mkdir -p $DEXTER_PATH
+# still only available for the pi user
+# shortly after this, we'll make it work for any user
+sudo chown pi:pi -R $DEXTER_PATH
 cd $DEXTER_PATH
 
 # it's simpler and more reliable (for now) to just delete the repo and clone a new one
