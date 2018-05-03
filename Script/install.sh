@@ -11,7 +11,6 @@ REPO_PATH=$(readlink -f $(dirname $0) | grep -E -o "^(.*?\\GrovePi)")
 source $DEXTERSCRIPT/functions_library.sh
 
 display_welcome_msg() {
-  echo " "
 	echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
 }
 
@@ -20,7 +19,6 @@ install_dependencies() {
     # done by the script_tools installer in
     # update_grovepi.sh
 
-    echo " "
   	feedback "Installing dependencies for the GrovePi"
   	echo "======================="
     # in order for nodejs to be installed, the repo for it
@@ -44,11 +42,9 @@ check_root_user() {
 install_spi_i2c() {
 	RASPI_BL="/etc/modprobe.d/raspi-blacklist.conf.bak"
 	MODS="i2c spi"
-  echo " "
 	if [ -f ${RASPI_BL} ]; then
 		feedback "Removing blacklist from ${RASPI_BL} . . ."
 		feedback "=================================================================="
-		echo " "
 		for i in ${MODS}
 		do
 			MOD_NAME=$(echo $i | tr [a-z] [A-Z])
