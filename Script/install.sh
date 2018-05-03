@@ -34,25 +34,6 @@ install_dependencies() {
     feedback "Dependencies installed"
 }
 
-install_wiringpi() {
-    # Check if WiringPi Installed
-
-    # using curl piped to bash does not leave a file behind. no need to remove it
-    # we can do either the curl - it works just fine
-    # sudo curl https://raw.githubusercontent.com/DexterInd/script_tools/master/update_wiringpi.sh | bash
-    # or call the version that's already on the SD card
-    sudo bash $DEXTERSCRIPT/update_wiringpi.sh
-    # done with WiringPi
-
-    # remove wiringPi directory if present
-    if [ -d wiringPi ]
-    then
-        sudo rm -r wiringPi
-    fi
-    # End check if WiringPi installed
-    echo " "
-}
-
 check_root_user() {
     if [[ $EUID -ne 0 ]]; then
         feedback "FAIL!  This script must be run as such: sudo ./install.sh"
@@ -132,6 +113,5 @@ install_avr() {
 display_welcome_msg
 check_root_user
 install_dependencies
-install_wiringpi
 install_spi_i2c
 install_avr
