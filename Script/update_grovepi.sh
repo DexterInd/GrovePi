@@ -64,31 +64,32 @@ parse_cmdline_arguments() {
     esac
   done
 
-  # show some feedback for the GrovePi
-  echo "  _____            _                                ";
-  echo " |  __ \          | |                               ";
-  echo " | |  | | _____  _| |_ ___ _ __                     ";
-  echo " | |  | |/ _ \ \/ / __/ _ \ '__|                    ";
-  echo " | |__| |  __/>  <| ||  __/ |                       ";
-  echo " |_____/ \___/_/\_\\\__\___|_|          _            ";
-  echo " |_   _|         | |         | |      (_)           ";
-  echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
-  echo "   | | | '_ \ / _\ | | | / __| __| '__| |/ _ \/ __| ";
-  echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
-  echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
-  echo "                                                    ";
-  echo "                                                    ";
-  echo "  _____                    _____ _ "
-  echo " / ____|                  |  __ (_)  "
-  echo "| |  __ _ __ _____   _____| |__) |   "
-  echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
-  echo "| |__| | | | (_) \ V /  __/ |   | |  "
-  echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
-  echo " "
-
   # show some feedback on the console
   if [ -f $DEXTERSCRIPT/functions_library.sh ]; then
     source $DEXTERSCRIPT/functions_library.sh
+    # show some feedback for the GrovePi
+    if ! quiet_mode
+      echo "  _____            _                                ";
+      echo " |  __ \          | |                               ";
+      echo " | |  | | _____  _| |_ ___ _ __                     ";
+      echo " | |  | |/ _ \ \/ / __/ _ \ '__|                    ";
+      echo " | |__| |  __/>  <| ||  __/ |                       ";
+      echo " |_____/ \___/_/\_\\\__\___|_|          _            ";
+      echo " |_   _|         | |         | |      (_)           ";
+      echo "   | |  _ __   __| |_   _ ___| |_ _ __ _  ___  ___  ";
+      echo "   | | | '_ \ / _\ | | | / __| __| '__| |/ _ \/ __| ";
+      echo "  _| |_| | | | (_| | |_| \__ \ |_| |  | |  __/\__ \ ";
+      echo " |_____|_| |_|\__,_|\__,_|___/\__|_|  |_|\___||___/ ";
+      echo "                                                    ";
+      echo "                                                    ";
+      echo "  _____                    _____ _ "
+      echo " / ____|                  |  __ (_)  "
+      echo "| |  __ _ __ _____   _____| |__) |   "
+      echo "| | |_ | '__/ _ \ \ / / _ \  ___/ |  "
+      echo "| |__| | | | (_) \ V /  __/ |   | |  "
+      echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
+      echo " "
+    fi
     feedback "Welcome to GrovePi Installer."
   else
     echo "Welcome to GrovePi Installer."
