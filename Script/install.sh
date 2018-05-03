@@ -44,7 +44,6 @@ install_spi_i2c() {
 	MODS="i2c spi"
 	if [ -f ${RASPI_BL} ]; then
 		feedback "Removing blacklist from ${RASPI_BL} . . ."
-		feedback "=================================================================="
 		for i in ${MODS}
 		do
 			MOD_NAME=$(echo $i | tr [a-z] [A-Z])
@@ -55,7 +54,6 @@ install_spi_i2c() {
 
 	#Adding in /etc/modules
 	feedback "Adding I2C-dev and SPI-dev in /etc/modules . . ."
-	feedback "================================================"
 	if grep -q "i2c-dev" /etc/modules; then
 		echo "I2C-dev already present"
 	else
@@ -76,7 +74,6 @@ install_spi_i2c() {
 	fi
 
 	feedback "Making I2C changes in /boot/config.txt . . ."
-	feedback "================================================"
 
 	BOOT_CONFIG="/boot/config.txt"
 	DTPARAMS="i2c1 i2c_arm"
@@ -94,13 +91,12 @@ install_spi_i2c() {
 }
 
 install_avr() {
-	feedback "Installing avrdude"
-	feedback "=================="
+	feedback "Installing avrdude for the GrovePi"
 	source /home/pi/Dexter/lib/Dexter/script_tools/install_avrdude.sh
 	create_avrdude_folder
   install_avrdude
   cd $ROBOT_DIR
-  echo "done with AVRDUDE "
+  echo "done with AVRDUDE for the GrovePi"
 }
 
 display_welcome_msg
