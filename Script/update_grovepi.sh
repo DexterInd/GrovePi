@@ -209,13 +209,13 @@ remove_python_packages() {
 
 # called way down bellow
 install_python_pkgs_and_dependencies() {
-  echo "Installing GrovePi dependencies and package. This might take a while.."
-
-  # installing dependencies
-  pushd $GROVEPI_DIR/Script > /dev/null
-  sudo chmod +x install.sh
-  [[ $installdependencies = "true" ]] && sudo bash ./install.sh
-  popd > /dev/null
+  # installing dependencies if required
+  if [[ $installdependencies = "true" ]]; then
+    feedback "Installing GrovePi dependencies. This might take a while.."
+    pushd $GROVEPI_DIR/Script > /dev/null
+    sudo bash ./install.sh
+    popd > /dev/null
+  fi
 
   # feedback "Removing \"$REPO_PACKAGE\" and \"$DHT_PACKAGE\" to make space for new ones"
   feedback "Removing \"$REPO_PACKAGE\" to make space for the new one"
