@@ -13,7 +13,6 @@ source $DEXTERSCRIPT/functions_library.sh
 display_welcome_msg() {
   echo " "
 	echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
-  echo " "
 }
 
 install_dependencies() {
@@ -22,19 +21,17 @@ install_dependencies() {
     # update_grovepi.sh
 
     echo " "
-  	feedback "Installing Dependencies"
+  	feedback "Installing dependencies for the GrovePi"
   	echo "======================="
     # in order for nodejs to be installed, the repo for it
     # needs to be in; this is all done in script_tools while doing an apt-get update
     sudo apt-get install nodejs -y
-    
+
   	sudo apt-get install git libi2c-dev i2c-tools arduino minicom -y
-    sudo apt-get purge python-rpi.gpio -y
-  	sudo apt-get purge python3-rpi.gpio -y
     sudo apt-get install python-pip python-smbus python-dev python-serial python-rpi.gpio python-scipy python-numpy -y
     sudo apt-get install python3-pip python3-smbus python3-dev python3-rpi.gpio python3-rpi.gpio python3-scipy python3-numpy -y
 
-    feedback "Dependencies installed"
+    feedback "Dependencies for the GrovePi installed"
 }
 
 check_root_user() {
@@ -42,13 +39,12 @@ check_root_user() {
         feedback "FAIL!  This script must be run as such: sudo ./install.sh"
         exit 1
     fi
-    echo " "
 }
 
 install_spi_i2c() {
-	echo " "
 	RASPI_BL="/etc/modprobe.d/raspi-blacklist.conf.bak"
 	MODS="i2c spi"
+  echo " "
 	if [ -f ${RASPI_BL} ]; then
 		feedback "Removing blacklist from ${RASPI_BL} . . ."
 		feedback "=================================================================="
@@ -62,7 +58,6 @@ install_spi_i2c() {
 	fi
 
 	#Adding in /etc/modules
-	feedback " "
 	feedback "Adding I2C-dev and SPI-dev in /etc/modules . . ."
 	feedback "================================================"
 	if grep -q "i2c-dev" /etc/modules; then
@@ -84,7 +79,6 @@ install_spi_i2c() {
 		echo "spi-dev added"
 	fi
 
-	echo " "
 	feedback "Making I2C changes in /boot/config.txt . . ."
 	feedback "================================================"
 

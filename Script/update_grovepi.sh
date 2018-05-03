@@ -13,11 +13,12 @@ RASPBIAN=$PIHOME/di_update/Raspbian_For_Robots
 GROVEPI_DIR=$DEXTER_PATH/GrovePi
 DEXTERSCRIPT=$DEXTER_PATH/lib/Dexter/script_tools
 
+# the top-level module name of grovepi package
+# used for detecting whether it's installed or not
+REPO_PACKAGE=grovepi
+
 # called way down below
 parse_cmdline_arguments() {
-  # the top-level module name of grovepi package
-  # used for detecting whether it's installed or not
-  REPO_PACKAGE=grovepi
 
   # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
   installdependencies=true
