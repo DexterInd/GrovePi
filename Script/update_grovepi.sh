@@ -233,7 +233,7 @@ install_python_pkgs_and_dependencies() {
 ######## Aggregating all function calls ########
 ################################################
 
-parse_cmdline_arguments
+parse_cmdline_arguments "$@"
 clone_grovepi_and_scriptools
 install_python_pkgs_and_dependencies
 exit 0
