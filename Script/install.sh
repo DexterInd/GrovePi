@@ -17,7 +17,6 @@ display_welcome_msg() {
 }
 
 install_dependencies() {
-
     # the sudo apt-get update is already
     # done by the script_tools installer in
     # update_grovepi.sh
@@ -25,6 +24,10 @@ install_dependencies() {
     echo " "
   	feedback "Installing Dependencies"
   	echo "======================="
+    # in order for nodejs to be installed, the repo for it
+    # needs to be in; this is all done in script_tools while doing an apt-get update
+    sudo apt-get install nodejs -y
+    
   	sudo apt-get install git libi2c-dev i2c-tools arduino minicom -y
     sudo apt-get purge python-rpi.gpio -y
   	sudo apt-get purge python3-rpi.gpio -y
