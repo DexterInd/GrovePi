@@ -91,7 +91,7 @@ install_spi_i2c() {
 
 install_avr() {
 	feedback "Installing avrdude for the GrovePi"
-	source /home/pi/Dexter/lib/Dexter/script_tools/install_avrdude.sh
+	source $DEXTERSCRIPT/install_avrdude.sh
 	create_avrdude_folder
   install_avrdude
   cd $ROBOT_DIR
