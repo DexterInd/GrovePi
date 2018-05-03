@@ -20,7 +20,6 @@ install_dependencies() {
     # update_grovepi.sh
 
   	feedback "Installing dependencies for the GrovePi"
-  	echo "======================="
     # in order for nodejs to be installed, the repo for it
     # needs to be in; this is all done in script_tools while doing an apt-get update
     sudo apt-get install nodejs -y

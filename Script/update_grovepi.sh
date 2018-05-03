@@ -138,6 +138,7 @@ clone_grovepi_and_scriptools() {
     echo "script_tools failed installing with exit code $ret_val. Aborting."
     exit 6
   fi
+  echo "Done installing script_tools"
 
   # needs to be sourced from here when we call this as a standalone
   source $DEXTERSCRIPT/functions_library.sh
