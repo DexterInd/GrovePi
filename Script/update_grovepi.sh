@@ -69,7 +69,7 @@ parse_cmdline_arguments() {
   if [ -f $DEXTERSCRIPT/functions_library.sh ]; then
     source $DEXTERSCRIPT/functions_library.sh
     # show some feedback for the GrovePi
-    if ! quiet_mode
+    if [ ! quiet_mode ]; then
       echo "  _____            _                                ";
       echo " |  __ \          | |                               ";
       echo " | |  | | _____  _| |_ ___ _ __                     ";
