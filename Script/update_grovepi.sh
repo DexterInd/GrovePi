@@ -17,6 +17,15 @@ DEXTERSCRIPT=$DEXTER_PATH/lib/Dexter/script_tools
 # used for detecting whether it's installed or not
 REPO_PACKAGE=grovepi
 
+# called way down bellow
+check_if_run_with_pi() {
+  ## if not running with the pi user then exit
+  if [ $(id -ur) -ne $(id -ur pi) ]; then
+    echo "GoPiGo3 installer script must be run with \"pi\" user. Exiting."
+    exit 7
+  fi
+}
+
 # called way down below
 parse_cmdline_arguments() {
 
@@ -235,6 +244,7 @@ install_python_pkgs_and_dependencies() {
 ######## Aggregating all function calls ########
 ################################################
 
+check_if_run_with_pi
 parse_cmdline_arguments "$@"
 clone_grovepi_and_scriptools
 install_python_pkgs_and_dependencies
