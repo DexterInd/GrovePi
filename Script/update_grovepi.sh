@@ -43,7 +43,7 @@ parse_cmdline_arguments() {
   # the following option tells which branch has to be used
   selectedbranch="master"
 
-  declare -a optionslist=("--system-wide")
+  declare -ga optionslist=("--system-wide")
   # iterate through bash arguments
   for i; do
     case "$i" in
@@ -59,12 +59,12 @@ parse_cmdline_arguments() {
       --user-local)
         userlocal=true
         systemwide=false
-        declare -a optionslist=("--user-local")
+        declare -ga optionslist=("--user-local")
         ;;
       --env-local)
         envlocal=true
         systemwide=false
-        declare -a optionslist=("--env-local")
+        declare -ga optionslist=("--env-local")
         ;;
       --system-wide)
         ;;
