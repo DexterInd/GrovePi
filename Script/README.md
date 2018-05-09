@@ -11,7 +11,7 @@ By default, the GrovePi package is installed system-wide and [script_tools](http
 
 An example using options appended to the command can be:
 ```
-curl -kL dexterindustries.com/update_grovepi | bash -s --user-local --no-update-aptget --no-dependencies
+curl -kL dexterindustries.com/update_grovepi | bash -s -- --user-local --no-update-aptget --no-dependencies
 ```
 
 ## Command Options
