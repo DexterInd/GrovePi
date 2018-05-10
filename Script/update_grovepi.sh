@@ -27,12 +27,14 @@ check_if_run_with_pi() {
 }
 
 # called way down below
+# called way down below
 parse_cmdline_arguments() {
 
   # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
   installdependencies=true
   updaterepo=true
-  install_pkg_scriptools=true
+  install_rfrtools=true
+  install_pkg_rfrtools=true
 
   # the following 3 options are mutually exclusive
   systemwide=true
@@ -43,7 +45,7 @@ parse_cmdline_arguments() {
   # the following option tells which branch has to be used
   selectedbranch="master"
 
-  declare -ga optionslist=("--system-wide")
+  declare -ga rfrtools_options=("--system-wide")
   # iterate through bash arguments
   for i; do
     case "$i" in
@@ -53,18 +55,21 @@ parse_cmdline_arguments() {
       --no-update-aptget)
         updaterepo=false
         ;;
-      --bypass-pkg-scriptools)
-        install_pkg_scriptools=false
+      --bypass-rfrtools)
+        install_rfrtools=false
+        ;;
+      --bypass-python-rfrtools)
+        install_pkg_rfrtools=false
         ;;
       --user-local)
         userlocal=true
         systemwide=false
-        declare -ga optionslist=("--user-local")
+        declare -ga rfrtools_options=("--user-local")
         ;;
       --env-local)
         envlocal=true
         systemwide=false
-        declare -ga optionslist=("--env-local")
+        declare -ga rfrtools_options=("--env-local")
         ;;
       --system-wide)
         ;;
@@ -78,7 +83,7 @@ parse_cmdline_arguments() {
   if [ -f $DEXTERSCRIPT/functions_library.sh ]; then
     source $DEXTERSCRIPT/functions_library.sh
     # show some feedback for the GrovePi
-    if [ ! quiet_mode ]; then
+    if [[ quiet_mode -eq 0 ]]; then
       echo "  _____            _                                ";
       echo " |  __ \          | |                               ";
       echo " | |  | | _____  _| |_ ___ _ __                     ";
@@ -100,14 +105,17 @@ parse_cmdline_arguments() {
       echo " \_____|_|  \___/ \_/ \___|_|   |_|  "
       echo " "
     fi
+
     feedback "Welcome to GrovePi Installer."
   else
     echo "Welcome to GrovePi Installer."
   fi
+
   echo "Updating GrovePi for $selectedbranch branch with the following options:"
   ([[ $installdependencies = "true" ]] && echo "  --no-dependencies=false") || echo "  --no-dependencies=true"
   ([[ $updaterepo = "true" ]] && echo "  --no-update-aptget=false") || echo "  --no-update-aptget=true"
-  ([[ $install_pkg_scriptools = "true" ]] && echo "  --bypass-pkg-scriptools=false") || echo "  --bypass-pkg-scriptools=true"
+  ([[ $install_rfrtools = "true" ]] && echo "  --bypass-rfrtools=false") || echo "  --bypass-rfrtools=true"
+  ([[ $install_pkg_rfrtools = "true" ]] && echo "  --bypass-python-rfrtools=false") || echo "  --bypass-python-rfrtools=true"
   echo "  --user-local=$userlocal"
   echo "  --env-local=$envlocal"
   echo "  --system-wide=$systemwide"
@@ -121,14 +129,19 @@ parse_cmdline_arguments() {
     command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Don't use --no-dependencies option. Exiting." >&2; exit 5; }
   fi
 
-  # create rest of list of arguments for script_tools call
-  optionslist+=("$selectedbranch")
-  [[ $usepython3exec = "true" ]] && optionslist+=("--use-python3-exe-too")
-  [[ $updaterepo = "true" ]] && optionslist+=("--update-aptget")
-  [[ $installdependencies = "true" ]] && optionslist+=("--install-deb-deps")
-  [[ $install_pkg_scriptools = "true" ]] && optionslist+=("--install-python-package")
+  # create rest of list of arguments for rfrtools call
+  rfrtools_options+=("$selectedbranch")
+  [[ $usepython3exec = "true" ]] && rfrtools_options+=("--use-python3-exe-too")
+  [[ $updaterepo = "true" ]] && rfrtools_options+=("--update-aptget")
+  [[ $installdependencies = "true" ]] && rfrtools_options+=("--install-deb-deps")
+  [[ $install_pkg_rfrtools = "true" ]] && rfrtools_options+=("--install-python-package")
 
-  echo "Options used for script_tools script: \"${optionslist[@]}\""
+  # create list of arguments for script_tools call
+  declare -ga scriptools_options=("$selectedbranch")
+
+  echo "Using \"$selectedbranch\" branch"
+  echo "Options used for RFR_Tools script: \"${rfrtools_options[@]}\""
+  echo "Options used for script_tools script: \"${scriptools_options[@]}\""
 }
 
 ################################################
@@ -136,35 +149,48 @@ parse_cmdline_arguments() {
 ################################################
 
 # called way down below
-clone_grovepi_and_scriptools() {
+install_scriptools_and_rfrtools() {
+
+  # if rfrtools is not bypassed then install it
+  if [[ $install_rfrtools = "true" ]]; then
+    curl --silent -kL dexterindustries.com/update_rfrtools > $PIHOME/.tmp_rfrtools.sh
+    echo "Installing RFR_Tools. This might take a while.."
+    bash $PIHOME/.tmp_rfrtools.sh ${rfrtools_options[@]} # > /dev/null
+    ret_val=$?
+    rm $PIHOME/.tmp_rfrtools.sh
+    if [[ $ret_val -ne 0 ]]; then
+      echo "RFR_Tools failed installing with exit code $ret_val. Exiting."
+      exit 7
+    fi
+    echo "Done installing RFR_Tool"
+  fi
+
   # update script_tools first
-  curl --silent -kL dexterindustries.com/update_tools > $PIHOME/.tmp_script_tools.sh
+  curl --silent -kL https://raw.githubusercontent.com/RobertLucian/script_tools/feature/strip-down-scriptools/install_script_tools.sh > $PIHOME/.tmp_script_tools.sh
   echo "Installing script_tools. This might take a while.."
-  bash $PIHOME/.tmp_script_tools.sh ${optionslist[@]} > /dev/null
+  bash $PIHOME/.tmp_script_tools.sh $selectedbranch > /dev/null
   ret_val=$?
   rm $PIHOME/.tmp_script_tools.sh
   if [[ $ret_val -ne 0 ]]; then
     echo "script_tools failed installing with exit code $ret_val. Exiting."
     exit 6
   fi
-  echo "Done installing script_tools"
-
   # needs to be sourced from here when we call this as a standalone
   source $DEXTERSCRIPT/functions_library.sh
+  feedback "Done installing script_tools"
+}
 
-  # create folders recursively if they don't exist already
-  # we use sudo for creating the dir(s) because on older versions of R4R
-  # the sudo command is used, and hence we need to be sure we have write permissions.
-  sudo mkdir -p $DEXTER_PATH
-  # still only available for the pi user
+# called way down bellow
+clone_grovepi() {
+  # $DEXTER_PATH is still only available for the pi user
   # shortly after this, we'll make it work for any user
+  sudo mkdir -p $DEXTER_PATH
   sudo chown pi:pi -R $DEXTER_PATH
   cd $DEXTER_PATH
-
   # it's simpler and more reliable (for now) to just delete the repo and clone a new one
   # otherwise, we'd have to deal with all the intricacies of git
   sudo rm -rf $GROVEPI_DIR
-  git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/GrovePi.git
+  git clone --quiet --depth=1 -b feature/use-rfr-tools-too https://github.com/RobertLucian/GrovePi.git
   cd $GROVEPI_DIR
 }
 
@@ -246,6 +272,7 @@ install_python_pkgs_and_dependencies() {
 
 check_if_run_with_pi
 parse_cmdline_arguments "$@"
-clone_grovepi_and_scriptools
+install_scriptools_and_rfrtools
+clone_grovepi
 install_python_pkgs_and_dependencies
 exit 0
