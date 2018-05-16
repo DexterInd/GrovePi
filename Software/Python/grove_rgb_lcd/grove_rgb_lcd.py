@@ -118,6 +118,12 @@ def setText_norefresh(text):
         count += 1
         bus.write_byte_data(DISPLAY_TEXT_ADDR,0x40,ord(c))
 
+# Create a custom character (from array of row patterns)
+def create_char(location, pattern):
+    location &= 0x07 # Make sure location is 0-7
+    textCommand(0x40 | (location << 3))
+    bus.write_i2c_block_data(DISPLAY_TEXT_ADDR, 0x40, pattern)
+
 # example code
 if __name__=="__main__":
     setText("Hello world\nThis is an LCD test")

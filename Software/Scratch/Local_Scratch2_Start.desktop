@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=xhost +
+Icon=/usr/share/scratch/Media/Costumes/Animals/cat1-a.gif
+Exec=sudo bash /home/pi/Dexter/GrovePi/Software/Scratch/launch_scratch2.sh
+Terminal=false
+Name=GrovePi+ Scratch2
+Comment= Programming system and content development tool
+Categories=Application;Education;Development;
+MimeType=application/x-scratch-project
