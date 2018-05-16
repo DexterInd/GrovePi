@@ -7,7 +7,7 @@ This first two Activity can be used easily in any graphically defined Flogo Flow
 ![GrovePi in Flogo](screenshots/Flogo-GrovePi-Flow.png "A simple GrovePi Flogo Flow.")
 
 ## Install
-All you need to install the new Activity into your Flogo WebUI Environment is the GitHub Path to the Extension: e.g. github.com/JGrotex/GrovePi/Software/flogo/activities/grovepiDigitalWrite
+All you need to install the new Activity into your Flogo WebUI Environment is the GitHub Path to the Extension: e.g. github.com/DexterInd/GrovePi/Software/flogo/activities/grovepiDigitalWrite
 
 Basically this needs match with the 'ref' in the Activity 'JSON'
 

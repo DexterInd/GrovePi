@@ -1,7 +1,7 @@
 {
   "name": "grovepiDHT",
   "type": "flogo:activity",
-  "ref": "github.com/JGrotex/GrovePi/Software/flogo/activities/grovepiDHT",
+  "ref": "github.com/DexterInd/GrovePi/Software/flogo/activities/grovepiDHT",
   "version": "0.0.1",
   "title": "grovepi DHT",
   "description": "DHT Activity for GrovePi to read current temperature and humidity",
