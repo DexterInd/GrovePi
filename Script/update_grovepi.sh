@@ -166,7 +166,7 @@ install_scriptools_and_rfrtools() {
   fi
 
   # update script_tools first
-  curl --silent -kL https://raw.githubusercontent.com/DexterInd/script_tools/develop/install_script_tools.sh > $PIHOME/.tmp_script_tools.sh
+  curl --silent -kL dexterindustries.com/update_tools > $PIHOME/.tmp_script_tools.sh
   echo "Installing script_tools. This might take a while.."
   bash $PIHOME/.tmp_script_tools.sh $selectedbranch > /dev/null
   ret_val=$?
