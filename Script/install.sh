@@ -25,8 +25,8 @@ install_dependencies() {
     sudo apt-get install nodejs -y
 
   	sudo apt-get install git libi2c-dev i2c-tools arduino minicom -y
-    sudo apt-get install python-pip python-smbus python-dev python-serial python-rpi.gpio python-scipy python-numpy -y
-    sudo apt-get install python3-pip python3-smbus python3-dev python3-rpi.gpio python3-rpi.gpio python3-scipy python3-numpy -y
+    sudo apt-get install python-pip  python-smbus  python-dev  python-serial  python-rpi.gpio  python-scipy  python-numpy -y
+    sudo apt-get install python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-scipy python3-numpy -y
 
     feedback "Dependencies for the GrovePi installed"
 }
