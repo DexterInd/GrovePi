@@ -150,23 +150,8 @@ parse_cmdline_arguments() {
 
 # called way down below
 install_scriptools_and_rfrtools() {
-
-  # if rfrtools is not bypassed then install it
-  if [[ $install_rfrtools = "true" ]]; then
-    curl --silent -kL dexterindustries.com/update_rfrtools > $PIHOME/.tmp_rfrtools.sh
-    echo "Installing RFR_Tools. This might take a while.."
-    bash $PIHOME/.tmp_rfrtools.sh ${rfrtools_options[@]} # > /dev/null
-    ret_val=$?
-    rm $PIHOME/.tmp_rfrtools.sh
-    if [[ $ret_val -ne 0 ]]; then
-      echo "RFR_Tools failed installing with exit code $ret_val. Exiting."
-      exit 7
-    fi
-    echo "Done installing RFR_Tool"
-  fi
-
   # update script_tools first
-  curl --silent -kL https://raw.githubusercontent.com/DexterInd/script_tools/develop/install_script_tools.sh > $PIHOME/.tmp_script_tools.sh
+  curl --silent -kL https://raw.githubusercontent.com/DexterInd/script_tools/$selectedbranch/install_script_tools.sh > $PIHOME/.tmp_script_tools.sh
   echo "Installing script_tools. This might take a while.."
   bash $PIHOME/.tmp_script_tools.sh $selectedbranch > /dev/null
   ret_val=$?
@@ -178,6 +163,20 @@ install_scriptools_and_rfrtools() {
   # needs to be sourced from here when we call this as a standalone
   source $DEXTERSCRIPT/functions_library.sh
   feedback "Done installing script_tools"
+
+  # if rfrtools is not bypassed then install it
+  if [[ $install_rfrtools = "true" ]]; then
+    curl --silent -kL https://raw.githubusercontent.com/DexterInd/RFR_Tools/$selectedbranch/scripts/install_tools.sh > $PIHOME/.tmp_rfrtools.sh
+    echo "Installing RFR_Tools. This might take a while.."
+    bash $PIHOME/.tmp_rfrtools.sh ${rfrtools_options[@]} # > /dev/null
+    ret_val=$?
+    rm $PIHOME/.tmp_rfrtools.sh
+    if [[ $ret_val -ne 0 ]]; then
+      echo "RFR_Tools failed installing with exit code $ret_val. Exiting."
+      exit 7
+    fi
+    echo "Done installing RFR_Tool"
+  fi
 }
 
 # called way down bellow
