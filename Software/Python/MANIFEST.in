@@ -1,0 +1,3 @@
+global-exclude README.md LICENSE.txt *readme*
+global-exclude *example*.py *test*.py
+global-exclude grove_i2c_oled_96x96_hello_world.py

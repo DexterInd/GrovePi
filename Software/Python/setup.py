@@ -67,7 +67,7 @@ setuptools.setup(
     url = "https://github.com/DexterInd/GrovePi",
 
     keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education', 'iot', 'internet of things', 'prototyping'],
-
+	packages = setuptools.find_packages(),
     py_modules = ['grovepi'],
     install_requires = ['numpy']
 )
