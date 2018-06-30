@@ -26,7 +26,7 @@
 #logging.basicConfig(level=logging.DEBUG)
 
 import time
-import SI1145
+from grove_i2c_sunlight_sensor import SI1145
 
 # Default constructor will pick a default I2C bus.
 #
@@ -50,4 +50,3 @@ while True:
         print('UV Index:        ' + str(uvIndex))
         print('')
         time.sleep(1)
-

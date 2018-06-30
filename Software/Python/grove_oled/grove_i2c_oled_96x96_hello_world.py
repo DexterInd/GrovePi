@@ -36,7 +36,7 @@ THE SOFTWARE.
 # Connect the OLED to any I2C port eg. I2C-1
 # Can be found at I2C address 0x3c
 
-import grove_oled
+from grove_oled import grove_oled
 import time
 
 grove_oled.oled_init()

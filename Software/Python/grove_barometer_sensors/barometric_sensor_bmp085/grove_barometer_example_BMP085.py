@@ -34,8 +34,9 @@ THE SOFTWARE.
 '''
 
 
-import grove_barometer_lib
+from grove_barometer_sensors.barometric_sensor_bmp085 import grove_barometer_lib
 b = grove_barometer_lib.barometer()
+
 while True():
 	print ("Temp:",b.temperature," Pressure:",b.pressure," Altitude:",b.altitude)
 	b.update()

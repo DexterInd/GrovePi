@@ -33,7 +33,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from grove_rgb_lcd import *
+from grove_rgb_lcd.grove_rgb_lcd import *
 
 setText("Hello world\nLCD test")
 setRGB(0,128,64)

@@ -33,7 +33,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import grove_i2c_adc
+from grove_i2c_adc import grove_i2c_adc
 import time
 
 # You can initialize with a different address too: grove_i2c_adc.ADC(address=0x56)
