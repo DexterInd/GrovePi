@@ -190,7 +190,7 @@ clone_grovepi() {
   # it's simpler and more reliable (for now) to just delete the repo and clone a new one
   # otherwise, we'd have to deal with all the intricacies of git
   sudo rm -rf $GROVEPI_DIR
-  git clone --quiet --depth=1 -b hotfix/add-subpackages https://github.com/RobertLucian/GrovePi.git
+  git clone --quiet --depth=1 -b $selectedbranch https://github.com/DexterInd/GrovePi.git
   cd $GROVEPI_DIR
 }
 
