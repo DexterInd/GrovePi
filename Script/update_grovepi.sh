@@ -200,12 +200,15 @@ clone_grovepi() {
 
 # called by <<install_python_pkgs_and_dependencies>>
 install_python_packages() {
-  [[ $systemwide = "true" ]] && sudo python setup.py install \
-              && [[ $usepython3exec = "true" ]] && sudo python3 setup.py install
-  [[ $userlocal = "true" ]] && python setup.py install --user \
-              && [[ $usepython3exec = "true" ]] && python3 setup.py install --user
-  [[ $envlocal = "true" ]] && python setup.py install \
-              && [[ $usepython3exec = "true" ]] && python3 setup.py install
+  python setup.py sdist --formats=tar
+  [[ $systemwide = "true" ]] && sudo pip install dist/grovepi-*.tar
+  [[ $userlocal = "true" ]] && pip install dist/grovepi-*.tar --user
+  [[ $envlocal = "true" ]] && pip install dist/grovepi-*.tar
+
+  [[ $usepython3exec = "true" ]] && python3 setup.py sdist --formats=tar
+  [[ $systemwide = "true" ]] && sudo pip3 install dist/grovepi-*.tar
+  [[ $userlocal = "true" ]] && pip3 install dist/grovepi-*.tar --user
+  [[ $envlocal = "true" ]] && pip3 install dist/grovepi-*.tar
 }
 
 # called by <<install_python_pkgs_and_dependencies>>
