@@ -1,6 +1,5 @@
 -IC:\Users\rober\.platformio\packages\framework-arduinoavr\cores\arduino
 -IC:\Users\rober\.platformio\packages\framework-arduinoavr\variants\standard
--IC:\Users\rober\Dropbox\Work\Repos\GrovePi\Firmware\Source\grovepi\src
 -IC:\Users\rober\.platformio\packages\framework-arduinoavr\libraries\__cores__\arduino\Wire\src
 -IC:\Users\rober\.platformio\packages\framework-arduinoavr\libraries\__cores__\arduino\EEPROM\src
 -IC:\Users\rober\.platformio\packages\framework-arduinoavr\libraries\__cores__\arduino\HID\src
