@@ -75,6 +75,17 @@ int j;
 void loop()
 {
 	long dur,RangeCm;
+  //Dust sensor can run in background so has a dedicated if condition
+  if(dust_run_bk)
+  {
+    if(millis() - starttime > sampletime_ms)
+    {
+      dust_latest = 1;
+      latest_dust_val = lowpulseoccupancy;
+      lowpulseoccupancy = 0;``
+      starttime = millis();
+    }
+  }
 	if(index==4 && flag == 0 )
 	{
 		flag=1;
@@ -549,18 +560,6 @@ void loop()
 			cmd[0]=0;
 		}
 	}
-    //Dust sensor can run in background so has a dedicated if condition
-    if(dust_run_bk)
-    {
-  		if(millis() - starttime > sampletime_ms)
-  		{
-  			dust_latest = 1;
-  			latest_dust_val = lowpulseoccupancy;
-  			lowpulseoccupancy = 0;
-  			starttime = millis();
-  		}
-    }
-
     if(enc_run_bk)
     {
         if (encoder.rotate_flag ==1)
@@ -671,16 +670,11 @@ void readPulseDust()
   t = millis();
   l_status = digitalRead(2);  // Represents if the line is low or high.
   if(l_status)
-  {
-	  digitalWrite(8,0);
     // If the line is high (1), the pulse just ended
     pulse_end = t;
-  }
   else
-  {   // If the line is low (0), the pulse just started
+    // If the line is low (0), the pulse just started
     pulse_start = t;
-	  digitalWrite(8,1);
-  }
 
   if(pulse_end > pulse_start)
   {
