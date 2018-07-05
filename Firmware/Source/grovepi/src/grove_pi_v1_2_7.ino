@@ -11,19 +11,21 @@ Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];   // 7 instances for D2-D8
 
-#define SLAVE_ADDRESS         0x04
+#define SLAVE_ADDRESS          0x04
 
-#define dust_sensor_read_cmd  10
-#define dust_sensor_en_cmd		14
-#define dust_sensor_dis_cmd		15
+#define dust_sensor_read_cmd     10
+#define dust_sensor_en_cmd		   14
+#define dust_sensor_dis_cmd		   15
+#define dust_sensor_int_cmd       9
+#define dust_sensor_read_int_cmd  6
 
-#define encoder_read_cmd      11
-#define encoder_en_cmd			  16
-#define encoder_dis_cmd			  17
+#define encoder_read_cmd         11
+#define encoder_en_cmd			     16
+#define encoder_dis_cmd			     17
 
-#define flow_read_cmd         12
-#define flow_en_cmd				    18
-#define flow_dis_cmd       		13
+#define flow_read_cmd            12
+#define flow_en_cmd				       18
+#define flow_dis_cmd       		   13
 
 int cmd[5];
 int index=0;
@@ -67,7 +69,6 @@ void setup()
 
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-    attachInterrupt(0,readPulseDust,CHANGE);
 }
 int pin;
 int j;
@@ -498,16 +499,27 @@ void loop()
 			dust_run_bk=0;
 			cmd[0]=0;
 		}
+    else if(cmd[0]==dust_sensor_int_cmd)
+    {
+      sampletime_ms = cmd[1] + (cmd[2] << 8);
+      dust_latest = 0;
+    }
+    else if(cmd[0]==dust_sensor_read_int_cmd)
+    {
+      b[0] = sampletime_ms & 0xFF;
+      b[1] = sampletime_ms >> 8;
+    }
 		else if(cmd[0]==dust_sensor_read_cmd)
 		{
 			if(run_once==1)
 			{
-			b[0]=dust_latest;
-			b[1]=latest_dust_val%256;
-			latest_dust_val=latest_dust_val/256;
-			b[2]=latest_dust_val%256;
-			b[3]=latest_dust_val/256;
-			run_once=0;
+  			b[0] = dust_latest;
+  			b[1] = latest_dust_val & 0xFF;
+  			b[2] = (latest_dust_val >> 8) & 0xFF;
+  			b[3] = latest_dust_val >> 16;
+        b[4] = sampletime_ms & 0xFF;
+        b[5] = sampletime_ms >> 8;
+  			run_once = 0;
 			}
 		}
 		else if(cmd[0]==encoder_en_cmd)
@@ -540,13 +552,13 @@ void loop()
     //Dust sensor can run in background so has a dedicated if condition
     if(dust_run_bk)
     {
-		if(millis()-starttime>30000)
-		{
-			dust_latest=1;
-			latest_dust_val=lowpulseoccupancy;
-			lowpulseoccupancy=0;
-			starttime=millis();
-		}
+  		if(millis() - starttime > sampletime_ms)
+  		{
+  			dust_latest = 1;
+  			latest_dust_val = lowpulseoccupancy;
+  			lowpulseoccupancy = 0;
+  			starttime = millis();
+  		}
     }
 
     if(enc_run_bk)
@@ -557,7 +569,7 @@ void loop()
             {
                 index_LED++;
                 if (index_LED>24)
-                index_LED=0;
+                  index_LED=0;
                 enc_val[0]=1;
                 enc_val[1]=index_LED;
             }
@@ -565,7 +577,7 @@ void loop()
             {
                 index_LED--;
                 if(index_LED<0)
-                index_LED=24;
+                  index_LED=24;
                 enc_val[0]=1;
                 enc_val[1]=index_LED;
             }
@@ -622,21 +634,26 @@ void sendData()
   }
   if(cmd[0]==dust_sensor_read_cmd)
   {
-    Wire.write(b,4);
-  	dust_latest=0;
+    Wire.write(b,6);
+    dust_latest = 0;
   	cmd[0]=0;
+  }
+  if(cmd[0]==dust_sensor_read_int_cmd)
+  {
+    Wire.write(b,2);
+    cmd[0]=0;
   }
   if(cmd[0]==encoder_read_cmd)
   {
     Wire.write(enc_val,2);
     enc_val[0]=0;
-	cmd[0]=0;
+    cmd[0]=0;
   }
   if(cmd[0]==flow_read_cmd)
   {
     Wire.write(flow_val,3);
     flow_val[0]=0;
-	cmd[0]=0;
+    cmd[0]=0;
   }
 
 }
@@ -655,20 +672,20 @@ void readPulseDust()
   l_status = digitalRead(2);  // Represents if the line is low or high.
   if(l_status)
   {
-	 digitalWrite(8,0);
+	  digitalWrite(8,0);
     // If the line is high (1), the pulse just ended
     pulse_end = t;
   }
   else
   {   // If the line is low (0), the pulse just started
     pulse_start = t;
-	   digitalWrite(8,1);
+	  digitalWrite(8,1);
   }
 
   if(pulse_end > pulse_start)
   {
     duration = pulse_end - pulse_start;
-    lowpulseoccupancy = lowpulseoccupancy+duration;   // Add to the pulse length.
+    lowpulseoccupancy = lowpulseoccupancy + duration;   // Add to the pulse length.
     pulse_end = 0;    // If you don't reset this, you'll keep adding the pulse length over and over.
   }
 }
