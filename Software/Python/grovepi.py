@@ -72,6 +72,15 @@ else:
 address = 0x04
 I2CDELAY = 0.2
 
+# This allows us to be more specific about which commands contain unused bytes
+unused = 0
+retries = 10
+
+# Get firmware version
+version_cmd = [8]
+# No data is available from the GrovePi
+data_not_available_cmd = [23]
+
 # Command Format
 # digitalRead() command format header
 dRead_cmd = [1]
@@ -85,8 +94,6 @@ aWrite_cmd = [4]
 pMode_cmd = [5]
 # Ultrasonic read
 uRead_cmd = [7]
-# Get firmware version
-version_cmd = [8]
 # Accelerometer (+/- 1.5g) read
 acc_xyz_cmd = [20]
 # RTC get time
@@ -151,6 +158,7 @@ ir_read_cmd=[21]
 # Set pin for the IR reciever
 ir_recv_pin_cmd=[22]
 
+# Dust, Encoder & Flow Sensor commands
 dus_sensor_read_cmd=[10]
 dust_sensor_en_cmd=[14]
 dust_sensor_dis_cmd=[15]
@@ -162,56 +170,77 @@ encoder_dis_cmd=[17]
 flow_read_cmd=[12]
 flow_disable_cmd=[13]
 flow_en_cmd=[18]
-# This allows us to be more specific about which commands contain unused bytes
-unused = 0
-retries = 10
+
+
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
 
+# Write I2C block to the GrovePi
 
-# Write I2C block
 def write_i2c_block(address, block):
 	for i in range(retries):
 		try:
 			return bus.write_i2c_block_data(address, 1, block)
 		except IOError:
-			if debug:
-				print ("IOError")
-	return -1
+			time.sleep(0.003)
 
-# Read I2C byte
+	time.sleep(0.001)
+	raise IOError("GrovePi is unreachable")
+
+# Read I2C byte from the GrovePi
 def read_i2c_byte(address):
-	for i in range(retries):
+	data = data_not_available_cmd[0]
+	count = 0
+
+	while data in [data_not_available_cmd[0], 255] and count < retries:
 		try:
-			return bus.read_byte(address)
-		except IOError:
-			if debug:
-				print ("IOError")
-	return -1
+			data = bus.read_byte(address)
+			if count > 0:
+				count = 0
+			time.sleep(0.0002)
+		except:
+			count += 1
+			time.sleep(0.003)
+
+	time.sleep(0.001)
+	if count == retries:
+		raise IOError("GrovePi is unreachable in grovepi.read_i2c_byte func")
+	else:
+		return data
 
 
-# Read I2C block
+# Read I2C block from the GrovePi
 def read_i2c_block(address):
-	for i in range(retries):
+ 	data = data_not_available_cmd
+	count = 0
+
+	while data[0] in [data_not_available_cmd[0], 255] and count < retries:
 		try:
-			return bus.read_i2c_block_data(address, 1)
-		except IOError:
-			if debug:
-				print ("IOError")
-	return -1
+			data = bus.read_i2c_block_data(address, 1)
+			if count > 0:
+				count = 0
+			time.sleep(0.0002)
+		except:
+			count += 1
+			time.sleep(0.003)
+
+	time.sleep(0.001)
+	if count == retries:
+		raise IOError("GrovePi is unreachable in grovepi.read_i2c_block func")
+	else:
+		return data
 
 # Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
-	# time.sleep(.1)
-	n = read_i2c_byte(address)
-	return n
+	data = read_i2c_byte(address)
+	return data
 
 # Arduino Digital Write
 def digitalWrite(pin, value):
 	write_i2c_block(address, dWrite_cmd + [pin, value, unused])
+	read_i2c_byte(address)
 	return 1
-
 
 # Setting Up Pin mode on Arduino
 def pinMode(pin, mode):
@@ -219,13 +248,13 @@ def pinMode(pin, mode):
 		write_i2c_block(address, pMode_cmd + [pin, 1, unused])
 	elif mode == "INPUT":
 		write_i2c_block(address, pMode_cmd + [pin, 0, unused])
+	read_i2c_byte(address)
 	return 1
 
 
 # Read analog value from Pin
 def analogRead(pin):
 	write_i2c_block(address, aRead_cmd + [pin, unused, unused])
-	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return number[1] * 256 + number[2]
 
@@ -254,7 +283,6 @@ def temp(pin, model = '1.0'):
 # Read value from Grove Ultrasonic
 def ultrasonicRead(pin):
 	write_i2c_block(address, uRead_cmd + [pin, unused, unused])
-	time.sleep(.06)	#firmware has a time of 50ms so wait for more than that
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return (number[1] * 256 + number[2])
@@ -263,7 +291,6 @@ def ultrasonicRead(pin):
 # Read the firmware version
 def version():
 	write_i2c_block(address, version_cmd + [unused, unused, unused])
-	time.sleep(.1)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return "%s.%s.%s" % (number[1], number[2], number[3])
@@ -272,7 +299,6 @@ def version():
 # Read Grove Accelerometer (+/- 1.5g) XYZ value
 def acc_xyz():
 	write_i2c_block(address, acc_xyz_cmd + [unused, unused, unused])
-	time.sleep(.1)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	if number[1] > 32:
@@ -287,7 +313,6 @@ def acc_xyz():
 # Read from Grove RTC
 def rtc_getTime():
 	write_i2c_block(address, rtc_getTime_cmd + [unused, unused, unused])
-	time.sleep(.1)
 	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return number
@@ -396,7 +421,6 @@ def ledBar_setBits(pin, state):
 # state: (0-1023) a bit for each of the 10 LEDs
 def ledBar_getBits(pin):
 	write_i2c_block(address, ledBarGet_cmd + [pin, unused, unused])
-	time.sleep(I2CDELAY)
 	read_i2c_byte(0x04)
 	block = read_i2c_block(0x04)
 	return block[1] ^ (block[2] << 8)
@@ -418,7 +442,6 @@ def fourDigit_number(pin, value, leading_zero):
 		write_i2c_block(address, fourDigitValue_cmd + [pin, byte1, byte2])
 	else:
 		write_i2c_block(address, fourDigitValueZeros_cmd + [pin, byte1, byte2])
-	time.sleep(.05)
 	return 1
 
 # Grove 4 Digit Display - set brightness
@@ -426,7 +449,6 @@ def fourDigit_number(pin, value, leading_zero):
 def fourDigit_brightness(pin, brightness):
 	# not actually visible until next command is executed
 	write_i2c_block(address, fourDigitBrightness_cmd + [pin, brightness, unused])
-	time.sleep(.05)
 	return 1
 
 # Grove 4 Digit Display - set individual segment (0-9,A-F)
@@ -434,7 +456,6 @@ def fourDigit_brightness(pin, brightness):
 # value: (0-15) or (0-F)
 def fourDigit_digit(pin, segment, value):
 	write_i2c_block(address, fourDigitIndividualDigit_cmd + [pin, segment, value])
-	time.sleep(.05)
 	return 1
 
 # Grove 4 Digit Display - set 7 individual leds of a segment
@@ -442,7 +463,6 @@ def fourDigit_digit(pin, segment, value):
 # leds: (0-255) or (0-0xFF) one bit per led, segment 2 is special, 8th bit is the colon
 def fourDigit_segment(pin, segment, leds):
 	write_i2c_block(address, fourDigitIndividualLeds_cmd + [pin, segment, leds])
-	time.sleep(.05)
 	return 1
 
 # Grove 4 Digit Display - set left and right values (0-99), with leading zeros and a colon
@@ -451,7 +471,6 @@ def fourDigit_segment(pin, segment, leds):
 # colon will be lit
 def fourDigit_score(pin, left, right):
 	write_i2c_block(address, fourDigitScore_cmd + [pin, left, right])
-	time.sleep(.05)
 	return 1
 
 # Grove 4 Digit Display - display analogRead value for n seconds, 4 samples per second
@@ -465,13 +484,11 @@ def fourDigit_monitor(pin, analog, duration):
 # Grove 4 Digit Display - turn entire display on (88:88)
 def fourDigit_on(pin):
 	write_i2c_block(address, fourDigitAllOn_cmd + [pin, unused, unused])
-	time.sleep(.05)
 	return 1
 
 # Grove 4 Digit Display - turn entire display off
 def fourDigit_off(pin):
 	write_i2c_block(address, fourDigitAllOff_cmd + [pin, unused, unused])
-	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - store a color for later use
@@ -480,14 +497,12 @@ def fourDigit_off(pin):
 # blue: 0-255
 def storeColor(red, green, blue):
 	write_i2c_block(address, storeColor_cmd + [red, green, blue])
-	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - initialise
 # numLeds: how many leds do you have in the chain
 def chainableRgbLed_init(pin, numLeds):
 	write_i2c_block(address, chainableRgbLedInit_cmd + [pin, numLeds, unused])
-	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - initialise and test with a simple color
@@ -496,7 +511,6 @@ def chainableRgbLed_init(pin, numLeds):
 #            ie. 0 black, 1 blue, 2 green, 3 cyan, 4 red, 5 magenta, 6 yellow, 7 white
 def chainableRgbLed_test(pin, numLeds, testColor):
 	write_i2c_block(address, chainableRgbLedTest_cmd + [pin, numLeds, testColor])
-	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - set one or more leds to the stored color by pattern
@@ -504,7 +518,6 @@ def chainableRgbLed_test(pin, numLeds, testColor):
 # whichLed: index of led you wish to set counting outwards from the GrovePi, 0 = led closest to the GrovePi
 def chainableRgbLed_pattern(pin, pattern, whichLed):
 	write_i2c_block(address, chainableRgbLedSetPattern_cmd + [pin, pattern, whichLed])
-	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - set one or more leds to the stored color by modulo
@@ -512,7 +525,6 @@ def chainableRgbLed_pattern(pin, pattern, whichLed):
 # divisor: when 1 (default) sets stored color on all leds >= offset, when 2 sets every 2nd led >= offset and so on
 def chainableRgbLed_modulo(pin, offset, divisor):
 	write_i2c_block(address, chainableRgbLedSetModulo_cmd + [pin, offset, divisor])
-	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - sets leds similar to a bar graph, reversible
@@ -520,7 +532,6 @@ def chainableRgbLed_modulo(pin, offset, divisor):
 # reversible (0-1) when 0 counting outwards from GrovePi, 0 = led closest to the GrovePi, otherwise counting inwards
 def chainableRgbLed_setLevel(pin, level, reverse):
 	write_i2c_block(address, chainableRgbLedSetLevel_cmd + [pin, level, reverse])
-	time.sleep(.05)
 	return 1
 
 # Grove - Infrared Receiver- get the commands received from the Grove IR sensor
@@ -528,7 +539,7 @@ def ir_read_signal():
 	try:
 		write_i2c_block(address,ir_read_cmd+[unused,unused,unused])
 		time.sleep(.1)
-		data_back= bus.read_i2c_block_data(address, 1)[0:21]
+		data_back = read_i2c_block(address)[0:21]
 		if (data_back[1]!=255):
 			return data_back
 		return [-1]*21
@@ -541,11 +552,9 @@ def ir_recv_pin(pin):
 
 def dust_sensor_en():
 	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
 
 def dust_sensor_dis():
 	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
 
 def dustSensorRead():
 	"""
@@ -557,16 +566,9 @@ def dustSensorRead():
 	different interval, use setDustSensrInterval function.
 	"""
 	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
-	#read_i2c_byte(address)
-	#number = read_i2c_block(address)
-	#return (number[1] * 256 + number[2])
-	data_back= bus.read_i2c_block_data(address, 1)[0:6]
-	time.sleep(I2CDELAY)
-	#print data_back[:4]
+	data_back= read_i2c_block(address)[0:6]
 	if data_back[0]!=255:
 		lowpulseoccupancy=(data_back[3] * 65536 + data_back[2] * 256 + data_back[1])
-		#print [data_back[0],lowpulseoccupancy]
 		return [data_back[0], lowpulseoccupancy]
 	else:
 		return [-1,-1]
@@ -575,13 +577,10 @@ def setDustSensorInterval(interval_ms):
 	byte1 = interval_ms & 0xFF
 	byte2 = interval_ms >> 8
 	write_i2c_block(address, dust_sensor_int_cmd + [byte1, byte2] + [unused])
-	time.sleep(I2CDELAY)
 
 def getDustSensorInterval():
 	write_i2c_block(address, dust_sensor_read_int_cmd + 3 * [unused])
-	time.sleep(I2CDELAY)
-	data_back = bus.read_i2c_block_data(address, 1)[0:2]
-	time.sleep(I2CDELAY)
+	data_back = read_i2c_block(address)[0:2]
 
 	if -1 in data_back: return -1
 
@@ -604,17 +603,13 @@ def dustSensorReadMore(blocking = True):
 
 def encoder_en():
 	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
 
 def encoder_dis():
 	write_i2c_block(address, encoder_dis_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
 
 def encoderRead():
 	write_i2c_block(address, encoder_read_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
-	data_back= bus.read_i2c_block_data(address, 1)[0:2]
-	#print data_back
+	data_back= read_i2c_block(address)[0:2]
 	if data_back[0]!=255:
 		return [data_back[0],data_back[1]]
 	else:
@@ -622,16 +617,13 @@ def encoderRead():
 
 def flowDisable():
 	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
 
 def flowEnable():
 	write_i2c_block(address, flow_en_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
 
 def flowRead():
 	write_i2c_block(address, flow_read_cmd + [unused, unused, unused])
-	time.sleep(I2CDELAY)
-	data_back= bus.read_i2c_block_data(address, 1)[0:3]
+	data_back= read_i2c_block(address)[0:3]
 	#print data_back
 	if data_back[0]!=255:
 		return [data_back[0],data_back[2]*256+data_back[1]]

@@ -27,52 +27,64 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define flow_en_cmd				       18
 #define flow_dis_cmd       		   13
 
-int cmd[5];
-int index=0;
-int flag=0;
-int i;
-byte val=0,b[21],float_array[4],dht_b[21];
+#define data_not_available       23
+
+volatile int cmd[5];
+volatile int index=0;
+volatile int flag=0;
+volatile byte val=0,b[21],float_array[4],dht_b[21];
+volatile bool need_extra_loop = false;
+
+volatile int run_once;
 unsigned char dta[21];
-int length;
+int length, i;
 int aRead=0;
 byte accFlag=0,clkFlag=0;
 int8_t accv[3];
 byte rgb[] = { 0, 0, 0 };
-int run_once;
 
 //Dust sensor variables:
+volatile unsigned long lowpulseoccupancy = 0, latest_dust_val=0;
+volatile unsigned long t, pulse_end,pulse_start,duration;
+volatile int dust_latest=0;
 unsigned long starttime;
 unsigned long sampletime_ms = 30000;//sample 30s ;
-unsigned long lowpulseoccupancy = 0, latest_dust_val=0;
-unsigned long t, pulse_end,pulse_start,duration;
 int dust_run_bk=0;
-int dust_latest=0;
 int l_status;
 
 //Encoder variable
 int index_LED;
-byte enc_val[2];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background
+volatile byte enc_val[2];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background
 int enc_run_bk=0;   //Flag for first time setup
 
 //Flow sensor variables
 volatile int NbTopsFan; //measuring the rising edges of the signal
+volatile byte flow_val[3]; //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background
 int Calc;
-int hallsensor = 2;    //The pin location of the sensor
+int hallsensor = 2; //The pin location of the sensor
 int flow_run_bk=0;
 long flow_read_start;
-byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background
+int pin;
+int j;
+
+// all user-defined functions
+void processIO();
+void flushI2C();
+void receiveData();
+void sendData();
+void rpm();
+void readPulseDust();
 
 void setup()
 {
-    // Serial.begin(38400);         // start serial for output
+    Serial.begin(38400);         // start serial for output
     Wire.begin(SLAVE_ADDRESS);
 
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
 }
-int pin;
-int j;
-void loop()
+
+void processIO()
 {
 	long dur,RangeCm;
   //Dust sensor can run in background so has a dedicated if condition
@@ -82,7 +94,7 @@ void loop()
     {
       dust_latest = 1;
       latest_dust_val = lowpulseoccupancy;
-      lowpulseoccupancy = 0;``
+      lowpulseoccupancy = 0;
       starttime = millis();
     }
   }
@@ -160,9 +172,9 @@ void loop()
 				byte *b1=(byte*)&t;
 				byte *b2=(byte*)&h;
 				for(j=0;j<4;j++)
-				dht_b[j+1]=b1[j];
+				    dht_b[j+1]=b1[j];
 				for(j=4;j<8;j++)
-				dht_b[j+1]=b2[j-4];
+				    dht_b[j+1]=b2[j-4];
 				run_once=0;
 			}
 		}
@@ -598,8 +610,23 @@ void loop()
     }
 }
 
+void loop()
+{
+  if(need_extra_loop == true)
+  {
+    processIO();
+    need_extra_loop = false;
+  }
+  else
+  {
+    processIO();
+  }
+}
+
 void receiveData(int byteCount)
 {
+  if(!need_extra_loop)
+  {
     while(Wire.available())
     {
       if(Wire.available()==4)
@@ -608,53 +635,73 @@ void receiveData(int byteCount)
         index=0;
 	      run_once=1;
       }
-        cmd[index++] = Wire.read();
+      cmd[index++] = Wire.read();
     }
+    need_extra_loop = true;
+  }
+  else
+  {
+    flushI2C();
+  }
+}
+
+void flushI2C()
+{
+  while(Wire.available())
+    Wire.read();
 }
 
 // callback for sending data
 void sendData()
 {
-  if(cmd[0] == 1)
-    Wire.write(val);
-  if(cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
-    Wire.write(b, 3);
-  if(cmd[0] == 8 || cmd[0] == 20)
-    Wire.write(b, 4);
-  if(cmd[0] == 30)
-    Wire.write(b, 9);
-  if(cmd[0] == 40)
-    Wire.write(dht_b, 9);
+  if(need_extra_loop == false)
+  {
+    if(cmd[0] == 1)
+      Wire.write(val);
+    if(cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
+      Wire.write((byte *)b, 3);
+    if(cmd[0] == 8 || cmd[0] == 20)
+      Wire.write((byte *)b, 4);
+    if(cmd[0] == 30)
+      Wire.write((byte *)b, 9);
+    if(cmd[0] == 40)
+      Wire.write((byte *)dht_b, 9);
 
-  if(cmd[0]==21)
-  {
-    Wire.write(b,21);
-    b[0]=0;
+    if(cmd[0]==21)
+    {
+      Wire.write((byte *)b,21);
+      b[0]=0;
+    }
+    if(cmd[0]==dust_sensor_read_cmd)
+    {
+      Wire.write((byte *)b,6);
+      dust_latest = 0;
+    	cmd[0]=0;
+    }
+    if(cmd[0]==dust_sensor_read_int_cmd)
+    {
+      Wire.write((byte *)b,2);
+      cmd[0]=0;
+    }
+    if(cmd[0]==encoder_read_cmd)
+    {
+      Wire.write((byte *)enc_val,2);
+      enc_val[0]=0;
+      cmd[0]=0;
+    }
+    if(cmd[0]==flow_read_cmd)
+    {
+      Wire.write((byte *)flow_val,3);
+      flow_val[0]=0;
+      cmd[0]=0;
+    }
   }
-  if(cmd[0]==dust_sensor_read_cmd)
+  // otherwise just reply the Pi telling
+  // there's no data available yet
+  else
   {
-    Wire.write(b,6);
-    dust_latest = 0;
-  	cmd[0]=0;
+    Wire.write(data_not_available);
   }
-  if(cmd[0]==dust_sensor_read_int_cmd)
-  {
-    Wire.write(b,2);
-    cmd[0]=0;
-  }
-  if(cmd[0]==encoder_read_cmd)
-  {
-    Wire.write(enc_val,2);
-    enc_val[0]=0;
-    cmd[0]=0;
-  }
-  if(cmd[0]==flow_read_cmd)
-  {
-    Wire.write(flow_val,3);
-    flow_val[0]=0;
-    cmd[0]=0;
-  }
-
 }
 
 //ISR for the flow sensor
