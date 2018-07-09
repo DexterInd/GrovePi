@@ -70,6 +70,7 @@ else:
 
 # I2C Address of Arduino
 address = 0x04
+I2CDELAY = 0.2
 
 # Command Format
 # digitalRead() command format header
@@ -395,7 +396,7 @@ def ledBar_setBits(pin, state):
 # state: (0-1023) a bit for each of the 10 LEDs
 def ledBar_getBits(pin):
 	write_i2c_block(address, ledBarGet_cmd + [pin, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 	read_i2c_byte(0x04)
 	block = read_i2c_block(0x04)
 	return block[1] ^ (block[2] << 8)
@@ -540,11 +541,11 @@ def ir_recv_pin(pin):
 
 def dust_sensor_en():
 	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def dust_sensor_dis():
 	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def dustSensorRead():
 	"""
@@ -556,11 +557,12 @@ def dustSensorRead():
 	different interval, use setDustSensrInterval function.
 	"""
 	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 	#read_i2c_byte(address)
 	#number = read_i2c_block(address)
 	#return (number[1] * 256 + number[2])
 	data_back= bus.read_i2c_block_data(address, 1)[0:6]
+	time.sleep(I2CDELAY)
 	#print data_back[:4]
 	if data_back[0]!=255:
 		lowpulseoccupancy=(data_back[3] * 65536 + data_back[2] * 256 + data_back[1])
@@ -573,12 +575,13 @@ def setDustSensorInterval(interval_ms):
 	byte1 = interval_ms & 0xFF
 	byte2 = interval_ms >> 8
 	write_i2c_block(address, dust_sensor_int_cmd + [byte1, byte2] + [unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def getDustSensorInterval():
 	write_i2c_block(address, dust_sensor_read_int_cmd + 3 * [unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 	data_back = bus.read_i2c_block_data(address, 1)[0:2]
+	time.sleep(I2CDELAY)
 
 	if -1 in data_back: return -1
 
@@ -589,7 +592,6 @@ def dustSensorReadMore(blocking = True):
 	sampletime_ms = getDustSensorInterval()
 	found, lpo = dustSensorRead()
 	while found in [0, -1] and blocking is True:
-		time.sleep(1.0)
 		found, lpo = dustSensorRead()
 
 	if found in [0, -1] and blocking is False:
@@ -602,15 +604,15 @@ def dustSensorReadMore(blocking = True):
 
 def encoder_en():
 	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def encoder_dis():
 	write_i2c_block(address, encoder_dis_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def encoderRead():
 	write_i2c_block(address, encoder_read_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 	data_back= bus.read_i2c_block_data(address, 1)[0:2]
 	#print data_back
 	if data_back[0]!=255:
@@ -620,15 +622,15 @@ def encoderRead():
 
 def flowDisable():
 	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def flowEnable():
 	write_i2c_block(address, flow_en_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 
 def flowRead():
 	write_i2c_block(address, flow_read_cmd + [unused, unused, unused])
-	time.sleep(.2)
+	time.sleep(I2CDELAY)
 	data_back= bus.read_i2c_block_data(address, 1)[0:3]
 	#print data_back
 	if data_back[0]!=255:
