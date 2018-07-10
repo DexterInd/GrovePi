@@ -86,6 +86,7 @@ void setup()
 
 void processIO()
 {
+  delay(2);
 	long dur,RangeCm;
   //Dust sensor can run in background so has a dedicated if condition
   if(dust_run_bk)
@@ -136,7 +137,11 @@ void processIO()
 		  delayMicroseconds(5);
 		  digitalWrite(pin,LOW);
 		  pinMode(pin,INPUT);
-		  dur = pulseIn(pin,HIGH);
+      // setting timeout to 75000 microseconds
+      // which is roughly the equivalent of time needed for the sound
+      // to travel 10 meters from the sensor to the target
+      // and backwards - where the speed of sound is 343m/s
+		  dur = pulseIn(pin,HIGH,75000);
 		  RangeCm = dur/29/2;
 		  b[1]=RangeCm/256;
 		  b[2]=RangeCm%256;

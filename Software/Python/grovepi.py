@@ -246,6 +246,7 @@ def analogRead(pin):
 # Write PWM
 def analogWrite(pin, value):
 	write_i2c_block(address, aWrite_cmd + [pin, value, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 
@@ -267,8 +268,7 @@ def temp(pin, model = '1.0'):
 # Read value from Grove Ultrasonic
 def ultrasonicRead(pin):
 	write_i2c_block(address, uRead_cmd + [pin, unused, unused])
-	read_i2c_byte(address)
-	number = read_i2c_block(address)
+	number = read_i2c_block(address, no_bytes = 3)
 	return (number[1] * 256 + number[2])
 
 
