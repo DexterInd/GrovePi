@@ -275,16 +275,16 @@ def ultrasonicRead(pin):
 # Read the firmware version
 def version():
 	write_i2c_block(address, version_cmd + [unused, unused, unused])
-	read_i2c_byte(address)
-	number = read_i2c_block(address)
+	number = read_i2c_block(address, no_bytes = 4)
 	return "%s.%s.%s" % (number[1], number[2], number[3])
 
 
 # Read Grove Accelerometer (+/- 1.5g) XYZ value
+# Need to investigate why this reports what was read with the previous command
+# Doesn't look to be implemented on the GrovePi
 def acc_xyz():
 	write_i2c_block(address, acc_xyz_cmd + [unused, unused, unused])
-	read_i2c_byte(address)
-	number = read_i2c_block(address)
+	number = read_i2c_block(address, no_bytes = 4)
 	if number[1] > 32:
 		number[1] = - (number[1] - 224)
 	if number[2] > 32:
@@ -295,28 +295,16 @@ def acc_xyz():
 
 
 # Read from Grove RTC
+# Doesn't look to be implemented on the GrovePi
 def rtc_getTime():
 	write_i2c_block(address, rtc_getTime_cmd + [unused, unused, unused])
-	read_i2c_byte(address)
 	number = read_i2c_block(address)
 	return number
-
 
 # Read and return temperature and humidity from Grove DHT Pro
 def dht(pin, module_type):
 	write_i2c_block(address, dht_temp_cmd + [pin, module_type, unused])
-
-	# Delay necessary for proper reading fron DHT sensor
-	# time.sleep(.6)
-	try:
-		read_i2c_byte(address)
-		number = read_i2c_block(address)
-		# time.sleep(.1)
-		if number == -1:
-			return [-1,-1]
-	except (TypeError, IndexError):
-		return [-1,-1]
-	# data returned in IEEE format as a float in 4 bytes
+	number = read_i2c_block(address)
 
 	if p_version==2:
 		h=''
