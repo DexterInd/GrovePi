@@ -48,29 +48,29 @@ import time
 import math
 import struct
 import numpy
+from periphery import I2C, I2CError
 
 debug = 0
 
 if sys.version_info<(3,0):
-	p_version=2
+	p_version = 2
 else:
-	p_version=3
+	p_version = 3
 
 if sys.platform == 'uwp':
-	import winrt_smbus as smbus
-	bus = smbus.SMBus(1)
+	bus_port = 1
 else:
-	import smbus
 	import RPi.GPIO as GPIO
 	rev = GPIO.RPI_REVISION
 	if rev == 2 or rev == 3:
-		bus = smbus.SMBus(1)
+		bus_port = 1
 	else:
-		bus = smbus.SMBus(0)
+		bus_port = 0
 
 # I2C Address of Arduino
 address = 0x04
-I2CDELAY = 0.2
+i2c = I2C('/dev/i2c-' + str(bus_port))
+max_recv_size = 10
 
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
@@ -180,47 +180,31 @@ flow_en_cmd=[18]
 def write_i2c_block(address, block):
 	for i in range(retries):
 		try:
-			return bus.write_i2c_block_data(address, 1, block)
-		except IOError:
+			msg = [I2C.Message(block)]
+			i2c.transfer(address, msg)
+			return
+		except I2CError:
 			time.sleep(0.003)
 
 	time.sleep(0.001)
 	raise IOError("GrovePi is unreachable")
 
-# Read I2C byte from the GrovePi
-def read_i2c_byte(address):
-	data = data_not_available_cmd[0]
-	count = 0
-
-	while data in [data_not_available_cmd[0], 255] and count < retries:
-		try:
-			data = bus.read_byte(address)
-			if count > 0:
-				count = 0
-			time.sleep(0.0002)
-		except:
-			count += 1
-			time.sleep(0.003)
-
-	time.sleep(0.001)
-	if count == retries:
-		raise IOError("GrovePi is unreachable in grovepi.read_i2c_byte func")
-	else:
-		return data
-
-
 # Read I2C block from the GrovePi
-def read_i2c_block(address):
- 	data = data_not_available_cmd
+def read_i2c_block(address, no_bytes = max_recv_size):
+	data = data_not_available_cmd
 	count = 0
 
 	while data[0] in [data_not_available_cmd[0], 255] and count < retries:
 		try:
-			data = bus.read_i2c_block_data(address, 1)
+			read_bytes = [255] * no_bytes
+			msg = [I2C.Message(read_bytes, read = True)]
+			i2c.transfer(address, msg)
+			data = msg[0].data
+
 			if count > 0:
 				count = 0
 			time.sleep(0.0002)
-		except:
+		except I2CError:
 			count += 1
 			time.sleep(0.003)
 
@@ -233,13 +217,13 @@ def read_i2c_block(address):
 # Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
-	data = read_i2c_byte(address)
+	data = read_i2c_block(address, no_bytes = 1)[0]
 	return data
 
 # Arduino Digital Write
 def digitalWrite(pin, value):
 	write_i2c_block(address, dWrite_cmd + [pin, value, unused])
-	read_i2c_byte(address)
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Setting Up Pin mode on Arduino
@@ -248,14 +232,14 @@ def pinMode(pin, mode):
 		write_i2c_block(address, pMode_cmd + [pin, 1, unused])
 	elif mode == "INPUT":
 		write_i2c_block(address, pMode_cmd + [pin, 0, unused])
-	read_i2c_byte(address)
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 
 # Read analog value from Pin
 def analogRead(pin):
 	write_i2c_block(address, aRead_cmd + [pin, unused, unused])
-	number = read_i2c_block(address)
+	number = read_i2c_block(address, no_bytes = 3)
 	return number[1] * 256 + number[2]
 
 
