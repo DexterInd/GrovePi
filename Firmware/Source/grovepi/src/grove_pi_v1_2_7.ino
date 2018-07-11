@@ -30,6 +30,7 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 
 #define ir_read_cmd              21
 #define ir_recv_pin_cmd          22
+#define ir_read_isdata           24
 
 #define data_not_available       23
 
@@ -94,10 +95,11 @@ void processIO()
   //Dust sensor can run in background so has a dedicated if condition
   if(dust_run_bk)
   {
-    if(millis() - starttime > sampletime_ms)
+    float current_time = millis() - starttime;
+    if(current_time > sampletime_ms)
     {
       dust_latest = 1;
-      latest_dust_val = lowpulseoccupancy;
+      latest_dust_val = lowpulseoccupancy * sampletime_ms / current_time;
       lowpulseoccupancy = 0;
       starttime = millis();
     }
@@ -545,10 +547,11 @@ void processIO()
   			b[0] = dust_latest;
   			b[1] = latest_dust_val & 0xFF;
   			b[2] = (latest_dust_val >> 8) & 0xFF;
-  			b[3] = latest_dust_val >> 16;
+  			b[3] = (latest_dust_val >> 16) & 0xFF;
         b[4] = sampletime_ms & 0xFF;
         b[5] = sampletime_ms >> 8;
   			run_once = 0;
+        Serial.println(latest_dust_val);
 			}
 		}
 		else if(cmd[0]==encoder_en_cmd)
@@ -579,19 +582,18 @@ void processIO()
 		}
     else if(cmd[0]==ir_recv_pin_cmd)
     {
+      Serial.print(cmd[1]);
       IR.Init(cmd[1]);
       cmd[0] = 0;
     }
     else if(cmd[0]==ir_read_cmd)
     {
-      unsigned char data[22];
       if(IR.IsDta())
-        IR.Recv(data);
-      for(int i = 0; i < 21; i++)
-        b[i] = data[i];
-        Serial.print(data[i]);
-      Serial.println();
-      cmd[0] = 0;
+        IR.Recv((unsigned char *)b);
+    }
+    else if(cmd[0]==ir_read_isdata)
+    {
+      b[0] = IR.IsDta();
     }
 	}
     if(enc_run_bk)
@@ -689,10 +691,14 @@ void sendData()
     if(cmd[0] == 40)
       Wire.write((byte *)dht_b, 9);
 
-    if(cmd[0]==21)
+    if(cmd[0]==ir_read_cmd)
     {
       Wire.write((byte *)b,21);
       b[0]=0;
+    }
+    if(cmd[0]==ir_read_isdata)
+    {
+      Wire.write((byte *)b, 1);
     }
     if(cmd[0]==dust_sensor_read_cmd)
     {

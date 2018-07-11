@@ -5,10 +5,10 @@
  * For details, see http://arcfn.com/2009/08/multi-protocol-infrared-remote-library.html
  *
  * Modified by Paul Stoffregen <paul@pjrc.com> to support other boards and timers
- * Modified  by Mitra Ardron <mitra@mitra.biz> 
+ * Modified  by Mitra Ardron <mitra@mitra.biz>
  * Added Sanyo and Mitsubishi controllers
  * Modified Sony to spot the repeat codes that some Sony's send
- * 
+ *
  * Modifier by
  * Interrupt code based on NECIRrcv by Joe Knapp
  * http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1210243556
@@ -33,7 +33,7 @@ void IRSendRev::sendRaw(unsigned int buf[], int len, int hz)
   for (int i = 0; i < len; i++) {
     if (i & 1) {
       space(buf[i]);
-    } 
+    }
     else {
       mark(buf[i]);
     }
@@ -70,7 +70,7 @@ void IRSendRev::enableIROut(int khz) {
 
   // Disable the Timer2 Interrupt (which is used for receiving IR)
   TIMER_DISABLE_INTR; //Timer2 Overflow Interrupt
-  
+
   pinMode(TIMER_PWM_PIN, OUTPUT);
   digitalWrite(TIMER_PWM_PIN, LOW); // When not sending PWM, we want it low
 
@@ -82,7 +82,7 @@ void IRSendRev::enableIROut(int khz) {
 void IRSendRev::Init(int revPin)
 {
     irparams.recvpin    = revPin;
-    
+
     enableIRIn(); // Start the receiver
     delay(20);
     Clear();
@@ -142,7 +142,7 @@ ISR(TIMER_INTR_NAME)
       if (irparams.timer < GAP_TICKS) {
         // Not big enough to be a gap.
         irparams.timer = 0;
-      } 
+      }
       else {
         // gap just ended, record duration and start recording transmission
         irparams.rawlen = 0;
@@ -172,7 +172,7 @@ ISR(TIMER_INTR_NAME)
         // Switch to STOP
         // Don't reset timer; keep counting space width
         irparams.rcvstate = STATE_STOP;
-      } 
+      }
     }
     break;
   case STATE_STOP: // waiting, measuring gap
@@ -192,14 +192,15 @@ void IRSendRev::Clear() {
 // Decodes the received IR message
 // Returns 0 if no data ready, 1 if data ready.
 // Results of decoding are stored in results
-int IRSendRev::decode(decode_results *results) {
+int IRSendRev::decode(decode_results *results, bool throwaway) {
   results->rawbuf = irparams.rawbuf;
   results->rawlen = irparams.rawlen;
   if (irparams.rcvstate != STATE_STOP) {
     return ERR;
   }
   // Throw away and start over
-  Clear();
+	if(throwaway)
+  	Clear();
   return 1;
 }
 
@@ -222,7 +223,7 @@ unsigned char IRSendRev::Recv(unsigned char *revData)
     int j = 0;
     while(1)        // count nlong
     {
-        if(results.rawbuf[4+2*i] > (2*nshort))
+        if(results.rawbuf[4+2*i] > (unsigned int)(2*nshort))
         {
             nlong += results.rawbuf[4+2*i];
             j++;
@@ -239,7 +240,7 @@ unsigned char IRSendRev::Recv(unsigned char *revData)
         revData[i+D_DATA] = 0x00;
         for(j = 0; j<8; j++)
         {
-            if(results.rawbuf[4 + 16*i + j*2] > doubleshort) // 1
+            if(results.rawbuf[4 + 16*i + j*2] > (unsigned int)doubleshort) // 1
             {
                 revData[i+D_DATA] |= 0x01<< (7-j);
             }
@@ -255,7 +256,7 @@ unsigned char IRSendRev::Recv(unsigned char *revData)
     revData[D_SHORT]    = nshort;
     revData[D_LONG]     = nlong;
     revData[D_DATALEN]  = count_data;
- 
+
 #if __DEBUG
     Serial.print("\r\n*************************************************************\r\n");
     Serial.print("len\t = ");Serial.println(revData[D_LEN]);
@@ -279,15 +280,14 @@ unsigned char IRSendRev::Recv(unsigned char *revData)
 unsigned char IRSendRev::IsDta()
 {
 
-    if(decode(&results))
+    if(decode(&results,false))
     {
         int count       = results.rawlen;
-        if(count < 20 || (count -4)%8 != 0)
+        if(count < 20 || (count -4) % 8 != 0)
         {
 #if __DEBUG
             Serial.print("IR GET BAD DATA!\r\n");
 #endif
-            Clear();        // Receive the next value
             return 0;
         }
         int count_data  = (count-4) / 16;
@@ -297,7 +297,7 @@ unsigned char IRSendRev::IsDta()
 #endif
         return (unsigned char)(count_data+6);
     }
-    else 
+    else
     {
         return 0;
     }
@@ -306,7 +306,6 @@ unsigned char IRSendRev::IsDta()
 
 void IRSendRev::Send(unsigned char *idata, unsigned char ifreq)
 {
-    int len = idata[0];
     unsigned char start_high    = idata[1];
     unsigned char start_low     = idata[2];
     unsigned char nshort        = idata[3];
@@ -366,7 +365,7 @@ void IRSendRev::Send(unsigned char *idata, unsigned char ifreq)
 #endif
     sendRaw(pSt, 4+datalen*16, ifreq);
     free(pSt);
-    
+
 }
 
 IRSendRev IR;

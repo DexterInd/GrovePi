@@ -48,16 +48,16 @@ class IRSendRev
     private:
     decode_results results;
     //**************************rev**********************************
-    
+
     private:
-    int decode(decode_results *results);
+    int decode(decode_results *results, bool throwaway = true);
     void enableIRIn();
-    
+
     public:
 
     void Init(int revPin);                          // init
     void Init();
-    unsigned char Recv(unsigned char *revData);     // 
+    unsigned char Recv(unsigned char *revData);     //
     unsigned char IsDta();                          // if IR get data
     void Clear();                                   // clear IR data
 
@@ -67,13 +67,13 @@ class IRSendRev
     void sendRaw(unsigned int buf[], int len, int hz);
 
     // private:
-    
+
     void mark(int usec);
     void space(int usec);
 	void enableIROut(int khz);
-    
+
     public:
-    
+
     void Send(unsigned char *idata, unsigned char ifreq);
 
 };
