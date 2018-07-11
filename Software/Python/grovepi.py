@@ -354,18 +354,21 @@ def statisticalNoiseReduction(values, std_factor_threshold = 2):
 # orientation: (0 = red to green, 1 = green to red)
 def ledBar_init(pin, orientation):
 	write_i2c_block(address, ledBarInit_cmd + [pin, orientation, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove LED Bar - set orientation
 # orientation: (0 = red to green,  1 = green to red)
 def ledBar_orientation(pin, orientation):
 	write_i2c_block(address, ledBarOrient_cmd + [pin, orientation, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove LED Bar - set level
 # level: (0-10)
 def ledBar_setLevel(pin, level):
 	write_i2c_block(address, ledBarLevel_cmd + [pin, level, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove LED Bar - set single led
@@ -373,12 +376,14 @@ def ledBar_setLevel(pin, level):
 # state: off or on (0-1)
 def ledBar_setLed(pin, led, state):
 	write_i2c_block(address, ledBarSetOne_cmd + [pin, led, state])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove LED Bar - toggle single led
 # led: which led (1-10)
 def ledBar_toggleLed(pin, led):
 	write_i2c_block(address, ledBarToggleOne_cmd + [pin, led, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove LED Bar - set all leds
@@ -387,20 +392,21 @@ def ledBar_setBits(pin, state):
 	byte1 = state & 255
 	byte2 = state >> 8
 	write_i2c_block(address, ledBarSet_cmd + [pin, byte1, byte2])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove LED Bar - get current state
 # state: (0-1023) a bit for each of the 10 LEDs
 def ledBar_getBits(pin):
 	write_i2c_block(address, ledBarGet_cmd + [pin, unused, unused])
-	read_i2c_byte(0x04)
-	block = read_i2c_block(0x04)
+	block = read_i2c_block(address, no_bytes = 3)
 	return block[1] ^ (block[2] << 8)
 
 
 # Grove 4 Digit Display - initialise
 def fourDigit_init(pin):
 	write_i2c_block(address, fourDigitInit_cmd + [pin, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - set numeric value with or without leading zeros
@@ -414,6 +420,7 @@ def fourDigit_number(pin, value, leading_zero):
 		write_i2c_block(address, fourDigitValue_cmd + [pin, byte1, byte2])
 	else:
 		write_i2c_block(address, fourDigitValueZeros_cmd + [pin, byte1, byte2])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - set brightness
@@ -421,6 +428,7 @@ def fourDigit_number(pin, value, leading_zero):
 def fourDigit_brightness(pin, brightness):
 	# not actually visible until next command is executed
 	write_i2c_block(address, fourDigitBrightness_cmd + [pin, brightness, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - set individual segment (0-9,A-F)
@@ -428,6 +436,7 @@ def fourDigit_brightness(pin, brightness):
 # value: (0-15) or (0-F)
 def fourDigit_digit(pin, segment, value):
 	write_i2c_block(address, fourDigitIndividualDigit_cmd + [pin, segment, value])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - set 7 individual leds of a segment
@@ -435,6 +444,7 @@ def fourDigit_digit(pin, segment, value):
 # leds: (0-255) or (0-0xFF) one bit per led, segment 2 is special, 8th bit is the colon
 def fourDigit_segment(pin, segment, leds):
 	write_i2c_block(address, fourDigitIndividualLeds_cmd + [pin, segment, leds])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - set left and right values (0-99), with leading zeros and a colon
@@ -443,6 +453,7 @@ def fourDigit_segment(pin, segment, leds):
 # colon will be lit
 def fourDigit_score(pin, left, right):
 	write_i2c_block(address, fourDigitScore_cmd + [pin, left, right])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - display analogRead value for n seconds, 4 samples per second
@@ -450,17 +461,20 @@ def fourDigit_score(pin, left, right):
 # duration: analog read for this many seconds
 def fourDigit_monitor(pin, analog, duration):
 	write_i2c_block(address, fourDigitAnalogRead_cmd + [pin, analog, duration])
-	time.sleep(duration + .05)
+	read_i2c_block(address, no_bytes = 1)
+	time.sleep(duration)
 	return 1
 
 # Grove 4 Digit Display - turn entire display on (88:88)
 def fourDigit_on(pin):
 	write_i2c_block(address, fourDigitAllOn_cmd + [pin, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove 4 Digit Display - turn entire display off
 def fourDigit_off(pin):
 	write_i2c_block(address, fourDigitAllOff_cmd + [pin, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove Chainable RGB LED - store a color for later use
@@ -469,12 +483,14 @@ def fourDigit_off(pin):
 # blue: 0-255
 def storeColor(red, green, blue):
 	write_i2c_block(address, storeColor_cmd + [red, green, blue])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove Chainable RGB LED - initialise
 # numLeds: how many leds do you have in the chain
 def chainableRgbLed_init(pin, numLeds):
 	write_i2c_block(address, chainableRgbLedInit_cmd + [pin, numLeds, unused])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove Chainable RGB LED - initialise and test with a simple color
@@ -483,6 +499,7 @@ def chainableRgbLed_init(pin, numLeds):
 #            ie. 0 black, 1 blue, 2 green, 3 cyan, 4 red, 5 magenta, 6 yellow, 7 white
 def chainableRgbLed_test(pin, numLeds, testColor):
 	write_i2c_block(address, chainableRgbLedTest_cmd + [pin, numLeds, testColor])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove Chainable RGB LED - set one or more leds to the stored color by pattern
@@ -490,6 +507,7 @@ def chainableRgbLed_test(pin, numLeds, testColor):
 # whichLed: index of led you wish to set counting outwards from the GrovePi, 0 = led closest to the GrovePi
 def chainableRgbLed_pattern(pin, pattern, whichLed):
 	write_i2c_block(address, chainableRgbLedSetPattern_cmd + [pin, pattern, whichLed])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove Chainable RGB LED - set one or more leds to the stored color by modulo
@@ -497,6 +515,7 @@ def chainableRgbLed_pattern(pin, pattern, whichLed):
 # divisor: when 1 (default) sets stored color on all leds >= offset, when 2 sets every 2nd led >= offset and so on
 def chainableRgbLed_modulo(pin, offset, divisor):
 	write_i2c_block(address, chainableRgbLedSetModulo_cmd + [pin, offset, divisor])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove Chainable RGB LED - sets leds similar to a bar graph, reversible
@@ -504,29 +523,29 @@ def chainableRgbLed_modulo(pin, offset, divisor):
 # reversible (0-1) when 0 counting outwards from GrovePi, 0 = led closest to the GrovePi, otherwise counting inwards
 def chainableRgbLed_setLevel(pin, level, reverse):
 	write_i2c_block(address, chainableRgbLedSetLevel_cmd + [pin, level, reverse])
+	read_i2c_block(address, no_bytes = 1)
 	return 1
 
 # Grove - Infrared Receiver- get the commands received from the Grove IR sensor
 def ir_read_signal():
-	try:
-		write_i2c_block(address,ir_read_cmd+[unused,unused,unused])
-		time.sleep(.1)
-		data_back = read_i2c_block(address)[0:21]
-		if (data_back[1]!=255):
-			return data_back
-		return [-1]*21
-	except IOError:
-		return [-1]*21
+	write_i2c_block(address, ir_read_cmd + [unused, unused, unused])
+	data_back = read_i2c_block(address, no_bytes = 22)[0:21]
+	if (data_back[1] != 255):
+		return data_back
+	return [-1]*21
 
 # Grove - Infrared Receiver- set the pin on which the Grove IR sensor is connected
 def ir_recv_pin(pin):
-	write_i2c_block(address,ir_recv_pin_cmd+[pin,unused,unused])
+	write_i2c_block(address,ir_recv_pin_cmd + [pin, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
 
 def dust_sensor_en():
 	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
 
 def dust_sensor_dis():
 	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
 
 def dustSensorRead():
 	"""

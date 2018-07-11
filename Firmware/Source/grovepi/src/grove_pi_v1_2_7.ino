@@ -5,6 +5,7 @@
 #include "ChainableLED.h"
 #include "Encoder.h"
 #include "TimerOne.h"
+#include "IRSendRev.h"
 
 DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
@@ -26,6 +27,9 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define flow_read_cmd            12
 #define flow_en_cmd				       18
 #define flow_dis_cmd       		   13
+
+#define ir_read_cmd              21
+#define ir_recv_pin_cmd          22
 
 #define data_not_available       23
 
@@ -360,7 +364,6 @@ void processIO()
 		  // reading analog pin 4x per second
 		  for(int i = 0; i < reads; i++) {
 			fourdigit[cmd[1]-2].showNumberDec(analogRead(pin), false);  // showNumberDec(number, leading_zero)
-			delay(250);
 		  }
 		}
 
@@ -574,6 +577,22 @@ void processIO()
 			detachInterrupt(0);
 			cmd[0]=0;
 		}
+    else if(cmd[0]==ir_recv_pin_cmd)
+    {
+      IR.Init(cmd[1]);
+      cmd[0] = 0;
+    }
+    else if(cmd[0]==ir_read_cmd)
+    {
+      unsigned char data[22];
+      if(IR.IsDta())
+        IR.Recv(data);
+      for(int i = 0; i < 21; i++)
+        b[i] = data[i];
+        Serial.print(data[i]);
+      Serial.println();
+      cmd[0] = 0;
+    }
 	}
     if(enc_run_bk)
     {
