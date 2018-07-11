@@ -86,7 +86,6 @@ void setup()
 
 void processIO()
 {
-  delay(2);
 	long dur,RangeCm;
   //Dust sensor can run in background so has a dedicated if condition
   if(dust_run_bk)
@@ -170,12 +169,11 @@ void processIO()
 					dht.begin(cmd[1],DHT21);
 				else if(cmd[2]==3)
 					dht.begin(cmd[1],AM2301);
-				float t= dht.readTemperature();
-				float h= dht.readHumidity();
-				//Serial.print(t);
-				//Serial.print("#");
-				byte *b1=(byte*)&t;
-				byte *b2=(byte*)&h;
+        float *buffer;
+	      buffer = dht.readTempHum();
+
+				byte *b1=(byte*)buffer;
+				byte *b2=(byte*)(buffer + 1);
 				for(j=0;j<4;j++)
 				    dht_b[j+1]=b1[j];
 				for(j=4;j<8;j++)

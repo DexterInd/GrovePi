@@ -34,7 +34,7 @@ float DHT::readTemperature(bool S) {
       f = data[2];
       if(S)
       	f = convertCtoF(f);
-      	
+
       return f;
     case DHT22:
     case DHT21:
@@ -159,7 +159,45 @@ boolean DHT::read(void) {
     return true;
   }
 
-
   return false;
+}
 
+float* DHT::readTempHum(bool scale)
+{
+  if(!read())
+    return NULL;
+
+  switch(_type) {
+    case DHT11:
+      // temperature
+      buffer[0] = data[2];
+      if(scale)
+        buffer[0] = convertCtoF(buffer[0]);
+
+      // humidity
+      buffer[1] = data[0];
+      break;
+    case DHT22:
+      buffer[0] = buffer[1] = 0;
+      break;
+    case DHT21:
+      // temperature
+      buffer[0] = data[2] & 0x7F;
+      buffer[0] *= 256;
+      buffer[0] += data[3];
+      buffer[0] /= 10;
+      if (data[2] & 0x80)
+	       buffer[0] *= -1;
+      if(scale)
+	       buffer[0] = convertCtoF(buffer[0]);
+
+      // humidity
+      buffer[1] = data[0];
+      buffer[1] *= 256;
+      buffer[1] += data[1];
+      buffer[1] /= 10;
+      break;
+  }
+
+  return &buffer[0];
 }

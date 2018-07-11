@@ -6,7 +6,7 @@
  #include "WProgram.h"
 #endif
 
-/* DHT library 
+/* DHT library
 
 MIT license
 written by Adafruit Industries
@@ -27,6 +27,7 @@ class DHT {
   boolean read(void);
   unsigned long _lastreadtime;
   boolean firstreading;
+  float buffer[2];
 
  public:
   //DHT(uint8_t pin, uint8_t type, uint8_t count=6);
@@ -34,6 +35,6 @@ class DHT {
   float readTemperature(bool S=false);
   float convertCtoF(float);
   float readHumidity(void);
-
+  float* readTempHum(bool scale = false);
 };
 #endif
