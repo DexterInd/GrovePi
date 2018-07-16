@@ -49,7 +49,8 @@ int8_t accv[3];
 byte rgb[] = { 0, 0, 0 };
 
 //Dust sensor variables:
-volatile unsigned long lowpulseoccupancy = 0, latest_dust_val=0;
+volatile uint16_t lowpulseoccupancy = 0;
+unsigned long latest_dust_val = 0;
 volatile unsigned long t, pulse_end,pulse_start,duration;
 volatile int dust_latest=0;
 unsigned long starttime;
@@ -95,13 +96,19 @@ void processIO()
   //Dust sensor can run in background so has a dedicated if condition
   if(dust_run_bk)
   {
-    float current_time = millis() - starttime;
+    float this_time = millis();
+    float current_time = this_time - starttime;
     if(current_time > sampletime_ms)
     {
-      dust_latest = 1;
+      cli();
       latest_dust_val = lowpulseoccupancy * sampletime_ms / current_time;
       lowpulseoccupancy = 0;
-      starttime = millis();
+      sei();
+
+      starttime = this_time;
+      dust_latest = 1;
+
+      Serial.println(latest_dust_val);
     }
   }
 	if(index==4 && flag == 0 )
@@ -548,10 +555,7 @@ void processIO()
   			b[1] = latest_dust_val & 0xFF;
   			b[2] = (latest_dust_val >> 8) & 0xFF;
   			b[3] = (latest_dust_val >> 16) & 0xFF;
-        b[4] = sampletime_ms & 0xFF;
-        b[5] = sampletime_ms >> 8;
   			run_once = 0;
-        Serial.println(latest_dust_val);
 			}
 		}
 		else if(cmd[0]==encoder_en_cmd)
@@ -702,7 +706,7 @@ void sendData()
     }
     if(cmd[0]==dust_sensor_read_cmd)
     {
-      Wire.write((byte *)b,6);
+      Wire.write((byte *)b,4);
       dust_latest = 0;
     	cmd[0]=0;
     }
@@ -742,7 +746,7 @@ void rpm ()     //This is the function that the interupt calls
 
 void readPulseDust()
 {
-  t = millis();
+  t = micros();
   l_status = digitalRead(2);  // Represents if the line is low or high.
   if(l_status)
     // If the line is high (1), the pulse just ended
@@ -753,7 +757,7 @@ void readPulseDust()
 
   if(pulse_end > pulse_start)
   {
-    duration = pulse_end - pulse_start;
+    duration = (pulse_end - pulse_start) / 1000;
     lowpulseoccupancy = lowpulseoccupancy + duration;   // Add to the pulse length.
     pulse_end = 0;    // If you don't reset this, you'll keep adding the pulse length over and over.
   }

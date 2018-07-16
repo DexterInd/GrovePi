@@ -179,7 +179,7 @@ flow_en_cmd=[18]
 
 # Write I2C block to the GrovePi
 
-def write_i2c_block(address, block):
+def write_i2c_block(address, block, custom_timing = None):
 	for i in range(retries):
 		try:
 			msg = [I2C.Message(block)]
@@ -188,11 +188,12 @@ def write_i2c_block(address, block):
 		except I2CError:
 			time.sleep(0.003)
 
-	time.sleep(0.001)
+	if custom_timing
+	time.sleep(0.002)
 	raise IOError("GrovePi is unreachable")
 
 # Read I2C block from the GrovePi
-def read_i2c_block(address, no_bytes = max_recv_size):
+def read_i2c_block(address, no_bytes = max_recv_size, custom_timing = None):
 	data = data_not_available_cmd
 	count = 0
 
@@ -210,7 +211,7 @@ def read_i2c_block(address, no_bytes = max_recv_size):
 			count += 1
 			time.sleep(0.003)
 
-	time.sleep(0.001)
+	time.sleep(0.002)
 	if count == retries:
 		raise IOError("GrovePi is unreachable in grovepi.read_i2c_block func")
 	else:
@@ -577,7 +578,7 @@ def dustSensorRead():
 	different interval, use setDustSensrInterval function.
 	"""
 	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
-	data_back = read_i2c_block(address, no_bytes = 7)[0:6]
+	data_back = read_i2c_block(address, no_bytes = 5)[0:4]
 	if data_back[0] != 255:
 		lowpulseoccupancy=(data_back[3] * 65536 + data_back[2] * 256 + data_back[1])
 		return [data_back[0], lowpulseoccupancy]
