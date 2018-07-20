@@ -188,7 +188,6 @@ def write_i2c_block(address, block, custom_timing = None):
 		except I2CError:
 			time.sleep(0.003)
 
-	if custom_timing
 	time.sleep(0.002)
 	raise IOError("GrovePi is unreachable")
 
@@ -603,7 +602,10 @@ def getDustSensorInterval():
 def dustSensorReadMore(blocking = True):
 	sampletime_ms = getDustSensorInterval()
 	found, lpo = dustSensorRead()
+	delay_to_reduce_traffic = 0.05
 	while found in [0, -1] and blocking is True:
+		if delay_to_reduce_traffic * 1000 < sampletime_ms:
+			time.sleep(delay_to_reduce_traffic)
 		found, lpo = dustSensorRead()
 
 	if found in [0, -1] and blocking is False:
