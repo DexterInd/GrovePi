@@ -75,6 +75,7 @@ max_recv_size = 10
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 retries = 10
+additional_waiting = 0
 
 # Get firmware version
 version_cmd = [8]
@@ -188,7 +189,7 @@ def write_i2c_block(address, block, custom_timing = None):
 		except I2CError:
 			time.sleep(0.003)
 
-	time.sleep(0.002)
+	time.sleep(0.002 + additional_waiting)
 	raise IOError("GrovePi is unreachable")
 
 # Read I2C block from the GrovePi
@@ -210,7 +211,7 @@ def read_i2c_block(address, no_bytes = max_recv_size, custom_timing = None):
 			count += 1
 			time.sleep(0.003)
 
-	time.sleep(0.002)
+	time.sleep(0.002 + additional_waiting)
 	if count == retries:
 		raise IOError("GrovePi is unreachable in grovepi.read_i2c_block func")
 	else:
@@ -530,22 +531,12 @@ def chainableRgbLed_setLevel(pin, level, reverse):
 
 # Grove - Infrared Receiver - get the commands received from the Grove IR sensor
 def ir_read_signal():
-	'''
-	Return block looks this way:
-	BIT_LEN,
-	BIT_START_H, BIT_START_L,
-	BIT_DATA_H, BIT_DATA_L,
-	BIT_DATA_LEN,
-	BIT_DATA (depending on the size specifed by BIT_DATA_LEN)
-
-	More info can be found here:
-	https://github.com/Seeed-Studio/IRSendRev/blob/master/examples/recv/recv.ino
-	'''
 	write_i2c_block(address, ir_read_cmd + [unused, unused, unused])
-	data_back = read_i2c_block(address, no_bytes = 22)[0:21]
-	if (data_back[1] != 255):
-		return data_back
-	return [-1]*21
+	data_back = read_i2c_block(address, no_bytes = 7)
+
+	return (data_back[0],
+			data_back[1] + data_back[2] * 256,
+			data_back[3] + data_back[4] * 256 + data_back[5] * (256 ** 2) + data_back[6] * (256 ** 3))
 
 # Grove - Infrared Receiver - set the pin on which the Grove IR sensor is connected
 def ir_recv_pin(pin):

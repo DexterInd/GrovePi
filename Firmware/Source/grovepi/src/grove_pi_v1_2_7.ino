@@ -2,10 +2,10 @@
 #include "DHT.h"
 #include "Encoder.h"
 #include "Grove_LED_Bar.h"
-#include "IRSendRev.h"
 #include "TM1637.h"
 #include "TimerOne.h"
 #include <Wire.h>
+#include <IRremote.h>
 
 DHT dht;
 Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you
@@ -13,6 +13,9 @@ Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you
 TM1637 fourdigit[6];     // 7 instances for D2-D8, however, max 4 displays, you
                          // can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];  // 7 instances for D2-D8
+
+IRrecv irrecv; // object to interface with the IR receiver
+decode_results results; // results for the IR receiver
 
 #define SLAVE_ADDRESS 0x04
 
@@ -154,6 +157,7 @@ void processIO() {
       RangeCm = dur / 29 / 2;
       b[1] = RangeCm / 256;
       b[2] = RangeCm % 256;
+      Serial.println(RangeCm);
       // Serial.println(b[1]);
       // Serial.println(b[2]);
     }
@@ -553,13 +557,28 @@ void processIO() {
       cmd[0] = 0;
     } else if (cmd[0] == ir_recv_pin_cmd) {
       Serial.print(cmd[1]);
-      IR.Init(cmd[1]);
+      irrecv.setRecvpin(cmd[1]);
+      irrecv.enableIRIn();
       cmd[0] = 0;
     } else if (cmd[0] == ir_read_cmd) {
-      if (IR.IsDta())
-        IR.Recv((unsigned char *)b);
+      if (irrecv.decode(&results))
+      {
+        b[0] = results.decode_type;
+        b[1] = results.address & 0xFF;
+        b[2] = results.address >> 8;
+        b[3] = results.value & 0xFF;
+        b[4] = (results.value >> 8) & 0xFF;
+        b[5] = (results.value >> 16) & 0xFF;
+        b[6] = (results.value >> 24) & 0xFF;
+
+        irrecv.resume(); // Receive the next value
+      }
+      else
+      {
+        b[0] = results.decode_type;
+      }
     } else if (cmd[0] == ir_read_isdata) {
-      b[0] = IR.IsDta();
+      b[0] = irrecv.decode(&results);
     }
   }
   if (enc_run_bk) {
@@ -638,7 +657,7 @@ void sendData() {
       Wire.write((byte *)dht_b, 9);
 
     if (cmd[0] == ir_read_cmd) {
-      Wire.write((byte *)b, 21);
+      Wire.write((byte *)b, 7);
       b[0] = 0;
     }
     if (cmd[0] == ir_read_isdata) {
