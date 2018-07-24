@@ -162,7 +162,7 @@ ir_recv_pin_cmd=[22]
 ir_read_isdata=[24]
 
 # Dust, Encoder & Flow Sensor commands
-dus_sensor_read_cmd=[10]
+dust_sensor_read_cmd=[10]
 dust_sensor_en_cmd=[14]
 dust_sensor_dis_cmd=[15]
 dust_sensor_int_cmd=[9]
@@ -185,15 +185,15 @@ def write_i2c_block(address, block, custom_timing = None):
 		try:
 			msg = [I2C.Message(block)]
 			i2c.transfer(address, msg)
+			time.sleep(0.002 + additional_waiting)
 			return
 		except I2CError:
 			time.sleep(0.003)
 
-	time.sleep(0.002 + additional_waiting)
 	raise IOError("GrovePi is unreachable")
 
 # Read I2C block from the GrovePi
-def read_i2c_block(address, no_bytes = max_recv_size, custom_timing = None):
+def read_i2c_block(address, no_bytes = max_recv_size):
 	data = data_not_available_cmd
 	count = 0
 
@@ -204,23 +204,30 @@ def read_i2c_block(address, no_bytes = max_recv_size, custom_timing = None):
 			i2c.transfer(address, msg)
 			data = msg[0].data
 
+			time.sleep(0.002 + additional_waiting)
 			if count > 0:
 				count = 0
-			time.sleep(0.0002)
+
 		except I2CError:
 			count += 1
 			time.sleep(0.003)
 
-	time.sleep(0.002 + additional_waiting)
 	if count == retries:
 		raise IOError("GrovePi is unreachable in grovepi.read_i2c_block func")
 	else:
 		return data
 
+def read_identified_i2c_block(address, read_command_id, no_bytes):
+	data = [-1]
+	while data[0] != read_command_id[0]:
+		data = read_i2c_block(address, no_bytes + 1)
+
+	return data[1:]
+
 # Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
-	data = read_i2c_block(address, no_bytes = 1)[0]
+	data = read_identified_i2c_block(address, dRead_cmd, no_bytes = 1)[0]
 	return data
 
 # Arduino Digital Write
@@ -242,8 +249,8 @@ def pinMode(pin, mode):
 # Read analog value from Pin
 def analogRead(pin):
 	write_i2c_block(address, aRead_cmd + [pin, unused, unused])
-	number = read_i2c_block(address, no_bytes = 3)
-	return number[1] * 256 + number[2]
+	number = read_identified_i2c_block(address, aRead_cmd, no_bytes = 2)
+	return number[0] * 256 + number[1]
 
 
 # Write PWM
@@ -271,15 +278,15 @@ def temp(pin, model = '1.0'):
 # Read value from Grove Ultrasonic
 def ultrasonicRead(pin):
 	write_i2c_block(address, uRead_cmd + [pin, unused, unused])
-	number = read_i2c_block(address, no_bytes = 3)
-	return (number[1] * 256 + number[2])
+	number = read_identified_i2c_block(address, uRead_cmd, no_bytes = 2)
+	return (number[0] * 256 + number[1])
 
 
 # Read the firmware version
 def version():
 	write_i2c_block(address, version_cmd + [unused, unused, unused])
-	number = read_i2c_block(address, no_bytes = 4)
-	return "%s.%s.%s" % (number[1], number[2], number[3])
+	number = read_identified_i2c_block(address, version_cmd, no_bytes = 3)
+	return "%s.%s.%s" % (number[0], number[1], number[2])
 
 
 # Read Grove Accelerometer (+/- 1.5g) XYZ value
@@ -287,14 +294,14 @@ def version():
 # Doesn't look to be implemented on the GrovePi
 def acc_xyz():
 	write_i2c_block(address, acc_xyz_cmd + [unused, unused, unused])
-	number = read_i2c_block(address, no_bytes = 4)
+	number = read_identified_i2c_block(address, acc_xyz_cmd, no_bytes = 3)
 	if number[1] > 32:
 		number[1] = - (number[1] - 224)
 	if number[2] > 32:
 		number[2] = - (number[2] - 224)
 	if number[3] > 32:
 		number[3] = - (number[3] - 224)
-	return (number[1], number[2], number[3])
+	return (number[0], number[1], number[2])
 
 
 # Read from Grove RTC
@@ -307,25 +314,25 @@ def rtc_getTime():
 # Read and return temperature and humidity from Grove DHT Pro
 def dht(pin, module_type):
 	write_i2c_block(address, dht_temp_cmd + [pin, module_type, unused])
-	number = read_i2c_block(address)
+	number = read_identified_i2c_block(address, dht_temp_cmd, no_bytes = 8)
 
 	if p_version==2:
 		h=''
-		for element in (number[1:5]):
+		for element in (number[0:4]):
 			h+=chr(element)
 
 		t_val=struct.unpack('f', h)
 		t = round(t_val[0], 2)
 
 		h = ''
-		for element in (number[5:9]):
+		for element in (number[4:8]):
 			h+=chr(element)
 
 		hum_val=struct.unpack('f',h)
 		hum = round(hum_val[0], 2)
 	else:
-		t_val=bytearray(number[1:5])
-		h_val=bytearray(number[5:9])
+		t_val=bytearray(number[0:4])
+		h_val=bytearray(number[4:8])
 		t=round(struct.unpack('f',t_val)[0],2)
 		hum=round(struct.unpack('f',h_val)[0],2)
 	if t > -100.0 and t <150.0 and hum >= 0.0 and hum<=100.0:
@@ -402,8 +409,8 @@ def ledBar_setBits(pin, state):
 # state: (0-1023) a bit for each of the 10 LEDs
 def ledBar_getBits(pin):
 	write_i2c_block(address, ledBarGet_cmd + [pin, unused, unused])
-	block = read_i2c_block(address, no_bytes = 3)
-	return block[1] ^ (block[2] << 8)
+	block = read_identified_i2c_block(address, ledBarGet_cmd, no_bytes = 2)
+	return block[0] ^ (block[1] << 8)
 
 
 # Grove 4 Digit Display - initialise
@@ -532,7 +539,7 @@ def chainableRgbLed_setLevel(pin, level, reverse):
 # Grove - Infrared Receiver - get the commands received from the Grove IR sensor
 def ir_read_signal():
 	write_i2c_block(address, ir_read_cmd + [unused, unused, unused])
-	data_back = read_i2c_block(address, no_bytes = 7)
+	data_back = read_identified_i2c_block(address, ir_read_cmd, no_bytes = 7)
 
 	return (data_back[0],
 			data_back[1] + data_back[2] * 256,
@@ -546,7 +553,7 @@ def ir_recv_pin(pin):
 # Grove - Infrared Receiver - check if there's any data that hasn't been read so far
 def ir_is_data():
 	write_i2c_block(address, ir_read_isdata + 3 * [unused])
-	number = read_i2c_block(address, no_bytes = 1)
+	number = read_identified_i2c_block(address, ir_read_isdata, no_bytes = 1)
 
 	return number[0] != 0
 
@@ -567,8 +574,8 @@ def dustSensorRead():
 	interval, then use dustSensorReadMore function. To set a
 	different interval, use setDustSensrInterval function.
 	"""
-	write_i2c_block(address, dus_sensor_read_cmd + [unused, unused, unused])
-	data_back = read_i2c_block(address, no_bytes = 5)[0:4]
+	write_i2c_block(address, dust_sensor_read_cmd + [unused, unused, unused])
+	data_back = read_identified_i2c_block(address, dust_sensor_read_cmd, no_bytes = 4)[0:4]
 	if data_back[0] != 255:
 		lowpulseoccupancy=(data_back[3] * 65536 + data_back[2] * 256 + data_back[1])
 		return [data_back[0], lowpulseoccupancy]
@@ -583,7 +590,7 @@ def setDustSensorInterval(interval_ms):
 
 def getDustSensorInterval():
 	write_i2c_block(address, dust_sensor_read_int_cmd + 3 * [unused])
-	data_back = read_i2c_block(address, no_bytes = 2)[0:2]
+	data_back = read_identified_i2c_block(address, dust_sensor_read_int_cmd, no_bytes = 2)[0:2]
 
 	if -1 in data_back: return -1
 
@@ -617,7 +624,7 @@ def encoder_dis():
 
 def encoderRead():
 	write_i2c_block(address, encoder_read_cmd + [unused, unused, unused])
-	read_i2c_block(address, no_bytes = 2)[0:2]
+	read_identified_i2c_block(address, encoder_read_cmd, no_bytes = 2)[0:2]
 	if data_back[0]!=255:
 		return [data_back[0],data_back[1]]
 	else:

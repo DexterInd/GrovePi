@@ -4,8 +4,8 @@
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "TimerOne.h"
-#include <Wire.h>
 #include <IRremote.h>
+#include <Wire.h>
 
 DHT dht;
 Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you
@@ -14,7 +14,7 @@ TM1637 fourdigit[6];     // 7 instances for D2-D8, however, max 4 displays, you
                          // can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];  // 7 instances for D2-D8
 
-IRrecv irrecv; // object to interface with the IR receiver
+IRrecv irrecv;          // object to interface with the IR receiver
 decode_results results; // results for the IR receiver
 
 #define SLAVE_ADDRESS 0x04
@@ -39,10 +39,10 @@ decode_results results; // results for the IR receiver
 
 #define data_not_available 23
 
-volatile int cmd[5];
+volatile uint8_t cmd[5];
 volatile int index = 0;
 volatile int flag = 0;
-volatile byte val = 0, b[21], float_array[4], dht_b[21];
+volatile byte b[21], float_array[4], dht_b[21];
 volatile bool need_extra_loop = false;
 
 volatile int run_once;
@@ -65,9 +65,9 @@ int l_status;
 
 // Encoder variable
 int index_LED;
-volatile byte
-    enc_val[2]; // Given it's own I2C buffer so that it does not corrupt the
-                // data from other sensors when running in background
+volatile byte enc_val[3];
+// Given it's own I2C buffer so that it does not corrupt the
+// data from other sensors when running in background
 int enc_run_bk = 0; // Flag for first time setup
 
 // Flow sensor variables
@@ -96,6 +96,9 @@ void setup() {
 
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
+
+  DDRD |= 0x10;
+  PORTD &= ~0x10;
 }
 
 void processIO() {
@@ -111,14 +114,17 @@ void processIO() {
       starttime = this_time;
       dust_latest = 1;
 
-      Serial.println(latest_dust_val);
+      // Serial.println(latest_dust_val);
     }
   }
   if (index == 4 && flag == 0) {
     flag = 1;
     // Digital Read
     if (cmd[0] == 1)
-      val = digitalRead(cmd[1]);
+    {
+      b[0] = cmd[0];
+      b[1] = digitalRead(cmd[1]);
+    }
 
     // Digital Write
     else if (cmd[0] == 2)
@@ -127,6 +133,7 @@ void processIO() {
     // Analog Read
     else if (cmd[0] == 3) {
       aRead = analogRead(cmd[1]);
+      b[0] = cmd[0];
       b[1] = aRead / 256;
       b[2] = aRead % 256;
     }
@@ -155,14 +162,16 @@ void processIO() {
       // and backwards - where the speed of sound is 343m/s
       dur = pulseIn(pin, HIGH, 75000);
       RangeCm = dur / 29 / 2;
+      b[0] = cmd[0];
       b[1] = RangeCm / 256;
       b[2] = RangeCm % 256;
-      Serial.println(RangeCm);
+      // Serial.println(b[1] * 256 + b[2]);
       // Serial.println(b[1]);
       // Serial.println(b[2]);
     }
     // Firmware version
     else if (cmd[0] == 8) {
+      b[0] = cmd[0];
       b[1] = 1;
       b[2] = 2;
       b[3] = 7;
@@ -185,10 +194,12 @@ void processIO() {
 
         byte *b1 = (byte *)buffer;
         byte *b2 = (byte *)(buffer + 1);
-        for (j = 0; j < 4; j++)
-          dht_b[j + 1] = b1[j];
-        for (j = 4; j < 8; j++)
-          dht_b[j + 1] = b2[j - 4];
+
+        dht_b[0] = cmd[0];
+        for (j = 1; j < 5; j++)
+          dht_b[j] = b1[j];
+        for (j = 5; j < 9; j++)
+          dht_b[j] = b2[j - 4];
         run_once = 0;
       }
     }
@@ -260,6 +271,7 @@ void processIO() {
     // [56, pin, unused, unused]
     else if (cmd[0] == 56 && ledbar[cmd[1] - 2].ready()) {
       unsigned int state = ledbar[cmd[1] - 2].getBits();
+      b[0] = cmd[0];
       b[1] = state & 0xFF;
       b[2] = state >> 8;
     }
@@ -527,14 +539,16 @@ void processIO() {
       sampletime_ms = cmd[1] + (cmd[2] << 8);
       dust_latest = 0;
     } else if (cmd[0] == dust_sensor_read_int_cmd) {
-      b[0] = sampletime_ms & 0xFF;
-      b[1] = sampletime_ms >> 8;
+      b[0] = cmd[0];
+      b[1] = sampletime_ms & 0xFF;
+      b[2] = sampletime_ms >> 8;
     } else if (cmd[0] == dust_sensor_read_cmd) {
       if (run_once == 1) {
-        b[0] = dust_latest;
-        b[1] = latest_dust_val & 0xFF;
-        b[2] = (latest_dust_val >> 8) & 0xFF;
-        b[3] = (latest_dust_val >> 16) & 0xFF;
+        b[0] = cmd[0];
+        b[1] = dust_latest;
+        b[2] = latest_dust_val & 0xFF;
+        b[3] = (latest_dust_val >> 8) & 0xFF;
+        b[4] = (latest_dust_val >> 16) & 0xFF;
         run_once = 0;
       }
     } else if (cmd[0] == encoder_en_cmd) {
@@ -561,24 +575,24 @@ void processIO() {
       irrecv.enableIRIn();
       cmd[0] = 0;
     } else if (cmd[0] == ir_read_cmd) {
-      if (irrecv.decode(&results))
-      {
-        b[0] = results.decode_type;
-        b[1] = results.address & 0xFF;
-        b[2] = results.address >> 8;
-        b[3] = results.value & 0xFF;
-        b[4] = (results.value >> 8) & 0xFF;
-        b[5] = (results.value >> 16) & 0xFF;
-        b[6] = (results.value >> 24) & 0xFF;
+      if (irrecv.decode(&results)) {
+        b[0] = cmd[0];
+        b[1] = results.decode_type;
+        b[2] = results.address & 0xFF;
+        b[3] = results.address >> 8;
+        b[4] = results.value & 0xFF;
+        b[5] = (results.value >> 8) & 0xFF;
+        b[6] = (results.value >> 16) & 0xFF;
+        b[7] = (results.value >> 24) & 0xFF;
 
         irrecv.resume(); // Receive the next value
-      }
-      else
-      {
-        b[0] = results.decode_type;
+      } else {
+        b[0] = cmd[0];
+        b[1] = results.decode_type;
       }
     } else if (cmd[0] == ir_read_isdata) {
-      b[0] = irrecv.decode(&results);
+      b[0] = cmd[0];
+      b[1] = irrecv.decode(&results);
     }
   }
   if (enc_run_bk) {
@@ -587,14 +601,16 @@ void processIO() {
         index_LED++;
         if (index_LED > 24)
           index_LED = 0;
-        enc_val[0] = 1;
-        enc_val[1] = index_LED;
+        enc_val[0] = cmd[0];
+        enc_val[1] = 1;
+        enc_val[2] = index_LED;
       } else {
         index_LED--;
         if (index_LED < 0)
           index_LED = 24;
-        enc_val[0] = 1;
-        enc_val[1] = index_LED;
+        enc_val[0] = cmd[0];
+        enc_val[1] = 1;
+        enc_val[2] = index_LED;
       }
       encoder.rotate_flag = 0;
     }
@@ -644,9 +660,11 @@ void flushI2C() {
 
 // callback for sending data
 void sendData() {
+  PORTD |= 0x10;
+
   if (need_extra_loop == false) {
     if (cmd[0] == 1)
-      Wire.write(val);
+      Wire.write((byte *)b, 2);
     if (cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
       Wire.write((byte *)b, 3);
     if (cmd[0] == 8 || cmd[0] == 20)
@@ -657,24 +675,24 @@ void sendData() {
       Wire.write((byte *)dht_b, 9);
 
     if (cmd[0] == ir_read_cmd) {
-      Wire.write((byte *)b, 7);
+      Wire.write((byte *)b, 8);
       b[0] = 0;
     }
     if (cmd[0] == ir_read_isdata) {
-      Wire.write((byte *)b, 1);
+      Wire.write((byte *)b, 2);
     }
     if (cmd[0] == dust_sensor_read_cmd) {
-      Wire.write((byte *)b, 4);
+      Wire.write((byte *)b, 5);
       dust_latest = 0;
       cmd[0] = 0;
     }
     if (cmd[0] == dust_sensor_read_int_cmd) {
-      Wire.write((byte *)b, 2);
+      Wire.write((byte *)b, 3);
       cmd[0] = 0;
     }
     if (cmd[0] == encoder_read_cmd) {
-      Wire.write((byte *)enc_val, 2);
-      enc_val[0] = 0;
+      Wire.write((byte *)enc_val, 3);
+      enc_val[0] = enc_val[1] = 0;
       cmd[0] = 0;
     }
     if (cmd[0] == flow_read_cmd) {
@@ -688,6 +706,7 @@ void sendData() {
   else {
     Wire.write(data_not_available);
   }
+  PORTD &= ~0x10;
 }
 
 // ISR for the flow sensor
