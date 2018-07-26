@@ -25,7 +25,7 @@
 
 import time
 from Adafruit_I2C import Adafruit_I2C
-import math 
+import math
 
 # ===========================================================================
 # BMP085 Class
@@ -170,7 +170,7 @@ class BMP085 :
     X1 = ((UT - self._cal_AC6) * self._cal_AC5) >> 15
     X2 = (self._cal_MC << 11) / (X1 + self._cal_MD)
     B5 = X1 + X2
-    temp = ((B5 + 8) >> 4) / 10.0
+    temp = (int(B5 + 8) >> 4) / 10.0
     if (self.debug):
       print("DBG: Calibrated temperature = %f C" % temp)
     return temp
@@ -226,8 +226,8 @@ class BMP085 :
 
     # Pressure Calculations
     B6 = B5 - 4000
-    X1 = (self._cal_B2 * (B6 * B6) >> 12) >> 11
-    X2 = (self._cal_AC2 * B6) >> 11
+    X1 = (int(self._cal_B2) * int(B6 * B6) >> 12) >> 11
+    X2 = int(self._cal_AC2 * B6) >> 11
     X3 = X1 + X2
     B3 = (((self._cal_AC1 * 4 + X3) << self.mode) + 2) / 4
     if (self.debug):
@@ -237,8 +237,8 @@ class BMP085 :
       print("DBG: X3 = %d" % (X3))
       print("DBG: B3 = %d" % (B3))
 
-    X1 = (self._cal_AC3 * B6) >> 13
-    X2 = (self._cal_B1 * ((B6 * B6) >> 12)) >> 16
+    X1 = int(self._cal_AC3 * B6) >> 13
+    X2 = (int(self._cal_B1) * (int(B6 * B6) >> 12)) >> 16
     X3 = ((X1 + X2) + 2) >> 2
     B4 = (self._cal_AC4 * (X3 + 32768)) >> 15
     B7 = (UP - B3) * (50000 >> self.mode)
@@ -256,10 +256,10 @@ class BMP085 :
 
     if (self.debug):
       print("DBG: X1 = %d" % (X1))
-      
-    X1 = (p >> 8) * (p >> 8)
+
+    X1 = (int(p) >> 8) * (int(p) >> 8)
     X1 = (X1 * 3038) >> 16
-    X2 = (-7357 * p) >> 16
+    X2 = (-7357 * int(p)) >> 16
     if (self.debug):
       print("DBG: p  = %d" % (p))
       print("DBG: X1 = %d" % (X1))
