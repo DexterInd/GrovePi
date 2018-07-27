@@ -63,6 +63,10 @@ unsigned long sampletime_ms = 30000; // sample 30s ;
 int dust_run_bk = 0;
 int l_status;
 
+// Pins used for interrupt routines
+volatile uint8_t dust_sensor_pin = 2;
+uint8_t flow_sensor_pin = 2;
+
 // Encoder variable
 int index_LED;
 volatile byte enc_val[3];
@@ -527,12 +531,14 @@ void processIO() {
         }
       }
     } else if (cmd[0] == dust_sensor_en_cmd) {
-      attachInterrupt(0, readPulseDust, CHANGE);
+      dust_sensor_pin = cmd[1];
+      attachInterrupt(digitalPinToInterrupt(dust_sensor_pin), readPulseDust, CHANGE);
       dust_run_bk = 1;
+      lowpulseoccupancy = 0;
       starttime = millis();
       cmd[0] = 0;
     } else if (cmd[0] == dust_sensor_dis_cmd) {
-      detachInterrupt(0);
+      detachInterrupt(digitalPinToInterrupt(dust_sensor_pin));
       dust_run_bk = 0;
       cmd[0] = 0;
     } else if (cmd[0] == dust_sensor_int_cmd) {
@@ -559,15 +565,16 @@ void processIO() {
       encoder.Timer_disable();
       enc_run_bk = 0;
     } else if (cmd[0] == flow_en_cmd) {
-      pinMode(2, INPUT);
-      attachInterrupt(0, rpm, RISING);
+      flow_sensor_pin = cmd[1];
+      pinMode(digitalPinToInterrupt(flow_sensor_pin), INPUT);
+      attachInterrupt(digitalPinToInterrupt(flow_sensor_pin), rpm, RISING);
       NbTopsFan = 0;
       flow_read_start = millis();
       flow_run_bk = 1;
       cmd[0] = 0;
     } else if (cmd[0] == flow_dis_cmd) {
       flow_run_bk = 0;
-      detachInterrupt(0);
+      detachInterrupt(digitalPinToInterrupt(flow_sensor_pin));
       cmd[0] = 0;
     } else if (cmd[0] == ir_recv_pin_cmd) {
       Serial.print(cmd[1]);
@@ -660,9 +667,7 @@ void flushI2C() {
 
 // callback for sending data
 void sendData() {
-  PORTD |= 0x10;
-
-  if (need_extra_loop == false) {
+    if (need_extra_loop == false) {
     if (cmd[0] == 1)
       Wire.write((byte *)b, 2);
     if (cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
@@ -706,7 +711,6 @@ void sendData() {
   else {
     Wire.write(data_not_available);
   }
-  PORTD &= ~0x10;
 }
 
 // ISR for the flow sensor
@@ -718,8 +722,10 @@ void rpm() // This is the function that the interupt calls
 }
 
 void readPulseDust() {
+  // PORTD |= 0x10;
+
   t = micros();
-  l_status = digitalRead(2); // Represents if the line is low or high.
+  l_status = digitalRead(dust_sensor_pin); // Represents if the line is low or high.
   if (l_status)
     // If the line is high (1), the pulse just ended
     pulse_end = t;
@@ -734,4 +740,6 @@ void readPulseDust() {
     pulse_end = 0; // If you don't reset this, you'll keep adding the pulse
                    // length over and over.
   }
+
+  // PORTD &= ~0x10;
 }

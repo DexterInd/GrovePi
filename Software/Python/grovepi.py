@@ -557,8 +557,8 @@ def ir_is_data():
 
 	return number[0] != 0
 
-def dust_sensor_en():
-	write_i2c_block(address, dust_sensor_en_cmd + [unused, unused, unused])
+def dust_sensor_en(pin = 2):
+	write_i2c_block(address, dust_sensor_en_cmd + [pin, unused, unused])
 	read_i2c_block(address, no_bytes = 1)
 
 def dust_sensor_dis():
@@ -634,8 +634,8 @@ def flowDisable():
 	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
 	read_i2c_block(address, no_bytes = 1)
 
-def flowEnable():
-	write_i2c_block(address, flow_en_cmd + [unused, unused, unused])
+def flowEnable(pin = 2):
+	write_i2c_block(address, flow_en_cmd + [pin, unused, unused])
 	read_i2c_block(address, no_bytes = 1)
 
 def flowRead():
