@@ -35,7 +35,7 @@ Now, inside your own app (which can be anywhere in `$HOME`) you need to run
 ```
 npm link node-grovepi
 ```
-once in order to link the your project to the library that's in this repository (`libs`) folder.
+once in order to link your project to the library that's in this repository (`libs`) folder.
 
 #### Using the Library
 
