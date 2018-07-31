@@ -1,3 +1,14 @@
 site_name: GrovePi Documentation
 theme:
   name: material
+pages:
+  - About: 'index.md'
+  - Getting Started: 'quickstart.md'
+  - Firmware Stuff: 'fw.md'
+  - Hardware Ports: 'hw.md'
+  - API Reference:
+    - 'GPIO Functions': 'api/gpio.md'
+    - 'General Sensors': 'api/general.md'
+    - 'Complex Devices': 'api/complex.md'
+    - 'Interrupt-Based Devices': 'api/interrupt.md'
+  - Supported Modules: 'supported.md'

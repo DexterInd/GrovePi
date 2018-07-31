@@ -236,16 +236,6 @@ def digitalWrite(pin, value):
 	read_i2c_block(address, no_bytes = 1)
 	return 1
 
-# Setting Up Pin mode on Arduino
-def pinMode(pin, mode):
-	if mode == "OUTPUT":
-		write_i2c_block(address, pMode_cmd + [pin, 1, unused])
-	elif mode == "INPUT":
-		write_i2c_block(address, pMode_cmd + [pin, 0, unused])
-	read_i2c_block(address, no_bytes = 1)
-	return 1
-
-
 # Read analog value from Pin
 def analogRead(pin):
 	write_i2c_block(address, aRead_cmd + [pin, unused, unused])
@@ -256,6 +246,15 @@ def analogRead(pin):
 # Write PWM
 def analogWrite(pin, value):
 	write_i2c_block(address, aWrite_cmd + [pin, value, unused])
+	read_i2c_block(address, no_bytes = 1)
+	return 1
+
+# Setting Up Pin mode on Arduino
+def pinMode(pin, mode):
+	if mode == "OUTPUT":
+		write_i2c_block(address, pMode_cmd + [pin, 1, unused])
+	elif mode == "INPUT":
+		write_i2c_block(address, pMode_cmd + [pin, 0, unused])
 	read_i2c_block(address, no_bytes = 1)
 	return 1
 
@@ -339,6 +338,27 @@ def dht(pin, module_type):
 		return [t, hum]
 	else:
 		return [float('nan'),float('nan')]
+
+# Grove - Infrared Receiver - get the commands received from the Grove IR sensor
+def ir_read_signal():
+	write_i2c_block(address, ir_read_cmd + [unused, unused, unused])
+	data_back = read_identified_i2c_block(address, ir_read_cmd, no_bytes = 7)
+
+	return (data_back[0],
+			data_back[1] + data_back[2] * 256,
+			data_back[3] + data_back[4] * 256 + data_back[5] * (256 ** 2) + data_back[6] * (256 ** 3))
+
+# Grove - Infrared Receiver - set the pin on which the Grove IR sensor is connected
+def ir_recv_pin(pin):
+	write_i2c_block(address, ir_recv_pin_cmd + [pin, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
+
+# Grove - Infrared Receiver - check if there's any data that hasn't been read so far
+def ir_is_data():
+	write_i2c_block(address, ir_read_isdata + 3 * [unused])
+	number = read_identified_i2c_block(address, ir_read_isdata, no_bytes = 1)
+
+	return number[0] != 0
 
 # after a list of numerical values is provided
 # the function returns a list with the outlier(or extreme) values removed
@@ -536,27 +556,6 @@ def chainableRgbLed_setLevel(pin, level, reverse):
 	read_i2c_block(address, no_bytes = 1)
 	return 1
 
-# Grove - Infrared Receiver - get the commands received from the Grove IR sensor
-def ir_read_signal():
-	write_i2c_block(address, ir_read_cmd + [unused, unused, unused])
-	data_back = read_identified_i2c_block(address, ir_read_cmd, no_bytes = 7)
-
-	return (data_back[0],
-			data_back[1] + data_back[2] * 256,
-			data_back[3] + data_back[4] * 256 + data_back[5] * (256 ** 2) + data_back[6] * (256 ** 3))
-
-# Grove - Infrared Receiver - set the pin on which the Grove IR sensor is connected
-def ir_recv_pin(pin):
-	write_i2c_block(address, ir_recv_pin_cmd + [pin, unused, unused])
-	read_i2c_block(address, no_bytes = 1)
-
-# Grove - Infrared Receiver - check if there's any data that hasn't been read so far
-def ir_is_data():
-	write_i2c_block(address, ir_read_isdata + 3 * [unused])
-	number = read_identified_i2c_block(address, ir_read_isdata, no_bytes = 1)
-
-	return number[0] != 0
-
 def dust_sensor_en(pin = 2):
 	write_i2c_block(address, dust_sensor_en_cmd + [pin, unused, unused])
 	read_i2c_block(address, no_bytes = 1)
@@ -565,14 +564,14 @@ def dust_sensor_dis():
 	write_i2c_block(address, dust_sensor_dis_cmd + [unused, unused, unused])
 	read_i2c_block(address, no_bytes = 1)
 
-def dustSensorRead():
+def dust_sensor_read():
 	"""
 	By default, the sample rate is set to 1 at every 30 seconds and this
 	function was written only for that interval.
 
 	If you wish to use a different
-	interval, then use dustSensorReadMore function. To set a
-	different interval, use setDustSensrInterval function.
+	interval, then use dust_sensor_read_more function. To set a
+	different interval, use set_dust_sensor_interval function.
 	"""
 	write_i2c_block(address, dust_sensor_read_cmd + [unused, unused, unused])
 	data_back = read_identified_i2c_block(address, dust_sensor_read_cmd, no_bytes = 4)[0:4]
@@ -582,29 +581,14 @@ def dustSensorRead():
 	else:
 		return [-1,-1]
 
-def setDustSensorInterval(interval_ms):
-	byte1 = interval_ms & 0xFF
-	byte2 = interval_ms >> 8
-	write_i2c_block(address, dust_sensor_int_cmd + [byte1, byte2] + [unused])
-	read_i2c_block(address, no_bytes = 1)
-
-def getDustSensorInterval():
-	write_i2c_block(address, dust_sensor_read_int_cmd + 3 * [unused])
-	data_back = read_identified_i2c_block(address, dust_sensor_read_int_cmd, no_bytes = 2)[0:2]
-
-	if -1 in data_back: return -1
-
-	interval = data_back[0] + data_back[1] * 256
-	return interval
-
-def dustSensorReadMore(blocking = True):
-	sampletime_ms = getDustSensorInterval()
-	found, lpo = dustSensorRead()
+def dust_sensor_read_more(blocking = True):
+	sampletime_ms = get_dust_sensor_interval()
+	found, lpo = dust_sensor_read()
 	delay_to_reduce_traffic = 0.05
 	while found in [0, -1] and blocking is True:
 		if delay_to_reduce_traffic * 1000 < sampletime_ms:
 			time.sleep(delay_to_reduce_traffic)
-		found, lpo = dustSensorRead()
+		found, lpo = dust_sensor_read()
 
 	if found in [0, -1] and blocking is False:
 		return (-1, -1, -1)
@@ -613,6 +597,21 @@ def dustSensorReadMore(blocking = True):
 	concetration = 1.1 * percentage ** 3 - 3.8 * percentage ** 2 + 520 * percentage + 0.62
 
 	return (lpo, percentage, concetration)
+
+def set_dust_sensor_interval(interval_ms):
+	byte1 = interval_ms & 0xFF
+	byte2 = interval_ms >> 8
+	write_i2c_block(address, dust_sensor_int_cmd + [byte1, byte2] + [unused])
+	read_i2c_block(address, no_bytes = 1)
+
+def get_dust_sensor_interval():
+	write_i2c_block(address, dust_sensor_read_int_cmd + 3 * [unused])
+	data_back = read_identified_i2c_block(address, dust_sensor_read_int_cmd, no_bytes = 2)[0:2]
+
+	if -1 in data_back: return -1
+
+	interval = data_back[0] + data_back[1] * 256
+	return interval
 
 def encoder_en():
 	write_i2c_block(address, encoder_en_cmd + [unused, unused, unused])
@@ -630,12 +629,12 @@ def encoderRead():
 	else:
 		return [-1,-1]
 
-def flowDisable():
-	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
-	read_i2c_block(address, no_bytes = 1)
-
 def flowEnable(pin = 2):
 	write_i2c_block(address, flow_en_cmd + [pin, unused, unused])
+	read_i2c_block(address, no_bytes = 1)
+
+def flowDisable():
+	write_i2c_block(address, flow_disable_cmd + [unused, unused, unused])
 	read_i2c_block(address, no_bytes = 1)
 
 def flowRead():
