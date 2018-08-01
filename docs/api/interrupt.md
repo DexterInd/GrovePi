@@ -9,6 +9,16 @@ The API for the following sensors is described in this section:
 - [Grove Encoder](https://www.seeedstudio.com/Grove-Encoder-p-1352.html)
 - [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html) of whose functionality can be used in other applications too
 
+---
+**IMPORTANT**
+
+This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes
+as that will put the GrovePi into a broken state.
+
+In case you need to reset the GrovePi from your Raspberry Pi, [check this section](../fw/#resetting-the-grovepi).
+
+---
+
 ##`grovepi.dust_sensor_en(pin = 2)`
 Enables the [Grove Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html).
 

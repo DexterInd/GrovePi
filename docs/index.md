@@ -1,6 +1,8 @@
 # GrovePi Documentation
 
-The GrovePi is an open-source platform for connecting Grove Sensors to the Raspberry Pi. With it you can
+![DexterIndustries Logo](img/biglogo.jpg)
+
+The [GrovePi](https://www.dexterindustries.com/grovepi/) is a [Dexter Industries](https://www.dexterindustries.com) open-source platform for connecting Grove Sensors to the Raspberry Pi. With it you can
 bring the world of IoT devices to the Raspberry Pi and the only requirement for that is for you to know
 how to code in your language of choice.
 

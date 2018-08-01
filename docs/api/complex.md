@@ -9,6 +9,16 @@ The API for the following sensors is described in this section:
 - [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/)
 - [Grove Chainable RGB LED](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html)
 
+---
+**IMPORTANT**
+
+This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes
+as that will put the GrovePi into a broken state.
+
+In case you need to reset the GrovePi from your Raspberry Pi, [check this section](../fw/#resetting-the-grovepi).
+
+---
+
 ##`grovepi.ledBar_init(pin, orientation)`
 Initialize an [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
 

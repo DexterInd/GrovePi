@@ -3,6 +3,16 @@
 In this section the Python API reference for GPIO functions is described. This library is supported on both major versions
 of Python: 2.x and 3.x.
 
+---
+**IMPORTANT**
+
+This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes
+as that will put the GrovePi into a broken state.
+
+In case you need to reset the GrovePi from your Raspberry Pi, [check this section](../fw/#resetting-the-grovepi).
+
+---
+
 ##`grovepi.digitalRead(pin)`
 Reads whether a port's input is set high or low on the GrovePi.
 

@@ -57,3 +57,8 @@ you also need to run the following command after you have installed the GrovePi:
 ```bash
 sudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh
 ```
+
+## Community Support
+
+To find out more on the GrovePi you can visit our forum and check for threads with the [grovepi tag](https://forum.dexterindustries.com/tags/grovepi)
+or by going to the [GrovePi category](https://forum.dexterindustries.com/c/grovepi).
