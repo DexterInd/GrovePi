@@ -1,6 +1,6 @@
 #API - GPIO Functions
 
-In this section the Python API reference is described. This library is supported on both major versions
+In this section the Python API reference for GPIO functions is described. This library is supported on both major versions
 of Python: 2.x and 3.x.
 
 ##`grovepi.digitalRead(pin)`
@@ -12,6 +12,8 @@ Reads whether a port's input is set high or low on the GrovePi.
 
 **Returns**: `0` or `1` depending on the input value
 
+---
+
 ##`grovepi.digitalWrite(pin, value)`
 Sets the output value to either `0` or `1` to a digital port on the GrovePi.
 
@@ -22,6 +24,8 @@ Sets the output value to either `0` or `1` to a digital port on the GrovePi.
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.analogRead(pin)`
 Detect an input voltage as a value from a given port on the GrovePi.
 
@@ -30,6 +34,8 @@ Detect an input voltage as a value from a given port on the GrovePi.
 - `pin {Integer}` a number to identify the port (A0-A2) from which to do the reading
 
 **Returns**: a 10-bit `{Integer}` number that maps to the input voltage on the port
+
+---
 
 ##`grovepi.analogWrite(pin, value)`
 Set an output voltage on a PWM-enabled port by mapping the value to the desired voltage on the GrovePi.
@@ -40,6 +46,8 @@ Set an output voltage on a PWM-enabled port by mapping the value to the desired 
 - `value {Integer}` an 8-bit number that maps from 0V to the referenced voltage of the GrovePi (5V)
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.pinMode(pin, mode)`
 Sets a port to be either an OUTPUT or an INPUT port on the GrovePi.

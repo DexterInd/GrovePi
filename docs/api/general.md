@@ -1,7 +1,15 @@
 #API - General Sensors
 
-In this section the Python API reference is described. This library is supported on both major versions
+In this section the Python API reference for diverse sensors is described. This library is supported on both major versions
 of Python: 2.x and 3.x.
+
+In this section, the API for the following sensors is described:
+
+- [Grove Temperature Sensor](http://wiki.seeedstudio.com/Grove-Temperature_Sensor_V1.2/)
+- [Grove Ultrasonic Sensor](https://www.seeedstudio.com/Grove-Ultrasonic-Ranger-p-960.html)
+- [DHT11](http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/)
+- [DHT22](http://wiki.seeedstudio.com/Grove-Temperature_and_Humidity_Sensor_Pro/)
+- [Grove IR Receiver](https://www.seeedstudio.com/Grove-Infrared-Receiver-p-994.html) necessary for the [Infrared Remote](https://www.dexterindustries.com/shop/infrared-remote/)
 
 ##`grovepi.temp(pin, model='1.0')`
 Read temperature from the [Grove Temperature Sensor](http://wiki.seeedstudio.com/Grove-Temperature_Sensor_V1.2/) on the GrovePi.
@@ -13,6 +21,8 @@ Read temperature from the [Grove Temperature Sensor](http://wiki.seeedstudio.com
 
 **Returns**: `{Float}` number to represent the temperature in ºC
 
+---
+
 ##`grovepi.ultrasonicRead(pin)`
 Read the distance to an object with the [Grove Ultrasonic Sensor](https://www.seeedstudio.com/Grove-Ultrasonic-Ranger-p-960.html) on the GrovePi.
 The closer it is to the targeted object, the faster the sample rate and slower when it's farther.
@@ -23,10 +33,14 @@ The closer it is to the targeted object, the faster the sample rate and slower w
 
 **Returns**: `{Integer}` number to represent the distance to the object in centimeters
 
+---
+
 ##`grovepi.version()`
 Read the version of the firmware.
 
 **Returns**: a `{String}` representing the firmware version (i.e. `"1.2.7"`)
+
+---
 
 ##`grovepi.dht(pin, module_type)`
 Read the temperature and humidity on the GrovePi with one of the given modules.
@@ -45,6 +59,8 @@ Read the temperature and humidity on the GrovePi with one of the given modules.
 
 **On Error**: it returns a `{(Float, Float)}` list containing `NaN`s. This happens when the sensor can't keep up with the demanded sample rate.
 
+---
+
 ##`grovepi.ir_read_signal()`
 Get the decoded value from the [Grove IR Receiver](https://www.seeedstudio.com/Grove-Infrared-Receiver-p-994.html). For this you need to use a remote control of any kind. The preferred one we use is the [Infrared Remote](https://www.dexterindustries.com/shop/infrared-remote/).
 
@@ -62,6 +78,8 @@ In order to use this function, you first need to call [grovepi.ir_recv_pin](#gro
 - The 2nd element is a 16-bit address used by some Panasonic and Sharp remotes
 - The 3rd element is the 32-bit decoded value that can be used to identify which buttons were pressed - since there's no map for them you need to do it on a case-by-case basis
 
+---
+
 ##`grovepi.ir_recv_pin(pin)`
 Enable the [Grove IR Receiver](https://www.seeedstudio.com/Grove-Infrared-Receiver-p-994.html) on a given port. Used in conjunction with [grovepi.ir_read_signal](#grovepiir_read_signal) and [grovepi.ir_is_data](#grovepiir_is_data).
 
@@ -70,6 +88,8 @@ Enable the [Grove IR Receiver](https://www.seeedstudio.com/Grove-Infrared-Receiv
 - `pin {Integer}` The port (D2-D8) to which the IR receiver gets connected to
 
 **Returns**: None
+
+---
 
 ##`grovepi.ir_is_data()`
 Checks if there's available data coming from the [Grove IR Receiver](https://www.seeedstudio.com/Grove-Infrared-Receiver-p-994.html). Used in conjunction with [grovepi.ir_read_signal](#grovepiir_read_signal) function.

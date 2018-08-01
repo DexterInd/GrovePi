@@ -1,7 +1,13 @@
 #API - Interrupt-Based Devices
 
-In this section the Python API reference is described. This library is supported on both major versions
+In this section the Python API reference for interrupt-based devices is described. This library is supported on both major versions
 of Python: 2.x and 3.x.
+
+The API for the following sensors is described in this section:
+
+- [Grove Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html)
+- [Grove Encoder](https://www.seeedstudio.com/Grove-Encoder-p-1352.html)
+- [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html) of whose functionality can be used in other applications too
 
 ##`grovepi.dust_sensor_en(pin = 2)`
 Enables the [Grove Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html).
@@ -14,6 +20,8 @@ Cannot call this function if [grovepi.encoder_en](#grovepiencoder_en) or [grovep
 
 **Returns**: None
 
+---
+
 ##`grovepi.dust_sensor_dis()`
 Disables the [Grove Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html).
 
@@ -23,12 +31,16 @@ Required if you want to enable other sensors. It's generally a good practice to 
 
 **Returns**: None
 
+---
+
 ##`grovepi.dust_sensor_read()`
 Reads the low pulse occupancy of the [Grove Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html) in the given time period specified by [grovepi.get_dust_sensor_interval](#grovepiget_dust_sensor_interval).
 
 **Parameters**: None
 
 **Returns**: `{(Integer, Integer)}` list - the 1st element is `1` if the read value is a new one or `0` if it's old and the 2nd element holds the actual LPO (low pulse occupancy) time.
+
+---
 
 ##`grovepi.dust_sensor_read_more()`
 Returns more information than [grovepi.dust_sensor_read](#grovepidust_sensor_read) from the [Grove Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html) in the given time period specified by [grovepi.get_dust_sensor_interval](#grovepiget_dust_sensor_interval).
@@ -41,12 +53,16 @@ Returns more information than [grovepi.dust_sensor_read](#grovepidust_sensor_rea
 - the 2nd one is the percentage (LPO time divided by total period)
 - the 3rd is the concentration as measured in _pcs/283ml=0.01cf_ where the particle size is over _1um_
 
+---
+
 ##`grovepi.get_dust_sensor_interval()`
 Retrieves the [Grove Dust Sensor's](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%BC%88PPD42NS%EF%BC%89-p-1050.html) period of time. By default, it's set to 30,000 ms (30 seconds) and on every power-up of the GrovePi, the interval needs to be reset if you want a different period other than the default one.
 
 **Parameters**: None
 
 **Returns**: The time the dust sensor collects data before it gets analyzed and sent back to the Raspberry Pi
+
+---
 
 
 ##`grovepi.set_dust_sensor_interval(interval_ms)`
@@ -58,6 +74,8 @@ Set the [Grove Dust Sensor's](https://www.seeedstudio.com/Grove-Dust-Sensor%EF%B
 
 **Returns**: None
 
+---
+
 ##`grovepi.encoder_en()`
 Enable the [Grove Encoder](https://www.seeedstudio.com/Grove-Encoder-p-1352.html) on port D2.
 
@@ -66,6 +84,8 @@ Bear in mind, this function must not be called if there's a device (dust sensor 
 **Parameters**: None
 
 **Returns**: None
+
+---
 
 ##`grovepi.encoder_dis()`
 Disable the [Grove Encoder](https://www.seeedstudio.com/Grove-Encoder-p-1352.html) which sits on port D2.
@@ -76,6 +96,7 @@ The call to this function is required if you already have the encoder enabled an
 
 **Returns**: None
 
+---
 
 ##`grovepi.encoderRead()`
 Read the data off of the [Grove Encoder](https://www.seeedstudio.com/Grove-Encoder-p-1352.html) on port D2.
@@ -83,6 +104,8 @@ Read the data off of the [Grove Encoder](https://www.seeedstudio.com/Grove-Encod
 **Parameters**: None
 
 **Returns**: `{(Integer, Integer)}` the 1st element is set to `1` if there's a value, `0` otherwise and the 2nd element represents the position of the encoder on a scale of 24 values (`1` to `24`). `-1`s are returned if there had been an error on reading.
+
+---
 
 ##`grovepi.flowEnable(pin = 2)`
 Enables the [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html).
@@ -97,6 +120,8 @@ This functionality can also be used for counting the number of rising pulses in 
 
 **Returns**: None
 
+---
+
 ##`grovepi.flowDisable()`
 Disables the [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html).
 
@@ -105,6 +130,8 @@ The call to this function is required if you already have the flow sensor enable
 **Parameters**: None
 
 **Returns**: None
+
+---
 
 ##`grovepi.flowRead()`
 Enables the [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html).

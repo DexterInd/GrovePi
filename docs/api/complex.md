@@ -1,7 +1,13 @@
 #API - Complex Devices
 
-In this section the Python API reference is described. This library is supported on both major versions
+In this section the Python API reference for more complex devices is described. This library is supported on both major versions
 of Python: 2.x and 3.x.
+
+The API for the following sensors is described in this section:
+
+- [Grove LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/)
+- [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/)
+- [Grove Chainable RGB LED](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html)
 
 ##`grovepi.ledBar_init(pin, orientation)`
 Initialize an [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
@@ -13,6 +19,8 @@ Initialize an [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.ledBar_orientation(pin, orientation)`
 Set the orientation on an already initialized [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
 
@@ -22,6 +30,8 @@ Set the orientation on an already initialized [LED bar](http://wiki.seeedstudio.
 - `orientation {Integer}` `0` to go from red to green or 1 to go the other way
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.ledBar_setLevel(pin, level)`
 Set the level on an [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
@@ -33,6 +43,8 @@ Set the level on an [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.ledBar_toggleLed(pin, led)`
 Toggle the state of one LED of the 10 levels of the [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
 
@@ -42,6 +54,8 @@ Toggle the state of one LED of the 10 levels of the [LED bar](http://wiki.seeeds
 - `led {Integer}` taking values from `0` to `10` depending on which LED to toggle
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.ledBar_setBits(pin, state)`
 Set the LED activations of the [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/) based on the binary representation of a 10-bit number.
@@ -53,6 +67,8 @@ Set the LED activations of the [LED bar](http://wiki.seeedstudio.com/Grove-LED_B
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.ledBar_getBits(pin)`
 Read the state of LED activations on the [LED bar](http://wiki.seeedstudio.com/Grove-LED_Bar/).
 
@@ -62,6 +78,8 @@ Read the state of LED activations on the [LED bar](http://wiki.seeedstudio.com/G
 
 **Returns**: a number from `0` to `1023` to represent the binary state of all 10 LEDs of the LED bar
 
+---
+
 ##`grovepi.fourDigit_init(pin)`
 Initialize a [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/).
 
@@ -70,6 +88,8 @@ Initialize a [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_D
 - `pin {Integer}` the port (D2-D8) to which the 4-Digit display is set to
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.fourDigit_number(pin, value, leading_zero)`
 Set the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/) to display a number.
@@ -82,6 +102,8 @@ Set the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Displa
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.fourDigit_brightness(pin, brightness)`
 Set the brightness of the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/).
 
@@ -91,6 +113,8 @@ Set the brightness of the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Gr
 - `brightness {Integer}` a number between `0` (for the darkest option) and `7` (for the brightest) representing the brightness of the display
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.fourDigit_digit(pin, segment, value)`
 Set individual segment of the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/).
@@ -103,6 +127,8 @@ Set individual segment of the [Grove 4-Digit Display](http://wiki.seeedstudio.co
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.fourDigit_segment(pin, segment, leds)`
 Set the individual LED segments of a digit of the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/).
 
@@ -113,6 +139,8 @@ Set the individual LED segments of a digit of the [Grove 4-Digit Display](http:/
 - `leds {Integer}` a number from `0` to `255` representing the binary activations of the selected `segment` - the 8th bit is the colon
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.fourDigit_score(pin, left, right)`
 Set values on either side of the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/).
@@ -126,6 +154,8 @@ To the left and right values, leading zeros are added and the colon is lit up
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.fourDigit_monitor(pin, analog, duration)`
 Display the [analogRead](#grovepianalogreadpin) values onto the [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/) for a given time.
 
@@ -137,6 +167,8 @@ Display the [analogRead](#grovepianalogreadpin) values onto the [Grove 4-Digit D
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.fourDigit_on(pin)`
 Turn the whole [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/) on.
 
@@ -146,6 +178,8 @@ Turn the whole [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.fourDigit_off(pin)`
 Turn the whole [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit_Display/) off.
 
@@ -154,6 +188,8 @@ Turn the whole [Grove 4-Digit Display](http://wiki.seeedstudio.com/Grove-4-Digit
 - `pin {Integer}` the port (D2-D8) to which the 4-Digit display is set to
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.storeColor(red, green, blue)`
 Store a color for later use with the [Grove Chainable RGB LED](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html).
@@ -166,6 +202,8 @@ Store a color for later use with the [Grove Chainable RGB LED](https://www.seeed
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.chainableRgbLed_init(pin, numLeds)`
 Initialize a number of [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html) on given port.
 
@@ -175,6 +213,8 @@ Initialize a number of [chained LEDs](https://www.seeedstudio.com/Grove-Chainabl
 - `numLeds {Integer}` number of chained LEDs
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.chainableRgbLed_test(pin, numLeds, testColor)`
 Initialize [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html) on given port and set a test color on all of them.
@@ -196,6 +236,8 @@ Initialize [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.chainableRgbLed_pattern(pin, pattern, whichLed)`
 Set one or more [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html) to a stored color following a given pattern.
 
@@ -213,6 +255,8 @@ Set one or more [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-L
 
 **Returns**: `1` all the time
 
+---
+
 ##`grovepi.chainableRgbLed_modulo(pin, offset, divisor)`
 Set one or more [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html) to a stored color following the "pattern" of the modulo operation.
 
@@ -223,6 +267,8 @@ Set one or more [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-L
 - `divisor {Integer}` sets the color to those LEDs of whose indexes divided by `divisor` have the remainder set to `0` - for `divisor=1` every LED gets set, but for `divisor=2` every 2nd LED gets set  
 
 **Returns**: `1` all the time
+
+---
 
 ##`grovepi.chainableRgbLed_setLevel(pin, level, reverse)`
 Set one or more [chained LEDs](https://www.seeedstudio.com/Grove-Chainable-RGB-LED-p-850.html) to a stored color similar to a bar graph.
