@@ -177,8 +177,8 @@ void processIO() {
     else if (cmd[0] == 8) {
       b[0] = cmd[0];
       b[1] = 1;
-      b[2] = 2;
-      b[3] = 7;
+      b[2] = 3;
+      b[3] = 0;
     }
 
     // Grove temp and humidity sensor pro
