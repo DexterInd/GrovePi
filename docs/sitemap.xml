@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>https://www.dexterindustries.com/</loc>
+     <loc>https://dexterind.github.io/GrovePi/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/quickstart/</loc>
+     <loc>https://dexterind.github.io/GrovePi/quickstart/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/fw/</loc>
+     <loc>https://dexterind.github.io/GrovePi/fw/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/hw/</loc>
+     <loc>https://dexterind.github.io/GrovePi/hw/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/api/gpio/</loc>
+     <loc>https://dexterind.github.io/GrovePi/api/gpio/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/api/general/</loc>
+     <loc>https://dexterind.github.io/GrovePi/api/general/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/api/complex/</loc>
+     <loc>https://dexterind.github.io/GrovePi/api/complex/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/api/interrupt/</loc>
+     <loc>https://dexterind.github.io/GrovePi/api/interrupt/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/supported/</loc>
+     <loc>https://dexterind.github.io/GrovePi/supported/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://www.dexterindustries.com/release-notes/</loc>
+     <loc>https://dexterind.github.io/GrovePi/release-notes/</loc>
      <lastmod>2018-08-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
