@@ -57,3 +57,13 @@ To reset the GrovePi from your Raspberry Pi, run the following command provided 
 ```bash
 avrdude -c gpio -p m328p
 ```
+
+<!-- ## Enabling Software I2C
+
+The GrovePi and the Raspberry Pi communicate over an I2C connection, but the problem with the Raspberry Pi's HW implementation has to do with the clock stretching mechanism. This mechanism is badly implemented and can lead to corrupted transfers with the GrovePi.
+
+More details on this issue can be found on these tickets: [raspberrypi/linux/issues/254](https://github.com/raspberrypi/linux/issues/254) and [dexterind/grovepi/issues/411](https://github.com/DexterInd/GrovePi/issues/411).
+
+In order to avoid having problems caused by the clock-stretching mechanism, you can use our bit-bang implementation of the I2C that uses the [RPi.GPIO](https://pypi.org/project/RPi.GPIO/) library. In order to have this alternative software I2C used instead, install the [DI-Sensors library](http://di-sensors.readthedocs.io/en/master/quickstart.html#how-to-install-the-di-sensors).
+
+To check which I2C you're using, you can import the `grovepi` module and then check the value of `grovepi.whichI2C` attribute. If it's set to `"periphery"` then it means the HW I2C is used and otherwise if it's set to `"software"` then it's using the DI-Sensors' one which is bit-banged. -->
