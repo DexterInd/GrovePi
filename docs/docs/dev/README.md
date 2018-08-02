@@ -7,12 +7,12 @@ docker image build -t dexterind/grovepi-docs .
 
 Once you have that, you need to fire up the container. First make sure you are running this from the root of this repository and then run
 ```
-docker container run -v $(pwd):/docs -it --rm -p 80:8000 dexterind/grovepi-docs
+docker container run -v $(pwd)/docs:/docs -it --rm -p 80:8000 dexterind/grovepi-docs
 ```
 
 To have the documentation built run from the root of this repository
 ```
-docker container run -v $(pwd):/docs -it --rm dexterind/grovepi-docs mkdocs build
+docker container run -v $(pwd)/docs:/docs -it --rm dexterind/grovepi-docs mkdocs build -c
 ```
 and wait for it to exit the process.
 
