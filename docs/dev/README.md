@@ -10,5 +10,10 @@ Once you have that, you need to fire up the container. First make sure you are r
 docker container run -v $(pwd):/docs -it --rm -p 80:8000 dexterind/grovepi-docs
 ```
 
+To have the documentation built run from the root of this repository
+```
+docker container run -v $(pwd):/docs -it --rm dexterind/grovepi-docs mkdocs build
+```
+and wait for it to exit the process.
 
 Enjoy developing and when you're done with it, build the documentation and save the statics in the docs folder.
