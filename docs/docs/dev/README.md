@@ -14,6 +14,6 @@ To have the documentation built run from the root of this repository
 ```
 docker container run -v $(pwd)/docs:/docs -it --rm dexterind/grovepi-docs mkdocs build -c
 ```
-and wait for it to exit the process.
+and wait for it to exit the process and then copy the contents of the newly created directory `site` and place it into the `/docs` directory.
 
 Enjoy developing and when you're done with it, build the documentation and save the statics in the docs folder.
