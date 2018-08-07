@@ -14,23 +14,6 @@ display_welcome_msg() {
 	echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
 }
 
-install_dependencies() {
-    # the sudo apt-get update is already
-    # done by the script_tools installer in
-    # update_grovepi.sh
-
-  	feedback "Installing dependencies for the GrovePi"
-    # in order for nodejs to be installed, the repo for it
-    # needs to be in; this is all done in script_tools while doing an apt-get update
-    sudo apt-get install nodejs -y
-
-  	sudo apt-get install git libi2c-dev i2c-tools arduino minicom -y
-    sudo apt-get install python-pip  python-smbus  python-dev  python-serial  python-rpi.gpio  python-scipy  python-numpy -y
-    sudo apt-get install python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-scipy python3-numpy -y
-
-    feedback "Dependencies for the GrovePi installed"
-}
-
 check_root_user() {
     if [[ $EUID -ne 0 ]]; then
         feedback "FAIL!  This script must be run as such: sudo ./install.sh"
@@ -100,6 +83,5 @@ install_avr() {
 
 display_welcome_msg
 check_root_user
-install_dependencies
 install_spi_i2c
 install_avr
