@@ -72,6 +72,11 @@ address = 0x04
 i2c = I2C('/dev/i2c-' + str(bus_port))
 max_recv_size = 10
 
+# Earliest version of the firmware to work with
+works_with_firmware = [
+	"1.3.0"
+]
+
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 retries = 10
