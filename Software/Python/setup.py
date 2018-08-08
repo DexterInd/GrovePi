@@ -69,5 +69,5 @@ setuptools.setup(
     keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education', 'iot', 'internet of things', 'prototyping'],
 
     py_modules = ['grovepi'],
-    install_requires = ['numpy']
+    install_requires = ['numpy', 'python-periphery']
 )
