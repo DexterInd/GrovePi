@@ -528,6 +528,29 @@ sudo bash all_tests.sh
 
 
 <p>At the end of this process you'll get a <code>log.txt</code> file on your Desktop at <code>~/Desktop/log.txt</code>.</p>
+<p>Also, to see with which version of the firmware the library installed on the Raspberry Pi works with you can go to <code>~/Dexter/GrovePi</code> directory and run:</p>
+<div class="codehilite"><pre><span></span>python grovepi.py
+</pre></div>
+
+
+<p>This should output a version number (of the GrovePi's firmware). Older versions of the firmware (&lt;=<code>v1.2.7</code>) won't get displayed when calling <code>python grovepi.py</code>.</p>
+<div class="codehilite"><pre><span></span>pi@raspberrypi:~ $ python grovepi.py
+library supports this fw versions: <span class="m">1</span>.3.0
+</pre></div>
+
+
+<p>To see which is the version of the current firmware loaded on the GrovePi you can either run the above test (<code>... all_test.sh</code>) from the <code>Troubleshooting/</code> directory or you can run these commands:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">grovepi</span>
+<span class="k">print</span><span class="p">(</span><span class="n">grovepi</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
+</pre></div>
+
+
+<p>There are also cases when the GrovePi doesn't respond to requests. In this situation, you would normally see an exception appearing in Python. More often than not, these can be the source of problems:</p>
+<ul>
+<li>A non-present firmware on the GrovePi.</li>
+<li>A mismatch of versions between the firmware and the library on the Raspberry Pi.</li>
+</ul>
+<p>In both of these situations, re-flashing the firmware is all it's needed.</p>
 <h2 id="building-the-firmware">Building the Firmware<a class="headerlink" href="#building-the-firmware" title="Permanent link">&para;</a></h2>
 <p>There may be cases where additional modification to the firmware is required to accommodate someone's particular requirements. In this case,
 building the firmware and then uploading it is crucial. During our production, we use <a href="https://platformio.org/">PlatformIO</a> along with <a href="https://atom.io/">Atom IDE</a>.</p>

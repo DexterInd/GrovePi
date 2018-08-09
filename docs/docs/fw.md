@@ -35,6 +35,29 @@ sudo bash all_tests.sh
 
 At the end of this process you'll get a `log.txt` file on your Desktop at `~/Desktop/log.txt`.
 
+Also, to see with which version of the firmware the library installed on the Raspberry Pi works with you can go to `~/Dexter/GrovePi` directory and run:
+```bash
+python grovepi.py
+```
+This should output a version number (of the GrovePi's firmware). Older versions of the firmware (<=`v1.2.7`) won't get displayed when calling `python grovepi.py`.
+```bash
+pi@raspberrypi:~ $ python grovepi.py
+library supports this fw versions: 1.3.0
+```
+
+To see which is the version of the current firmware loaded on the GrovePi you can either run the above test (`... all_test.sh`) from the `Troubleshooting/` directory or you can run these commands:
+```python
+import grovepi
+print(grovepi.version())
+```
+
+There are also cases when the GrovePi doesn't respond to requests. In this situation, you would normally see an exception appearing in Python. More often than not, these can be the source of problems:
+
+- A non-present firmware on the GrovePi.
+- A mismatch of versions between the firmware and the library on the Raspberry Pi.
+
+In both of these situations, re-flashing the firmware is all it's needed.
+
 ## Building the Firmware
 
 There may be cases where additional modification to the firmware is required to accommodate someone's particular requirements. In this case,
