@@ -650,3 +650,10 @@ def flowRead():
 		return [data_back[0],data_back[2] * 256 + data_back[1]]
 	else:
 		return [-1,-1]
+
+def main():
+	print("library supports this fw versions: " +
+			" ".join('{}'.format(k[1]) for k in enumerate(works_with_firmware)))
+
+if __name__ == "__main__":
+	main()
