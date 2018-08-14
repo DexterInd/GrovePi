@@ -33,7 +33,6 @@ parse_cmdline_arguments() {
   # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
   installdependencies=true
   updaterepo=true
-  installgrovepideb=true
   install_rfrtools=true
   install_pkg_rfrtools=true
   install_rfrtools_gui=true
@@ -56,9 +55,6 @@ parse_cmdline_arguments() {
         ;;
       --no-update-aptget)
         updaterepo=false
-        ;;
-      --no-grovepi-deb-packages)
-        installgrovepideb=false
         ;;
       --bypass-rfrtools)
         install_rfrtools=false
@@ -122,7 +118,6 @@ parse_cmdline_arguments() {
   echo "Updating GrovePi for $selectedbranch branch with the following options:"
   ([[ $installdependencies = "true" ]] && echo "  --no-dependencies=false") || echo "  --no-dependencies=true"
   ([[ $updaterepo = "true" ]] && echo "  --no-update-aptget=false") || echo "  --no-update-aptget=true"
-  ([[ $installgrovepideb == "true" ]] && echo "  --no-grovepi-deb-packages=false") || echo "  --no-grovepi-deb-packages=true"
   ([[ $install_rfrtools = "true" ]] && echo "  --bypass-rfrtools=false") || echo "  --bypass-rfrtools=true"
   ([[ $install_pkg_rfrtools = "true" ]] && echo "  --bypass-python-rfrtools=false") || echo "  --bypass-python-rfrtools=true"
   ([[ $install_rfrtools_gui = "true" ]] && echo "  --bypass-gui-installation=false") || echo "  --bypass-gui-installation=true"
@@ -131,7 +126,7 @@ parse_cmdline_arguments() {
   echo "  --system-wide=$systemwide"
 
   # in case the following packages are not installed and `--no-dependencies` option has been used
-  if [[ $installdependencies = "false" || $install_rfrtools = "false"  || $installgrovepideb = "false" ]]; then
+  if [[ $installdependencies = "false" || $install_rfrtools = "false" ]]; then
     command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Dependencies are set to be installed. Exiting." >&2; exit 1; }
     command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Dependencies are set to be installed. Exiting." >&2; exit 2; }
     command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Dependencies are set to be installed. Exiting." >&2; exit 3; }
@@ -259,11 +254,11 @@ install_deb_dependencies() {
   feedback "Installing dependencies for the GrovePi"
   # in order for nodejs to be installed, the repo for it
   # needs to be in; this is all done in script_tools while doing an apt-get update
-  sudo apt-get install nodejs -y
+  sudo apt-get install nodejs --no-install-recommends -y
 
-  sudo apt-get install git libi2c-dev i2c-tools minicom -y
-  sudo apt-get install python-setuptools python-pip python-smbus python-dev python-serial  python-rpi.gpio python-numpy -y
-  sudo apt-get install python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy -y
+  sudo apt-get install git libi2c-dev i2c-tools --no-install-recommends -y
+  sudo apt-get install python-setuptools python-pip python-smbus python-dev python-serial python-rpi.gpio python-numpy --no-install-recommends -y
+  sudo apt-get install python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy --no-install-recommends -y
   feedback "Dependencies for the GrovePi installed"
 }
 
@@ -272,11 +267,7 @@ install_python_pkgs_and_dependencies() {
   # installing dependencies if required
   if [[ $installdependencies = "true" ]]; then
     feedback "Installing GrovePi dependencies. This might take a while.."
-    if [[ $installgrovepideb = "true" ]]; then
-      install_deb_dependencies
-    else
-      feedback "Skipping the installation of deb packages for the GrovePi"
-    fi
+    install_deb_dependencies
     pushd $GROVEPI_DIR/Script > /dev/null
     sudo bash ./install.sh
     popd > /dev/null
