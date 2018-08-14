@@ -252,7 +252,7 @@ install_deb_dependencies() {
 
   # in order for nodejs to be installed, the repo for it
   # needs to be in; this is all done in script_tools while doing an apt-get update
-  sudo apt-get install nodejs --no-install-recommends -y \
+  sudo apt-get install --no-install-recommends -y nodejs\
     git libi2c-dev i2c-tools \
     python-setuptools python-pip python-smbus python-dev python-serial python-rpi.gpio python-numpy \
     python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy
