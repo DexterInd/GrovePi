@@ -27,7 +27,6 @@ check_if_run_with_pi() {
 }
 
 # called way down below
-# called way down below
 parse_cmdline_arguments() {
 
   # whether to install the dependencies or not (avrdude, apt-get, wiringpi, and so on)
@@ -125,15 +124,6 @@ parse_cmdline_arguments() {
   echo "  --env-local=$envlocal"
   echo "  --system-wide=$systemwide"
 
-  # in case the following packages are not installed and `--no-dependencies` option has been used
-  if [[ $installdependencies = "false" || $install_rfrtools = "false" ]]; then
-    command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Dependencies are set to be installed. Exiting." >&2; exit 1; }
-    command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Dependencies are set to be installed. Exiting." >&2; exit 2; }
-    command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Dependencies are set to be installed. Exiting." >&2; exit 3; }
-    command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Dependencies are set to be installed. Exiting." >&2; exit 4; }
-    command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Dependencies are set to be installed. Exiting." >&2; exit 5; }
-  fi
-
   # create rest of list of arguments for rfrtools call
   rfrtools_options+=("$selectedbranch")
   [[ $usepython3exec = "true" ]] && rfrtools_options+=("--use-python3-exe-too")
@@ -142,33 +132,24 @@ parse_cmdline_arguments() {
   [[ $install_pkg_rfrtools = "true" ]] && rfrtools_options+=("--install-python-package")
   [[ $install_rfrtools_gui = "true" ]] && rfrtools_options+=("--install-gui")
 
-  # create list of arguments for script_tools call
-  declare -ga scriptools_options=("$selectedbranch")
-
   echo "Using \"$selectedbranch\" branch"
   echo "Options used for RFR_Tools script: \"${rfrtools_options[@]}\""
-  echo "Options used for script_tools script: \"${scriptools_options[@]}\""
 }
 
 ################################################
-######## Cloning GrovePi & Script_Tools  #######
+######## Cloning GrovePi & RFR_Tools  ##########
 ################################################
 
+check_dependencies() {
+  command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Error occurred with RFR_Tools installation." >&2; exit 1; }
+  command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 2; }
+  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 3; }
+  command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 4; }
+  command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 5; }
+}
+
 # called way down below
-install_scriptools_and_rfrtools() {
-  # update script_tools first
-  curl --silent -kL https://raw.githubusercontent.com/DexterInd/script_tools/$selectedbranch/install_script_tools.sh > $PIHOME/.tmp_script_tools.sh
-  echo "Installing script_tools. This might take a while.."
-  bash $PIHOME/.tmp_script_tools.sh $selectedbranch > /dev/null
-  ret_val=$?
-  rm $PIHOME/.tmp_script_tools.sh
-  if [[ $ret_val -ne 0 ]]; then
-    echo "script_tools failed installing with exit code $ret_val. Exiting."
-    exit 6
-  fi
-  # needs to be sourced from here when we call this as a standalone
-  source $DEXTERSCRIPT/functions_library.sh
-  feedback "Done installing script_tools"
+install_rfrtools_repo() {
 
   # if rfrtools is not bypassed then install it
   if [[ $install_rfrtools = "true" ]]; then
@@ -180,10 +161,15 @@ install_scriptools_and_rfrtools() {
     rm $PIHOME/.tmp_rfrtools.sh
     if [[ $ret_val -ne 0 ]]; then
       echo "RFR_Tools failed installing with exit code $ret_val. Exiting."
-      exit 7
+      exit 6
     fi
     echo "Done installing RFR_Tool"
   fi
+  
+  # check if all deb packages have been installed with RFR_Tools
+  check_dependencies
+
+  source $DEXTERSCRIPT/functions_library.sh
 }
 
 # called way down bellow
@@ -252,6 +238,7 @@ remove_python_packages() {
   done < $PIHOME/.pypaths
 }
 
+# called by <<install_python_pkgs_and_dependencies>>
 install_deb_dependencies() {
   feedback "Installing dependencies for the GrovePi"
   # in order for nodejs to be installed, the repo for it
@@ -291,8 +278,11 @@ install_python_pkgs_and_dependencies() {
 ################################################
 
 check_if_run_with_pi
+
 parse_cmdline_arguments "$@"
-install_scriptools_and_rfrtools
+install_rfrtools_repo
+
 clone_grovepi
 install_python_pkgs_and_dependencies
+
 exit 0
