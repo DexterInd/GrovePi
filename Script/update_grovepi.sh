@@ -143,9 +143,11 @@ parse_cmdline_arguments() {
 check_dependencies() {
   command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Error occurred with RFR_Tools installation." >&2; exit 1; }
   command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 2; }
-  command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 3; }
-  command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 4; }
-  command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 5; }
+  command -v pip >/dev/null 2>&1 || { echo "Executable \"pip\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 3; }
+  if [[ $usepython3exec = "true" ]]; then
+    command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 4; }
+    command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 5; }
+  fi
 }
 
 # called way down below
