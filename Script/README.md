@@ -18,11 +18,11 @@ curl -kL dexterindustries.com/update_grovepi | bash -s -- --user-local --no-upda
 
 The options that can be appended to this command are:
 
-* `--no-dependencies` - skip installing any dependencies for the GrovePi. It's supposed to be used on each consecutive update after the initial install has gone through.
-* `--no-update-aptget` - to skip using `sudo apt-get update` before installing dependencies. For this to be useful, `--no-dependencies` has to be not used.
+* `--no-update-aptget` - to skip using `sudo apt-get update` before installing dependencies. For this to be useful, `--no-dependencies` has to be not used. Applies to RFR_Tools and the GrovePi.
 * `--bypass-rfrtools` - skips installing RFR_Tools completely.
-* `--bypass-python-rfrtools` - skips installing/updating the python package for  [RFR_Tools](https://github.com/DexterInd/RFR_Tools).
-* `--bypass-gui-installation` - skips installing the GUI packages/dependencies from [RFR_Tools](https://github.com/DexterInd/RFR_Tools).
+    * `--bypass-python-rfrtools` - skips installing/updating the python package for  [RFR_Tools](https://github.com/DexterInd/RFR_Tools).
+    * `--bypass-gui-installation` - skips installing the GUI packages/dependencies from [RFR_Tools](https://github.com/DexterInd/RFR_Tools).
+* `--no-dependencies` - skip installing any dependencies for the GrovePi. It's supposed to be used on each consecutive update after the initial install has gone through.
 * `--user-local` - install the python package for the GrovePi in the home directory of the user. This doesn't require any special read/write permissions: the actual command used is (`python setup.py install --force --user`).
 * `--env-local` - install the python package for the GrovePi within the given environment without elevated privileges: the actual command used is (`python setup.py install --force`).
 * `--system-wide` - install the python package for the GrovePi within the sytem-wide environment with `sudo`: the actual command used is (`sudo python setup.py install --force`).
@@ -32,9 +32,12 @@ As a last thing, different versions of it can be pulled by appending a correspon
 
 ## Minimal Installation
 
-Now, if you only want the absolute minimum in order to get going with the GrovePi, you can run this commands in this order:
+Now, if you only want the absolute minimum in order to get going with the GrovePi, you can run this commands in these orders:
 ```bash
-curl -kL dexterindustries.com/update_grovepi | sh -s -- --bypass-gui-installation
+sudo apt-get update && sudo apt-get install --no-install-recommends -y git
+```
+```bash
+curl -kL dexterindustries.com/update_grovepi | bash -s -- --bypass-gui-installation
 ```
 
 This will only get you installed the GrovePi dependencies and nothing else. You still can use options such as `--user-local` or `--env-local` if you are working with a different kind of environment. Keep in mind that `--system-wide` is selected by default.
