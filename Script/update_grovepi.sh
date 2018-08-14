@@ -148,6 +148,11 @@ check_dependencies() {
     command -v python3 >/dev/null 2>&1 || { echo "Executable \"python3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 4; }
     command -v pip3 >/dev/null 2>&1 || { echo "Executable \"pip3\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 5; }
   fi
+
+  if [[ ! -f $DEXTERSCRIPT/functions_library.sh ]]; then
+    echo "script_tools didn\'t get installed. Enable the installation of dependencies with RFR_Tools.'"
+    exit 7
+  fi
 }
 
 # called way down below
