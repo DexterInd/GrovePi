@@ -32,10 +32,7 @@ As a last thing, different versions of it can be pulled by appending a correspon
 
 ## Minimal Installation
 
-Now, if you only want the absolute minimum in order to get going with the GrovePi, you can run this commands in these orders:
-```bash
-sudo apt-get update && sudo apt-get install --no-install-recommends -y git
-```
+Now, if you only want the absolute minimum in order to get going with the GrovePi, you can run this command:
 ```bash
 curl -kL dexterindustries.com/update_grovepi | bash -s -- --bypass-gui-installation
 ```
