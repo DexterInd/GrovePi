@@ -140,6 +140,7 @@ parse_cmdline_arguments() {
 ######## Cloning GrovePi & RFR_Tools  ##########
 ################################################
 
+# called in <<install_rfrtools_repo>>
 check_dependencies() {
   command -v git >/dev/null 2>&1 || { echo "This script requires \"git\" but it's not installed. Error occurred with RFR_Tools installation." >&2; exit 1; }
   command -v python >/dev/null 2>&1 || { echo "Executable \"python\" couldn't be found. Error occurred with RFR_Tools installation." >&2; exit 2; }
@@ -248,13 +249,14 @@ remove_python_packages() {
 # called by <<install_python_pkgs_and_dependencies>>
 install_deb_dependencies() {
   feedback "Installing dependencies for the GrovePi"
+
   # in order for nodejs to be installed, the repo for it
   # needs to be in; this is all done in script_tools while doing an apt-get update
-  sudo apt-get install nodejs --no-install-recommends -y
+  sudo apt-get install nodejs --no-install-recommends -y \
+    git libi2c-dev i2c-tools \
+    python-setuptools python-pip python-smbus python-dev python-serial python-rpi.gpio python-numpy \
+    python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy
 
-  sudo apt-get install git libi2c-dev i2c-tools --no-install-recommends -y
-  sudo apt-get install python-setuptools python-pip python-smbus python-dev python-serial python-rpi.gpio python-numpy --no-install-recommends -y
-  sudo apt-get install python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy --no-install-recommends -y
   feedback "Dependencies for the GrovePi installed"
 }
 
