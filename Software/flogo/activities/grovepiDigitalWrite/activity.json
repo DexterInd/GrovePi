@@ -1,0 +1,27 @@
+{
+  "name": "grovepiDigitalWrite",
+  "type": "flogo:activity",
+  "ref": "github.com/DexterInd/GrovePi/Software/flogo/activities/grovepiDigitalWrite",
+  "version": "0.0.1",
+  "title": "grovepi Digital Write",
+  "description": "Digital Write Activity for GrovePi",
+  "homepage": "https://github.com/DexterInd/GrovePi/Software/flogo/",
+  "inputs":[
+    {
+      "name": "pin",
+      "type": "integer",
+      "required": true
+    },
+    {
+      "name": "value",
+      "type": "boolean",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "success",
+      "type": "boolean"
+    }
+  ]
+}

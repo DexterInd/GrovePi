@@ -3,7 +3,7 @@
 GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  Create your Internet of Things devices and inventions without the need for soldering!
 ![Picture](GrovePi_Plus_By_Dexter_Industries_For_the_Raspberry_Pi.JPG)
 
-There are over 2 million Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
+There are over 14 million Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
 
 We brought Grove and Raspberry Pi together in a simple and affordable way. Grove sensors allow you to interact and monitor the world. Raspberry Pi lets you store and process data, and bring the real world to the Raspberry Pi and the web.  
 The GrovePi brings both Grove Sensors and the popular Raspberry Pi together in a simple, elegant, and open source design.
@@ -15,15 +15,26 @@ The GrovePi board slips over the Raspberry Pi.  Connect the Grove Sensors to the
 The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, 2, and 3.
 
 ### Getting Started
-Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/). 
-We have an extensive library that covers most Grove sensors. You can find it on the Github repo.  You won’t need to hack much at all with our library: get started coding in Python and C now! 
+Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/).
+We have an extensive library that covers most Grove sensors. You can find it on the Github repo.  You won’t need to hack much at all with our library: get started coding in Python and C now!
 
 ### Quick Install
 In order to quick install the `GrovePi` repository, open up a terminal and type the following command:
 ```
-sudo curl -kL dexterindustries.com/update_grovepi | bash
+curl -kL dexterindustries.com/update_grovepi | bash
 ```
 The same command can be used for updating the `GrovePi` to the latest version.
+
+For more details on how you can install/update your `GrovePi`, please check this [README](Script/README.md).
+
+### Scratch Support
+Once you've done the above command, you can install Scratch support if you want it. This step is optional.
+```
+sudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh
+```
+
+If your SD card has Scratch 2.0 installed on it, then this will install GrovePi support for it.
+GrovePi integration for Scratch 1.4 is also getting installed.
 
 ### Want to use a sensor not in the library yet?  
 Ask us in the [forums](http://forum.dexterindustries.com/c/grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://forum.dexterindustries.com/c/grovepi).

@@ -12,12 +12,32 @@ To install node.js you can do the following:
 ```bash
 curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo apt-get install nodejs
+cd $HOME && mkdir .node_modules_global
+npm config set prefix $HOME/.node_modules_global
 ```
+
+#### Installing Package from NPM Repository
 
 Go inside your Node.js application folder and type
 ```bash
 $ npm install node-grovepi
 ```
+
+#### Installing Package by Linking the Project In This Repo
+
+`cd` to `libs` directory in this folder and type
+```bash
+npm install
+npm link
+```
+
+Now, inside your own app (which can be anywhere in `$HOME`) you need to run
+```
+npm link node-grovepi
+```
+once in order to link your project to the library that's in this repository (`libs`) folder.
+
+#### Using the Library
 
 Now you can include the module inside your application:
 ```javascript
