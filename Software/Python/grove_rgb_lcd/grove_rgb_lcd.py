@@ -120,6 +120,14 @@ def setText_norefresh(text):
 
 # Create a custom character (from array of row patterns)
 def create_char(location, pattern):
+    """
+    Writes a bit pattern to LCD CGRAM
+    
+    Arguments: 
+    location -- integer, one of 8 slots (0-7)
+    pattern -- byte array containing the bit pattern, like as found at
+               https://omerk.github.io/lcdchargen/
+    """
     location &= 0x07 # Make sure location is 0-7
     textCommand(0x40 | (location << 3))
     bus.write_i2c_block_data(DISPLAY_TEXT_ADDR, 0x40, pattern)
