@@ -43,7 +43,7 @@ This will only get you installed the GrovePi dependencies and nothing else. You 
 
 If the GrovePi has been installed either by using the full command or the one for the minimal installation, this means you have all the packages installed already and all dependencies put in. Therefore, on subsequent installation, you can skip installing any dependency and instead just reinstall the python package of the GrovePi. To do this, you can run this command:
 ```bash
-curl -kL dexterindustries.com/update_grovepi | bash -s -- --bypass-rfrtools --no-dependencies --no-update-aptget
+curl -kL dexterindustries.com/update_grovepi | bash -s -- --bypass-rfrtools --no-dependencies
 ```
 
 Or if this is too complex, you can always stick to the command meant for the full installation or the minimal one.
