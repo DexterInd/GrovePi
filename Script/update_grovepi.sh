@@ -22,7 +22,7 @@ check_if_run_with_pi() {
   ## if not running with the pi user then exit
   if [ $(id -ur) -ne $(id -ur pi) ]; then
     echo "GrovePi installer script must be run with \"pi\" user. Exiting."
-    exit 7
+    exit 6
   fi
 }
 
@@ -152,7 +152,7 @@ check_dependencies() {
 
   if [[ ! -f $DEXTERSCRIPT/functions_library.sh ]]; then
     echo "script_tools didn\'t get installed. Enable the installation of dependencies with RFR_Tools.'"
-    exit 7
+    exit 8
   fi
 }
 
@@ -169,7 +169,7 @@ install_rfrtools_repo() {
     rm $PIHOME/.tmp_rfrtools.sh
     if [[ $ret_val -ne 0 ]]; then
       echo "RFR_Tools failed installing with exit code $ret_val. Exiting."
-      exit 6
+      exit 7
     fi
     echo "Done installing RFR_Tool"
   fi
