@@ -22,8 +22,8 @@ patterns=["$GPGGA",
     ]
 
 class GROVEGPS():
-    def __init__(self,port='/dev/ttyAMA0',baud=9600,timeout=0):
-        self.ser = serial.Serial(port,baud,timeout=timeout)
+    def __init__(self, port='/dev/ttyAMA0', baud=9600, timeout=0):
+        self.ser = serial.Serial(port, baud, timeout=timeout)
         self.ser.flush()
         self.raw_line = ""
         self.gga = []
@@ -57,18 +57,18 @@ class GROVEGPS():
         self.longitude = -1.0
         self.fancylat = ""  #
         
-    def get_date(self):
-        '''
-        attempt to get date from GPS data. So far no luck. GPS does
-        not seem to send date sentence at all
-        function is unfinished
-        '''
-        valid = False
-        for i in range(50):
-            time.sleep(0.5)
-            self.raw_line = self.ser.readline().strip()
-            if self.raw_line[:6] == "GPZDA":  # found date line!
-                print (self.raw_line)
+    # def get_date(self):
+    #     '''
+    #     attempt to get date from GPS data. So far no luck. GPS does
+    #     not seem to send date sentence at all
+    #     function is unfinished
+    #     '''
+    #     valid = False
+    #     for i in range(50):
+    #         time.sleep(0.5)
+    #         self.raw_line = self.ser.readline().strip()
+    #         if self.raw_line[:6] == "GPZDA":  # found date line!
+    #             print (self.raw_line)
             
 
     def read(self):
@@ -78,7 +78,7 @@ class GROVEGPS():
         If valid data is not found, then clean up data in GPS instance
         '''
         valid = False
-        for i in range(50):
+        for _ in range(50):
             time.sleep(0.5)
             self.raw_line = self.ser.readline()
             try:
@@ -97,7 +97,7 @@ class GROVEGPS():
             self.clean_data()
             return []
 
-    def validate(self,in_line):
+    def validate(self, in_line):
         '''
         Runs regex validation on a GPGAA sentence. 
         Returns False if the sentence is mangled
@@ -114,7 +114,7 @@ class GROVEGPS():
 
         #Sometimes multiple GPS data packets come into the stream. Take the data only after the last '$GPGGA' is seen
         try:
-            ind=self.gga.index('$GPGGA',5,len(self.gga))	
+            ind=self.gga.index('$GPGGA', 5, len(self.gga))	
             self.gga=self.gga[ind:]
         except ValueError:
             pass
