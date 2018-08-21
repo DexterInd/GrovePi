@@ -24,9 +24,11 @@ dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.
 
 Once you've done these 2 steps from above, a reboot will be required. Do it, and then proceed to the next section.
 
+More information on how the serial ports are set up, you can [read this article](https://spellfoundry.com/2016/05/29/configuring-gpio-serial-port-raspbian-jessie-including-pi-3/#Disabling_the_Console).
+
 ### Running it
 
-To run the GPS script, you need to have followed the instructions in the previous section and have connected the Grove GPS Module to the **RPIser** port of the GrovePi.
+To run the GPS script, you need to have followed the instructions in the previous section and have connected the [Grove GPS Module](http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130) to the **RPIser** port of the GrovePi.
 
 The script can be either launched with Python 2 or Python 3.
 ```bash
