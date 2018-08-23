@@ -40,15 +40,10 @@ try:
 except IOError:
 	description = "Check more on https://pypi.python.org/pypi/grovepi"
 
-package_dirs_list = {
-	'dextergps' : 'grove_gps/',
-	'lsm303d' : 'grove_6axis_acc_compass/',
-	'adxl345' : 'grove_accelerometer_16g/',
-	'grove_barometer_lib' : 'grove_barometer_sensors/barometric_sensor_bmp085'
-}
-
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
+import os
+
 setuptools.setup(
     name = "grovepi",
     version = "1.0.0",
@@ -75,19 +70,10 @@ setuptools.setup(
 
     keywords = ['robot', 'grovepi', 'grovepi+', 'dexter industries', 'learning', 'education', 'iot', 'internet of things', 'prototyping'],
 
-	# packages = [
-	# 	'dextergps',
-	# 	# 'lsm303d',
-	# 	# 'adxl345',
-	# 	# 'grove_barometer_lib'
-	# ],
-	# package_dir = {
-	# 	'dextergps' : 'grove_gps/',
-	# 	# 'lsm303d' : 'grove_6axis_acc_compass/',
-	# 	# 'adxl345' : 'grove_accelerometer_16g/',
-	# 	# 'grove_barometer_lib' : 'grove_barometer_sensors/barometric_sensor_bmp085'
-	# },
-    py_modules = ['grovepi', 'grove_gps/dextergps'],
+	package_dir = {
+		'' : 'src'
+	},
+	py_modules = [script.split('.')[0] for script in os.listdir('src/')],
     install_requires = ['numpy', 'smbus-cffi', 'RPi.GPIO', 'serial'],
 	test_suite = 'test_suite.TestMethods'
 )
