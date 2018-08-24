@@ -4,13 +4,7 @@ import unittest
 class TestMethods(unittest.TestCase):
 
     def test_imports(self):
-        modules = [
-            'grovepi',
-            'dextergps',
-            'lsm303d',
-            'adxl345',
-            'grove_barometer_lib'
-        ]
+        modules = [script.split('.')[0] for script in os.listdir('../src/')]
 
         for module in modules:
             try:
