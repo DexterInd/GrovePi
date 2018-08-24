@@ -7,7 +7,7 @@
 #
 # Have a question about this example?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
-# LICENSE: 
+# LICENSE:
 # These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
 #
 # Karan Nayan
@@ -56,15 +56,15 @@ if rev == 2 or rev == 3:
     bus = smbus.SMBus(1)
 else:
     bus = smbus.SMBus(0)
-	
+
 address=0x3c
 addressingMode= None
 SeeedOLED_Max_X                 =127 #128 Pixels
 SeeedOLED_Max_Y                 =63  #64  Pixels
-                                
-PAGE_MODE                       =01
-HORIZONTAL_MODE                 =02
-                                                            
+
+PAGE_MODE                       =1
+HORIZONTAL_MODE                 =2
+
 SeeedOLED_Address               =0x3c
 SeeedOLED_Command_Mode          =0x80
 SeeedOLED_Data_Mode             =0x40
@@ -78,7 +78,7 @@ SeeedOLED_Set_Brightness_Cmd    =0x81
 
 Scroll_Left             =0x00
 Scroll_Right            =0x01
-                        
+
 Scroll_2Frames          =0x7
 Scroll_3Frames          =0x4
 Scroll_4Frames          =0x5
@@ -211,15 +211,15 @@ def multi_comm(commands):
 # Init function of the OLED
 def init():
 	sendCommand(SeeedOLED_Display_Off_Cmd)     #display off
-	time.sleep(.005) 
+	time.sleep(.005)
 	sendCommand(SeeedOLED_Display_On_Cmd)  	#display on
-	time.sleep(.005) 
+	time.sleep(.005)
 	sendCommand(SeeedOLED_Normal_Display_Cmd)  #Set Normal Display (default)
 
 def setBrightness(Brightness):
    sendCommand(SeeedOLED_Set_Brightness_Cmd)
    sendCommand(Brightness)
-  
+
 def setHorizontalMode():
 	global addressingMode
 	addressingMode = HORIZONTAL_MODE
@@ -240,11 +240,11 @@ def setTextXY(Column,Row):
 def clearDisplay():
 	sendCommand(SeeedOLED_Display_Off_Cmd)   #display off
 	for j in range(8):
-		setTextXY(0,j)    
+		setTextXY(0,j)
 		for i in range(16):  #clear all columns
-			putChar(' ')    
+			putChar(' ')
 	sendCommand(SeeedOLED_Display_On_Cmd)    #display on
-	setTextXY(0,0)    
+	setTextXY(0,0)
 
 def putChar(C):
 	C_add=ord(C)
@@ -255,7 +255,7 @@ def putChar(C):
 	for i in range(8):
 		data=(BasicFont[C_add-32][i])
 		sendData(data)
-	
+
     # for i in range(0,8,2):
         # for j in range(0,8):
             # c=0x00
@@ -274,7 +274,7 @@ def putChar(C):
 def putString(s):
     for i in range(len(s)):
         putChar(s[i])
-		
+
 def putNumber(long_num):
 	char_buffer[10]=None
 	i = 0
@@ -284,12 +284,12 @@ def putNumber(long_num):
 		f=1
 		putChar('-')
 		long_num = -long_num
-		
+
 	elif (long_num == 0) :
 		f=1
 		putChar('0')
 		return f
-	
+
 	while (long_num > 0):
 		char_buffer[i] = long_num % 10
 		long_num /= 10
@@ -306,13 +306,13 @@ def setHorizontalScrollProperties(direction,startPage, endPage, scrollSpeed):
 
 	'''
 	Use the following defines for 'direction' :
-	Scroll_Left            
-	Scroll_Right           
+	Scroll_Left
+	Scroll_Right
 	Use the following defines for 'scrollSpeed' :
-	Scroll_2Frames     
+	Scroll_2Frames
 	Scroll_3Frames
 	Scroll_4Frames
-	Scroll_5Frames 
+	Scroll_5Frames
 	Scroll_25Frames
 	Scroll_64Frames
 	Scroll_128Frames
@@ -323,7 +323,7 @@ def setHorizontalScrollProperties(direction,startPage, endPage, scrollSpeed):
 		#Scroll Right
 		sendCommand(0x26)
 	else:
-		#Scroll Left  
+		#Scroll Left
 		sendCommand(0x27)
 
 	sendCommand(0x00)
