@@ -74,6 +74,6 @@ setuptools.setup(
 		'' : 'src'
 	},
 	py_modules = [script.split('.')[0] for script in os.listdir('src/')],
-    install_requires = ['numpy', 'smbus-cffi', 'RPi.GPIO', 'serial'],
+    install_requires = ['numpy', 'smbus-cffi', 'RPi.GPIO', 'pyserial', 'scipy'],
 	test_suite = 'tests.test_suite.TestMethods'
 )
