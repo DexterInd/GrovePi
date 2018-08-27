@@ -40,6 +40,9 @@ try:
 except IOError:
 	description = "Check more on https://pypi.python.org/pypi/grovepi"
 
+with open('requirements.txt') as fp:
+    install_requires = fp.read()
+
 # To install the GrovePi library systemwide, use: sudo python setup.py install
 import setuptools
 import os
@@ -74,6 +77,6 @@ setuptools.setup(
 		'' : 'src'
 	},
 	py_modules = [script.split('.')[0] for script in os.listdir('src/')],
-    install_requires = ['numpy', 'smbus-cffi', 'RPi.GPIO', 'pyserial', 'scipy'],
+    install_requires = install_requires,
 	test_suite = 'tests.test_suite.TestMethods'
 )
