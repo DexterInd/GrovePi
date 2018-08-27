@@ -1,9 +1,10 @@
 The GrovePi should no longer be installed with PIP. Instead, go with the following command:
-```bash
-curl -kL dexterindustries.com/update_grovepi | bash
-```
 
-Or if you need to customize your installation, to be better suited for your requirements, check this GitHub [README](https://github.com/DexterInd/GrovePi/tree/master/Script) for more information.
+.. code:: bash
+
+  curl -kL dexterindustries.com/update_grovepi | bash
+
+Or if you need to customize your installation, to be better suited for your requirements, check this GitHub `README <https://github.com/DexterInd/GrovePi/tree/master/Script>`_ for more information.
 
 ---
 

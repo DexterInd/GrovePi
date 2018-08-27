@@ -49,7 +49,7 @@ import os
 
 setuptools.setup(
     name = "grovepi",
-    version = "1.0.2",
+    version = "1.0.4",
 
     description = "Drivers for using the GrovePi+ in Python",
     long_description = description,
