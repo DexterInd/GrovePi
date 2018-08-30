@@ -6,6 +6,8 @@ from grovepi import dht # we built on top of the base function found in the grov
 from grovepi import statisticalNoiseReduction # importing function which is meant for removing outliers from a given set
 import time
 
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
 
 '''
 # after a list of numerical values is provided

@@ -1,4 +1,7 @@
 
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
+
 import grovepi
 import serial, time, sys
 import re
@@ -34,11 +37,11 @@ class GROVEGPS():
             self.validation.append(re.compile(patterns[i]))
 
         self.clean_data()
-        # self.get_date()  # attempt to gete date from GPS. 
+        # self.get_date()  # attempt to gete date from GPS.
 
     def clean_data(self):
         '''
-        clean_data: 
+        clean_data:
         ensures that all relevant GPS data is set to either empty string
         or -1.0, or -1, depending on appropriate type
         This occurs right after initialisation or
@@ -56,7 +59,7 @@ class GROVEGPS():
         self.latitude = -1.0  #degrees and decimals
         self.longitude = -1.0
         self.fancylat = ""  #
-        
+
     # def get_date(self):
     #     '''
     #     attempt to get date from GPS data. So far no luck. GPS does
@@ -69,7 +72,7 @@ class GROVEGPS():
     #         self.raw_line = self.ser.readline().strip()
     #         if self.raw_line[:6] == "GPZDA":  # found date line!
     #             print (self.raw_line)
-            
+
 
     def read(self):
         '''
@@ -83,7 +86,7 @@ class GROVEGPS():
             self.raw_line = self.ser.readline()
             try:
                 self.line = self.raw_line.decode('utf-8')
-                self.line = self.line.strip()   
+                self.line = self.line.strip()
             except:
                 self.line = ""
             debug(self.line)
@@ -99,7 +102,7 @@ class GROVEGPS():
 
     def validate(self, in_line):
         '''
-        Runs regex validation on a GPGAA sentence. 
+        Runs regex validation on a GPGAA sentence.
         Returns False if the sentence is mangled
         Return True if everything is all right and sets internal
         class members.
@@ -114,7 +117,7 @@ class GROVEGPS():
 
         #Sometimes multiple GPS data packets come into the stream. Take the data only after the last '$GPGGA' is seen
         try:
-            ind=self.gga.index('$GPGGA', 5, len(self.gga))	
+            ind=self.gga.index('$GPGGA', 5, len(self.gga))
             self.gga=self.gga[ind:]
         except ValueError:
             pass
@@ -123,8 +126,8 @@ class GROVEGPS():
             debug ("Failed: wrong number of parameters ")
             debug (self.gga)
             return False
-        
-        for i in range(len(self.validation)-1):	
+
+        for i in range(len(self.validation)-1):
             if len(self.gga[i]) == 0:
                 debug ("Failed: empty string %d"%i)
                 return False

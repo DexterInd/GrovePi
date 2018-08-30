@@ -1,3 +1,6 @@
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
+
 import serial
 import binascii
 import struct
