@@ -64,9 +64,8 @@ with open('package_modules.txt', 'r') as fmodules:
 try:
 	os.mkdir(temp_dir)
 except FileExistsError:
-	with os.scandir(temp_dir) as files:
-		for file in files:
-			os.remove(file.path)
+	shutil.rmtree(temp_dir)
+	os.mkdir(temp_dir)
 
 # copy modules from all over the place to the designated
 # temporary directory
@@ -123,11 +122,8 @@ setuptools.setup(
 
 	py_modules = [script.split('.')[0] for script in os.listdir(temp_dir)],
     install_requires = install_requires,
-	test_suite = 'tests.test_suite.TestMethods'
+	test_suite = 'test_script.test_suite.TestMethods'
 )
 
 # removing everything under the temp directory
-with os.scandir(temp_dir) as files:
-	for file in files:
-		os.remove(file.path)
-os.rmdir(temp_dir)
+shutil.rmtree(temp_dir)

@@ -12,8 +12,8 @@ def get_file_with_parents(filepath, levels=1):
 class TestMethods(unittest.TestCase):
 
     def test_imports(self):
-        src_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-        modules = [script.split('.')[0] for script in os.listdir(src_path + '/src')]
+        with open('package_modules.txt', 'r') as fmodules:
+            modules = list(map(lambda module: module.strip(), fmodules.readlines()))
 
         for module in modules:
             try:
