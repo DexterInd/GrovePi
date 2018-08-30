@@ -12,11 +12,13 @@ You can also run `python setup.py test` to test import the modules of the GroveP
 
 ## Library Breakdown
 
-There are 2 directories in this directory that contain example scripts:
+There are 2 kind of example scripts:
 
-1. [connectables_examples](connectables_examples/) - containing example programs that rely on other libraries other than the `grovepi.py` module.
+1. Example programs that only require the `grovepi` module - these example scripts are found in this directory (or root directory of the Python package).
 
-1. [grovepi_examples](grovepi_examples/) - containing example programs that only need the main module of the GrovePi, `grovepi.py`.
+1. Example programs that are based on other sublibraries other than the `grovepi` module - these example scripts are found in the subdirectories of this directory.
+
+The libraries installed with the GrovePi package are listed in [here](package_modules.txt).
 
 ## Python Consideration
 
