@@ -8,7 +8,7 @@ pip install -r requirements.txt
 python3 setup.py install
 ```
 
-You can also run `python setup.py test` to test import the modules of the GrovePi package that reside in [src](src/). The `python setup.py test` commands should be run after pip installing the dependencies.
+You can also run `python setup.py test` to test import the modules of the GrovePi package that are listed in the [package_modules.txt](package_modules.txt) file. The `python setup.py test` commands should be run after pip installing the dependencies.
 
 ## Library Breakdown
 
