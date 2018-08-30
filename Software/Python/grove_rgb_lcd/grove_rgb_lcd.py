@@ -11,10 +11,32 @@
 # Author	Date      		Comments
 # 						  	Initial Authoring
 # Karan		7 Jan 16		Library updated to add a function to update the text without erasing the screen
+'''
+## License
 
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
+The MIT License (MIT)
 
+GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Copyright (C) 2017  Dexter Industries
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
 #
 # NOTE:
 # 	Just supports setting the backlight colour, and
@@ -48,11 +70,11 @@ def setRGB(r,g,b):
     bus.write_byte_data(DISPLAY_RGB_ADDR,3,g)
     bus.write_byte_data(DISPLAY_RGB_ADDR,2,b)
 
-# send command to display (no need for external use)
+# send command to display (no need for external use)    
 def textCommand(cmd):
     bus.write_byte_data(DISPLAY_TEXT_ADDR,0x80,cmd)
 
-# set display text \n for second line(or auto wrap)
+# set display text \n for second line(or auto wrap)     
 def setText(text):
     textCommand(0x01) # clear display
     time.sleep(.05)
@@ -100,8 +122,8 @@ def setText_norefresh(text):
 def create_char(location, pattern):
     """
     Writes a bit pattern to LCD CGRAM
-
-    Arguments:
+    
+    Arguments: 
     location -- integer, one of 8 slots (0-7)
     pattern -- byte array containing the bit pattern, like as found at
                https://omerk.github.io/lcdchargen/
@@ -121,3 +143,5 @@ if __name__=="__main__":
         time.sleep(0.1)
     setRGB(0,255,0)
     setText("Bye bye, this should wrap onto next line")
+
+    

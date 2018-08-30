@@ -4,26 +4,23 @@
 # The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
 #
 # Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
+#         
 #
-#
-# NOTES:
+# NOTES:                                      
 # * Calibration and read of the CO2 sensor MH-Z16 according to the datasheet : http://www.seeedstudio.com/wiki/images/c/ca/MH-Z16_CO2_datasheet_EN.pdf
 # * output value directly in ppm
 # * Library derived from the inital controbution by Doms Genoud (@domsgen) here: http://www.dexterindustries.com/topic/how-to-use-co2-grove-sensor-with-serial-grovepi/
-#
+# 
 # History
 # ------------------------------------------------
 # Author     		Date      		Comments
 # Doms Genoud      	13 Apr 15 		Initial Authoring
 # Karan				07 Jan 16		Code cleanup and added to main Github repo
-#
+# 			                                                         
 # These files have been made available online through a Creative Commons Attribution-ShareAlike 3.0  license.
-# (http://creativecommons.org/licenses/by-sa/3.0/)
+# (http://creativecommons.org/licenses/by-sa/3.0/)           
 #
 ########################################################################
-
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
 
 import serial, time
 import struct
@@ -37,14 +34,14 @@ class CO2:
 	cmd_zero_sensor = "\xff\x87\x87\x00\x00\x00\x00\x00\xf2"
 	cmd_span_sensor = "\xff\x87\x87\x00\x00\x00\x00\x00\xf2"
 	cmd_get_sensor = "\xff\x01\x86\x00\x00\x00\x00\x00\x79"
-
-	def __init__(self):
+	
+	def __init__(self):	
 		#To open the raspberry serial port
 		#ser = serial.Serial('/dev/ttyAMA0',  9600, timeout = 1)	#Open the serial port at 9600 baud
 
 		#init serial
 		ser.flush()
-
+		
 	def read(self):
 		try:
 			ser.write(self.cmd_get_sensor)
@@ -59,9 +56,10 @@ class CO2:
 
 		except IOError:
 			return [-1,-1]
-
-if __name__ == "__main__":
+			
+if __name__ == "__main__":		
 	c = CO2()
 	while True:
 		print(c.read())
 		time.sleep(1)
+

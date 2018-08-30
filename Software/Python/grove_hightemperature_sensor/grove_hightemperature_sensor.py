@@ -1,6 +1,3 @@
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
-
 import grovepi
 import math
 import json
@@ -17,7 +14,7 @@ class HighTemperatureSensor:
 
     # initialize the object with the appropriate sensor pins on the GrovePi and configuration JSON
     def __init__(self, _temperature_pin, _thermocouple_pin, _json_path = None):
-
+        
         if(_json_path is None):
             _json_path = 'thermocouple_table.json'
 

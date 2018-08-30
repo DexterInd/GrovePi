@@ -23,9 +23,6 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
-
 import time
 from Adafruit_I2C import Adafruit_I2C
 import math

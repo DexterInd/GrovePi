@@ -6,10 +6,32 @@
 #
 # Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
+'''
+## License
 
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
+The MIT License (MIT)
 
+GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Copyright (C) 2017  Dexter Industries
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
 #################################################################################################################################################
 # NOTE:
 # The software for this sensor is still in development and might make your GrovePi unuable as long as this sensor is connected with the GrovePi
@@ -27,7 +49,7 @@ else:
     bus = smbus.SMBus(0)
 
 class th02:
-
+	
 	ADDRESS = 0x40
 
 	TH02_REG_STATUS = 0x00
@@ -42,10 +64,10 @@ class th02:
 	TH02_CMD_MEASURE_TEMP = [0x11]
 
 	SUCCESS = 0
-
+	
 	def getTemperature(self):
 		bus.write_i2c_block_data(self.ADDRESS, self.TH02_REG_CONFIG, self.TH02_CMD_MEASURE_TEMP)
-
+		
 		while 1:
 			status=self.getStatus()
 			if debug:
@@ -57,10 +79,10 @@ class th02:
 			print(t_raw)
 		temperature = (t_raw[1]<<8|t_raw[2])>>2
 		return (temperature/32.0)-50.0
-
+		
 	def getHumidity(self):
 		bus.write_i2c_block_data(self.ADDRESS, self.TH02_REG_CONFIG, self.TH02_CMD_MEASURE_HUMI)
-
+		
 		while 1:
 			status=self.getStatus()
 			if debug:
@@ -72,7 +94,7 @@ class th02:
 			print(t_raw)
 		temperature = (t_raw[1]<<8|t_raw[2])>>4
 		return (temperature/16.0)-24.0
-
+		
 	def getStatus(self):
 		status=bus.read_i2c_block_data(self.ADDRESS, self.TH02_REG_STATUS,1)
 		if debug:
@@ -82,7 +104,7 @@ class th02:
 		else:
 			return 0
 
-if __name__ == "__main__":
+if __name__ == "__main__":		
 	t= th02()
 	while True:
 		print(t.getTemperature(),t.getHumidity())

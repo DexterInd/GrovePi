@@ -7,9 +7,6 @@
 # the Adafruit Triple Axis ADXL345 breakout board:
 # http://shop.pimoroni.com/products/adafruit-triple-axis-accelerometer
 
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information see https://github.com/DexterInd/GoPiGo3/blob/master/LICENSE.md
-
 import smbus
 from time import sleep
 
