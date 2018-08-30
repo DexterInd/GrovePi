@@ -1,35 +1,23 @@
-GrovePi
-=======
+## Installing the GrovePi for Python
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Run the following 2 commands in the following order to get the GrovePi installed:
+```
+pip install -r requirements.txt
+```
+```
+python3 setup.py install
+```
 
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
-[Dexter Industries](http://www.dexterindustries.com)
+You can also run `python setup.py test` to test import the modules of the GrovePi package that reside in [src](src/). The `python setup.py test` commands should be run after pip installing the dependencies.
 
-## License
+## Library Breakdown
 
-The MIT License (MIT)
+There are 2 directories in this directory that contain example scripts:
 
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
+1. [connectables_examples](connectables_examples/) - containing example programs that rely on other libraries other than the `grovepi.py` module.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. [grovepi_examples](grovepi_examples/) - containing example programs that only need the main module of the GrovePi, `grovepi.py`.
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+## Python Consideration
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-
-
+Even though you can install the GrovePi package for both versions of it (2.x and 3.x), some libraries other than the main one (`grovepi.py`) can only be used with Python3. Therefore, it's just better to use Python 3 by-default, instead of relying on an older version of Python which will anyway get retired in the very near future.

@@ -1,8 +1,8 @@
-# ADXL345 Python library for Raspberry Pi 
+# ADXL345 Python library for Raspberry Pi
 #
 # author:  Jonathan Williamson
 # license: BSD, see LICENSE.txt included in this package
-# 
+#
 # This is a Raspberry Pi Python implementation to help you get started with
 # the Adafruit Triple Axis ADXL345 breakout board:
 # http://shop.pimoroni.com/products/adafruit-triple-axis-accelerometer
@@ -11,7 +11,8 @@ import smbus
 from time import sleep
 
 # select the correct i2c bus for this revision of Raspberry Pi
-revision = ([l[12:-1] for l in open('/proc/cpuinfo','r').readlines() if l[:8]=="Revision"]+['0000'])[0]
+with open('/proc/cpuinfo', 'r') as file:
+    revision = ([l[12:-1] for l in file.readlines() if l[:8]=="Revision"]+['0000'])[0]
 bus = smbus.SMBus(1 if int(revision, 16) >= 4 else 0)
 
 # ADXL345 constants
@@ -42,7 +43,7 @@ class ADXL345:
 
     address = None
 
-    def __init__(self, address = 0x53):        
+    def __init__(self, address = 0x53):
         self.address = address
         self.setBandwidthRate(BW_RATE_100HZ)
         self.setRange(RANGE_2G)
@@ -59,11 +60,11 @@ class ADXL345:
         value = bus.read_byte_data(self.address, DATA_FORMAT)
 
         value &= ~0x0F;
-        value |= range_flag;  
+        value |= range_flag;
         value |= 0x08;
 
         bus.write_byte_data(self.address, DATA_FORMAT, value)
-    
+
     # returns the current reading from the sensor for each axis
     #
     # parameter gforce:
@@ -71,7 +72,7 @@ class ADXL345:
     #    True           : result is returned in gs
     def getAxes(self, gforce = False):
         bytes = bus.read_i2c_block_data(self.address, AXES_DATA, 6)
-        
+
         x = bytes[0] | (bytes[1] << 8)
         if(x & (1 << 16 - 1)):
             x = x - (1<<16)
@@ -84,7 +85,7 @@ class ADXL345:
         if(z & (1 << 16 - 1)):
             z = z - (1<<16)
 
-        x = x * SCALE_MULTIPLIER 
+        x = x * SCALE_MULTIPLIER
         y = y * SCALE_MULTIPLIER
         z = z * SCALE_MULTIPLIER
 
@@ -100,10 +101,10 @@ class ADXL345:
         return {"x": x, "y": y, "z": z}
 
 if __name__ == "__main__":
-    # if run directly we'll just create an instance of the class and output 
+    # if run directly we'll just create an instance of the class and output
     # the current readings
     adxl345 = ADXL345()
-    
+
     axes = adxl345.getAxes(True)
     print("ADXL345 on address 0x%x:" % (adxl345.address))
     print("   x = %.3fG" % ( axes['x'] ))
