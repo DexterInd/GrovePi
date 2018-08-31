@@ -64,3 +64,11 @@ The output of any of these 2 commands looks this way:
 
 *Note*:
 You would only get good data when fix is 1 and you have 3 or more satellites in view. You might have to take the module near a window with access to open sky for good results
+
+### Old GPS Scripts
+
+`dextergps.py` is the new go-to script for getting values off of the Grove GPS module. The old ones that are no longer used but are kept in here for legacy reasons are:
+
+* [grove_gps_data.py](grove_gps_data.py)
+* [grove_gps_hardware_test.py](grove_gps_hardware_test.py)
+* [GroveGPS.py](GroveGPS.py)
