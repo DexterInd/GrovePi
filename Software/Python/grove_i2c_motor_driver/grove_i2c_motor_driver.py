@@ -6,32 +6,9 @@
 #
 # Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
-'''
-## License
 
-The MIT License (MIT)
-
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
 
 import time,sys
 import RPi.GPIO as GPIO
@@ -45,7 +22,7 @@ else:
     bus = smbus.SMBus(0)
 
 class motor_driver:
-	
+
 	MotorSpeedSet             = 0x82
 	PWMFrequenceSet           = 0x84
 	DirectionSet              = 0xaa
@@ -72,20 +49,20 @@ class motor_driver:
 
 		# Convert the 0-1 range into a value in the right range.
 		return int(rightMin + (valueScaled * rightSpan))
-		
+
 	#Set motor speed
 	def MotorSpeedSetAB(self,MotorSpeedA,MotorSpeedB):
 		MotorSpeedA=self.map_vals(MotorSpeedA,0,100,0,255)
 		MotorSpeedB=self.map_vals(MotorSpeedB,0,100,0,255)
 		bus.write_i2c_block_data(self.I2CMotorDriverAdd, self.MotorSpeedSet, [MotorSpeedA,MotorSpeedB])
 		time.sleep(.02)
-	
+
 	#Set motor direction
 	def MotorDirectionSet(self,Direction):
 		bus.write_i2c_block_data(self.I2CMotorDriverAdd, self.DirectionSet, [Direction,0])
 		time.sleep(.02)
-		
-if __name__ == "__main__":		
+
+if __name__ == "__main__":
 	m= motor_driver()
 	while True:
 		m.MotorSpeedSetAB(100,100)

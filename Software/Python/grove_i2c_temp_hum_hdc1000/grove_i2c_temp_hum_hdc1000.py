@@ -8,34 +8,11 @@
 #
 # This library is derived from the HDC1000 library by aklib here: https://github.com/nonNoise/akilib/blob/master/akilib/raspberrypi/AKI_I2C_HDC1000.py
 #
-'''
-## License
 
-The MIT License (MIT)
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
 
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
-
-import smbus 
+import smbus
 import RPi.GPIO as GPIO
 import time
 
@@ -44,18 +21,18 @@ if rev == 2 or rev == 3:
     bus = smbus.SMBus(1)
 else:
     bus = smbus.SMBus(0)
-    
+
 class HDC1000:
     I2C_ADDR = 0
     def __init__(self):
         self.I2C_ADDR=0x40
- 
+
     def Config(self):
         # HDC1000 address, 0x40(64)
         # Select configuration register, 0x02(02)
         #		0x30(48)	Temperature, Humidity enabled, Resolultion = 14-bits, Heater on
         bus.write_byte_data(self.I2C_ADDR, 0x02, 0x30)
-         
+
     def Temperature(self):
         try :
             bus.write_byte(self.I2C_ADDR,0x00)
@@ -79,7 +56,7 @@ class HDC1000:
         try :
             bus.write_byte(self.I2C_ADDR,0x01)
             time.sleep(0.50)
-            
+
             # Read data back, 2 bytes
             # humidity MSB, humidity LSB
             data0 = bus.read_byte(0x40)

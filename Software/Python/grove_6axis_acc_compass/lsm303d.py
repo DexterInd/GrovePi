@@ -8,32 +8,9 @@
 #
 # Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
-'''
-## License
 
-The MIT License (MIT)
-
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
 
 import time,sys
 import RPi.GPIO as GPIO
@@ -48,10 +25,10 @@ else:
     bus = smbus.SMBus(0)
 
 class lsm303d:
-	# LSM303 Address definitions 
+	# LSM303 Address definitions
 	LSM303D_ADDR	= 0x1E  # assuming SA0 grounded
 
-	# LSM303 Register definitions 
+	# LSM303 Register definitions
 	TEMP_OUT_L		= 0x05
 	TEMP_OUT_H		= 0x06
 	STATUS_REG_M	= 0x07
@@ -115,11 +92,11 @@ class lsm303d:
 	MAG_SCALE_12 	= 0x60 #+/-12Gauss
 
 	ACCELE_SCALE 	= 2
-	
+
 	X 				= 0
 	Y 				= 1
 	Z 				= 2
-	
+
 	# Set up the sensor
 	def __init__(self,):
 		self.write_reg(0x57, self.CTRL_REG1)				# 0x57 = ODR=50hz, all accel axes on
@@ -130,41 +107,41 @@ class lsm303d:
 		self.write_reg(self.MAG_SCALE_2, self.CTRL_REG6)		# magnetic scale = +/-1.3Gauss
 		self.write_reg(0x00, self.CTRL_REG7)  			# 0x00 = continouous conversion mode
 		time.sleep(.005)
-	
+
 	# get the status of the sensor
 	def status(self):
 		if self.read_reg(self.WHO_AM_I) !=73:
 			return -1
 		return 1
-		
+
 	# Write data to a reg on the I2C device
 	def write_reg(self,data,reg):
 		bus.write_byte_data(self.LSM303D_ADDR, reg, data)
-		
+
 	# Read data from the sensor
 	def read_reg(self,reg):
 		return bus.read_byte_data(self.LSM303D_ADDR, reg)
-		
+
 	# Check if compass is ready
 	def isMagReady(self):
 		if self.read_reg(self.STATUS_REG_M)&0x03!=0:
 			return 1
 		return 0
 
-	# Get raw accelerometer values	
+	# Get raw accelerometer values
 	def getAccel(self):
 		raw_accel=[0,0,0]
 		raw_accel[0]=((self.read_reg(self.OUT_X_H_A)<<8)|self.read_reg(self.OUT_X_L_A))
 		raw_accel[1]=((self.read_reg(self.OUT_Y_H_A)<<8)|self.read_reg(self.OUT_Y_L_A))
 		raw_accel[2]=((self.read_reg(self.OUT_Z_H_A)<<8)|self.read_reg(self.OUT_Z_L_A))
-		
+
 		#2's compiment
 		for i in range(3):
 			if raw_accel[i]>32767:
 				raw_accel[i]=raw_accel[i]-65536
-				
+
 		return raw_accel
-	
+
 	# Get accelerometer values in g
 	def getRealAccel(self):
 		realAccel=[0.0,0.0,0.0]
@@ -172,21 +149,21 @@ class lsm303d:
 		for i in range(3):
 			realAccel[i] = round(accel[i] / math.pow(2, 15) * self.ACCELE_SCALE,3)
 		return realAccel
-			
+
 	# Get compass raw values
 	def getMag(self):
 		raw_mag=[0,0,0]
 		raw_mag[0]=(self.read_reg(self.OUT_X_H_M)<<8)|self.read_reg(self.OUT_X_L_M)
 		raw_mag[1]=(self.read_reg(self.OUT_Y_H_M)<<8)|self.read_reg(self.OUT_Y_L_M)
 		raw_mag[2]=(self.read_reg(self.OUT_Z_H_M)<<8)|self.read_reg(self.OUT_Z_L_M)
-		
+
 		#2's compiment
 		for i in range(3):
 			if raw_mag[i]>32767:
 				raw_mag[i]=raw_mag[i]-65536
-				
+
 		return raw_mag
-		
+
 	# Get heading from the compass
 	def getHeading(self):
 		magValue=self.getMag()
@@ -196,17 +173,17 @@ class lsm303d:
 			heading += 360
 
 		return round(heading,3)
-		
+
 	def getTiltHeading(self):
 		magValue=self.getMag()
 		accelValue=self.getRealAccel()
-		
+
 		X=self.X
 		Y=self.Y
 		Z=self.Z
-		
+
 		pitch = math.asin(-accelValue[X])
-		
+
 		print(accelValue[Y],pitch,math.cos(pitch),accelValue[Y]/math.cos(pitch),math.asin(accelValue[Y]/math.cos(pitch)))
 		roll = math.asin(accelValue[Y]/math.cos(pitch))
 
@@ -219,17 +196,16 @@ class lsm303d:
 			return heading
 		else:
 			return (360 + heading)
-			
-if __name__ == "__main__":		
+
+if __name__ == "__main__":
 	acc_mag=lsm303d()
 	while True:
 		print(acc_mag.getRealAccel())
-		
+
 		while True:
 			if acc_mag.isMagReady():
 				break
 		print(acc_mag.getHeading())
-		
+
 		# Do not use, math error
 		# print acc_mag.getTiltHeading()
-	

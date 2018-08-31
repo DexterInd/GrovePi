@@ -6,32 +6,9 @@
 #
 # Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
-'''
-## License
 
-The MIT License (MIT)
-
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
 
 import time,sys
 import RPi.GPIO as GPIO
@@ -46,7 +23,7 @@ else:
 
 class ADC:
 	address = None
-	
+
 	REG_ADDR_RESULT = 0x00
 	REG_ADDR_ALERT  = 0x01
 	REG_ADDR_CONFIG = 0x02
@@ -65,7 +42,7 @@ class ADC:
 		raw_val=(data[0]&0x0f)<<8 | data[1]
 		return raw_val
 
-if __name__ == "__main__":		
+if __name__ == "__main__":
 	adc= ADC()
 	while True:
 		print(adc.adc_read())
