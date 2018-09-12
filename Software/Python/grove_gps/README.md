@@ -22,7 +22,7 @@ After you remove the 2 statements, it should be like this:
 dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes root wait
 ```
 
-Once you've done these 2 steps from above, a reboot will be required. Do it, and then proceed to the next section.
+Once you've done these 2 steps from above, a reboot will be required. Do it now, and then proceed to the next section.
 
 For more information on how the serial ports are set up, you can [read this article](https://spellfoundry.com/2016/05/29/configuring-gpio-serial-port-raspbian-jessie-including-pi-3/#Disabling_the_Console).
 
