@@ -1,3 +1,6 @@
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
+
 import threading # we need threads for processing data seperately from the main thread
 import numpy # for statistical computations
 import datetime
