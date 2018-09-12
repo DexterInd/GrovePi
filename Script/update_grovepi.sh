@@ -252,8 +252,8 @@ install_deb_dependencies() {
   # needs to be in; this is all done in script_tools while doing an apt-get update
   sudo apt-get install --no-install-recommends -y nodejs\
     git libi2c-dev i2c-tools \
-    python-setuptools python-pip python-smbus python-dev python-serial python-rpi.gpio python-numpy \
-    python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy
+    python-setuptools python-pip python-smbus python-dev python-serial python-rpi.gpio python-numpy python-scipy \
+    python3-setuptools python3-pip python3-smbus python3-dev python3-serial python3-rpi.gpio python3-numpy python3-scipy
 
   feedback "Dependencies for the GrovePi installed"
 }
