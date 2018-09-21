@@ -201,9 +201,9 @@ void processIO() {
 
         dht_b[0] = cmd[0];
         for (j = 1; j < 5; j++)
-          dht_b[j] = b1[j];
+          dht_b[j] = b1[j - 1];
         for (j = 5; j < 9; j++)
-          dht_b[j] = b2[j - 4];
+          dht_b[j] = b2[j - 5];
         run_once = 0;
       }
     }

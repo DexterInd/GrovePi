@@ -31,7 +31,7 @@
 -IC:\Users\rober\.platformio\packages\toolchain-atmelavr\lib\gcc\avr\4.9.2\include-fixed
 -IC:\Users\rober\.platformio\packages\tool-unity
 -DF_CPU=16000000L
--DPLATFORMIO=30600
+-DPLATFORMIO=30601
 -DARDUINO_AVR_MICRODUINO_CORE
 -DARDUINO_ARCH_AVR
 -DARDUINO=10805

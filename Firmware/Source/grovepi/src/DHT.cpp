@@ -178,8 +178,6 @@ float* DHT::readTempHum(bool scale)
       buffer[1] = data[0];
       break;
     case DHT22:
-      buffer[0] = buffer[1] = 0;
-      break;
     case DHT21:
       // temperature
       buffer[0] = data[2] & 0x7F;
