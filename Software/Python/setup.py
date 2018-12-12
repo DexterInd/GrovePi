@@ -56,8 +56,8 @@ temp_dir = '.tmp_modules'
 
 # read the module names and append the .py extension
 with open('package_modules.txt', 'r') as fmodules:
-	modules = fmodules.readlines()
-	modules = list(map(lambda mod: mod.strip() + '.py', modules))
+    modules = fmodules.readlines()
+    modules = list(map(lambda mod: mod.strip() + '.py', modules))
 
 # create .tmp_modules directory
 # and make sure to have it clean before proceeding further
@@ -71,12 +71,12 @@ except FileExistsError:
 # temporary directory
 to_copy_modules = []
 for root, dirs, files in os.walk('.'):
-	for file in files:
-		if file in modules:
-			to_copy_modules.append(root + '/' + file)
+    for file in files:
+	    if file in modules:
+		    to_copy_modules.append(root + '/' + file)
 for module in to_copy_modules:
-	print('Copying to ' + temp_dir + ' module ' + module)
-	shutil.copy(module, temp_dir)
+    print('Copying to ' + temp_dir + ' module ' + module)
+    shutil.copy(module, temp_dir)
 
 # the same for develop and build, just import the right modules
 # class PostInstallCommand(install):
