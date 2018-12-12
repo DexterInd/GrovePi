@@ -38,6 +38,19 @@ int8_t accv[3];
 byte rgb[] = { 0, 0, 0 };
 int run_once;
 
+//Heart rate sensor variables
+const int max_beat_delay=2000;     //max time between beats, 2 seconds
+const int milliseconds_to_seconds=1000;
+unsigned int heart_rate_status;
+unsigned long beat_time_gap;
+unsigned long beat[21];
+unsigned long time;
+unsigned long start_time;
+unsigned long end_time;
+unsigned char counter;
+int num_of_beats;
+double heart_rate;
+
 //Dust sensor variables:
 unsigned long starttime;
 unsigned long sampletime_ms = 30000;//sample 30s ;
@@ -485,6 +498,44 @@ void loop()
 			}
 		  }
 		}
+
+		// end Grove Chainable RGB LED
+
+
+        // Grove Ear-clip Heart Rate Sensor
+        // http://wiki.seeed.cc/Grove-Ear-clip_Heart_Rate_Sensor/
+		
+		// Commands
+		// [47, unused, unused, unused]            initialize and attach interrupt for Heart rate sensor, always attaches interrupt to port D2
+		// [48, pin, unused, unused]               Heart rate read command
+		// [49, unused, unused, unused]            detach interrupt for Heart rate sensor
+
+		else if(cmd[0] == 47)
+		{
+           heart_rate_status = 0;
+           beatInit();
+		   attachInterrupt(0,readHeartBeat,RISING);
+		   cmd[0] = 0;
+		}
+		else if(cmd[0] == 48)
+		{
+           b[0] = heart_rate_status;
+           b[1] = (int)heart_rate;
+		}
+		else if(cmd[0] == 49)
+		{
+           heart_rate_status = 0;
+           beatInit();
+		   detachInterrupt(0);
+		   cmd[0] = 0;
+		}
+
+        // end Grove Ear-clip Heart Rate Sensor 
+        
+
+		// Grove Dust Sensor
+        // http://wiki.seeed.cc/Grove-Dust_Sensor/
+
 		else if(cmd[0]==dust_sensor_en_cmd)
 		{
 			attachInterrupt(0,readPulseDust,CHANGE);
@@ -617,8 +668,13 @@ void sendData()
   
   if(cmd[0]==21)
   {
-    Wire.write(b,21);     
+    Wire.write(b,21);
     b[0]=0;
+  }
+  if(cmd[0]==48)
+  {
+    Wire.write(b,2);
+    cmd[0]=0;
   }
   if(cmd[0]==dust_sensor_read_cmd)
   {
@@ -649,7 +705,97 @@ void rpm ()     //This is the function that the interupt calls
 //hall effect sensors signal
 } 
 
-void readPulseDust()
+//interruptor for ear-clip heart rate sensor
+void readHeartBeat ()
+{
+  beat[counter] = millis();
+  if(counter == 0)
+  {
+     beat_time_gap = beat[counter] - beat[20];
+  }
+  else
+  {
+     beat_time_gap = beat[counter] - beat[counter-1];
+  }
+
+  if(beat_time_gap > max_beat_delay)      //if too much time has passed between beats, readings restart
+  {
+     beatInit();
+     heart_rate_status = 2;                //Too much time has passed, beat counter restarted
+  }
+  else
+  {
+     //increment counter after a beat
+     if(counter != 20)
+     {
+        heart_rate_status = 0;          //beat detected but not enough data
+        if(beat[counter+1] != 0)      //calculates heart rate if there are no empty entries
+        {
+           calcHeartRate();
+        }
+        else if(counter > 10)       //calculates heart rate if the first 10 entries are
+        {
+            calcHeartRate();
+        }
+        counter++;
+     }
+     else
+     {
+        calcHeartRate();
+        counter = 0;
+     }
+  }
+}
+
+//Calculates a heart rate
+void calcHeartRate ()
+{
+  num_of_beats = 0;
+  end_time = beat[counter];
+
+  //if last data entered is at index 20 (last index)
+  if(counter == 20)
+  {
+     start_time = beat[0];
+     num_of_beats = counter;
+  }
+  //if not all indexes are filled 
+  if(beat[counter+1] == 0)
+  {
+     start_time = beat[0];
+     num_of_beats = counter;
+  }
+  // all indexes are filled and counter != 20
+  else
+  {   
+     start_time = beat[counter+1];
+     num_of_beats = 20;              //size of beat[]
+  }
+  time = end_time - start_time;
+  if(time > 0)
+  {
+     heart_rate_status = 1;
+     double time_min = time / milliseconds_to_seconds;
+     heart_rate = num_of_beats / time_min;
+     heart_rate = heart_rate * 60;
+  }
+}
+
+//initializes array and values used for ear-clip heart rate sensor
+void beatInit ()
+{
+    counter = 0;
+    time = 0;
+    num_of_beats = 0;
+    heart_rate = 0;
+    for(unsigned char i=0; i<20; i++)
+    {
+        beat[i] = 0;
+    }
+    beat[20] = millis();
+}
+
+void readPulseDust ()
 {
   t = millis();
   l_status = digitalRead(2);  // Represents if the line is low or high.  
