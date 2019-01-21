@@ -82,7 +82,6 @@ I2C address: 0x4
 | Chainable RGB set LEDs with modulo  | 94    | pin      | offset      | divisor      | _none_             | Set color on all LEDs >= offset when mod remainder is 0 |
 | Chainable RGB set level             | 95    | pin      | level       | reverse      | _none_             | Set color on all LEDs <= level, outwards unless reverse |
 
-
 ### Library Dependencies
 
 * [DHT](https://github.com/karan259/DHT-sensor-library)
@@ -91,3 +90,4 @@ I2C address: 0x4
 * [Grove_LED_bar](https://github.com/Seeed-Studio/Grove_LED_Bar)
 * [TM1637](https://github.com/mcauser/TM1637-led-driver-7-segment)
 * [Chainable_RGB_LED](https://github.com/mcauser/Grove-Chainable-RGB-LED)
+* [Modified version of RCSwitch](https://github.com/sui77/rc-switch)
