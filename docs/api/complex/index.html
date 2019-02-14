@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.9.2">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.1">
     
     
       
@@ -46,21 +46,25 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.ba0fd1a6.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.982221ab.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
     
     
-      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
       
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
     
     
   </head>
@@ -117,22 +121,19 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                GrovePi Documentation
-              </span>
-              <span class="md-header-nav__topic">
-                Complex Devices
-              </span>
-            
+            <span class="md-header-nav__topic">
+              GrovePi Documentation
+            </span>
+            <span class="md-header-nav__topic">
+              Complex Devices
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
@@ -155,7 +156,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -166,20 +166,18 @@
 
   
 
-
-  <a href="https://github.com/DexterInd/GrovePi/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      DexterInd/GrovePi
+<a href="https://github.com/DexterInd/GrovePi/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    DexterInd/GrovePi
+  </div>
+</a>
           </div>
         </div>
       
@@ -201,11 +199,11 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <span class="md-nav__button md-logo">
+    <a href="https://dexterind.github.io/GrovePi" title="GrovePi Documentation" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
-    </span>
+    </a>
     GrovePi Documentation
   </label>
   
@@ -215,20 +213,18 @@
 
   
 
-
-  <a href="https://github.com/DexterInd/GrovePi/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      DexterInd/GrovePi
+<a href="https://github.com/DexterInd/GrovePi/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    DexterInd/GrovePi
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -756,7 +752,7 @@ of Python: 2.x and 3.x.</p>
 <p><strong>IMPORTANT</strong></p>
 <p>This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes
 as that will put the GrovePi into a broken state.</p>
-<p>In case you need to reset the GrovePi from your Raspberry Pi, <a href="../../fw/#resetting-the-grovepi">check this section</a>.</p>
+<p>In case you need to reset the GrovePi from your Raspberry Pi, <a href="../fw/#resetting-the-grovepi">check this section</a>.</p>
 <hr />
 <h2 id="grovepiledbar_initpin-orientation"><code>grovepi.ledBar_init(pin, orientation)</code><a class="headerlink" href="#grovepiledbar_initpin-orientation" title="Permanent link">&para;</a></h2>
 <p>Initialize an <a href="http://wiki.seeedstudio.com/Grove-LED_Bar/">LED bar</a>.</p>
@@ -1042,7 +1038,6 @@ To the left and right values, leading zeros are added and the colon is lit up</p
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
@@ -1052,19 +1047,15 @@ To the left and right values, leading zeros are added and the colon is lit up</p
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.a59e2a89.js"></script>
+      <script src="../../assets/javascripts/application.b806dc00.js"></script>
       
-      <script>app.initialize({version:"0.17.5",url:{base:"../.."}})</script>
-      
-    
-    
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
     
   </body>
