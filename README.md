@@ -29,7 +29,7 @@ For more details on how you can install/update your `GrovePi`, please check this
 
 ### Documentation
 
-The documentation for the GrovePi Python library can be checked out [here](https://dexterind.github.io/GrovePi). 
+The documentation for the GrovePi Python library can be read [here](https://dexterind.github.io/GrovePi). 
 
 ### Scratch Support
 Once you've done the above command, you can install Scratch support if you want it. This step is optional.
