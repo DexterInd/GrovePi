@@ -48,29 +48,15 @@ import time
 import math
 import struct
 import numpy
-from periphery import I2C, I2CError
 
-debug = 0
+import di_i2c
 
-if sys.version_info<(3,0):
-	p_version = 2
-else:
-	p_version = 3
+def set_bus(bus):
+	return di_i2c.DI_I2C(bus = bus, address = address)
 
-if sys.platform == 'uwp':
-	bus_port = 1
-else:
-	import RPi.GPIO as GPIO
-	rev = GPIO.RPI_REVISION
-	if rev == 2 or rev == 3:
-		bus_port = 1
-	else:
-		bus_port = 0
-
-# I2C Address of Arduino
 address = 0x04
-i2c = I2C('/dev/i2c-' + str(bus_port))
 max_recv_size = 10
+i2c = set_bus("RPI_1SW")
 
 # Earliest version of the firmware to work with
 works_with_firmware = [
@@ -184,43 +170,19 @@ flow_en_cmd=[18]
 # data from RPi to Arduino
 
 # Write I2C block to the GrovePi
-
 def write_i2c_block(address, block, custom_timing = None):
-	for i in range(retries):
-		try:
-			msg = [I2C.Message(block)]
-			i2c.transfer(address, msg)
-			time.sleep(0.002 + additional_waiting)
-			return
-		except I2CError:
-			time.sleep(0.003)
-
-	raise IOError("GrovePi is unreachable")
+	reg = block[0]
+	data = block[1:]
+	i2c.write_reg_list(reg, data)
+	time.sleep(0.002 + additional_waiting)
 
 # Read I2C block from the GrovePi
 def read_i2c_block(address, no_bytes = max_recv_size):
 	data = data_not_available_cmd
-	count = 0
 
-	while data[0] in [data_not_available_cmd[0], 255] and count < retries:
-		try:
-			read_bytes = [255] * no_bytes
-			msg = [I2C.Message(read_bytes, read = True)]
-			i2c.transfer(address, msg)
-			data = msg[0].data
-
-			time.sleep(0.002 + additional_waiting)
-			if count > 0:
-				count = 0
-
-		except I2CError:
-			count += 1
-			time.sleep(0.003)
-
-	if count == retries:
-		raise IOError("GrovePi is unreachable in grovepi.read_i2c_block func")
-	else:
-		return data
+	while data[0] in [data_not_available_cmd[0], 255]:
+		data = i2c.read_list(reg = None, no_bytes)
+		time.sleep(0.002 + additional_waiting)
 
 def read_identified_i2c_block(address, read_command_id, no_bytes):
 	data = [-1]
