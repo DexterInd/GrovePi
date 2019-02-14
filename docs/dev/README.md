@@ -11,5 +11,5 @@ Once the container is up and running, you can go to `localhost` in your browser 
 
 To build the documentation, run the following container in the same directory as before:
 ```
-docker container run -it --rm -v $(pwd):/docs 80:8000 grovepi/mkdocs-serve mkdocs build
+docker container run -it --rm -v $(pwd):/docs -p 80:8000 grovepi/mkdocs-serve mkdocs build
 ```
