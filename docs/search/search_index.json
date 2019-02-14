@@ -1,0 +1,424 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "GrovePi Documentation\n\u00b6\n\n\n\n\nThe \nGrovePi\n is a \nDexter Industries\n open-source platform for connecting Grove Sensors to the Raspberry Pi. With it you can\nbring the world of IoT devices to the Raspberry Pi and the only requirement for that is for you to know\nhow to code in your language of choice.\n\n\n\n\nWhether it's a humidity/temperature sensor, distance sensor or an IR receiver or something as basic as an LED,\nthe GrovePi can be your answer to these questions.\n\n\nBy default the language of choice for our library is Python, but support for other languages can be found too\nfrom our contributors such as:\n\n\n\n\nC/C++\n\n\nNodeJS\n\n\nJava\n\n\nGo\n\n\nRuby\n\n\nScratch",
+            "title": "About"
+        },
+        {
+            "location": "/#grovepi-documentation",
+            "text": "The  GrovePi  is a  Dexter Industries  open-source platform for connecting Grove Sensors to the Raspberry Pi. With it you can\nbring the world of IoT devices to the Raspberry Pi and the only requirement for that is for you to know\nhow to code in your language of choice.   Whether it's a humidity/temperature sensor, distance sensor or an IR receiver or something as basic as an LED,\nthe GrovePi can be your answer to these questions.  By default the language of choice for our library is Python, but support for other languages can be found too\nfrom our contributors such as:   C/C++  NodeJS  Java  Go  Ruby  Scratch",
+            "title": "GrovePi Documentation"
+        },
+        {
+            "location": "/quickstart/",
+            "text": "Stacking It\n\u00b6\n\n\nTo get the GrovePi up and running we first need to attach the GrovePi to the RaspberryPi. It's\na very simple process where it only needs to be stacked on top the GrovePi just like with any other hat.\n\n\nBefore powering the Pi up, you need to make sure there's no foam sticked to the headers as that\ncan trigger the Raspberry Pi to reboot. That's because the foam is electrically conductive and it\nbasically shorts the pins.\n\n\nIn the end the GrovePi will sit on the Raspberry Pi like in the following photo.\n\n\n\n\nHow to Install\n\u00b6\n\n\nWhen it comes to installation there are 2 ways to do it:\n\n\n\n\nBy using our pre-made image called \nRaspbian For Robots\n.\n\n\nBy using a fresh Raspbian image and running our install command.\n\n\n\n\nFor Raspbian For Robots Image\n\u00b6\n\n\nThe benefit of using our image is that you don't have to worry about installing the GrovePi - because it's already on it.\nStill after a while you will be required to run updates via the console or via our GUI app in order to get the latest.\n\n\nFor Manual Installation\n\u00b6\n\n\nOn the other hand, when using a fresh Raspbian image the initial installation takes some time, but subsequent updates take\nway less. The disadvantage with method is that you don't get the other robots installed too, so if you don't want to use\nother robots from our family then this method is the preferred one.\n\n\nTo install the GrovePi on a fresh image of Raspbian, run the following command:\n\n\ncurl -kL dexterindustries.com/update_grovepi \n|\n bash\n\n\n\n\n\nHow to Update to a Newer Version\n\u00b6\n\n\nRegardless of how you got the GrovePi installed (manually or by getting the Raspbian For Robots image), there's only one way to update\nto the latest version:\n\n\ncurl -kL dexterindustries.com/update_grovepi \n|\n bash\n\n\n\n\n\nAs you can see it's basically the same command used for installing the library on a fresh Raspbian image.\n\n\nWhere Is It Installed\n\u00b6\n\n\nUpon installing the GrovePi or getting our flavored image the GrovePi library can be found in \n/home/pi/Dexter/GrovePi\n directory.\n\n\nThe \n/home/pi/Dexter/GrovePi\n is a mirrored version of \nour GitHub repository\n of the master branch.\n\n\nScratch Support\n\u00b6\n\n\nScratch support comes by default with our flavored image, Raspbian For Robots, but if you find yourself to be using the classic Raspbian then\nyou also need to run the following command after you have installed the GrovePi:\n\n\nsudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh\n\n\n\n\n\nCommunity Support\n\u00b6\n\n\nTo find out more on the GrovePi you can visit our forum and check for threads with the \ngrovepi tag\n\nor by going to the \nGrovePi category\n.",
+            "title": "Getting Started"
+        },
+        {
+            "location": "/quickstart/#stacking-it",
+            "text": "To get the GrovePi up and running we first need to attach the GrovePi to the RaspberryPi. It's\na very simple process where it only needs to be stacked on top the GrovePi just like with any other hat.  Before powering the Pi up, you need to make sure there's no foam sticked to the headers as that\ncan trigger the Raspberry Pi to reboot. That's because the foam is electrically conductive and it\nbasically shorts the pins.  In the end the GrovePi will sit on the Raspberry Pi like in the following photo.",
+            "title": "Stacking It"
+        },
+        {
+            "location": "/quickstart/#how-to-install",
+            "text": "When it comes to installation there are 2 ways to do it:   By using our pre-made image called  Raspbian For Robots .  By using a fresh Raspbian image and running our install command.",
+            "title": "How to Install"
+        },
+        {
+            "location": "/quickstart/#for-raspbian-for-robots-image",
+            "text": "The benefit of using our image is that you don't have to worry about installing the GrovePi - because it's already on it.\nStill after a while you will be required to run updates via the console or via our GUI app in order to get the latest.",
+            "title": "For Raspbian For Robots Image"
+        },
+        {
+            "location": "/quickstart/#for-manual-installation",
+            "text": "On the other hand, when using a fresh Raspbian image the initial installation takes some time, but subsequent updates take\nway less. The disadvantage with method is that you don't get the other robots installed too, so if you don't want to use\nother robots from our family then this method is the preferred one.  To install the GrovePi on a fresh image of Raspbian, run the following command:  curl -kL dexterindustries.com/update_grovepi  |  bash",
+            "title": "For Manual Installation"
+        },
+        {
+            "location": "/quickstart/#how-to-update-to-a-newer-version",
+            "text": "Regardless of how you got the GrovePi installed (manually or by getting the Raspbian For Robots image), there's only one way to update\nto the latest version:  curl -kL dexterindustries.com/update_grovepi  |  bash  As you can see it's basically the same command used for installing the library on a fresh Raspbian image.",
+            "title": "How to Update to a Newer Version"
+        },
+        {
+            "location": "/quickstart/#where-is-it-installed",
+            "text": "Upon installing the GrovePi or getting our flavored image the GrovePi library can be found in  /home/pi/Dexter/GrovePi  directory.  The  /home/pi/Dexter/GrovePi  is a mirrored version of  our GitHub repository  of the master branch.",
+            "title": "Where Is It Installed"
+        },
+        {
+            "location": "/quickstart/#scratch-support",
+            "text": "Scratch support comes by default with our flavored image, Raspbian For Robots, but if you find yourself to be using the classic Raspbian then\nyou also need to run the following command after you have installed the GrovePi:  sudo bash /home/pi/Dexter/GrovePi/Script/install_scratch.sh",
+            "title": "Scratch Support"
+        },
+        {
+            "location": "/quickstart/#community-support",
+            "text": "To find out more on the GrovePi you can visit our forum and check for threads with the  grovepi tag \nor by going to the  GrovePi category .",
+            "title": "Community Support"
+        },
+        {
+            "location": "/fw/",
+            "text": "Flashing the Firmware\n\u00b6\n\n\nTo flash the firmware, you must first have the GrovePi library/repository installed so for this you must follow the \nGetting Started guide\n.\n\n\nOnce the library is installed on the Raspberry Pi, run the following commands to have the firmware flashed onto the GrovePi:\n\n\ncd\n ~/Dexter/GrovePi/Firmware\nbash firmware_update.sh\n\n\n\n\n\nThis updates you to the latest version of the firmware which is the \n1.3.0\n.\n\n\n\n\nNOTE TO OTHER LIBRARIES\n\n\nBecause the \n1.3.0\n firmware was recently released, lots of other libraries written in other languages other than Python are yet to be updated, so\nthey need to run on an older version of the firmware, specifically the \n1.2.7\n.\n\n\nThe \n1.2.7\n version can be found in \n~/Dexter/GrovePi/Firmware/Archive\n as \ngrove_pi_v1_2_7.cpp.hex\n. If you need to run on this older version, follow these steps to burn the firmware:\n\n\nmv ~/Dexter/GrovePi/Firmware/grove_pi_firmware.hex ~/Dexter/GrovePi/Firmware/grove_pi_v1_3_0.hex.bak\ncp ~/Dexter/GrovePi/Firmware/Archive/grove_pi_v1_2_7.cpp.hex ~/Dexter/GrovePi/Firmware/grove_pi_firmware.hex\nbash firmware_update.sh\n\n\n\n\n\n\n\nRunning Tests\n\u00b6\n\n\nTo run the entire suite of tests for the GrovePi follow these bash instructions:\n\n\ncd\n ~/Dexter/GrovePi/Troubleshooting\nsudo bash all_tests.sh\n\n\n\n\n\nAt the end of this process you'll get a \nlog.txt\n file on your Desktop at \n~/Desktop/log.txt\n.\n\n\nAlso, to see with which version of the firmware the library installed on the Raspberry Pi works with you can go to \n~/Dexter/GrovePi\n directory and run:\n\n\npython grovepi.py\n\n\n\n\n\nThis should output a version number (of the GrovePi's firmware). Older versions of the firmware (<=\nv1.2.7\n) won't get displayed when calling \npython grovepi.py\n.\n\n\npi@raspberrypi:~ $ python grovepi.py\nlibrary supports this fw versions: \n1\n.3.0\n\n\n\n\n\nTo see which is the version of the current firmware loaded on the GrovePi you can either run the above test (\n... all_test.sh\n) from the \nTroubleshooting/\n directory or you can run these commands:\n\n\nimport\n \ngrovepi\n\n\nprint\n(\ngrovepi\n.\nversion\n())\n\n\n\n\n\n\nThere are also cases when the GrovePi doesn't respond to requests. In this situation, you would normally see an exception appearing in Python. More often than not, these can be the source of problems:\n\n\n\n\nA non-present firmware on the GrovePi.\n\n\nA mismatch of versions between the firmware and the library on the Raspberry Pi.\n\n\n\n\nIn both of these situations, re-flashing the firmware is all it's needed.\n\n\nBuilding the Firmware\n\u00b6\n\n\nThere may be cases where additional modification to the firmware is required to accommodate someone's particular requirements. In this case,\nbuilding the firmware and then uploading it is crucial. During our production, we use \nPlatformIO\n along with \nAtom IDE\n.\n\n\nOnce you get them both installed on your machine, open Atom IDE and add as a project the \n/Firmware/Source/grovepi\n directory. The added directory will have the following structure:\n\n\n\n\nlib/\n\n\nsrc/\n\n\n.gitignore\n\n\n.travis.yml\n\n\nextra_script.py\n\n\nplatformio.ini\n\n\n\n\nNext, click on the build button or use \nALT-CTRL-B\n key combination to build the firmware with PlatformIO. Once that it's done, head over to \n/Firmware/Source/grovepi/.pioenvs/grovepi\n directory and notice the \nfirmware.hex\n. That's the firmware that was just built. You can then burn that to your GrovePi.\n\n\nResetting the GrovePi\n\u00b6\n\n\nTo reset the GrovePi from your Raspberry Pi, run the following command provided you have installed the GrovePi library on your image:\n\n\navrdude -c gpio -p m328p",
+            "title": "Firmware Stuff"
+        },
+        {
+            "location": "/fw/#flashing-the-firmware",
+            "text": "To flash the firmware, you must first have the GrovePi library/repository installed so for this you must follow the  Getting Started guide .  Once the library is installed on the Raspberry Pi, run the following commands to have the firmware flashed onto the GrovePi:  cd  ~/Dexter/GrovePi/Firmware\nbash firmware_update.sh  This updates you to the latest version of the firmware which is the  1.3.0 .   NOTE TO OTHER LIBRARIES  Because the  1.3.0  firmware was recently released, lots of other libraries written in other languages other than Python are yet to be updated, so\nthey need to run on an older version of the firmware, specifically the  1.2.7 .  The  1.2.7  version can be found in  ~/Dexter/GrovePi/Firmware/Archive  as  grove_pi_v1_2_7.cpp.hex . If you need to run on this older version, follow these steps to burn the firmware:  mv ~/Dexter/GrovePi/Firmware/grove_pi_firmware.hex ~/Dexter/GrovePi/Firmware/grove_pi_v1_3_0.hex.bak\ncp ~/Dexter/GrovePi/Firmware/Archive/grove_pi_v1_2_7.cpp.hex ~/Dexter/GrovePi/Firmware/grove_pi_firmware.hex\nbash firmware_update.sh",
+            "title": "Flashing the Firmware"
+        },
+        {
+            "location": "/fw/#running-tests",
+            "text": "To run the entire suite of tests for the GrovePi follow these bash instructions:  cd  ~/Dexter/GrovePi/Troubleshooting\nsudo bash all_tests.sh  At the end of this process you'll get a  log.txt  file on your Desktop at  ~/Desktop/log.txt .  Also, to see with which version of the firmware the library installed on the Raspberry Pi works with you can go to  ~/Dexter/GrovePi  directory and run:  python grovepi.py  This should output a version number (of the GrovePi's firmware). Older versions of the firmware (<= v1.2.7 ) won't get displayed when calling  python grovepi.py .  pi@raspberrypi:~ $ python grovepi.py\nlibrary supports this fw versions:  1 .3.0  To see which is the version of the current firmware loaded on the GrovePi you can either run the above test ( ... all_test.sh ) from the  Troubleshooting/  directory or you can run these commands:  import   grovepi  print ( grovepi . version ())   There are also cases when the GrovePi doesn't respond to requests. In this situation, you would normally see an exception appearing in Python. More often than not, these can be the source of problems:   A non-present firmware on the GrovePi.  A mismatch of versions between the firmware and the library on the Raspberry Pi.   In both of these situations, re-flashing the firmware is all it's needed.",
+            "title": "Running Tests"
+        },
+        {
+            "location": "/fw/#building-the-firmware",
+            "text": "There may be cases where additional modification to the firmware is required to accommodate someone's particular requirements. In this case,\nbuilding the firmware and then uploading it is crucial. During our production, we use  PlatformIO  along with  Atom IDE .  Once you get them both installed on your machine, open Atom IDE and add as a project the  /Firmware/Source/grovepi  directory. The added directory will have the following structure:   lib/  src/  .gitignore  .travis.yml  extra_script.py  platformio.ini   Next, click on the build button or use  ALT-CTRL-B  key combination to build the firmware with PlatformIO. Once that it's done, head over to  /Firmware/Source/grovepi/.pioenvs/grovepi  directory and notice the  firmware.hex . That's the firmware that was just built. You can then burn that to your GrovePi.",
+            "title": "Building the Firmware"
+        },
+        {
+            "location": "/fw/#resetting-the-grovepi",
+            "text": "To reset the GrovePi from your Raspberry Pi, run the following command provided you have installed the GrovePi library on your image:  avrdude -c gpio -p m328p",
+            "title": "Resetting the GrovePi"
+        },
+        {
+            "location": "/hw/",
+            "text": "Port Layout\n\u00b6\n\n\nThe GrovePi+ has multiple types of ports:\n\n\n\n\n\n\nAnalog\n ports - \nA0\n, \nA1\n, \nA2\n - with these ports you can read the voltage output of sensors. In this diagram, these ports are coloured in blue.\nWhen using the ports with our API, only use integers to designate the port of your choice such as \n0\n, \n1\n or \n2\n.\n\n\n\n\n\n\nDigital\n ports - \nD2\n, \nD3\n, \nD4\n, \nD5\n, \nD6\n, \nD7\n ,\nD8\n - with these ports you can read and write digital values of 1 or 0. In the above\ndiagram, these ports are coloured in orange. When using the ports with our API, only use integers to designate the port of your choice such as \n2\n, \n3\n ... \n8\n.\n\n\n\n\n\n\nPWM\n port - \n3\n, \n5\n, \n6\n, \n9\n - with these ports you can set a specific voltage output between 0V and 5V by using the concept of duty cycle / PWN / PPM.\n\n\n\n\n\n\nI2C\n ports - which are coloured in yellow and have the SDA & SCL acronyms written. The master of this connection is the Raspberry Pi.\n\n\n\n\n\n\nSerial\n ports - which are found in the bottom-left corner of the above diagram. \nSERIAL\n port is the GrovePi's port whereas \nRPISER\n is a bypass to the Raspberry Pi's port,\nwhich has a level converter implemented to accept 5V signals.\n\n\n\n\n\n\nNumbering System\n\u00b6\n\n\nMost of the sensors/actuators that we support have the signal line on the outwards of the grove port. For instance,\nthe \nGrove LED\n has the signal line on the edge of the grove port which corresponds to port number 4 on port name \nD4\n,\nso for us this was the reason why the port names we have given actually depend on where the signal lines mostly reside.\n\n\nLooking at a typical grove cable that comes with any GrovePi kit, the signal line is generally the yellow wire and the white\nwire is left unused. As you might have guessed, the yellow wire is the outermost wire of the grove cable.",
+            "title": "Hardware Ports"
+        },
+        {
+            "location": "/hw/#port-layout",
+            "text": "The GrovePi+ has multiple types of ports:    Analog  ports -  A0 ,  A1 ,  A2  - with these ports you can read the voltage output of sensors. In this diagram, these ports are coloured in blue.\nWhen using the ports with our API, only use integers to designate the port of your choice such as  0 ,  1  or  2 .    Digital  ports -  D2 ,  D3 ,  D4 ,  D5 ,  D6 ,  D7  , D8  - with these ports you can read and write digital values of 1 or 0. In the above\ndiagram, these ports are coloured in orange. When using the ports with our API, only use integers to designate the port of your choice such as  2 ,  3  ...  8 .    PWM  port -  3 ,  5 ,  6 ,  9  - with these ports you can set a specific voltage output between 0V and 5V by using the concept of duty cycle / PWN / PPM.    I2C  ports - which are coloured in yellow and have the SDA & SCL acronyms written. The master of this connection is the Raspberry Pi.    Serial  ports - which are found in the bottom-left corner of the above diagram.  SERIAL  port is the GrovePi's port whereas  RPISER  is a bypass to the Raspberry Pi's port,\nwhich has a level converter implemented to accept 5V signals.",
+            "title": "Port Layout"
+        },
+        {
+            "location": "/hw/#numbering-system",
+            "text": "Most of the sensors/actuators that we support have the signal line on the outwards of the grove port. For instance,\nthe  Grove LED  has the signal line on the edge of the grove port which corresponds to port number 4 on port name  D4 ,\nso for us this was the reason why the port names we have given actually depend on where the signal lines mostly reside.  Looking at a typical grove cable that comes with any GrovePi kit, the signal line is generally the yellow wire and the white\nwire is left unused. As you might have guessed, the yellow wire is the outermost wire of the grove cable.",
+            "title": "Numbering System"
+        },
+        {
+            "location": "/api/gpio/",
+            "text": "API - GPIO Functions\n\u00b6\n\n\nIn this section the Python API reference for GPIO functions is described. This library is supported on both major versions\nof Python: 2.x and 3.x.\n\n\n\n\nIMPORTANT\n\n\nThis library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.\n\n\nIn case you need to reset the GrovePi from your Raspberry Pi, \ncheck this section\n.\n\n\n\n\ngrovepi.digitalRead(pin)\n\u00b6\n\n\nReads whether a port's input is set high or low on the GrovePi.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) from which to do the reading\n\n\n\n\nReturns\n: \n0\n or \n1\n depending on the input value\n\n\n\n\ngrovepi.digitalWrite(pin, value)\n\u00b6\n\n\nSets the output value to either \n0\n or \n1\n to a digital port on the GrovePi.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which to do the writing\n\n\nvalue {Integer}\n either \n0\n for 0 volts or \n1\n for maximum output voltage (usually 5 volts)\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.analogRead(pin)\n\u00b6\n\n\nDetect an input voltage as a value from a given port on the GrovePi.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (A0-A2) from which to do the reading\n\n\n\n\nReturns\n: a 10-bit \n{Integer}\n number that maps to the input voltage on the port\n\n\n\n\ngrovepi.analogWrite(pin, value)\n\u00b6\n\n\nSet an output voltage on a PWM-enabled port by mapping the value to the desired voltage on the GrovePi.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (ports 3, 5, 6, 9) to which to do the writing\n\n\nvalue {Integer}\n an 8-bit number that maps from 0V to the referenced voltage of the GrovePi (5V)\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.pinMode(pin, mode)\n\u00b6\n\n\nSets a port to be either an OUTPUT or an INPUT port on the GrovePi.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which to do the change\n\n\nmode {String}\n \n\"OUTPUT\"\n for writing values or \n\"INPUT\"\n for reading\n\n\n\n\nReturns\n: \n1\n all the time",
+            "title": "GPIO Functions"
+        },
+        {
+            "location": "/api/gpio/#api-gpio-functions",
+            "text": "In this section the Python API reference for GPIO functions is described. This library is supported on both major versions\nof Python: 2.x and 3.x.   IMPORTANT  This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.  In case you need to reset the GrovePi from your Raspberry Pi,  check this section .",
+            "title": "API - GPIO Functions"
+        },
+        {
+            "location": "/api/gpio/#grovepidigitalreadpin",
+            "text": "Reads whether a port's input is set high or low on the GrovePi.  Parameters   pin {Integer}  a number to identify the port (D2-D8) from which to do the reading   Returns :  0  or  1  depending on the input value",
+            "title": "grovepi.digitalRead(pin)"
+        },
+        {
+            "location": "/api/gpio/#grovepidigitalwritepin-value",
+            "text": "Sets the output value to either  0  or  1  to a digital port on the GrovePi.  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which to do the writing  value {Integer}  either  0  for 0 volts or  1  for maximum output voltage (usually 5 volts)   Returns :  1  all the time",
+            "title": "grovepi.digitalWrite(pin, value)"
+        },
+        {
+            "location": "/api/gpio/#grovepianalogreadpin",
+            "text": "Detect an input voltage as a value from a given port on the GrovePi.  Parameters   pin {Integer}  a number to identify the port (A0-A2) from which to do the reading   Returns : a 10-bit  {Integer}  number that maps to the input voltage on the port",
+            "title": "grovepi.analogRead(pin)"
+        },
+        {
+            "location": "/api/gpio/#grovepianalogwritepin-value",
+            "text": "Set an output voltage on a PWM-enabled port by mapping the value to the desired voltage on the GrovePi.  Parameters   pin {Integer}  a number to identify the port (ports 3, 5, 6, 9) to which to do the writing  value {Integer}  an 8-bit number that maps from 0V to the referenced voltage of the GrovePi (5V)   Returns :  1  all the time",
+            "title": "grovepi.analogWrite(pin, value)"
+        },
+        {
+            "location": "/api/gpio/#grovepipinmodepin-mode",
+            "text": "Sets a port to be either an OUTPUT or an INPUT port on the GrovePi.  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which to do the change  mode {String}   \"OUTPUT\"  for writing values or  \"INPUT\"  for reading   Returns :  1  all the time",
+            "title": "grovepi.pinMode(pin, mode)"
+        },
+        {
+            "location": "/api/general/",
+            "text": "API - General Sensors\n\u00b6\n\n\nIn this section the Python API reference for diverse sensors is described. This library is supported on both major versions\nof Python: 2.x and 3.x.\n\n\nIn this section, the API for the following sensors is described:\n\n\n\n\nGrove Temperature Sensor\n\n\nGrove Ultrasonic Sensor\n\n\nDHT11\n\n\nDHT22\n\n\nGrove IR Receiver\n necessary for the \nInfrared Remote\n\n\n\n\n\n\nIMPORTANT\n\n\nThis library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.\n\n\nIn case you need to reset the GrovePi from your Raspberry Pi, \ncheck this section\n.\n\n\n\n\ngrovepi.temp(pin, model='1.0')\n\u00b6\n\n\nRead temperature from the \nGrove Temperature Sensor\n on the GrovePi.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (A0-A2) from which to do the reading\n\n\nmodel {String}\n \n\"1.0\"\n, \n\"1.1\"\n, \n\"1.2\"\n depending on the used model\n\n\n\n\nReturns\n: \n{Float}\n number to represent the temperature in \u00baC\n\n\n\n\ngrovepi.ultrasonicRead(pin)\n\u00b6\n\n\nRead the distance to an object with the \nGrove Ultrasonic Sensor\n on the GrovePi.\nThe closer it is to the targeted object, the faster the sample rate and slower when it's farther.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) from which to do the reading\n\n\n\n\nReturns\n: \n{Integer}\n number to represent the distance to the object in centimeters\n\n\n\n\ngrovepi.version()\n\u00b6\n\n\nRead the version of the firmware.\n\n\nReturns\n: a \n{String}\n representing the firmware version (i.e. \n\"1.2.7\"\n)\n\n\n\n\ngrovepi.dht(pin, module_type)\n\u00b6\n\n\nRead the temperature and humidity on the GrovePi with one of the given modules.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) from which to do the reading\n\n\n\n\nmodule_type {Integer}\n a number to identify the model\n\n\n\n\n0\n for \nDHT11\n\n\n1\n for \nDHT22\n\n\n2\n for DHT21\n\n\n3\n for AM2301\n\n\n\n\n\n\n\n\nReturns\n: a \n{(Float, Float}\n list where the 1st parameter is the temperature in \u00baC and the 2nd one is the humidity as a percentage.\n\n\nOn Error\n: it returns a \n{(Float, Float)}\n list containing \nNaN\ns. This happens when the sensor can't keep up with the demanded sample rate.\n\n\n\n\ngrovepi.ir_read_signal()\n\u00b6\n\n\nGet the decoded value from the \nGrove IR Receiver\n. For this you need to use a remote control of any kind. The preferred one we use is the \nInfrared Remote\n.\n\n\nIn order to use this function, you first need to call \ngrovepi.ir_recv_pin\n function to bind the functionality to a given port.\n\n\nParameters\n: None\n\n\nReturns\n: a 3-element list of this form \n{(Integer, Integer, Integer)}\n\n\n\n\n\n\nThe 1st element keeps an \n{Integer}\n corresponding to a certain brand:\n\n\n\n\n-1\n for unknown and \n0\n for unused\n\n\nRC2, RC5, NEC, SONY, PANASONIC, JVC, SAMSUNG, WHYNTER, AIWA_RC_T501, LG, SANYO, MITSUBISHI, DISH, SHARP, DENON, PRONTO, LEGO_PF having values from \n1\n to \n17\n\n\n\n\n\n\n\n\nThe 2nd element is a 16-bit address used by some Panasonic and Sharp remotes\n\n\n\n\nThe 3rd element is the 32-bit decoded value that can be used to identify which buttons were pressed - since there's no map for them you need to do it on a case-by-case basis\n\n\n\n\n\n\ngrovepi.ir_recv_pin(pin)\n\u00b6\n\n\nEnable the \nGrove IR Receiver\n on a given port. Used in conjunction with \ngrovepi.ir_read_signal\n and \ngrovepi.ir_is_data\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n The port (D2-D8) to which the IR receiver gets connected to\n\n\n\n\nReturns\n: None\n\n\n\n\ngrovepi.ir_is_data()\n\u00b6\n\n\nChecks if there's available data coming from the \nGrove IR Receiver\n. Used in conjunction with \ngrovepi.ir_read_signal\n function.\n\n\nParameters\n: None\n\n\nReturns\n: \nTrue\n or \nFalse",
+            "title": "General Sensors"
+        },
+        {
+            "location": "/api/general/#api-general-sensors",
+            "text": "In this section the Python API reference for diverse sensors is described. This library is supported on both major versions\nof Python: 2.x and 3.x.  In this section, the API for the following sensors is described:   Grove Temperature Sensor  Grove Ultrasonic Sensor  DHT11  DHT22  Grove IR Receiver  necessary for the  Infrared Remote    IMPORTANT  This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.  In case you need to reset the GrovePi from your Raspberry Pi,  check this section .",
+            "title": "API - General Sensors"
+        },
+        {
+            "location": "/api/general/#grovepitemppin-model10",
+            "text": "Read temperature from the  Grove Temperature Sensor  on the GrovePi.  Parameters   pin {Integer}  a number to identify the port (A0-A2) from which to do the reading  model {String}   \"1.0\" ,  \"1.1\" ,  \"1.2\"  depending on the used model   Returns :  {Float}  number to represent the temperature in \u00baC",
+            "title": "grovepi.temp(pin, model='1.0')"
+        },
+        {
+            "location": "/api/general/#grovepiultrasonicreadpin",
+            "text": "Read the distance to an object with the  Grove Ultrasonic Sensor  on the GrovePi.\nThe closer it is to the targeted object, the faster the sample rate and slower when it's farther.  Parameters   pin {Integer}  a number to identify the port (D2-D8) from which to do the reading   Returns :  {Integer}  number to represent the distance to the object in centimeters",
+            "title": "grovepi.ultrasonicRead(pin)"
+        },
+        {
+            "location": "/api/general/#grovepiversion",
+            "text": "Read the version of the firmware.  Returns : a  {String}  representing the firmware version (i.e.  \"1.2.7\" )",
+            "title": "grovepi.version()"
+        },
+        {
+            "location": "/api/general/#grovepidhtpin-module_type",
+            "text": "Read the temperature and humidity on the GrovePi with one of the given modules.  Parameters   pin {Integer}  a number to identify the port (D2-D8) from which to do the reading   module_type {Integer}  a number to identify the model   0  for  DHT11  1  for  DHT22  2  for DHT21  3  for AM2301     Returns : a  {(Float, Float}  list where the 1st parameter is the temperature in \u00baC and the 2nd one is the humidity as a percentage.  On Error : it returns a  {(Float, Float)}  list containing  NaN s. This happens when the sensor can't keep up with the demanded sample rate.",
+            "title": "grovepi.dht(pin, module_type)"
+        },
+        {
+            "location": "/api/general/#grovepiir_read_signal",
+            "text": "Get the decoded value from the  Grove IR Receiver . For this you need to use a remote control of any kind. The preferred one we use is the  Infrared Remote .  In order to use this function, you first need to call  grovepi.ir_recv_pin  function to bind the functionality to a given port.  Parameters : None  Returns : a 3-element list of this form  {(Integer, Integer, Integer)}    The 1st element keeps an  {Integer}  corresponding to a certain brand:   -1  for unknown and  0  for unused  RC2, RC5, NEC, SONY, PANASONIC, JVC, SAMSUNG, WHYNTER, AIWA_RC_T501, LG, SANYO, MITSUBISHI, DISH, SHARP, DENON, PRONTO, LEGO_PF having values from  1  to  17     The 2nd element is a 16-bit address used by some Panasonic and Sharp remotes   The 3rd element is the 32-bit decoded value that can be used to identify which buttons were pressed - since there's no map for them you need to do it on a case-by-case basis",
+            "title": "grovepi.ir_read_signal()"
+        },
+        {
+            "location": "/api/general/#grovepiir_recv_pinpin",
+            "text": "Enable the  Grove IR Receiver  on a given port. Used in conjunction with  grovepi.ir_read_signal  and  grovepi.ir_is_data .  Parameters   pin {Integer}  The port (D2-D8) to which the IR receiver gets connected to   Returns : None",
+            "title": "grovepi.ir_recv_pin(pin)"
+        },
+        {
+            "location": "/api/general/#grovepiir_is_data",
+            "text": "Checks if there's available data coming from the  Grove IR Receiver . Used in conjunction with  grovepi.ir_read_signal  function.  Parameters : None  Returns :  True  or  False",
+            "title": "grovepi.ir_is_data()"
+        },
+        {
+            "location": "/api/complex/",
+            "text": "API - Complex Devices\n\u00b6\n\n\nIn this section the Python API reference for more complex devices is described. This library is supported on both major versions\nof Python: 2.x and 3.x.\n\n\nThe API for the following sensors is described in this section:\n\n\n\n\nGrove LED bar\n\n\nGrove 4-Digit Display\n\n\nGrove Chainable RGB LED\n\n\n\n\n\n\nIMPORTANT\n\n\nThis library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.\n\n\nIn case you need to reset the GrovePi from your Raspberry Pi, \ncheck this section\n.\n\n\n\n\ngrovepi.ledBar_init(pin, orientation)\n\u00b6\n\n\nInitialize an \nLED bar\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which the LED bar is assigned to\n\n\norientation {Integer}\n \n0\n to go from red to green or 1 to go the other way\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.ledBar_orientation(pin, orientation)\n\u00b6\n\n\nSet the orientation on an already initialized \nLED bar\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which the LED bar is assigned to\n\n\norientation {Integer}\n \n0\n to go from red to green or 1 to go the other way\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.ledBar_setLevel(pin, level)\n\u00b6\n\n\nSet the level on an \nLED bar\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which the LED bar is assigned to\n\n\norientation {Integer}\n \n0\n to \n10\n corresponding to the number of levels that exist on the LED bar.\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.ledBar_toggleLed(pin, led)\n\u00b6\n\n\nToggle the state of one LED of the 10 levels of the \nLED bar\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which the LED bar is assigned to\n\n\nled {Integer}\n taking values from \n0\n to \n10\n depending on which LED to toggle\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.ledBar_setBits(pin, state)\n\u00b6\n\n\nSet the LED activations of the \nLED bar\n based on the binary representation of a 10-bit number.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which the LED bar is assigned to\n\n\nstate {Integer}\n a number from \n0\n to \n1023\n that covers all states for all 10 LEDs of the LED bar\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.ledBar_getBits(pin)\n\u00b6\n\n\nRead the state of LED activations on the \nLED bar\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n a number to identify the port (D2-D8) to which the LED bar is assigned to\n\n\n\n\nReturns\n: a number from \n0\n to \n1023\n to represent the binary state of all 10 LEDs of the LED bar\n\n\n\n\ngrovepi.fourDigit_init(pin)\n\u00b6\n\n\nInitialize a \nGrove 4-Digit Display\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_number(pin, value, leading_zero)\n\u00b6\n\n\nSet the \nGrove 4-Digit Display\n to display a number.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\nvalue {Integer}\n a value between \n0\n and \n9999\n representing the number to be printed on the display\n\n\nleading_zero {Boolean}\n whether to add leading zeros or not\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_brightness(pin, brightness)\n\u00b6\n\n\nSet the brightness of the \nGrove 4-Digit Display\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\nbrightness {Integer}\n a number between \n0\n (for the darkest option) and \n7\n (for the brightest) representing the brightness of the display\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_digit(pin, segment, value)\n\u00b6\n\n\nSet individual segment of the \nGrove 4-Digit Display\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\nsegment {Integer}\n a number from \n0\n to \n3\n representing the segment\n\n\nvalue {Integer}\n value of the segment - \n0\n to \n15\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_segment(pin, segment, leds)\n\u00b6\n\n\nSet the individual LED segments of a digit of the \nGrove 4-Digit Display\n.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\nsegment {Integer}\n which segment of the display to modify (\n0\n to \n3\n)\n\n\nleds {Integer}\n a number from \n0\n to \n255\n representing the binary activations of the selected \nsegment\n - the 8th bit is the colon\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_score(pin, left, right)\n\u00b6\n\n\nSet values on either side of the \nGrove 4-Digit Display\n.\nTo the left and right values, leading zeros are added and the colon is lit up\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\nleft {Integer}\n value to be displayed on the left side of the display (takes values from \n0\n to \n99\n)\n\n\nright {Integer}\n value to be displayed on the right side of the display (takes values from \n0\n to \n99\n)\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_monitor(pin, analog, duration)\n\u00b6\n\n\nDisplay the \nanalogRead\n values onto the \nGrove 4-Digit Display\n for a given time.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\nanalog {Integer}\n the port (A0-A2) on which analog values are read from\n\n\nduration {Integer}\n for how many seconds (\n0\n to \n255\n) the readings are to be displayed\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_on(pin)\n\u00b6\n\n\nTurn the whole \nGrove 4-Digit Display\n on.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.fourDigit_off(pin)\n\u00b6\n\n\nTurn the whole \nGrove 4-Digit Display\n off.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the 4-Digit display is set to\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.storeColor(red, green, blue)\n\u00b6\n\n\nStore a color for later use with the \nGrove Chainable RGB LED\n.\n\n\nParameters\n\n\n\n\nred {Integer}\n value from \n0\n to \n255\n\n\ngreen {Integer}\n value from \n0\n to \n255\n\n\nblue {Integer}\n value from \n0\n to \n255\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.chainableRgbLed_init(pin, numLeds)\n\u00b6\n\n\nInitialize a number of \nchained LEDs\n on given port.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the Grove RGB LED(s) are connected to\n\n\nnumLeds {Integer}\n number of chained LEDs\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.chainableRgbLed_test(pin, numLeds, testColor)\n\u00b6\n\n\nInitialize \nchained LEDs\n on given port and set a test color on all of them.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the Grove RGB LED(s) are connected to\n\n\nnumLeds {Integer}\n number of chained LEDs\n\n\n\n\ntestColor {Integer}\n the color to use for all chained LEDs\n\n\n\n\n0\n for black (or nothing)\n\n\n1\n for blue\n\n\n2\n for green\n\n\n3\n for cyan\n\n\n4\n for red\n\n\n5\n for magenta\n\n\n6\n for yellow\n\n\n7\n for white\n\n\n\n\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.chainableRgbLed_pattern(pin, pattern, whichLed)\n\u00b6\n\n\nSet one or more \nchained LEDs\n to a stored color following a given pattern.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the Grove RGB LED(s) are connected to\n\n\n\n\npattern {Integer}\n\n\n\n\n0\n for this LED only\n\n\n1\n for all LEDs except this LED\n\n\n2\n this LED and all LEDs inwards\n\n\n3\n this LED and all LEDs outwards\n\n\n\n\n\n\n\n\nwhichLed {Integer}\n the index of the LED you wish to set counting outwards from the GrovePi starting with \n0\n\n\n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.chainableRgbLed_modulo(pin, offset, divisor)\n\u00b6\n\n\nSet one or more \nchained LEDs\n to a stored color following the \"pattern\" of the modulo operation.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the Grove RGB LED(s) are connected to\n\n\noffset {Integer}\n the index of the LED you want to start at (\n0\n is for the 1st LED)\n\n\ndivisor {Integer}\n sets the color to those LEDs of whose indexes divided by \ndivisor\n have the remainder set to \n0\n - for \ndivisor=1\n every LED gets set, but for \ndivisor=2\n every 2nd LED gets set  \n\n\n\n\nReturns\n: \n1\n all the time\n\n\n\n\ngrovepi.chainableRgbLed_setLevel(pin, level, reverse)\n\u00b6\n\n\nSet one or more \nchained LEDs\n to a stored color similar to a bar graph.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2-D8) to which the Grove RGB LED(s) are connected to\n\n\nlevel {Integer}\n the number of LEDs you want to set to the stored color\n\n\nreverse {Integer}\n \n0\n when counting outwards from the GrovePi or \n1\n when it's the other way (from the most outward LED inwards)\n\n\n\n\nReturns\n: \n1\n all the time",
+            "title": "Complex Devices"
+        },
+        {
+            "location": "/api/complex/#api-complex-devices",
+            "text": "In this section the Python API reference for more complex devices is described. This library is supported on both major versions\nof Python: 2.x and 3.x.  The API for the following sensors is described in this section:   Grove LED bar  Grove 4-Digit Display  Grove Chainable RGB LED    IMPORTANT  This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.  In case you need to reset the GrovePi from your Raspberry Pi,  check this section .",
+            "title": "API - Complex Devices"
+        },
+        {
+            "location": "/api/complex/#grovepiledbar_initpin-orientation",
+            "text": "Initialize an  LED bar .  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which the LED bar is assigned to  orientation {Integer}   0  to go from red to green or 1 to go the other way   Returns :  1  all the time",
+            "title": "grovepi.ledBar_init(pin, orientation)"
+        },
+        {
+            "location": "/api/complex/#grovepiledbar_orientationpin-orientation",
+            "text": "Set the orientation on an already initialized  LED bar .  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which the LED bar is assigned to  orientation {Integer}   0  to go from red to green or 1 to go the other way   Returns :  1  all the time",
+            "title": "grovepi.ledBar_orientation(pin, orientation)"
+        },
+        {
+            "location": "/api/complex/#grovepiledbar_setlevelpin-level",
+            "text": "Set the level on an  LED bar .  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which the LED bar is assigned to  orientation {Integer}   0  to  10  corresponding to the number of levels that exist on the LED bar.   Returns :  1  all the time",
+            "title": "grovepi.ledBar_setLevel(pin, level)"
+        },
+        {
+            "location": "/api/complex/#grovepiledbar_toggleledpin-led",
+            "text": "Toggle the state of one LED of the 10 levels of the  LED bar .  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which the LED bar is assigned to  led {Integer}  taking values from  0  to  10  depending on which LED to toggle   Returns :  1  all the time",
+            "title": "grovepi.ledBar_toggleLed(pin, led)"
+        },
+        {
+            "location": "/api/complex/#grovepiledbar_setbitspin-state",
+            "text": "Set the LED activations of the  LED bar  based on the binary representation of a 10-bit number.  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which the LED bar is assigned to  state {Integer}  a number from  0  to  1023  that covers all states for all 10 LEDs of the LED bar   Returns :  1  all the time",
+            "title": "grovepi.ledBar_setBits(pin, state)"
+        },
+        {
+            "location": "/api/complex/#grovepiledbar_getbitspin",
+            "text": "Read the state of LED activations on the  LED bar .  Parameters   pin {Integer}  a number to identify the port (D2-D8) to which the LED bar is assigned to   Returns : a number from  0  to  1023  to represent the binary state of all 10 LEDs of the LED bar",
+            "title": "grovepi.ledBar_getBits(pin)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_initpin",
+            "text": "Initialize a  Grove 4-Digit Display .  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_init(pin)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_numberpin-value-leading_zero",
+            "text": "Set the  Grove 4-Digit Display  to display a number.  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to  value {Integer}  a value between  0  and  9999  representing the number to be printed on the display  leading_zero {Boolean}  whether to add leading zeros or not   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_number(pin, value, leading_zero)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_brightnesspin-brightness",
+            "text": "Set the brightness of the  Grove 4-Digit Display .  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to  brightness {Integer}  a number between  0  (for the darkest option) and  7  (for the brightest) representing the brightness of the display   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_brightness(pin, brightness)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_digitpin-segment-value",
+            "text": "Set individual segment of the  Grove 4-Digit Display .  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to  segment {Integer}  a number from  0  to  3  representing the segment  value {Integer}  value of the segment -  0  to  15   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_digit(pin, segment, value)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_segmentpin-segment-leds",
+            "text": "Set the individual LED segments of a digit of the  Grove 4-Digit Display .  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to  segment {Integer}  which segment of the display to modify ( 0  to  3 )  leds {Integer}  a number from  0  to  255  representing the binary activations of the selected  segment  - the 8th bit is the colon   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_segment(pin, segment, leds)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_scorepin-left-right",
+            "text": "Set values on either side of the  Grove 4-Digit Display .\nTo the left and right values, leading zeros are added and the colon is lit up  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to  left {Integer}  value to be displayed on the left side of the display (takes values from  0  to  99 )  right {Integer}  value to be displayed on the right side of the display (takes values from  0  to  99 )   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_score(pin, left, right)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_monitorpin-analog-duration",
+            "text": "Display the  analogRead  values onto the  Grove 4-Digit Display  for a given time.  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to  analog {Integer}  the port (A0-A2) on which analog values are read from  duration {Integer}  for how many seconds ( 0  to  255 ) the readings are to be displayed   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_monitor(pin, analog, duration)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_onpin",
+            "text": "Turn the whole  Grove 4-Digit Display  on.  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_on(pin)"
+        },
+        {
+            "location": "/api/complex/#grovepifourdigit_offpin",
+            "text": "Turn the whole  Grove 4-Digit Display  off.  Parameters   pin {Integer}  the port (D2-D8) to which the 4-Digit display is set to   Returns :  1  all the time",
+            "title": "grovepi.fourDigit_off(pin)"
+        },
+        {
+            "location": "/api/complex/#grovepistorecolorred-green-blue",
+            "text": "Store a color for later use with the  Grove Chainable RGB LED .  Parameters   red {Integer}  value from  0  to  255  green {Integer}  value from  0  to  255  blue {Integer}  value from  0  to  255   Returns :  1  all the time",
+            "title": "grovepi.storeColor(red, green, blue)"
+        },
+        {
+            "location": "/api/complex/#grovepichainablergbled_initpin-numleds",
+            "text": "Initialize a number of  chained LEDs  on given port.  Parameters   pin {Integer}  the port (D2-D8) to which the Grove RGB LED(s) are connected to  numLeds {Integer}  number of chained LEDs   Returns :  1  all the time",
+            "title": "grovepi.chainableRgbLed_init(pin, numLeds)"
+        },
+        {
+            "location": "/api/complex/#grovepichainablergbled_testpin-numleds-testcolor",
+            "text": "Initialize  chained LEDs  on given port and set a test color on all of them.  Parameters   pin {Integer}  the port (D2-D8) to which the Grove RGB LED(s) are connected to  numLeds {Integer}  number of chained LEDs   testColor {Integer}  the color to use for all chained LEDs   0  for black (or nothing)  1  for blue  2  for green  3  for cyan  4  for red  5  for magenta  6  for yellow  7  for white     Returns :  1  all the time",
+            "title": "grovepi.chainableRgbLed_test(pin, numLeds, testColor)"
+        },
+        {
+            "location": "/api/complex/#grovepichainablergbled_patternpin-pattern-whichled",
+            "text": "Set one or more  chained LEDs  to a stored color following a given pattern.  Parameters   pin {Integer}  the port (D2-D8) to which the Grove RGB LED(s) are connected to   pattern {Integer}   0  for this LED only  1  for all LEDs except this LED  2  this LED and all LEDs inwards  3  this LED and all LEDs outwards     whichLed {Integer}  the index of the LED you wish to set counting outwards from the GrovePi starting with  0    Returns :  1  all the time",
+            "title": "grovepi.chainableRgbLed_pattern(pin, pattern, whichLed)"
+        },
+        {
+            "location": "/api/complex/#grovepichainablergbled_modulopin-offset-divisor",
+            "text": "Set one or more  chained LEDs  to a stored color following the \"pattern\" of the modulo operation.  Parameters   pin {Integer}  the port (D2-D8) to which the Grove RGB LED(s) are connected to  offset {Integer}  the index of the LED you want to start at ( 0  is for the 1st LED)  divisor {Integer}  sets the color to those LEDs of whose indexes divided by  divisor  have the remainder set to  0  - for  divisor=1  every LED gets set, but for  divisor=2  every 2nd LED gets set     Returns :  1  all the time",
+            "title": "grovepi.chainableRgbLed_modulo(pin, offset, divisor)"
+        },
+        {
+            "location": "/api/complex/#grovepichainablergbled_setlevelpin-level-reverse",
+            "text": "Set one or more  chained LEDs  to a stored color similar to a bar graph.  Parameters   pin {Integer}  the port (D2-D8) to which the Grove RGB LED(s) are connected to  level {Integer}  the number of LEDs you want to set to the stored color  reverse {Integer}   0  when counting outwards from the GrovePi or  1  when it's the other way (from the most outward LED inwards)   Returns :  1  all the time",
+            "title": "grovepi.chainableRgbLed_setLevel(pin, level, reverse)"
+        },
+        {
+            "location": "/api/interrupt/",
+            "text": "API - Interrupt-Based Devices\n\u00b6\n\n\nIn this section the Python API reference for interrupt-based devices is described. This library is supported on both major versions\nof Python: 2.x and 3.x.\n\n\nThe API for the following sensors is described in this section:\n\n\n\n\nGrove Dust Sensor\n\n\nGrove Encoder\n\n\nGrove Water Flow Sensor\n of whose functionality can be used in other applications too\n\n\n\n\n\n\nIMPORTANT\n\n\nThis library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.\n\n\nIn case you need to reset the GrovePi from your Raspberry Pi, \ncheck this section\n.\n\n\n\n\ngrovepi.dust_sensor_en(pin = 2)\n\u00b6\n\n\nEnables the \nGrove Dust Sensor\n.\n\n\nCannot call this function if \ngrovepi.encoder_en\n or \ngrovepi.flowEnable\n have been previously called. You first must disable them by using their appropriate function calls.\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2 or D3) to which the dust sensor is assigned to\n\n\n\n\nReturns\n: None\n\n\n\n\ngrovepi.dust_sensor_dis()\n\u00b6\n\n\nDisables the \nGrove Dust Sensor\n.\n\n\nRequired if you want to enable other sensors. It's generally a good practice to disable it after you're done with it.\n\n\nParameters\n: None\n\n\nReturns\n: None\n\n\n\n\ngrovepi.dust_sensor_read()\n\u00b6\n\n\nReads the low pulse occupancy of the \nGrove Dust Sensor\n in the given time period specified by \ngrovepi.get_dust_sensor_interval\n.\n\n\nParameters\n: None\n\n\nReturns\n: \n{(Integer, Integer)}\n list - the 1st element is \n1\n if the read value is a new one or \n0\n if it's old and the 2nd element holds the actual LPO (low pulse occupancy) time.\n\n\n\n\ngrovepi.dust_sensor_read_more()\n\u00b6\n\n\nReturns more information than \ngrovepi.dust_sensor_read\n from the \nGrove Dust Sensor\n in the given time period specified by \ngrovepi.get_dust_sensor_interval\n.\n\n\nParameters\n: None\n\n\nReturns\n: \n{(Integer, Integer, Integer)}\n list\n\n\n\n\n1st element is the LPO time\n\n\nthe 2nd one is the percentage (LPO time divided by total period)\n\n\nthe 3rd is the concentration as measured in \npcs/283ml=0.01cf\n where the particle size is over \n1um\n\n\n\n\n\n\ngrovepi.get_dust_sensor_interval()\n\u00b6\n\n\nRetrieves the \nGrove Dust Sensor's\n period of time. By default, it's set to 30,000 ms (30 seconds) and on every power-up of the GrovePi, the interval needs to be reset if you want a different period other than the default one.\n\n\nParameters\n: None\n\n\nReturns\n: The time the dust sensor collects data before it gets analyzed and sent back to the Raspberry Pi\n\n\n\n\ngrovepi.set_dust_sensor_interval(interval_ms)\n\u00b6\n\n\nSet the \nGrove Dust Sensor's\n period of time. By default, it's set to 30,000 ms (30 seconds).\n\n\nParameters\n\n\n\n\ninterval_ms {Integer}\n the period in milliseconds of the dust sensor\n\n\n\n\nReturns\n: None\n\n\n\n\ngrovepi.encoder_en()\n\u00b6\n\n\nEnable the \nGrove Encoder\n on port D2.\n\n\nBear in mind, this function must not be called if there's a device (dust sensor or flow meter) already assigned to port D2 - you must first disable them and then run this function.\n\n\nParameters\n: None\n\n\nReturns\n: None\n\n\n\n\ngrovepi.encoder_dis()\n\u00b6\n\n\nDisable the \nGrove Encoder\n which sits on port D2.\n\n\nThe call to this function is required if you already have the encoder enabled and you want to either use a dust sensor or a flow meter on port D2.\n\n\nParameters\n: None\n\n\nReturns\n: None\n\n\n\n\ngrovepi.encoderRead()\n\u00b6\n\n\nRead the data off of the \nGrove Encoder\n on port D2.\n\n\nParameters\n: None\n\n\nReturns\n: \n{(Integer, Integer)}\n the 1st element is set to \n1\n if there's a value, \n0\n otherwise and the 2nd element represents the position of the encoder on a scale of 24 values (\n1\n to \n24\n). \n-1\ns are returned if there had been an error on reading.\n\n\n\n\ngrovepi.flowEnable(pin = 2)\n\u00b6\n\n\nEnables the \nGrove Water Flow Sensor\n.\n\n\nCannot call this function if \ngrovepi.encoder_en\n or \ngrovepi.dust_sensor_en\n have been previously called. You first must disable them by using their appropriate function calls.\n\n\nThis functionality can also be used for counting the number of rising pulses in the given time period of 2,000 ms (2 seconds).\n\n\nParameters\n\n\n\n\npin {Integer}\n the port (D2 or D3) to which the dust sensor is assigned to\n\n\n\n\nReturns\n: None\n\n\n\n\ngrovepi.flowDisable()\n\u00b6\n\n\nDisables the \nGrove Water Flow Sensor\n.\n\n\nThe call to this function is required if you already have the flow sensor enabled and you want to either use a dust sensor or an encoder on port D2.\n\n\nParameters\n: None\n\n\nReturns\n: None\n\n\n\n\ngrovepi.flowRead()\n\u00b6\n\n\nEnables the \nGrove Water Flow Sensor\n.\n\n\nThis functionality can also be used for counting the number of rising pulses in the given time period of 2,000 ms (2 seconds).\n\n\nParameters\n: None\n\n\nReturns\n: the 1st element of the list is either \n1\n (for having received a new value) or \n0\n (or otherwise) and the 2nd element of it represents the number of pulse rises per 2,000ms cycle (2 seconds). \n-1\ns are returned if there's an error processing the request.",
+            "title": "Interrupt-Based Devices"
+        },
+        {
+            "location": "/api/interrupt/#api-interrupt-based-devices",
+            "text": "In this section the Python API reference for interrupt-based devices is described. This library is supported on both major versions\nof Python: 2.x and 3.x.  The API for the following sensors is described in this section:   Grove Dust Sensor  Grove Encoder  Grove Water Flow Sensor  of whose functionality can be used in other applications too    IMPORTANT  This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes\nas that will put the GrovePi into a broken state.  In case you need to reset the GrovePi from your Raspberry Pi,  check this section .",
+            "title": "API - Interrupt-Based Devices"
+        },
+        {
+            "location": "/api/interrupt/#grovepidust_sensor_enpin-2",
+            "text": "Enables the  Grove Dust Sensor .  Cannot call this function if  grovepi.encoder_en  or  grovepi.flowEnable  have been previously called. You first must disable them by using their appropriate function calls.  Parameters   pin {Integer}  the port (D2 or D3) to which the dust sensor is assigned to   Returns : None",
+            "title": "grovepi.dust_sensor_en(pin = 2)"
+        },
+        {
+            "location": "/api/interrupt/#grovepidust_sensor_dis",
+            "text": "Disables the  Grove Dust Sensor .  Required if you want to enable other sensors. It's generally a good practice to disable it after you're done with it.  Parameters : None  Returns : None",
+            "title": "grovepi.dust_sensor_dis()"
+        },
+        {
+            "location": "/api/interrupt/#grovepidust_sensor_read",
+            "text": "Reads the low pulse occupancy of the  Grove Dust Sensor  in the given time period specified by  grovepi.get_dust_sensor_interval .  Parameters : None  Returns :  {(Integer, Integer)}  list - the 1st element is  1  if the read value is a new one or  0  if it's old and the 2nd element holds the actual LPO (low pulse occupancy) time.",
+            "title": "grovepi.dust_sensor_read()"
+        },
+        {
+            "location": "/api/interrupt/#grovepidust_sensor_read_more",
+            "text": "Returns more information than  grovepi.dust_sensor_read  from the  Grove Dust Sensor  in the given time period specified by  grovepi.get_dust_sensor_interval .  Parameters : None  Returns :  {(Integer, Integer, Integer)}  list   1st element is the LPO time  the 2nd one is the percentage (LPO time divided by total period)  the 3rd is the concentration as measured in  pcs/283ml=0.01cf  where the particle size is over  1um",
+            "title": "grovepi.dust_sensor_read_more()"
+        },
+        {
+            "location": "/api/interrupt/#grovepiget_dust_sensor_interval",
+            "text": "Retrieves the  Grove Dust Sensor's  period of time. By default, it's set to 30,000 ms (30 seconds) and on every power-up of the GrovePi, the interval needs to be reset if you want a different period other than the default one.  Parameters : None  Returns : The time the dust sensor collects data before it gets analyzed and sent back to the Raspberry Pi",
+            "title": "grovepi.get_dust_sensor_interval()"
+        },
+        {
+            "location": "/api/interrupt/#grovepiset_dust_sensor_intervalinterval_ms",
+            "text": "Set the  Grove Dust Sensor's  period of time. By default, it's set to 30,000 ms (30 seconds).  Parameters   interval_ms {Integer}  the period in milliseconds of the dust sensor   Returns : None",
+            "title": "grovepi.set_dust_sensor_interval(interval_ms)"
+        },
+        {
+            "location": "/api/interrupt/#grovepiencoder_en",
+            "text": "Enable the  Grove Encoder  on port D2.  Bear in mind, this function must not be called if there's a device (dust sensor or flow meter) already assigned to port D2 - you must first disable them and then run this function.  Parameters : None  Returns : None",
+            "title": "grovepi.encoder_en()"
+        },
+        {
+            "location": "/api/interrupt/#grovepiencoder_dis",
+            "text": "Disable the  Grove Encoder  which sits on port D2.  The call to this function is required if you already have the encoder enabled and you want to either use a dust sensor or a flow meter on port D2.  Parameters : None  Returns : None",
+            "title": "grovepi.encoder_dis()"
+        },
+        {
+            "location": "/api/interrupt/#grovepiencoderread",
+            "text": "Read the data off of the  Grove Encoder  on port D2.  Parameters : None  Returns :  {(Integer, Integer)}  the 1st element is set to  1  if there's a value,  0  otherwise and the 2nd element represents the position of the encoder on a scale of 24 values ( 1  to  24 ).  -1 s are returned if there had been an error on reading.",
+            "title": "grovepi.encoderRead()"
+        },
+        {
+            "location": "/api/interrupt/#grovepiflowenablepin-2",
+            "text": "Enables the  Grove Water Flow Sensor .  Cannot call this function if  grovepi.encoder_en  or  grovepi.dust_sensor_en  have been previously called. You first must disable them by using their appropriate function calls.  This functionality can also be used for counting the number of rising pulses in the given time period of 2,000 ms (2 seconds).  Parameters   pin {Integer}  the port (D2 or D3) to which the dust sensor is assigned to   Returns : None",
+            "title": "grovepi.flowEnable(pin = 2)"
+        },
+        {
+            "location": "/api/interrupt/#grovepiflowdisable",
+            "text": "Disables the  Grove Water Flow Sensor .  The call to this function is required if you already have the flow sensor enabled and you want to either use a dust sensor or an encoder on port D2.  Parameters : None  Returns : None",
+            "title": "grovepi.flowDisable()"
+        },
+        {
+            "location": "/api/interrupt/#grovepiflowread",
+            "text": "Enables the  Grove Water Flow Sensor .  This functionality can also be used for counting the number of rising pulses in the given time period of 2,000 ms (2 seconds).  Parameters : None  Returns : the 1st element of the list is either  1  (for having received a new value) or  0  (or otherwise) and the 2nd element of it represents the number of pulse rises per 2,000ms cycle (2 seconds).  -1 s are returned if there's an error processing the request.",
+            "title": "grovepi.flowRead()"
+        },
+        {
+            "location": "/supported/",
+            "text": "Supported Modules\n\u00b6\n\n\nA \ngrid list of supported modules\n (sensors and actuators) can be seen on our page somewhere in the middle of it - you need to scroll down quite a lot.\nUpon scrolling down, you'll see a list that looks like this one down below.\n\n\n\n\nDI-Sensors\n\u00b6\n\n\nThe GrovePi can also be used along with our \nDI-Sensors\n that require an I2C interface. The GrovePi has 3 I2C ports which can be used for interfacing with these sensors. More can be found in the \nDI-Sensors Documentation\n.",
+            "title": "Supported Modules"
+        },
+        {
+            "location": "/supported/#supported-modules",
+            "text": "A  grid list of supported modules  (sensors and actuators) can be seen on our page somewhere in the middle of it - you need to scroll down quite a lot.\nUpon scrolling down, you'll see a list that looks like this one down below.",
+            "title": "Supported Modules"
+        },
+        {
+            "location": "/supported/#di-sensors",
+            "text": "The GrovePi can also be used along with our  DI-Sensors  that require an I2C interface. The GrovePi has 3 I2C ports which can be used for interfacing with these sensors. More can be found in the  DI-Sensors Documentation .",
+            "title": "DI-Sensors"
+        },
+        {
+            "location": "/release-notes/",
+            "text": "Release Notes For the Firmware\n\u00b6\n\n\nMaintenance Team\n\u00b6\n\n\nThe current and past members of the GrovePi team in alphabetical order are:\n\n\n\n\n@CleoQc\n\n\n@johnisanerd\n\n\n@karan259\n\n\n@RobertLucian\n\n\n\n\nAlso, we have a couple of notable contributors to the GrovePi but for other libraries:\n\n\n\n\n@marcellobarile\n for the NodeJS library\n\n\n@mcauser\n for adding different new functionalities/bug fixes/examples to our current library\n\n\n@lanselambor\n\n\n@nikkoura\n\n\n@lucavallin\n for coming with fixes to the Go library\n\n\n@rpedersen\n for C# stuff\n\n\n@k33g\n for Java library\n\n\n\n\nVersion 1.3.0\n - 1 Aug 2018\n\u00b6\n\n\n\n\n\n\nFixed synchronization bugs which led to very small IO rates\n\n\n\n\nAlso caused values to overlap on other ports \n#412\n\n\nCaused I2C errors when functions were called with no delay between them \n#409\n\n\n\n\n\n\n\n\nSmall refactorization of the code to something slightly better\n\n\n\n\nFixed the dust sensor \n#408\n\n\nMitigated abnormality caused by the Raspberry Pi not supporting clock stretching on the I2C \n#411\n\n\nDebugged and sped up the rate of acquisition of the DHT sensor \n#418\n\n\nAdd IR receiver functionality for any remote control and fix inherent issues with the library \n#416\n\n\nAdd option to set the flow meter and the dust sensor on different ports other than D2 \n#421\n\n\n\n\nVersion 1.2.7 - 20 Dec 2016\n\u00b6\n\n\n\n\nFaster IO\n\n\nLess IO Errors\n\n\nRTC and MMA7xxx accelerometer code removed from the firmware\n\n\n\n\nVersion 1.2.2 - 22 Jan 2015\n\u00b6\n\n\n\n\nGrove Chainable RGB LED added\n\n\nAbility to persist a RGB color in memory for later use\n\n\n\n\nVersion 1.2.1 - 30 Dec 2014\n\u00b6\n\n\n\n\nGrove 4 Digit Display added\n\n\n\n\nVersion 1.2.0 - 29 Dec 2014\n\u00b6\n\n\n\n\nGrove LED Bar added\n\n\nFirmware version made available\n\n\n\n\nVersion 1.1 - 13 Feb 2014\n\u00b6\n\n\n\n\nDHT, ultrasonic, RTC code added\n\n\nSupport for multiple modules for same type added (Not tested)\n\n\nProtocol made more robust",
+            "title": "Release Notes"
+        },
+        {
+            "location": "/release-notes/#release-notes-for-the-firmware",
+            "text": "",
+            "title": "Release Notes For the Firmware"
+        },
+        {
+            "location": "/release-notes/#maintenance-team",
+            "text": "The current and past members of the GrovePi team in alphabetical order are:   @CleoQc  @johnisanerd  @karan259  @RobertLucian   Also, we have a couple of notable contributors to the GrovePi but for other libraries:   @marcellobarile  for the NodeJS library  @mcauser  for adding different new functionalities/bug fixes/examples to our current library  @lanselambor  @nikkoura  @lucavallin  for coming with fixes to the Go library  @rpedersen  for C# stuff  @k33g  for Java library",
+            "title": "Maintenance Team"
+        },
+        {
+            "location": "/release-notes/#version-130-1-aug-2018",
+            "text": "Fixed synchronization bugs which led to very small IO rates   Also caused values to overlap on other ports  #412  Caused I2C errors when functions were called with no delay between them  #409     Small refactorization of the code to something slightly better   Fixed the dust sensor  #408  Mitigated abnormality caused by the Raspberry Pi not supporting clock stretching on the I2C  #411  Debugged and sped up the rate of acquisition of the DHT sensor  #418  Add IR receiver functionality for any remote control and fix inherent issues with the library  #416  Add option to set the flow meter and the dust sensor on different ports other than D2  #421",
+            "title": "Version 1.3.0 - 1 Aug 2018"
+        },
+        {
+            "location": "/release-notes/#version-127-20-dec-2016",
+            "text": "Faster IO  Less IO Errors  RTC and MMA7xxx accelerometer code removed from the firmware",
+            "title": "Version 1.2.7 - 20 Dec 2016"
+        },
+        {
+            "location": "/release-notes/#version-122-22-jan-2015",
+            "text": "Grove Chainable RGB LED added  Ability to persist a RGB color in memory for later use",
+            "title": "Version 1.2.2 - 22 Jan 2015"
+        },
+        {
+            "location": "/release-notes/#version-121-30-dec-2014",
+            "text": "Grove 4 Digit Display added",
+            "title": "Version 1.2.1 - 30 Dec 2014"
+        },
+        {
+            "location": "/release-notes/#version-120-29-dec-2014",
+            "text": "Grove LED Bar added  Firmware version made available",
+            "title": "Version 1.2.0 - 29 Dec 2014"
+        },
+        {
+            "location": "/release-notes/#version-11-13-feb-2014",
+            "text": "DHT, ultrasonic, RTC code added  Support for multiple modules for same type added (Not tested)  Protocol made more robust",
+            "title": "Version 1.1 - 13 Feb 2014"
+        }
+    ]
+}
