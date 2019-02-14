@@ -50,6 +50,16 @@ Upon installing the GrovePi or getting our flavored image the GrovePi library ca
 
 The `/home/pi/Dexter/GrovePi` is a mirrored version of [our GitHub repository](https://github.com/DexterInd/GrovePi/tree/master) of the master branch.
 
+## What I2C Bus to Use
+
+By default, the GrovePi library is set to use the `RPI_1SW` bus, which is a software implementation of the I2C specifically built to circumvent
+the issues with the hardware I2C of the Raspberry Pi. It's very fast and it doesn't use much CPU time at all. We recommend using this bus, thus,
+when importing the `grovepi` module, you don't have to do anything.
+
+There's also the `RPI_1`, the classic HW I2C of the Raspberry Pi, which is buggy and unreliable. We don't see any reason in using this one in any scenario. Period.
+
+In order to change the bus, presumably to `RPI_1` bus, call `grovepi.set_bus("RPI_1")` or `grovepi.set_bus("RPI_1SW")` in case you've changed the default one.
+
 ## Scratch Support
 
 Scratch support comes by default with our flavored image, Raspbian For Robots, but if you find yourself to be using the classic Raspbian then

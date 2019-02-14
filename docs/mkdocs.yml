@@ -17,7 +17,7 @@ extra:
       - type: 'twitter'
         link: 'https://twitter.com/dexterind'
 
-pages:
+nav:
   - About: 'index.md'
   - Getting Started: 'quickstart.md'
   - Firmware Stuff: 'fw.md'
