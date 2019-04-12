@@ -1,0 +1,40 @@
+site_name: GrovePi Documentation
+site_url: https://dexterind.github.io/GrovePi
+site_description: Python documentation for the GrovePi
+site_author: DexterInd Team
+
+repo_url: https://github.com/DexterInd/GrovePi
+repo_name: 'DexterInd/GrovePi'
+
+theme:
+  name: material
+  favicon: 'img/favicon.ico'
+
+extra:
+  social:
+      - type: 'github'
+        link: 'https://github.com/DexterInd'
+      - type: 'twitter'
+        link: 'https://twitter.com/dexterind'
+
+nav:
+  - About: 'index.md'
+  - Getting Started: 'quickstart.md'
+  - Firmware Stuff: 'fw.md'
+  - Hardware Ports: 'hw.md'
+  - API Reference:
+    - 'GPIO Functions': 'api/gpio.md'
+    - 'General Sensors': 'api/general.md'
+    - 'Complex Devices': 'api/complex.md'
+    - 'Interrupt-Based Devices': 'api/interrupt.md'
+  - Supported Modules: 'supported.md'
+  - Release Notes: 'release-notes.md'
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+
+copyright: Maintained by the <a href="/release-notes/#maintenance-team">DexterInd Team</a>.

@@ -1,0 +1,666 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Python documentation for the GrovePi">
+      
+      
+        <link rel="canonical" href="https://dexterind.github.io/GrovePi/fw/">
+      
+      
+        <meta name="author" content="DexterInd Team">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.1">
+    
+    
+      
+        <title>Firmware Stuff - GrovePi Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.982221ab.css">
+      
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#flashing-the-firmware" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://dexterind.github.io/GrovePi" title="GrovePi Documentation" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              GrovePi Documentation
+            </span>
+            <span class="md-header-nav__topic">
+              Firmware Stuff
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/DexterInd/GrovePi/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    DexterInd/GrovePi
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://dexterind.github.io/GrovePi" title="GrovePi Documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    GrovePi Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/DexterInd/GrovePi/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    DexterInd/GrovePi
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../quickstart/" title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Firmware Stuff
+      </label>
+    
+    <a href="./" title="Firmware Stuff" class="md-nav__link md-nav__link--active">
+      Firmware Stuff
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flashing-the-firmware" title="Flashing the Firmware" class="md-nav__link">
+    Flashing the Firmware
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-tests" title="Running Tests" class="md-nav__link">
+    Running Tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-the-firmware" title="Building the Firmware" class="md-nav__link">
+    Building the Firmware
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resetting-the-grovepi" title="Resetting the GrovePi" class="md-nav__link">
+    Resetting the GrovePi
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../hw/" title="Hardware Ports" class="md-nav__link">
+      Hardware Ports
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      API Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        API Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/gpio/" title="GPIO Functions" class="md-nav__link">
+      GPIO Functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/general/" title="General Sensors" class="md-nav__link">
+      General Sensors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/complex/" title="Complex Devices" class="md-nav__link">
+      Complex Devices
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../api/interrupt/" title="Interrupt-Based Devices" class="md-nav__link">
+      Interrupt-Based Devices
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../supported/" title="Supported Modules" class="md-nav__link">
+      Supported Modules
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flashing-the-firmware" title="Flashing the Firmware" class="md-nav__link">
+    Flashing the Firmware
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-tests" title="Running Tests" class="md-nav__link">
+    Running Tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-the-firmware" title="Building the Firmware" class="md-nav__link">
+    Building the Firmware
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resetting-the-grovepi" title="Resetting the GrovePi" class="md-nav__link">
+    Resetting the GrovePi
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/DexterInd/GrovePi/edit/master/docs/fw.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>Firmware Stuff</h1>
+                
+                <h2 id="flashing-the-firmware">Flashing the Firmware<a class="headerlink" href="#flashing-the-firmware" title="Permanent link">&para;</a></h2>
+<p>To flash the firmware, you must first have the GrovePi library/repository installed so for this you must follow the <a href="../quickstart/#how-to-install">Getting Started guide</a>.</p>
+<p>Once the library is installed on the Raspberry Pi, run the following commands to have the firmware flashed onto the GrovePi:</p>
+<div class="codehilite"><pre><span></span><span class="nb">cd</span> ~/Dexter/GrovePi/Firmware
+bash firmware_update.sh
+</pre></div>
+
+
+<p>This updates you to the latest version of the firmware which is the <code>1.3.0</code>.</p>
+<hr />
+<p><strong>NOTE TO OTHER LIBRARIES</strong></p>
+<p>Because the <code>1.3.0</code> firmware was recently released, lots of other libraries written in other languages other than Python are yet to be updated, so
+they need to run on an older version of the firmware, specifically the <code>1.2.7</code>.</p>
+<p>The <code>1.2.7</code> version can be found in <code>~/Dexter/GrovePi/Firmware/Archive</code> as <code>grove_pi_v1_2_7.cpp.hex</code>. If you need to run on this older version, follow these steps to burn the firmware:</p>
+<div class="codehilite"><pre><span></span>mv ~/Dexter/GrovePi/Firmware/grove_pi_firmware.hex ~/Dexter/GrovePi/Firmware/grove_pi_v1_3_0.hex.bak
+cp ~/Dexter/GrovePi/Firmware/Archive/grove_pi_v1_2_7.cpp.hex ~/Dexter/GrovePi/Firmware/grove_pi_firmware.hex
+bash firmware_update.sh
+</pre></div>
+
+
+<hr />
+<h2 id="running-tests">Running Tests<a class="headerlink" href="#running-tests" title="Permanent link">&para;</a></h2>
+<p>To run the entire suite of tests for the GrovePi follow these bash instructions:</p>
+<div class="codehilite"><pre><span></span><span class="nb">cd</span> ~/Dexter/GrovePi/Troubleshooting
+sudo bash all_tests.sh
+</pre></div>
+
+
+<p>At the end of this process you'll get a <code>log.txt</code> file on your Desktop at <code>~/Desktop/log.txt</code>.</p>
+<p>Also, to see with which version of the firmware the library installed on the Raspberry Pi works with you can go to <code>~/Dexter/GrovePi</code> directory and run:</p>
+<div class="codehilite"><pre><span></span>python grovepi.py
+</pre></div>
+
+
+<p>This should output a version number (of the GrovePi's firmware). Older versions of the firmware (&lt;=<code>v1.2.7</code>) won't get displayed when calling <code>python grovepi.py</code>.</p>
+<div class="codehilite"><pre><span></span>pi@raspberrypi:~ $ python grovepi.py
+library supports this fw versions: <span class="m">1</span>.3.0
+</pre></div>
+
+
+<p>To see which is the version of the current firmware loaded on the GrovePi you can either run the above test (<code>... all_test.sh</code>) from the <code>Troubleshooting/</code> directory or you can run these commands:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">grovepi</span>
+<span class="k">print</span><span class="p">(</span><span class="n">grovepi</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
+</pre></div>
+
+
+<p>There are also cases when the GrovePi doesn't respond to requests. In this situation, you would normally see an exception appearing in Python. More often than not, these can be the source of problems:</p>
+<ul>
+<li>A non-present firmware on the GrovePi.</li>
+<li>A mismatch of versions between the firmware and the library on the Raspberry Pi.</li>
+</ul>
+<p>In both of these situations, re-flashing the firmware is all it's needed.</p>
+<h2 id="building-the-firmware">Building the Firmware<a class="headerlink" href="#building-the-firmware" title="Permanent link">&para;</a></h2>
+<p>There may be cases where additional modification to the firmware is required to accommodate someone's particular requirements. In this case,
+building the firmware and then uploading it is crucial. During our production, we use <a href="https://platformio.org/">PlatformIO</a> along with <a href="https://atom.io/">Atom IDE</a>.</p>
+<p>Once you get them both installed on your machine, open Atom IDE and add as a project the <code>/Firmware/Source/grovepi</code> directory. The added directory will have the following structure:</p>
+<ul>
+<li><code>lib/</code></li>
+<li><code>src/</code></li>
+<li><code>.gitignore</code></li>
+<li><code>.travis.yml</code></li>
+<li><code>extra_script.py</code></li>
+<li><code>platformio.ini</code></li>
+</ul>
+<p>Next, click on the build button or use <strong>ALT-CTRL-B</strong> key combination to build the firmware with PlatformIO. Once that it's done, head over to <code>/Firmware/Source/grovepi/.pioenvs/grovepi</code> directory and notice the <code>firmware.hex</code>. That's the firmware that was just built. You can then burn that to your GrovePi.</p>
+<h2 id="resetting-the-grovepi">Resetting the GrovePi<a class="headerlink" href="#resetting-the-grovepi" title="Permanent link">&para;</a></h2>
+<p>To reset the GrovePi from your Raspberry Pi, run the following command provided you have installed the GrovePi library on your image:</p>
+<div class="codehilite"><pre><span></span>avrdude -c gpio -p m328p
+</pre></div>
+
+
+<!-- ## Enabling Software I2C
+
+The GrovePi and the Raspberry Pi communicate over an I2C connection, but the problem with the Raspberry Pi's HW implementation has to do with the clock stretching mechanism. This mechanism is badly implemented and can lead to corrupted transfers with the GrovePi.
+
+More details on this issue can be found on these tickets: [raspberrypi/linux/issues/254](https://github.com/raspberrypi/linux/issues/254) and [dexterind/grovepi/issues/411](https://github.com/DexterInd/GrovePi/issues/411).
+
+In order to avoid having problems caused by the clock-stretching mechanism, you can use our bit-bang implementation of the I2C that uses the [RPi.GPIO](https://pypi.org/project/RPi.GPIO/) library. In order to have this alternative software I2C used instead, install the [DI-Sensors library](http://di-sensors.readthedocs.io/en/master/quickstart.html#how-to-install-the-di-sensors).
+
+To check which I2C you're using, you can import the `grovepi` module and then check the value of `grovepi.whichI2C` attribute. If it's set to `"periphery"` then it means the HW I2C is used and otherwise if it's set to `"software"` then it's using the DI-Sensors' one which is bit-banged. -->
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../quickstart/" title="Getting Started" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Getting Started
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../hw/" title="Hardware Ports" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Hardware Ports
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Maintained by the <a href="/release-notes/#maintenance-team">DexterInd Team</a>.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/DexterInd" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/dexterind" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.b806dc00.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+  </body>
+</html>

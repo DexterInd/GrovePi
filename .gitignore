@@ -51,3 +51,4 @@ Release
 # Visual Studio files
 *.pyc
 *.pfx
+Firmware/Source/grovepi/\.pioenvs/

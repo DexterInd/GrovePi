@@ -1,3 +1,6 @@
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
+
 from sys import platform
 import datetime
 

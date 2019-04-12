@@ -12,32 +12,9 @@
 # Karan		31 Dec 15	  	Initial Authoring
 #
 # Code derived from the basic Arduino library for the Gesture Sensor by Seeed: https://github.com/Seeed-Studio/Gesture_PAJ7620
-'''
-## License
 
-The MIT License (MIT)
-
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2017  Dexter Industries
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
+# Released under the MIT license (http://choosealicense.com/licenses/mit/).
+# For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
 
 import time,sys
 import RPi.GPIO as GPIO
@@ -53,12 +30,12 @@ else:
 class gesture:
 	#Registers and variables for the gesture sensor
 	GES_REACTION_TIME		=.500				# You can adjust the reaction time according to the actual circumstance.
-	GES_ENTRY_TIME			=.800				# When you want to recognize the Forward/Backward gestures, your gestures' reaction time must less than GES_ENTRY_TIME(0.8s). 
+	GES_ENTRY_TIME			=.800				# When you want to recognize the Forward/Backward gestures, your gestures' reaction time must less than GES_ENTRY_TIME(0.8s).
 	GES_QUIT_TIME			=1.000
-	
+
 	BANK0 = 0
 	BANK1 = 1
-	
+
 	PAJ7620_ADDR_BASE =0x00
 
 	#REGISTER BANK SELECT
@@ -78,8 +55,8 @@ class gesture:
 	PAJ7620_ADDR_PS_LOW_THRESHOLD	=(PAJ7620_ADDR_BASE + 0x6A)	#RW
 	PAJ7620_ADDR_PS_APPROACH_STATE	=(PAJ7620_ADDR_BASE + 0x6B)	#R
 	PAJ7620_ADDR_PS_RAW_DATA		=(PAJ7620_ADDR_BASE + 0x6C)	#R
-                                    
-	#REGISTER BANK 1                
+
+	#REGISTER BANK 1
 	PAJ7620_ADDR_PS_GAIN			=(PAJ7620_ADDR_BASE + 0x44)	#RW
 	PAJ7620_ADDR_IDLE_S1_STEP_0		=(PAJ7620_ADDR_BASE + 0x67)	#RW
 	PAJ7620_ADDR_IDLE_S1_STEP_1		=(PAJ7620_ADDR_BASE + 0x68)	#RW
@@ -94,15 +71,15 @@ class gesture:
 	#PAJ7620_REGITER_BANK_SEL
 	PAJ7620_BANK0=0
 	PAJ7620_BANK1=1
-	
+
 	#PAJ7620_ADDR_SUSPEND_CMD
 	PAJ7620_I2C_WAKEUP	=1
 	PAJ7620_I2C_SUSPEND	=0
-	
+
 	#PAJ7620_ADDR_OPERATION_ENABLE
 	PAJ7620_ENABLE=1
 	PAJ7620_DISABLE=0
-	
+
 	#ADC, delete
 	REG_ADDR_RESULT = 0x00
 	REG_ADDR_ALERT  = 0x01
@@ -122,7 +99,7 @@ class gesture:
 	GES_CLOCKWISE_FLAG			=1<<6
 	GES_COUNT_CLOCKWISE_FLAG	=1<<7
 	GES_WAVE_FLAG				=1<<0
-	
+
 	#Gesture output
 	FORWARD 		= 1
 	BACKWARD 		= 2
@@ -133,7 +110,7 @@ class gesture:
 	CLOCKWISE		= 7
 	ANTI_CLOCKWISE	= 8
 	WAVE			= 9
-	
+
 	#Initial register state
 	initRegisterArray=(	[0xEF,0x00],
 						[0x32,0x29],
@@ -357,13 +334,13 @@ class gesture:
 
 	#Enable debug message
 	debug=0
-	
+
 	#Initialize the sensors
 	def init(self):
 		time.sleep(.001)
 		self.paj7620SelectBank(self.BANK0)
 		self.paj7620SelectBank(self.BANK0)
-		
+
 		data0 = self.paj7620ReadReg(0, 1)[0]
 		data1 = self.paj7620ReadReg(1, 1)[0]
 		if self.debug:
@@ -373,27 +350,27 @@ class gesture:
 			#return 0xff
 		if data0 == 0x20:
 			print("wake-up finish.")
-			
+
 		for i in range(len(self.initRegisterArray)):
 			self.paj7620WriteReg(self.initRegisterArray[i][0],self.initRegisterArray[i][1])
-		
+
 		self.paj7620SelectBank(self.BANK0)
-		
+
 		print("Paj7620 initialize register finished.")
-		
+
 	#Write a byte to a register on the Gesture sensor
 	def paj7620WriteReg(self,addr,cmd):
 		bus.write_word_data(self.PAJ7620_ID, addr, cmd)
-		
+
 	#Select a register bank on the Gesture Sensor
 	def paj7620SelectBank(self,bank):
 		if bank==self.BANK0:
 			self.paj7620WriteReg(self.PAJ7620_REGITER_BANK_SEL, self.PAJ7620_BANK0)
-			
+
 	#Read a block of bytes of length "qty" starting at address "addr" from the Gesture sensor
 	def paj7620ReadReg(self,addr,qty):
 		return bus.read_i2c_block_data(self.PAJ7620_ID, addr,qty)
-	
+
 	#Print the values from the gesture sensor
 	def print_gesture(self):
 		data=self.paj7620ReadReg(0x43,1)[0]
@@ -408,7 +385,7 @@ class gesture:
 				time.sleep(self.GES_QUIT_TIME)
 			else:
 				print("Right")
-				
+
 		elif data==self.GES_LEFT_FLAG:
 			time.sleep(self.GES_ENTRY_TIME)
 			data=self.paj7620ReadReg(0x43, 1)[0]
@@ -419,8 +396,8 @@ class gesture:
 				print("Backward")
 				time.sleep(self.GES_QUIT_TIME)
 			else:
-				print("Left")		
-		
+				print("Left")
+
 		elif data==self.GES_UP_FLAG:
 			time.sleep(self.GES_ENTRY_TIME)
 			data=self.paj7620ReadReg(0x43, 1)[0]
@@ -431,8 +408,8 @@ class gesture:
 				print("Backward")
 				time.sleep(self.GES_QUIT_TIME)
 			else:
-				print("Up")		
-				
+				print("Up")
+
 		elif data==self.GES_DOWN_FLAG:
 			time.sleep(self.GES_ENTRY_TIME)
 			data=self.paj7620ReadReg(0x43, 1)[0]
@@ -444,26 +421,26 @@ class gesture:
 				time.sleep(self.GES_QUIT_TIME)
 			else:
 				print("Down")
-		
+
 		elif data==self.GES_FORWARD_FLAG:
 			print("Forward")
 			time.sleep(self.GES_QUIT_TIME)
-			
+
 		elif data==self.GES_BACKWARD_FLAG:
 			print("Backward")
 			time.sleep(self.GES_QUIT_TIME)
-			
+
 		elif data==self.GES_CLOCKWISE_FLAG:
 			print("Clockwise")
-	
+
 		elif data==self.GES_COUNT_CLOCKWISE_FLAG:
 			print("anti-clockwise")
-			
+
 		else:
 			data1=self.paj7620ReadReg(0x44, 1)[0]
 			if (data1 == self.GES_WAVE_FLAG):
 				print("wave")
-	
+
 	#Return a vlaue from the gestire sensor which can be used in a program
 	# 	0:nothing
 	# 	1:Forward
@@ -489,7 +466,7 @@ class gesture:
 				time.sleep(self.GES_QUIT_TIME)
 			else:
 				return 3
-				
+
 		elif data==self.GES_LEFT_FLAG:
 			time.sleep(self.GES_ENTRY_TIME)
 			data=self.paj7620ReadReg(0x43, 1)[0]
@@ -500,8 +477,8 @@ class gesture:
 				return 2
 				time.sleep(self.GES_QUIT_TIME)
 			else:
-				return 4	
-		
+				return 4
+
 		elif data==self.GES_UP_FLAG:
 			time.sleep(self.GES_ENTRY_TIME)
 			data=self.paj7620ReadReg(0x43, 1)[0]
@@ -512,8 +489,8 @@ class gesture:
 				return 2
 				time.sleep(self.GES_QUIT_TIME)
 			else:
-				return 5		
-				
+				return 5
+
 		elif data==self.GES_DOWN_FLAG:
 			time.sleep(self.GES_ENTRY_TIME)
 			data=self.paj7620ReadReg(0x43, 1)[0]
@@ -525,27 +502,27 @@ class gesture:
 				time.sleep(self.GES_QUIT_TIME)
 			else:
 				return 6
-		
+
 		elif data==self.GES_FORWARD_FLAG:
 			return 1
 			time.sleep(self.GES_QUIT_TIME)
-			
+
 		elif data==self.GES_BACKWARD_FLAG:
 			return 2
 			time.sleep(self.GES_QUIT_TIME)
-			
+
 		elif data==self.GES_CLOCKWISE_FLAG:
 			return 7
 
 		elif data==self.GES_COUNT_CLOCKWISE_FLAG:
 			return 8
-			
+
 		else:
 			data1=self.paj7620ReadReg(0x44, 1)[0]
 			if (data1 == self.GES_WAVE_FLAG):
 				return 9
 		return 0
-		
+
 if __name__ == "__main__":
 	g=gesture()
 	g.init()
@@ -554,9 +531,3 @@ if __name__ == "__main__":
 		time.sleep(.1)
 		# print g.return_gesture()
 		# time.sleep(.1)
-		
-
-		
-		
-
-		
