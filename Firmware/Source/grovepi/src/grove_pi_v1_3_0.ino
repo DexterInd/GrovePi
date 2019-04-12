@@ -6,6 +6,7 @@
 #include "TimerOne.h"
 #include <IRremote.h>
 #include <Wire.h>
+#include <YetAnotherPcInt.h>
 
 DHT dht;
 Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you
