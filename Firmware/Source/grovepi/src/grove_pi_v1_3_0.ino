@@ -20,19 +20,19 @@ decode_results results; // results for the IR receiver
 
 #define SLAVE_ADDRESS 0x04
 
-#define dust_sensor_read_cmd 10
-#define dust_sensor_en_cmd 14
-#define dust_sensor_dis_cmd 15
-#define dust_sensor_int_cmd 9
-#define dust_sensor_read_int_cmd 6
+// #define dust_sensor_read_cmd 10
+// #define dust_sensor_en_cmd 14
+// #define dust_sensor_dis_cmd 15
+// #define dust_sensor_int_cmd 9
+// #define dust_sensor_read_int_cmd 6
 
-#define encoder_read_cmd 11
-#define encoder_en_cmd 16
-#define encoder_dis_cmd 17
+// #define encoder_read_cmd 11
+// #define encoder_en_cmd 16
+// #define encoder_dis_cmd 17
 
-#define flow_read_cmd 12
-#define flow_en_cmd 18
-#define flow_dis_cmd 13
+// #define flow_read_cmd 12
+// #define flow_en_cmd 18
+// #define flow_dis_cmd 13
 
 #define ir_read_cmd 21
 #define ir_recv_pin_cmd 22
@@ -531,52 +531,6 @@ void processIO() {
           }
         }
       }
-    } else if (cmd[0] == dust_sensor_en_cmd) {
-      dust_sensor_pin = cmd[1];
-      attachInterrupt(digitalPinToInterrupt(dust_sensor_pin), readPulseDust, CHANGE);
-      dust_run_bk = 1;
-      lowpulseoccupancy = 0;
-      starttime = millis();
-      cmd[0] = 0;
-    } else if (cmd[0] == dust_sensor_dis_cmd) {
-      detachInterrupt(digitalPinToInterrupt(dust_sensor_pin));
-      dust_run_bk = 0;
-      cmd[0] = 0;
-    } else if (cmd[0] == dust_sensor_int_cmd) {
-      sampletime_ms = cmd[1] + (cmd[2] << 8);
-      dust_latest = 0;
-    } else if (cmd[0] == dust_sensor_read_int_cmd) {
-      b[0] = cmd[0];
-      b[1] = sampletime_ms & 0xFF;
-      b[2] = sampletime_ms >> 8;
-    } else if (cmd[0] == dust_sensor_read_cmd) {
-      if (run_once == 1) {
-        b[0] = cmd[0];
-        b[1] = dust_latest;
-        b[2] = latest_dust_val & 0xFF;
-        b[3] = (latest_dust_val >> 8) & 0xFF;
-        b[4] = (latest_dust_val >> 16) & 0xFF;
-        run_once = 0;
-      }
-    } else if (cmd[0] == encoder_en_cmd) {
-      encoder.Timer_init();
-      enc_run_bk = 1;
-      cmd[0] = 0;
-    } else if (cmd[0] == encoder_dis_cmd) {
-      encoder.Timer_disable();
-      enc_run_bk = 0;
-    } else if (cmd[0] == flow_en_cmd) {
-      flow_sensor_pin = cmd[1];
-      pinMode(digitalPinToInterrupt(flow_sensor_pin), INPUT);
-      attachInterrupt(digitalPinToInterrupt(flow_sensor_pin), rpm, RISING);
-      NbTopsFan = 0;
-      flow_read_start = millis();
-      flow_run_bk = 1;
-      cmd[0] = 0;
-    } else if (cmd[0] == flow_dis_cmd) {
-      flow_run_bk = 0;
-      detachInterrupt(digitalPinToInterrupt(flow_sensor_pin));
-      cmd[0] = 0;
     } else if (cmd[0] == ir_recv_pin_cmd) {
       Serial.print(cmd[1]);
       irrecv.setRecvpin(cmd[1]);
@@ -601,37 +555,6 @@ void processIO() {
     } else if (cmd[0] == ir_read_isdata) {
       b[0] = cmd[0];
       b[1] = irrecv.decode(&results);
-    }
-  }
-  if (enc_run_bk) {
-    if (encoder.rotate_flag == 1) {
-      if (encoder.direct == 1) {
-        index_LED++;
-        if (index_LED > 24)
-          index_LED = 0;
-        enc_val[0] = cmd[0];
-        enc_val[1] = 1;
-        enc_val[2] = index_LED;
-      } else {
-        index_LED--;
-        if (index_LED < 0)
-          index_LED = 24;
-        enc_val[0] = cmd[0];
-        enc_val[1] = 1;
-        enc_val[2] = index_LED;
-      }
-      encoder.rotate_flag = 0;
-    }
-  }
-
-  if (flow_run_bk) {
-    if (millis() - flow_read_start > 2000) {
-      Calc = (NbTopsFan * 30 / 73);
-      flow_val[0] = 1;
-      flow_val[1] = Calc % 256;
-      flow_val[2] = Calc / 256;
-      NbTopsFan = 0;
-      flow_read_start = millis();
     }
   }
 }
@@ -687,60 +610,10 @@ void sendData() {
     if (cmd[0] == ir_read_isdata) {
       Wire.write((byte *)b, 2);
     }
-    if (cmd[0] == dust_sensor_read_cmd) {
-      Wire.write((byte *)b, 5);
-      dust_latest = 0;
-      cmd[0] = 0;
-    }
-    if (cmd[0] == dust_sensor_read_int_cmd) {
-      Wire.write((byte *)b, 3);
-      cmd[0] = 0;
-    }
-    if (cmd[0] == encoder_read_cmd) {
-      Wire.write((byte *)enc_val, 3);
-      enc_val[0] = enc_val[1] = 0;
-      cmd[0] = 0;
-    }
-    if (cmd[0] == flow_read_cmd) {
-      Wire.write((byte *)flow_val, 3);
-      flow_val[0] = 0;
-      cmd[0] = 0;
-    }
   }
   // otherwise just reply the Pi telling
   // there's no data available yet
   else {
     Wire.write(data_not_available);
   }
-}
-
-// ISR for the flow sensor
-void rpm() // This is the function that the interupt calls
-{
-  NbTopsFan++; // This function measures the rising and falling edge of the
-
-  // hall effect sensors signal
-}
-
-void readPulseDust() {
-  // PORTD |= 0x10;
-
-  t = micros();
-  l_status = digitalRead(dust_sensor_pin); // Represents if the line is low or high.
-  if (l_status)
-    // If the line is high (1), the pulse just ended
-    pulse_end = t;
-  else
-    // If the line is low (0), the pulse just started
-    pulse_start = t;
-
-  if (pulse_end > pulse_start) {
-    duration = (pulse_end - pulse_start) / 1000;
-    lowpulseoccupancy =
-        lowpulseoccupancy + duration; // Add to the pulse length.
-    pulse_end = 0; // If you don't reset this, you'll keep adding the pulse
-                   // length over and over.
-  }
-
-  // PORTD &= ~0x10;
 }
