@@ -152,11 +152,17 @@ chainableRgbLedSetModulo_cmd = [94]
 chainableRgbLedSetLevel_cmd = [95]
 
 # Read the button from IR sensor
-ir_read_cmd=[21]
+ir_read_cmd = [21]
 # Set pin for the IR receiver
-ir_recv_pin_cmd=[22]
+ir_recv_pin_cmd = [22]
 # Check if there's data coming from the IR receiver
-ir_read_isdata=[24]
+ir_read_isdata = [24]
+
+isr_set_cmd = [6]
+isr_unset_cmd = [9]
+isr_read_cmd = [10]
+isr_clear_cmd = [11]
+isr_active_cmd = [12]
 
 # Dust, Encoder & Flow Sensor commands
 # dust_sensor_read_cmd=[10]
@@ -546,6 +552,66 @@ def chainableRgbLed_setLevel(pin, level, reverse):
 	write_i2c_block(chainableRgbLedSetLevel_cmd + [pin, level, reverse])
 	read_i2c_block(no_bytes = 1)
 	return 1
+
+def set_pin_interrupt(pin, ftype, interrupt_mode, period):
+	'''
+	Attach an interrupt to a pin.
+
+	pin - D2-D8 pins
+	ftype - 0 for COUNT_CHANGES, 1 for COUNT_PULSES
+	interrupt_mode - 1 for CHANGE, 2 for FALLING, 3 for RISING
+	period - as measured in ms (max 65535 ms)
+	'''
+	period_high = period >> 8
+	period_low = period & 0xff
+	combined_params = (ftype & 0x03) + (interrupt_mode & 0x03) << 2
+	write_i2c_block(isr_set_cmd + [pin, combined_params, period_high, period_low])
+	read_i2c_block(no_bytes = 1)
+
+def unset_pin_interrupt(pin):
+	'''
+	Detach an interrupt from a pin.
+
+	pin - D2-D8 pins
+	'''
+	write_i2c_block(isr_unset_cmd + [pin])
+	read_i2c_block(no_bytes = 1)
+
+def unset_all_interrupts(pin):
+	'''
+	Detach all attached interrupts from all D2-D8 pins.
+
+	pin - D2-D8 pins
+	'''
+	write_i2c_block(isr_clear_cmd + [pin])
+	read_i2c_block(no_bytes = 1)
+
+def get_active_interrupts(pin):
+	'''
+	Get list of attached interrupts for a given pin or all of them.
+
+	pin - D2-D8 pins; if it's 255 return the state of all pins
+	'''
+	write_i2c_block(isr_active_cmd + [pin])
+	data = read_identified_i2c_block(isr_active_cmd, no_bytes = 2)
+	value = data[0] + data[1] << 8
+	
+	if pin == 255:
+		active_interrupts = [(value >> i) & 0x01 for i in range(2 * 8)]
+		return active_interrupts
+	else:
+		return value >> pin
+
+def read_interrupt_state(pin):
+	'''
+	Read number of pulses/changes on given port that occurred within a time period.
+
+	pin - D2-D8 pins
+	'''
+	write_i2c_block(isr_read_cmd + [pin])
+	data = read_identified_i2c_block(isr_read_cmd, no_bytes = 4)
+	value = data[0] + data[1] << 8 + data[2] << 16 + data[3] << 24
+	return value
 
 # def dust_sensor_en(pin = 2):
 # 	write_i2c_block(dust_sensor_en_cmd + [pin, unused, unused])

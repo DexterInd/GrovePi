@@ -12,8 +12,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "c:/Users/OboTh/Dropbox/Work/Repos/GrovePi/Firmware/Source/grovepi/.pioenvs/grovepi/firmware.elf",
-            "toolchainBinDir": "C:/Users/OboTh/.platformio/packages/toolchain-atmelavr/bin",
+            "executable": "c:/Users/rober/Dropbox/Work/Repos/GrovePi/Firmware/Source/grovepi/.pioenvs/grovepi/firmware.elf",
+            "toolchainBinDir": "C:/Users/rober/.platformio/packages/toolchain-atmelavr/bin",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug"
@@ -24,8 +24,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "c:/Users/OboTh/Dropbox/Work/Repos/GrovePi/Firmware/Source/grovepi/.pioenvs/grovepi/firmware.elf",
-            "toolchainBinDir": "C:/Users/OboTh/.platformio/packages/toolchain-atmelavr/bin",
+            "executable": "c:/Users/rober/Dropbox/Work/Repos/GrovePi/Firmware/Source/grovepi/.pioenvs/grovepi/firmware.elf",
+            "toolchainBinDir": "C:/Users/rober/.platformio/packages/toolchain-atmelavr/bin",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]

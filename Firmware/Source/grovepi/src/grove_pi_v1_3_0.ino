@@ -1,6 +1,5 @@
 #include "ChainableLED.h"
 #include "DHT.h"
-#include "Encoder.h"
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "TimerOne.h"
@@ -9,10 +8,8 @@
 #include <YetAnotherPcInt.h>
 
 DHT dht;
-Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you
-                         // can't use adjacent sockets, 4 pin display
-TM1637 fourdigit[6];     // 7 instances for D2-D8, however, max 4 displays, you
-                         // can't use adjacent sockets, 4 pin display
+Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you; can't use adjacent sockets, 4 pin display
+TM1637 fourdigit[6];     // 7 instances for D2-D8, however, max 4 displays, you; can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];  // 7 instances for D2-D8
 
 IRrecv irrecv;          // object to interface with the IR receiver
@@ -38,6 +35,12 @@ decode_results results; // results for the IR receiver
 #define ir_recv_pin_cmd 22
 #define ir_read_isdata 24
 
+#define isr_set_cmd 6
+#define isr_unset_cmd 9
+#define isr_read_cmd 10
+#define isr_clear_cmd 11
+#define isr_active_cmd 12
+
 #define data_not_available 23
 
 volatile uint8_t cmd[5];
@@ -45,6 +48,25 @@ volatile int index = 0;
 volatile int flag = 0;
 volatile byte b[21], float_array[4], dht_b[21];
 volatile bool need_extra_loop = false;
+int pin;
+
+const uint8_t total_ports = 9;
+enum ISR_Type {
+  COUNT_CHANGES, COUNT_PULSES
+};
+typedef struct {
+  volatile unsigned long period, last_update;
+} Tracked_time;
+typedef struct {
+  volatile unsigned long counted_duration, pulse_end, pulse_start;
+} Pulse_counter;
+
+volatile bool set_pcint[total_ports]; // to see which ports are being watched
+volatile uint8_t func_type[total_ports]; // type of counting function - COUNT_CHANGES or COUNT_PULSES
+Tracked_time tracked_time[total_ports]; // for tracking the time
+Pulse_counter pulse_counter[total_ports]; // for counting pulses
+volatile unsigned long change_counter[total_ports]; // for counting changes
+volatile uint32_t buffer[total_ports]; // to store the calculated values for transmission
 
 volatile int run_once;
 unsigned char dta[21];
@@ -54,46 +76,14 @@ byte accFlag = 0, clkFlag = 0;
 int8_t accv[3];
 byte rgb[] = {0, 0, 0};
 
-// Dust sensor variables:
-volatile uint16_t lowpulseoccupancy = 0;
-unsigned long latest_dust_val = 0;
-volatile unsigned long t, pulse_end, pulse_start, duration;
-volatile int dust_latest = 0;
-unsigned long starttime;
-unsigned long sampletime_ms = 30000; // sample 30s ;
-int dust_run_bk = 0;
-int l_status;
-
-// Pins used for interrupt routines
-volatile uint8_t dust_sensor_pin = 2;
-uint8_t flow_sensor_pin = 2;
-
-// Encoder variable
-int index_LED;
-volatile byte enc_val[3];
-// Given it's own I2C buffer so that it does not corrupt the
-// data from other sensors when running in background
-int enc_run_bk = 0; // Flag for first time setup
-
-// Flow sensor variables
-volatile int NbTopsFan; // measuring the rising edges of the signal
-volatile byte
-    flow_val[3]; // Given it's own I2C buffer so that it does not corrupt the
-                 // data from other sensors when running in background
-int Calc;
-int hallsensor = 2; // The pin location of the sensor
-int flow_run_bk = 0;
-long flow_read_start;
-int pin;
-int j;
-
 // all user-defined functions
 void processIO();
 void flushI2C();
 void receiveData();
 void sendData();
-void rpm();
-void readPulseDust();
+void detachISRPin(const uint8_t);
+void isr_buffer_filler();
+void isr_handler(uint8_t, bool);
 
 void setup() {
   Serial.begin(38400); // start serial for output
@@ -104,24 +94,11 @@ void setup() {
 
   DDRD |= 0x10;
   PORTD &= ~0x10;
+
+  Timer1.attachInterrupt(isr_buffer_filler, 1000);
 }
 
 void processIO() {
-  long dur, RangeCm;
-  // Dust sensor can run in background so has a dedicated if condition
-  if (dust_run_bk) {
-    float this_time = millis();
-    float current_time = this_time - starttime;
-    if (current_time > sampletime_ms) {
-      latest_dust_val = lowpulseoccupancy * sampletime_ms / current_time;
-      lowpulseoccupancy = 0;
-
-      starttime = this_time;
-      dust_latest = 1;
-
-      // Serial.println(latest_dust_val);
-    }
-  }
   if (index == 4 && flag == 0) {
     flag = 1;
     // Digital Read
@@ -165,8 +142,8 @@ void processIO() {
       // which is roughly the equivalent of time needed for the sound
       // to travel 10 meters from the sensor to the target
       // and backwards - where the speed of sound is 343m/s
-      dur = pulseIn(pin, HIGH, 75000);
-      RangeCm = dur / 29 / 2;
+      long dur = pulseIn(pin, HIGH, 75000);
+      long RangeCm = dur / 29 / 2;
       b[0] = cmd[0];
       b[1] = RangeCm / 256;
       b[2] = RangeCm % 256;
@@ -201,9 +178,9 @@ void processIO() {
         byte *b2 = (byte *)(buffer + 1);
 
         dht_b[0] = cmd[0];
-        for (j = 1; j < 5; j++)
+        for (uint8_t j = 1; j < 5; j++)
           dht_b[j] = b1[j - 1];
-        for (j = 5; j < 9; j++)
+        for (uint8_t j = 5; j < 9; j++)
           dht_b[j] = b2[j - 5];
         run_once = 0;
       }
@@ -556,6 +533,71 @@ void processIO() {
       b[0] = cmd[0];
       b[1] = irrecv.decode(&results);
     }
+  } else if (cmd[0] == isr_set_cmd) {
+
+    uint8_t pin = cmd[1]; // on pin D2->D8
+    const uint8_t ftype = cmd[2] & 0x03; // take 1st & 2nd bits
+    const uint8_t interrupt_mode = (cmd[2] >> 2) & 0x03; // take 3rd and 4th bit
+    const uint16_t period = (cmd[3] << 8) + cmd[4]; // get period in ms (maximum 65535 sms)
+
+    Serial.println(pin);
+    Serial.println(ftype);
+    Serial.println(interrupt_mode);
+    Serial.println(period);
+
+    pinMode(pin, INPUT_PULLUP);
+    set_pcint[pin] = true;
+    func_type[pin] = ftype;
+    tracked_time[pin] = Tracked_time({period, 0});
+    if (ftype == COUNT_CHANGES) {
+      PcInt::attachInterrupt(pin, isr_handler, &pin, interrupt_mode, false);
+    } else if (ftype == COUNT_PULSES) {
+      pulse_counter[pin] = Pulse_counter({0, 0, 0});
+      PcInt::attachInterrupt(pin, isr_handler, &pin, CHANGE, false);
+    }
+
+  } else if (cmd[0] == isr_unset_cmd) {
+    
+    // detach pin from PCINT
+    const uint8_t pin = cmd[1];
+    detachISRPin(pin);
+
+  } else if (cmd[0] == isr_read_cmd) {
+
+    const uint8_t pin = cmd[1]; // from pin D2->D8
+    const uint32_t val = buffer[pin];
+    b[0] = cmd[0];
+    b[1] = val & 0xff;
+    b[2] = (val >> 8) & 0xff;
+    b[3] = (val >> 16) & 0xff;
+    b[4] = (val >> 24) & 0xff;
+
+  } else if (cmd[0] == isr_clear_cmd) {
+
+    // detach all pins from PCINT
+    for (int idx = 0; idx < total_ports; idx++) {
+      if (set_pcint[idx]) {
+        detachISRPin(idx);
+      }
+    }
+    
+  } else if (cmd[0] == isr_active_cmd) {
+    const uint8_t pin = cmd[1];
+
+    if (pin > total_ports) {
+      uint16_t ports = 0;
+      for (int idx = 0; idx < total_ports; idx++) {
+        ports += (set_pcint[idx] & 0x01) << idx;
+      }
+
+      b[0] = cmd[0];
+      b[1] = ports & 0xff;
+      b[2] = (ports >> 8) & 0xff;
+    } else {
+      b[0] = cmd[0];
+      b[1] = 0;
+      b[2] = (set_pcint[pin] & 0x01) << pin;
+    }
   }
 }
 
@@ -602,18 +644,83 @@ void sendData() {
       Wire.write((byte *)b, 9);
     if (cmd[0] == 40)
       Wire.write((byte *)dht_b, 9);
-
+    if (cmd[0] == isr_read_cmd)
+      Wire.write((byte *)b, 5);
+    if (cmd[0] == isr_active_cmd)
+      Wire.write((byte *)b, 3);
     if (cmd[0] == ir_read_cmd) {
       Wire.write((byte *)b, 8);
       b[0] = 0;
     }
-    if (cmd[0] == ir_read_isdata) {
+    if (cmd[0] == ir_read_isdata)
       Wire.write((byte *)b, 2);
-    }
   }
   // otherwise just reply the Pi telling
   // there's no data available yet
   else {
     Wire.write(data_not_available);
+  }
+}
+
+void detachISRPin(const uint8_t pin) {
+  // detach pin from PCINT
+  PcInt::detachInterrupt(pin);
+  pinMode(pin, OUTPUT);
+  set_pcint[pin] = false;
+}
+
+void isr_buffer_filler() {
+  PORTD |= 0x10;
+
+  const unsigned long current = micros() / 1000;
+  // iterate over all possible interrupted pins
+  for (int idx = 0; idx < total_ports; idx++) {
+    // if the pin has been attached to an interrupt
+    if (set_pcint[idx]) {
+      const unsigned long elapsed_time = current - tracked_time[idx].last_update;
+      // if more time than the associated period has passed
+      if (elapsed_time >= tracked_time[idx].period) {
+          // save and reset depending on the selected function
+          switch (func_type[idx]) {
+            case COUNT_CHANGES:
+              buffer[idx] = change_counter[idx];
+              change_counter[idx] = 0;
+              break;
+            case COUNT_PULSES:
+              buffer[idx] = pulse_counter[idx].counted_duration * tracked_time[idx].period / elapsed_time;
+              pulse_counter[idx].counted_duration = 0;
+              break;
+          }
+          // update time
+          tracked_time[idx].last_update = current;
+      }
+    }
+  }
+
+  PORTD &= ~0x10;
+}
+ 
+void isr_handler(uint8_t pin, bool newstate) {
+  if (func_type[pin] == COUNT_CHANGES) {
+
+    // count changes
+    change_counter[pin] ++;
+
+  } else if (func_type[pin] == COUNT_PULSES) {
+
+    // count duration
+    if (newstate == 0) {
+      pulse_counter[pin].pulse_end = micros();
+    } else {
+      pulse_counter[pin].pulse_start = micros();
+    }
+    const unsigned long pulse_end = pulse_counter[pin].pulse_end;
+    const unsigned long pulse_start = pulse_counter[pin].pulse_start;
+    if(pulse_end > pulse_start) {
+      const unsigned long duration = int((pulse_end - pulse_start) / 1000); // to get ms
+      pulse_counter[pin].counted_duration += duration;
+      pulse_counter[pin].pulse_end = 0;
+    }
+
   }
 }
