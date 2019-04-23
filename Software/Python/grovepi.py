@@ -564,8 +564,8 @@ def set_pin_interrupt(pin, ftype, interrupt_mode, period):
 	'''
 	period_high = period >> 8
 	period_low = period & 0xff
-	combined_params = (ftype & 0x03) + (interrupt_mode & 0x03) << 2
-	write_i2c_block(isr_set_cmd + [pin, combined_params, period_high, period_low])
+	combined_params = (pin & 0x0f) + ((ftype & 0x03) << 4) + ((interrupt_mode & 0x03) << 6)
+	write_i2c_block(isr_set_cmd + [combined_params, period_high, period_low])
 	read_i2c_block(no_bytes = 1)
 
 def unset_pin_interrupt(pin):
@@ -574,33 +574,34 @@ def unset_pin_interrupt(pin):
 
 	pin - D2-D8 pins
 	'''
-	write_i2c_block(isr_unset_cmd + [pin])
+	write_i2c_block(isr_unset_cmd + [pin, unused, unused])
 	read_i2c_block(no_bytes = 1)
 
-def unset_all_interrupts(pin):
+def unset_all_interrupts():
 	'''
 	Detach all attached interrupts from all D2-D8 pins.
 
 	pin - D2-D8 pins
 	'''
-	write_i2c_block(isr_clear_cmd + [pin])
+	write_i2c_block(isr_clear_cmd + 3 * [unused])
 	read_i2c_block(no_bytes = 1)
 
-def get_active_interrupts(pin):
+def get_active_interrupts(pin = 255):
 	'''
 	Get list of attached interrupts for a given pin or all of them.
 
 	pin - D2-D8 pins; if it's 255 return the state of all pins
 	'''
-	write_i2c_block(isr_active_cmd + [pin])
+	write_i2c_block(isr_active_cmd + [pin, unused, unused])
 	data = read_identified_i2c_block(isr_active_cmd, no_bytes = 2)
-	value = data[0] + data[1] << 8
 	
 	if pin == 255:
-		active_interrupts = [(value >> i) & 0x01 for i in range(2 * 8)]
+		value = data[0] + (data[1] << 8)
+		active_interrupts = [i for i in range(2 * 8) if ((value >> i) & 0x01)]
 		return active_interrupts
 	else:
-		return value >> pin
+		value  = data[1] >> pin
+		return value
 
 def read_interrupt_state(pin):
 	'''
@@ -608,7 +609,7 @@ def read_interrupt_state(pin):
 
 	pin - D2-D8 pins
 	'''
-	write_i2c_block(isr_read_cmd + [pin])
+	write_i2c_block(isr_read_cmd + [pin, unused, unused])
 	data = read_identified_i2c_block(isr_read_cmd, no_bytes = 4)
 	value = data[0] + data[1] << 8 + data[2] << 16 + data[3] << 24
 	return value

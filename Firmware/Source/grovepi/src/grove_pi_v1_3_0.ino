@@ -535,32 +535,42 @@ void processIO() {
     }
   } else if (cmd[0] == isr_set_cmd) {
 
-    uint8_t pin = cmd[1]; // on pin D2->D8
-    const uint8_t ftype = cmd[2] & 0x03; // take 1st & 2nd bits
-    const uint8_t interrupt_mode = (cmd[2] >> 2) & 0x03; // take 3rd and 4th bit
-    const uint16_t period = (cmd[3] << 8) + cmd[4]; // get period in ms (maximum 65535 sms)
+    if (run_once == 1) {
+      uint8_t pin = cmd[1] & 0x0f; // 1st 4 bits to determine pin (D2->D8)
+      const uint8_t ftype = (cmd[1] >> 4) & 0x03; // take 5th & 6th bits
+      const uint8_t interrupt_mode = (cmd[1] >> 6) & 0x03; // take 7th and 8th bit
+      const uint16_t period = (cmd[2] << 8) + cmd[3]; // get period in ms (maximum 65535 sms)
 
-    Serial.println(pin);
-    Serial.println(ftype);
-    Serial.println(interrupt_mode);
-    Serial.println(period);
+      // detach pin if it's already set
+      if (set_pcint[pin]) {
+        detachISRPin(pin);
+      }
 
-    pinMode(pin, INPUT_PULLUP);
-    set_pcint[pin] = true;
-    func_type[pin] = ftype;
-    tracked_time[pin] = Tracked_time({period, 0});
-    if (ftype == COUNT_CHANGES) {
-      PcInt::attachInterrupt(pin, isr_handler, &pin, interrupt_mode, false);
-    } else if (ftype == COUNT_PULSES) {
-      pulse_counter[pin] = Pulse_counter({0, 0, 0});
-      PcInt::attachInterrupt(pin, isr_handler, &pin, CHANGE, false);
+      pinMode(pin, INPUT_PULLUP);
+      set_pcint[pin] = true;
+      func_type[pin] = ftype;
+      tracked_time[pin] = Tracked_time({period, 0});
+      if (ftype == COUNT_CHANGES) {
+        Serial.print("a");
+        Serial.print(pin);
+        Serial.print("b");
+        CHANGE; RISING; FALLING;
+        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pin), interrupt_mode, true);
+      } else if (ftype == COUNT_PULSES) {
+        pulse_counter[pin] = Pulse_counter({0, 0, 0});
+        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pin), CHANGE, false);
+      }
+      run_once = 0;
     }
 
   } else if (cmd[0] == isr_unset_cmd) {
     
-    // detach pin from PCINT
-    const uint8_t pin = cmd[1];
-    detachISRPin(pin);
+    if (run_once == 1) {
+      // detach pin from PCINT
+      const uint8_t pin = cmd[1];
+      detachISRPin(pin);
+      run_once = 0;
+    }
 
   } else if (cmd[0] == isr_read_cmd) {
 
@@ -574,10 +584,12 @@ void processIO() {
 
   } else if (cmd[0] == isr_clear_cmd) {
 
-    // detach all pins from PCINT
-    for (int idx = 0; idx < total_ports; idx++) {
-      if (set_pcint[idx]) {
-        detachISRPin(idx);
+    if (run_once == 1) {
+      // detach all pins from PCINT
+      for (int idx = 0; idx < total_ports; idx++) {
+        if (set_pcint[idx]) {
+          detachISRPin(idx);
+        }
       }
     }
     
@@ -670,7 +682,7 @@ void detachISRPin(const uint8_t pin) {
 }
 
 void isr_buffer_filler() {
-  PORTD |= 0x10;
+  // PORTD |= 0x10;
 
   const unsigned long current = micros() / 1000;
   // iterate over all possible interrupted pins
@@ -697,14 +709,21 @@ void isr_buffer_filler() {
     }
   }
 
-  PORTD &= ~0x10;
+  // PORTD &= ~0x10;
 }
  
-void isr_handler(uint8_t pin, bool newstate) {
+void isr_handler(void *userdata, bool newstate) {
+
+  PORTD |= 0x10;
+
+  const uint8_t pin = *((uint8_t*)userdata);
+
   if (func_type[pin] == COUNT_CHANGES) {
 
     // count changes
     change_counter[pin] ++;
+
+    Serial.println(pin);
 
   } else if (func_type[pin] == COUNT_PULSES) {
 
@@ -723,4 +742,7 @@ void isr_handler(uint8_t pin, bool newstate) {
     }
 
   }
+
+  PORTD &= ~0x10;
+
 }
