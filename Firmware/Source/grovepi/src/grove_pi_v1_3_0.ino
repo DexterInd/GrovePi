@@ -61,6 +61,7 @@ typedef struct {
   volatile unsigned long counted_duration, pulse_end, pulse_start;
 } Pulse_counter;
 
+volatile uint8_t pins[total_ports]; // to track the available pins (passes the address to PcInt attachInterrupt method)
 volatile bool set_pcint[total_ports]; // to see which ports are being watched
 volatile uint8_t func_type[total_ports]; // type of counting function - COUNT_CHANGES or COUNT_PULSES
 Tracked_time tracked_time[total_ports]; // for tracking the time
@@ -86,15 +87,23 @@ void isr_buffer_filler();
 void isr_handler(uint8_t, bool);
 
 void setup() {
-  Serial.begin(38400); // start serial for output
+  // Start serial
+  Serial.begin(38400);
+  
+  // Start I2C
   Wire.begin(SLAVE_ADDRESS);
-
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
 
+  // Set port 4 to output and set it to LOW
   DDRD |= 0x10;
   PORTD &= ~0x10;
 
+  // initialize the pins array with the ports itself
+  for(int i = 0; i < total_ports; i++) {
+    pins[i] = i;
+  }
+  
   Timer1.attachInterrupt(isr_buffer_filler, 1000);
 }
 
@@ -554,11 +563,11 @@ void processIO() {
         Serial.print("a");
         Serial.print(pin);
         Serial.print("b");
-        CHANGE; RISING; FALLING;
-        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pin), interrupt_mode, true);
+        // CHANGE; RISING; FALLING;
+        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pins[pin]), interrupt_mode, true);
       } else if (ftype == COUNT_PULSES) {
         pulse_counter[pin] = Pulse_counter({0, 0, 0});
-        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pin), CHANGE, false);
+        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pins[pin]), CHANGE, false);
       }
       run_once = 0;
     }
@@ -722,8 +731,6 @@ void isr_handler(void *userdata, bool newstate) {
 
     // count changes
     change_counter[pin] ++;
-
-    Serial.println(pin);
 
   } else if (func_type[pin] == COUNT_PULSES) {
 

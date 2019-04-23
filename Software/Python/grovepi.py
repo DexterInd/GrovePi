@@ -611,7 +611,7 @@ def read_interrupt_state(pin):
 	'''
 	write_i2c_block(isr_read_cmd + [pin, unused, unused])
 	data = read_identified_i2c_block(isr_read_cmd, no_bytes = 4)
-	value = data[0] + data[1] << 8 + data[2] << 16 + data[3] << 24
+	value = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)
 	return value
 
 # def dust_sensor_en(pin = 2):
