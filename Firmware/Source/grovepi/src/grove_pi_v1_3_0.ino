@@ -583,13 +583,16 @@ void processIO() {
 
   } else if (cmd[0] == isr_read_cmd) {
 
-    const uint8_t pin = cmd[1]; // from pin D2->D8
-    const uint32_t val = buffer[pin];
-    b[0] = cmd[0];
-    b[1] = val & 0xff;
-    b[2] = (val >> 8) & 0xff;
-    b[3] = (val >> 16) & 0xff;
-    b[4] = (val >> 24) & 0xff;
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1]; // from pin D2->D8
+      const uint32_t val = buffer[pin];
+      b[0] = cmd[0];
+      b[1] = val & 0xff;
+      b[2] = (val >> 8) & 0xff;
+      b[3] = (val >> 16) & 0xff;
+      b[4] = (val >> 24) & 0xff;
+      run_once = 0;
+    }
 
   } else if (cmd[0] == isr_clear_cmd) {
 
@@ -603,21 +606,25 @@ void processIO() {
     }
     
   } else if (cmd[0] == isr_active_cmd) {
-    const uint8_t pin = cmd[1];
 
-    if (pin > total_ports) {
-      uint16_t ports = 0;
-      for (int idx = 0; idx < total_ports; idx++) {
-        ports += (set_pcint[idx] & 0x01) << idx;
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+
+      if (pin > total_ports) {
+        uint16_t ports = 0;
+        for (int idx = 0; idx < total_ports; idx++) {
+          ports += (set_pcint[idx] & 0x01) << idx;
+        }
+
+        b[0] = cmd[0];
+        b[1] = ports & 0xff;
+        b[2] = (ports >> 8) & 0xff;
+      } else {
+        b[0] = cmd[0];
+        b[1] = 0;
+        b[2] = (set_pcint[pin] & 0x01) << pin;
       }
-
-      b[0] = cmd[0];
-      b[1] = ports & 0xff;
-      b[2] = (ports >> 8) & 0xff;
-    } else {
-      b[0] = cmd[0];
-      b[1] = 0;
-      b[2] = (set_pcint[pin] & 0x01) << pin;
+      run_once = 0;
     }
   }
 }
@@ -723,7 +730,7 @@ void isr_buffer_filler() {
  
 void isr_handler(void *userdata, bool newstate) {
 
-  PORTD |= 0x10;
+  // PORTD |= 0x10;
 
   const uint8_t pin = *((uint8_t*)userdata);
 
@@ -750,6 +757,6 @@ void isr_handler(void *userdata, bool newstate) {
 
   }
 
-  PORTD &= ~0x10;
+  // PORTD &= ~0x10;
 
 }
