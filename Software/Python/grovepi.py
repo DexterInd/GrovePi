@@ -627,7 +627,7 @@ def read_interrupt_state(pin):
 	return value
 
 def dust_sensor_en(pin = 2, period = 30000):
-	set_pin_interrupt(pin, ftype=1, interrupt_mode=1, period=period)
+	set_pin_interrupt(pin, ftype=COUNT_LOW_DURATION, interrupt_mode=CHANGE, period=period)
 
 def dust_sensor_dis(pin = 2):
 	unset_pin_interrupt(pin)
@@ -662,7 +662,7 @@ def encoderRead(pin = 2):
 	return value
 
 def flowEnable(pin = 2, period = 2000):
-	set_pin_interrupt(pin, ftype=0, interrupt_mode=1, period=period)
+	set_pin_interrupt(pin, ftype=COUNT_CHANGES, interrupt_mode=RISING, period=period)
 
 def flowDisable(pin = 2):
 	unset_pin_interrupt(pin)
