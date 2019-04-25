@@ -69,6 +69,15 @@ works_with_firmware = [
 	"1.3.0"
 ]
 
+# interrupt operations
+COUNT_CHANGES = 0
+COUNT_LOW_DURATION = 1
+
+# interrupt trigger mode
+CHANGE = 1
+FALLING = 2
+RISING = 3
+
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 retries = 10
@@ -559,7 +568,7 @@ def set_pin_interrupt(pin, ftype, interrupt_mode, period):
 	Attach an interrupt to a pin.
 
 	pin - D2-D8 pins
-	ftype - 0 for COUNT_CHANGES, 1 for COUNT_PULSES
+	ftype - 0 for COUNT_CHANGES, 1 for COUNT_LOW_DURATION
 	interrupt_mode - 1 for CHANGE, 2 for FALLING, 3 for RISING
 	period - as measured in ms (max 65535 ms)
 	'''
@@ -624,14 +633,14 @@ def dust_sensor_dis(pin = 2):
 	unset_pin_interrupt(pin)
 
 def dust_sensor_read(pin = 2, period = 30000):
-	"""
+	'''
 	By default, the sample rate is set to 1 at every 30 seconds and this
 	function was written only for that interval.
 
 	If you wish to use a different
 	interval, then use dust_sensor_read_more function. To set a
 	different interval, use set_dust_sensor_interval function.
-	"""
+	'''
 	lpo = read_interrupt_state(pin)
 	percentage = 100.0 * lpo / period
 	concentration = 1.1 * percentage ** 3 - 3.8 * percentage ** 2 + 520 * percentage + 0.62

@@ -54,9 +54,10 @@ volatile byte b[21], float_array[4], dht_b[21];
 volatile bool need_extra_loop = false;
 int pin;
 
+// for interrupt stuff
 const uint8_t total_ports = 9;
 enum ISR_Type {
-  COUNT_CHANGES, COUNT_PULSES
+  COUNT_CHANGES, COUNT_LOW_DURATION
 };
 typedef struct {
   volatile unsigned long period, last_update;
@@ -67,12 +68,13 @@ typedef struct {
 
 volatile uint8_t pins[total_ports]; // to track the available pins (passes the address to PcInt attachInterrupt method)
 volatile bool set_pcint[total_ports]; // to see which ports are being watched
-volatile uint8_t func_type[total_ports]; // type of counting function - COUNT_CHANGES or COUNT_PULSES
+volatile uint8_t func_type[total_ports]; // type of counting function - COUNT_CHANGES or COUNT_LOW_DURATION
 Tracked_time tracked_time[total_ports]; // for tracking the time
 Pulse_counter pulse_counter[total_ports]; // for counting pulses
 volatile unsigned long change_counter[total_ports]; // for counting changes
 volatile uint32_t buffer[total_ports]; // to store the calculated values for transmission
 
+// for encoders
 typedef struct {
   volatile uint8_t LOW_PIN, HIGH_PIN;
   volatile int32_t value;
@@ -572,7 +574,7 @@ void processIO() {
       tracked_time[pin] = Tracked_time({period, 0});
       if (ftype == COUNT_CHANGES) {
         PcInt::attachInterrupt<uint8_t>(pin, isr_handler, (uint8_t*)&pins[pin], interrupt_mode, true);
-      } else if (ftype == COUNT_PULSES) {
+      } else if (ftype == COUNT_LOW_DURATION) {
         pulse_counter[pin] = Pulse_counter({0, 0, 0});
         PcInt::attachInterrupt<uint8_t>(pin, isr_handler, (uint8_t*)&pins[pin], CHANGE, false);
       }
@@ -752,6 +754,7 @@ void sendData() {
   }
 }
 
+// detaching an PCINT interrupt from a given pin
 void detachISRPin(const uint8_t pin) {
   // detach pin from PCINT
   if (set_pcint[pin]) {
@@ -761,6 +764,7 @@ void detachISRPin(const uint8_t pin) {
   }
 }
 
+// repeatedly called ISR to update values on each interrupt-enabled pin
 void isr_buffer_filler() {
   // PORTD |= 0x10;
 
@@ -778,7 +782,7 @@ void isr_buffer_filler() {
               buffer[idx] = change_counter[idx];
               change_counter[idx] = 0;
               break;
-            case COUNT_PULSES:
+            case COUNT_LOW_DURATION:
               buffer[idx] = pulse_counter[idx].counted_duration * tracked_time[idx].period / elapsed_time;
               pulse_counter[idx].counted_duration = 0;
               break;
@@ -792,6 +796,7 @@ void isr_buffer_filler() {
   // PORTD &= ~0x10;
 }
  
+ // interrupt handler for COUNT_CHANGES & COUNT_LOW_DURATION operations
 void isr_handler(uint8_t *userdata, bool newstate) {
 
   // PORTD |= 0x10;
@@ -804,7 +809,7 @@ void isr_handler(uint8_t *userdata, bool newstate) {
     // count changes
     change_counter[pin] ++;
 
-  } else if (func_type[pin] == COUNT_PULSES) {
+  } else if (func_type[pin] == COUNT_LOW_DURATION) {
 
     // count duration
     if (newstate == 0) {
@@ -826,6 +831,7 @@ void isr_handler(uint8_t *userdata, bool newstate) {
 
 }
 
+// interrupt handler for grove encoders
 void grove_encoder_handler(GroveEncoder *ge) {
   // PORTD |= 0x10;
 
