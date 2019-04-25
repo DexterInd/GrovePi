@@ -41,6 +41,10 @@ decode_results results; // results for the IR receiver
 #define isr_clear_cmd 11
 #define isr_active_cmd 12
 
+#define encoder_read_cmd 13
+#define encoder_en_cmd 14
+#define encoder_dis_cmd 15
+
 #define data_not_available 23
 
 volatile uint8_t cmd[5];
@@ -68,6 +72,13 @@ Tracked_time tracked_time[total_ports]; // for tracking the time
 Pulse_counter pulse_counter[total_ports]; // for counting pulses
 volatile unsigned long change_counter[total_ports]; // for counting changes
 volatile uint32_t buffer[total_ports]; // to store the calculated values for transmission
+
+typedef struct {
+  volatile uint8_t LOW_PIN, HIGH_PIN;
+  volatile int32_t value;
+  volatile uint8_t MAX_VAL = 32;
+} GroveEncoder; 
+GroveEncoder ge[total_ports];
 
 volatile int run_once;
 unsigned char dta[21];
@@ -560,14 +571,10 @@ void processIO() {
       func_type[pin] = ftype;
       tracked_time[pin] = Tracked_time({period, 0});
       if (ftype == COUNT_CHANGES) {
-        Serial.print("a");
-        Serial.print(pin);
-        Serial.print("b");
-        // CHANGE; RISING; FALLING;
-        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pins[pin]), interrupt_mode, true);
+        PcInt::attachInterrupt<uint8_t>(pin, isr_handler, (uint8_t*)&pins[pin], interrupt_mode, true);
       } else if (ftype == COUNT_PULSES) {
         pulse_counter[pin] = Pulse_counter({0, 0, 0});
-        PcInt::attachInterrupt(pin, isr_handler, (void*)(&pins[pin]), CHANGE, false);
+        PcInt::attachInterrupt<uint8_t>(pin, isr_handler, (uint8_t*)&pins[pin], CHANGE, false);
       }
       run_once = 0;
     }
@@ -626,6 +633,58 @@ void processIO() {
       }
       run_once = 0;
     }
+  } else if (cmd[0] == encoder_en_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+      const uint8_t steps = cmd[2];
+      if (pin < total_ports - 1) {
+          // detach pin if it's already set
+        if (set_pcint[pin]) {
+          detachISRPin(pin);
+          detachISRPin(pin + 1);
+        }
+        ge[pin].LOW_PIN = pin;
+        ge[pin].HIGH_PIN = pin + 1;
+        ge[pin].value = 0;
+        ge[pin].MAX_VAL = steps;
+        pinMode(ge[pin].LOW_PIN, INPUT_PULLUP);
+        pinMode(ge[pin].HIGH_PIN, INPUT_PULLUP);
+        set_pcint[pin] = set_pcint[pin + 1] = true;
+        PcInt::attachInterrupt<GroveEncoder>(ge[pin].LOW_PIN, grove_encoder_handler, &ge[pin], FALLING, false);
+        PcInt::attachInterrupt<GroveEncoder>(ge[pin].HIGH_PIN, grove_encoder_handler, &ge[pin], FALLING, false);
+      }
+      run_once = 0;
+    }
+
+  } else if (cmd[0] == encoder_read_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+      const int value = ge[pin].value;
+      Serial.print(value);
+      Serial.print("\n");
+
+      b[0] = cmd[0];
+      b[1] = value & 0xff;
+      b[2] = (value >> 8) & 0xff;
+      b[3] = (value >> 16) & 0xff;
+      b[4] = (value >> 24) & 0xff;
+
+      run_once = 0;
+    }
+
+  } else if (cmd[0] == encoder_dis_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+      if (pin < total_ports - 1) {
+        detachISRPin(pin);
+        detachISRPin(pin + 1);
+      }
+      run_once = 0;
+    }
+
   }
 }
 
@@ -680,6 +739,9 @@ void sendData() {
       Wire.write((byte *)b, 8);
       b[0] = 0;
     }
+    if (cmd[0] == encoder_read_cmd) {
+      Wire.write((byte *)b, 5);
+    }
     if (cmd[0] == ir_read_isdata)
       Wire.write((byte *)b, 2);
   }
@@ -692,9 +754,11 @@ void sendData() {
 
 void detachISRPin(const uint8_t pin) {
   // detach pin from PCINT
-  PcInt::detachInterrupt(pin);
-  pinMode(pin, OUTPUT);
-  set_pcint[pin] = false;
+  if (set_pcint[pin]) {
+    PcInt::detachInterrupt(pin);
+    pinMode(pin, OUTPUT);
+    set_pcint[pin] = false;
+  }
 }
 
 void isr_buffer_filler() {
@@ -728,11 +792,12 @@ void isr_buffer_filler() {
   // PORTD &= ~0x10;
 }
  
-void isr_handler(void *userdata, bool newstate) {
+void isr_handler(uint8_t *userdata, bool newstate) {
 
   // PORTD |= 0x10;
 
-  const uint8_t pin = *((uint8_t*)userdata);
+  // const uint8_t pin = *((uint8_t*)userdata);
+  const uint8_t pin = *userdata;
 
   if (func_type[pin] == COUNT_CHANGES) {
 
@@ -743,9 +808,9 @@ void isr_handler(void *userdata, bool newstate) {
 
     // count duration
     if (newstate == 0) {
-      pulse_counter[pin].pulse_end = micros();
-    } else {
       pulse_counter[pin].pulse_start = micros();
+    } else {
+      pulse_counter[pin].pulse_end = micros();
     }
     const unsigned long pulse_end = pulse_counter[pin].pulse_end;
     const unsigned long pulse_start = pulse_counter[pin].pulse_start;
@@ -759,4 +824,29 @@ void isr_handler(void *userdata, bool newstate) {
 
   // PORTD &= ~0x10;
 
+}
+
+void grove_encoder_handler(GroveEncoder *ge) {
+  // PORTD |= 0x10;
+
+  const uint8_t valA = digitalRead(ge->LOW_PIN);
+  const uint8_t valB = digitalRead(ge->HIGH_PIN);
+
+  if (valA + valB > 0 && valA + valB < 2) {
+    if (valA < valB) {
+      ge->value += 1;
+    } else {
+      ge->value -= 1;
+    }
+  }
+
+  if (ge->value < 0)
+    ge->value = 0;
+  else if (ge->value > ge->MAX_VAL)
+    ge->value = ge->MAX_VAL;
+
+  Serial.println(ge->LOW_PIN);
+  Serial.println(ge->HIGH_PIN);
+
+  // PORTD &= ~0x10;
 }

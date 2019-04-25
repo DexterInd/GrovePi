@@ -158,11 +158,17 @@ ir_recv_pin_cmd = [22]
 # Check if there's data coming from the IR receiver
 ir_read_isdata = [24]
 
+# Interrupt-based devices
 isr_set_cmd = [6]
 isr_unset_cmd = [9]
 isr_read_cmd = [10]
 isr_clear_cmd = [11]
 isr_active_cmd = [12]
+
+# Grove Encoders
+encoder_read_cmd = [13]
+encoder_en_cmd = [14]
+encoder_dis_cmd = [15]
 
 # Dust, Encoder & Flow Sensor commands
 # dust_sensor_read_cmd=[10]
@@ -170,9 +176,6 @@ isr_active_cmd = [12]
 # dust_sensor_dis_cmd=[15]
 # dust_sensor_int_cmd=[9]
 # dust_sensor_read_int_cmd=[6]
-# encoder_read_cmd=[11]
-# encoder_en_cmd=[16]
-# encoder_dis_cmd=[17]
 # flow_read_cmd=[12]
 # flow_disable_cmd=[13]
 # flow_en_cmd=[18]
@@ -309,8 +312,6 @@ def rtc_getTime():
 def dht(pin, module_type):
 	write_i2c_block(dht_temp_cmd + [pin, module_type, unused])
 	number = read_identified_i2c_block(dht_temp_cmd, no_bytes = 8)
-
-	print(number)
 
 	if p_version==2:
 		h=''
@@ -586,22 +587,24 @@ def unset_all_interrupts():
 	write_i2c_block(isr_clear_cmd + 3 * [unused])
 	read_i2c_block(no_bytes = 1)
 
-def get_active_interrupts(pin = 255):
+def is_interrupt_active(pin):
+	write_i2c_block(isr_active_cmd + [pin, unused, unused])
+	data = read_identified_i2c_block(isr_active_cmd, no_bytes = 2)
+	value  = data[1] >> pin
+	return value
+
+def get_active_interrupts():
 	'''
 	Get list of attached interrupts for a given pin or all of them.
 
 	pin - D2-D8 pins; if it's 255 return the state of all pins
 	'''
+	pin = 255
 	write_i2c_block(isr_active_cmd + [pin, unused, unused])
 	data = read_identified_i2c_block(isr_active_cmd, no_bytes = 2)
-	
-	if pin == 255:
-		value = data[0] + (data[1] << 8)
-		active_interrupts = [i for i in range(2 * 8) if ((value >> i) & 0x01)]
-		return active_interrupts
-	else:
-		value  = data[1] >> pin
-		return value
+	value = data[0] + (data[1] << 8)
+	active_interrupts = [i for i in range(2 * 8) if ((value >> i) & 0x01)]
+	return active_interrupts
 
 def read_interrupt_state(pin):
 	'''
@@ -614,95 +617,50 @@ def read_interrupt_state(pin):
 	value = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)
 	return value
 
-# def dust_sensor_en(pin = 2):
-# 	write_i2c_block(dust_sensor_en_cmd + [pin, unused, unused])
-# 	read_i2c_block(no_bytes = 1)
+def dust_sensor_en(pin = 2, period = 30000):
+	set_pin_interrupt(pin, ftype=1, interrupt_mode=1, period=period)
 
-# def dust_sensor_dis():
-# 	write_i2c_block(dust_sensor_dis_cmd + [unused, unused, unused])
-# 	read_i2c_block(no_bytes = 1)
+def dust_sensor_dis(pin = 2):
+	unset_pin_interrupt(pin)
 
-# def dust_sensor_read():
-# 	"""
-# 	By default, the sample rate is set to 1 at every 30 seconds and this
-# 	function was written only for that interval.
+def dust_sensor_read(pin = 2, period = 30000):
+	"""
+	By default, the sample rate is set to 1 at every 30 seconds and this
+	function was written only for that interval.
 
-# 	If you wish to use a different
-# 	interval, then use dust_sensor_read_more function. To set a
-# 	different interval, use set_dust_sensor_interval function.
-# 	"""
-# 	write_i2c_block(dust_sensor_read_cmd + [unused, unused, unused])
-# 	data_back = read_identified_i2c_block(dust_sensor_read_cmd, no_bytes = 4)[0:4]
-# 	if data_back[0] != 255:
-# 		lowpulseoccupancy=(data_back[3] * 65536 + data_back[2] * 256 + data_back[1])
-# 		return [data_back[0], lowpulseoccupancy]
-# 	else:
-# 		return [-1,-1]
+	If you wish to use a different
+	interval, then use dust_sensor_read_more function. To set a
+	different interval, use set_dust_sensor_interval function.
+	"""
+	lpo = read_interrupt_state(pin)
+	percentage = 100.0 * lpo / period
+	concentration = 1.1 * percentage ** 3 - 3.8 * percentage ** 2 + 520 * percentage + 0.62
 
-# def dust_sensor_read_more(blocking = True):
-# 	sampletime_ms = get_dust_sensor_interval()
-# 	found, lpo = dust_sensor_read()
-# 	delay_to_reduce_traffic = 0.05
-# 	while found in [0, -1] and blocking is True:
-# 		if delay_to_reduce_traffic * 1000 < sampletime_ms:
-# 			time.sleep(delay_to_reduce_traffic)
-# 		found, lpo = dust_sensor_read()
+	return lpo, percentage, concentration
 
-# 	if found in [0, -1] and blocking is False:
-# 		return (-1, -1, -1)
+def encoder_en(pin = 2, steps = 32):
+	write_i2c_block(encoder_en_cmd + [pin, steps, unused])
+	read_i2c_block(no_bytes = 1)
 
-# 	percentage = lpo * 100.0 / sampletime_ms
-# 	concetration = 1.1 * percentage ** 3 - 3.8 * percentage ** 2 + 520 * percentage + 0.62
+def encoder_dis(pin = 2):
+	write_i2c_block(encoder_dis_cmd + [pin, unused, unused])
+	read_i2c_block(no_bytes = 1)
 
-# 	return (lpo, percentage, concetration)
+def encoderRead(pin = 2):
+	write_i2c_block(encoder_read_cmd + [pin, unused, unused])
+	data = read_identified_i2c_block(encoder_read_cmd, no_bytes = 4)
+	value = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)
+	return value
 
-# def set_dust_sensor_interval(interval_ms):
-# 	byte1 = interval_ms & 0xFF
-# 	byte2 = interval_ms >> 8
-# 	write_i2c_block(dust_sensor_int_cmd + [byte1, byte2] + [unused])
-# 	read_i2c_block(no_bytes = 1)
+def flowEnable(pin = 2, period = 2000):
+	set_pin_interrupt(pin, ftype=0, interrupt_mode=1, period=period)
 
-# def get_dust_sensor_interval():
-# 	write_i2c_block(dust_sensor_read_int_cmd + 3 * [unused])
-# 	data_back = read_identified_i2c_block(dust_sensor_read_int_cmd, no_bytes = 2)[0:2]
+def flowDisable(pin = 2):
+	unset_pin_interrupt(pin)
 
-# 	if -1 in data_back: return -1
-
-# 	interval = data_back[0] + data_back[1] * 256
-# 	return interval
-
-# def encoder_en():
-# 	write_i2c_block(encoder_en_cmd + [unused, unused, unused])
-# 	read_i2c_block(no_bytes = 1)
-
-# def encoder_dis():
-# 	write_i2c_block(encoder_dis_cmd + [unused, unused, unused])
-# 	read_i2c_block(no_bytes = 1)
-
-# def encoderRead():
-# 	write_i2c_block(encoder_read_cmd + [unused, unused, unused])
-# 	read_identified_i2c_block(encoder_read_cmd, no_bytes = 2)[0:2]
-# 	if data_back[0]!=255:
-# 		return [data_back[0],data_back[1]]
-# 	else:
-# 		return [-1,-1]
-
-# def flowEnable(pin = 2):
-# 	write_i2c_block(flow_en_cmd + [pin, unused, unused])
-# 	read_i2c_block(no_bytes = 1)
-
-# def flowDisable():
-# 	write_i2c_block(flow_disable_cmd + [unused, unused, unused])
-# 	read_i2c_block(no_bytes = 1)
-
-# def flowRead():
-# 	write_i2c_block(flow_read_cmd + [unused, unused, unused])
-# 	data_back = read_i2c_block(no_bytes = 3)[0:3]
-# 	#print data_back
-# 	if data_back[0]!=255:
-# 		return [data_back[0],data_back[2] * 256 + data_back[1]]
-# 	else:
-# 		return [-1,-1]
+def flowRead(pin = 2):
+	val = read_interrupt_state(pin)
+	return val
 
 def main():
 	print("library supports this fw versions: " +
