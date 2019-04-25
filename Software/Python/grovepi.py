@@ -600,7 +600,7 @@ def is_interrupt_active(pin):
 	write_i2c_block(isr_active_cmd + [pin, unused, unused])
 	data = read_identified_i2c_block(isr_active_cmd, no_bytes = 2)
 	value  = data[1] >> pin
-	return value
+	return value != 0
 
 def get_active_interrupts():
 	'''
