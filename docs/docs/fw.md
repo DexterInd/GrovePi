@@ -8,7 +8,7 @@ Once the library is installed on the Raspberry Pi, run the following commands to
 cd ~/Dexter/GrovePi/Firmware
 bash firmware_update.sh
 ```
-This updates you to the latest version of the firmware which is the `1.3.0`.
+This updates you to the latest version of the firmware which is the `1.4.0`.
 
 ---
 **NOTE TO OTHER LIBRARIES**
@@ -42,7 +42,7 @@ python grovepi.py
 This should output a version number (of the GrovePi's firmware). Older versions of the firmware (<=`v1.2.7`) won't get displayed when calling `python grovepi.py`.
 ```bash
 pi@raspberrypi:~ $ python grovepi.py
-library supports this fw versions: 1.3.0
+library supports this fw versions: 1.4.0
 ```
 
 To see which is the version of the current firmware loaded on the GrovePi you can either run the above test (`... all_test.sh`) from the `Troubleshooting/` directory or you can run these commands:
