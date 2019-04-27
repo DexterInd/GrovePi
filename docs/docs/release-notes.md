@@ -19,6 +19,11 @@ Also, we have a couple of notable contributors to the GrovePi but for other libr
 - [@rpedersen](https://github.com/rpedersen) for C# stuff
 - [@k33g](https://github.com/k33g) for Java library
 
+## Version 1.4.0 - 27 April 2019
+
+- Add support for setting up interrupt events on each digital port of the GrovePi, thus breaking the limit of just two available hardware interrupts [#446](https://github.com/DexterInd/GrovePi/pull/446)
+- Enable the Grove Dust Sensor, the Grove Encoder and the Grove Flow Meter to work on any digital port of the GrovePi and support 7 or 3 or respectively 7 devices at the same time [#446](https://github.com/DexterInd/GrovePi/pull/446)
+
 ## [Version 1.3.0](https://github.com/DexterInd/GrovePi/projects/2) - 1 Aug 2018
 
 - Fixed synchronization bugs which led to very small IO rates

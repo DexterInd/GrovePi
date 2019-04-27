@@ -9,7 +9,7 @@ The API for the following sensors is described in this section:
 - [Grove Encoder](https://www.seeedstudio.com/Grove-Encoder-p-1352.html)
 - [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html) of whose functionality can be used in other applications too
 
-Apart from describing the API for the above sensors, there is described also a set of functions used to set interrupt events on the GrovePi. These functions are like the building blocks of the API of the above sensors and can be used for your own implementation, should it be applicable to your device.
+Apart from describing the API for the above sensors, there is also described a set of functions used to set interrupt events on the GrovePi. These functions are like the building blocks of the API of the above sensors and can be used for your own implementation, should it be applicable to your device.
  
 ---
 **IMPORTANT**
@@ -19,16 +19,18 @@ as that will put the GrovePi into a broken state.
 
 In case you need to reset the GrovePi from your Raspberry Pi, [check this section](../../fw/#resetting-the-grovepi).
 
+The functions don't verify if the input parameters are valid and therefore the parameters have to be verified/validated before that.
+Calling a function with improper parameters can result in an undefined behavior for the GrovePi.
 ---
 
 ##`grovepi.set_pin_interrupt(pin, ftype, interrupt_mode, period)`
 Attach an interrupt event to a port.
 
-Can be used to count pulses, duration of pulses, set different kinds of trigger modes (on change, rising or falling edges) all done within a given period of time.
+Can be used to count pulses, duration of pulses, set different kinds of trigger modes (on change, rising or falling edges) all done within a given time period.
 
 If there are subsequent calls to this set function without detaching the interrupt event first from a given pin, then it will overwrite the old setting and update it to reflect the latest one.
 
-Also, setting this up disable the OUTPUT functionality on the selected pin. If the selected pin has to drive the output, then detach the interrupt event with [grovepi.unset_pin_interrupt](#grovepiunset_pin_interruptpin)
+Also, setting this up disables the OUTPUT functionality on the selected pin. If the selected pin has to drive the output, then detach the interrupt event with [grovepi.unset_pin_interrupt](#grovepiunset_pin_interruptpin).
 
 **Parameters**
 
@@ -68,7 +70,7 @@ Check if a pin has an interrupt event associated.
 
 **Parameters**
 
-- `pin {Integer}` pin to check if there's an associated interrupt event
+- `pin {Integer}` pin to check (D2-D8) if there's an associated interrupt event
 
 **Returns**: `{Bool}` - `True` if it has an interrupt event associated and `False` if otherwise.
 
@@ -224,7 +226,9 @@ Necessary if you want to set output values to this pin with [grovepi.digitalWrit
 ##`grovepi.flowRead(pin = 2)`
 Enables the [Grove Water Flow Sensor](https://www.seeedstudio.com/M11%2A1.25-Water-Flow-Sensor-p-1345.html).
 
-This function counts the number of rising pulses in the period of time set with [grovepi.flowEnable](#grovepiflowenablepin-2-period-2000).
+This function counts the number of rising pulses in the time period set with [grovepi.flowEnable](#grovepiflowenablepin-2-period-2000).
+
+It's the same as calling [grovepi.read_interrupt_state](#grovepiread_interrupt_statepin) for the given pin.
 
 **Parameters**:
 
