@@ -39,25 +39,28 @@ THE SOFTWARE.
 
 # You can send 'run_in_bk=1' as a parameter, e.g. grovepi.flowRead(run_in_bk=1) to run the flow meter code in the background on the GrovePi. This allows you to use other functions such as digitalRead to run with the flow meter read running in the background
 #
-# the fist byte is 1 for a new value and 0 for old values
-# second byte is flow rate in L/hour
-#
 # Since the flow meter uses interrupts, it is better to disable it once you are done using it
 # The flow sensor readings are updated once every 2 seconds on the firmware
+
 import time
 import grovepi
 
-import atexit
-atexit.register(grovepi.flowDisable())
-
 print("Reading from the Flow meter")
-grovepi.flowEnable()
-while True:
-    try:
-		[new_val,flow_val] = grovepi.flowRead()
-		if new_val:
-			print(flow_val)
-		time.sleep(.5) 
 
-    except IOError:
-        print ("Error")
+# default pin is 2 and default update period is 2000 ms
+grovepi.flowEnable()
+
+time_to_run = 10 # 10 seconds
+start = time.time() # current time in seconds
+old_val = 0
+
+while start + time_to_run > time.time():
+
+	# defaults to pin 2
+	new_val = grovepi.flowRead()
+	if old_val != new_val:
+		print("{:3d} L/h".format(new_val))
+		old_val = new_val
+
+# and disable the interrupt on pin 2
+grovepi.flowDisable()
