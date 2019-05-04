@@ -51,7 +51,7 @@ print("Reading from the dust sensor")
 grovepi.dust_sensor_en()
 while True:
     try:
-		[new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
+		[new_val,lowpulseoccupancy] = grovepi.dust_sensor_read()
 		if new_val:
 			print(lowpulseoccupancy)
 		time.sleep(5) 
