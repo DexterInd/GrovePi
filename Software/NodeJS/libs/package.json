@@ -9,7 +9,7 @@
         "i2c-bus": "1.*",
         "npmlog": "2.*",
         "sleep": "3.*",
-        "mathjs": "3.10.*"
+        "mathjs": "3.17.*"
     },
     "main": "index.js",
     "scripts": {
