@@ -177,7 +177,7 @@ void processIO() {
     else if (cmd[0] == 8) {
       b[0] = cmd[0];
       b[1] = 1;
-      b[2] = 3;
+      b[2] = 4;
       b[3] = 0;
     }
 
