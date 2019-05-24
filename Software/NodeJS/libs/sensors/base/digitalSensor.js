@@ -13,7 +13,7 @@ DigitalSensor.prototype.read = function() {
   var writeRet = this.board.writeBytes(commands.dRead.concat([this.pin, commands.unused, commands.unused]))
   if (writeRet) {
     this.board.wait(100)
-    return this.board.readByte()[0]
+    return this.board.readBytes(2)[1]
   } else {
     return false
   }
