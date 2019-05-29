@@ -113,7 +113,7 @@ GrovePi.prototype.readByte = function() {
     return false
 
   var length = 1
-  var buffer = new Buffer(length)
+  var buffer = new Buffer.alloc(length)
   var ret = bus.i2cReadSync(ADDRESS, length, buffer)
   return ret > 0 ? buffer : false
 }
@@ -125,7 +125,7 @@ GrovePi.prototype.readBytes = function(length) {
   if (!isOperative)
     return false
 
-  var buffer = new Buffer(length)
+  var buffer = new Buffer.alloc(length)
   var ret = false
   try {
     var val = bus.i2cReadSync(ADDRESS, length, buffer)
@@ -141,7 +141,7 @@ GrovePi.prototype.writeBytes = function(bytes) {
   if (!isOperative)
     return false
 
-  var buffer = new Buffer(bytes)
+  var buffer = new Buffer.from(bytes)
   var ret = false
   try {
     var val = bus.i2cWriteSync(ADDRESS, buffer.length, buffer)
