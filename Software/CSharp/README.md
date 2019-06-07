@@ -1,63 +1,10 @@
-![alt text](https://raw.githubusercontent.com/DexterInd/GrovePi/master/Software/CSharp/Windows_IOT_and_Dex-768x281.jpg "Logo WinIoT GrovePi")
+# GrovePi for C#
 
-# GrovePi in C#
-Get the Packages:
-* Windows 10 IoT C# driver library for [GrovePi](https://www.nuget.org/packages/GrovePi/).
-* The NuGet package for the current release is available [here](https://www.nuget.org/packages/GrovePi/).
+Multiple implantationss of GrovePi exist for C#:
 
-# Getting Started with WinIoT
-If you are just starting with WinIoT, see our [tutorial for getting started with WinIoT and the GrovePi here](http://www.dexterindustries.com/GrovePi/programming/getting-started-with-windows-iot-and-the-grovepi-winiot/).  There are three steps:
+- Universal Windows Platform for Windows IoT Core. You will find all details [here](./README-UWP.md)
+- .NET Core IoT for Linux or Windows. You will find all details [here](https://github.com/dotnet/iot/tree/master/src/devices/GrovePi)
 
-[Introduction to Getting Started with WinIoT and the GrovePi.](http://www.dexterindustries.com/GrovePi/programming/getting-started-with-windows-iot-and-the-grovepi-winiot/)
+Universal Windows Platform for Windows IoT Core is a specific implementation of Windows IoT Core running on boards like Raspberry Pi. It's best if you love XAML and traditional Universal Windows Platform and if you need a UI.
 
-1. [Setting up your Computer and Raspberry Pi](http://www.dexterindustries.com/GrovePi/programming/getting-started-with-windows-iot-and-the-grovepi-winiot/getting-started-windows-iot-winiot-and-grovepi-setting-up-your-pc-and-pi/)
-
-2. [Run Hello World in WinIoT](http://www.dexterindustries.com/GrovePi/programming/getting-started-with-windows-iot-and-the-grovepi-winiot/getting-started-windows-iot-winiot-and-grovepi-run-hello-world/)
-
-3. [More WinIoT GrovePi Samples and Examples](http://www.dexterindustries.com/GrovePi/programming/getting-started-with-windows-iot-and-the-grovepi-winiot/getting-started-windows-iot-winiot-and-grovepi-more-winiot-grovepi-samples-and-examples/)
-
-
-# Sample Programs in C#
-Below are some simple examples of how to use the library.
-
-######Sample Programs
-* Button_Buzzer
-* Example-Button
-* Example-LCD_Display
-* Example-LED
-* Example-Light_Sensor
-* Example-Relay
-* Example-Sound_Sensor
-* Example-Temp_and_Humidity
-* Example-Ultrasonic
-* HelloWorldBlinky
-* LcdRgbDisplay
-* LedFade
-* Light_Sensor_LCDDisplay
-
-#####Supported Samples
-
-All supported sensors are available through the DeviceFactory class.
-
-Supported sensors include:
-- Relay
-- Led
-- TemperatureAndHumiditySensor
-- UltraSonicSensor
-- AccelerometerSensor
-- RealTimeClock
-- BuildLedBar
-- FourDigitDisplay
-- ChainableRgbLed
-- RotaryAngleSensor
-- Buzzer
-- SoundSensor
-- LightSensor
-- ButtonSensor
-- RgbLcdDisplay
-
-
-### Getting Into It
-Want to hack it open or make your own from scratch? With full hardware and software designs, you can remix and duplicate to your hearts content.
-
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
+.NET Core is open source. .NET Core is best thought of as 'agile .NET'. Generally speaking it is the same as the Desktop .NET Framework distributed as part of the Windows operating system, but it is a cross platform (Windows, Linux, macOS) and cross architecture (x86, x64, ARM) subset that can be deployed as part of the application (if desired), and thus can be updated quickly to fix bugs or add features. It is a perfect fit for boards like Raspberry running Raspbian. Check the [.NET Core IoT documentation](https://github.com/dotnet/iot/tree/master/Documentation) if you are not familiar with .NET Core.
