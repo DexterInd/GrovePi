@@ -31,7 +31,7 @@ void DHT::getSafeData(float &temp, float &humidity)
 	this->getUnsafeData(temp, humidity); // read data from GrovePi once
 
 	// while values got are not okay / accepteed
-	while((isnan(temp) || isnan(humidity) || !this->areGoodReadings(temp, humidity))
+	while((std::isnan(temp) || std::isnan(humidity) || !this->areGoodReadings(temp, humidity))
 	      && current_retry < this->MAX_RETRIES)
 	{
 		// reread them again
@@ -42,7 +42,7 @@ void DHT::getSafeData(float &temp, float &humidity)
 	// if even after [MAX_RETRIES] attempts at getting good values
 	// nothing good came, then throw one of the bottom exceptions
 
-	if(isnan(temp) || isnan(humidity))
+	if(std::isnan(temp) || std::isnan(humidity))
 		throw runtime_error("[GroveDHT NaN readings - check analog port]\n");
 
 	if(!DHT::areGoodReadings(temp, humidity))
