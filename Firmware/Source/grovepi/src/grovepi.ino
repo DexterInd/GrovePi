@@ -1,17 +1,15 @@
 #include "ChainableLED.h"
 #include "DHT.h"
-#include "Encoder.h"
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "TimerOne.h"
 #include <IRremote.h>
 #include <Wire.h>
+#include <YetAnotherPcInt.h>
 
 DHT dht;
-Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you
-                         // can't use adjacent sockets, 4 pin display
-TM1637 fourdigit[6];     // 7 instances for D2-D8, however, max 4 displays, you
-                         // can't use adjacent sockets, 4 pin display
+Grove_LED_Bar ledbar[6]; // 7 instances for D2-D8, however, max 4 bars, you; can't use adjacent sockets, 4 pin display
+TM1637 fourdigit[6];     // 7 instances for D2-D8, however, max 4 displays, you; can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];  // 7 instances for D2-D8
 
 IRrecv irrecv;          // object to interface with the IR receiver
@@ -19,23 +17,33 @@ decode_results results; // results for the IR receiver
 
 #define SLAVE_ADDRESS 0x04
 
-#define dust_sensor_read_cmd 10
-#define dust_sensor_en_cmd 14
-#define dust_sensor_dis_cmd 15
-#define dust_sensor_int_cmd 9
-#define dust_sensor_read_int_cmd 6
+// #define dust_sensor_read_cmd 10
+// #define dust_sensor_en_cmd 14
+// #define dust_sensor_dis_cmd 15
+// #define dust_sensor_int_cmd 9
+// #define dust_sensor_read_int_cmd 6
 
-#define encoder_read_cmd 11
-#define encoder_en_cmd 16
-#define encoder_dis_cmd 17
+// #define encoder_read_cmd 11
+// #define encoder_en_cmd 16
+// #define encoder_dis_cmd 17
 
-#define flow_read_cmd 12
-#define flow_en_cmd 18
-#define flow_dis_cmd 13
+// #define flow_read_cmd 12
+// #define flow_en_cmd 18
+// #define flow_dis_cmd 13
 
 #define ir_read_cmd 21
 #define ir_recv_pin_cmd 22
 #define ir_read_isdata 24
+
+#define isr_set_cmd 6
+#define isr_unset_cmd 9
+#define isr_read_cmd 10
+#define isr_clear_cmd 11
+#define isr_active_cmd 12
+
+#define encoder_read_cmd 13
+#define encoder_en_cmd 14
+#define encoder_dis_cmd 15
 
 #define data_not_available 23
 
@@ -44,6 +52,35 @@ volatile int index = 0;
 volatile int flag = 0;
 volatile byte b[21], float_array[4], dht_b[21];
 volatile bool need_extra_loop = false;
+int pin;
+
+// for interrupt stuff
+const uint8_t total_ports = 9;
+enum ISR_Type {
+  COUNT_CHANGES, COUNT_LOW_DURATION
+};
+typedef struct {
+  volatile unsigned long period, last_update;
+} Tracked_time;
+typedef struct {
+  volatile unsigned long counted_duration, pulse_end, pulse_start;
+} Pulse_counter;
+
+volatile uint8_t pins[total_ports]; // to track the available pins (passes the address to PcInt attachInterrupt method)
+volatile bool set_pcint[total_ports]; // to see which ports are being watched
+volatile uint8_t func_type[total_ports]; // type of counting function - COUNT_CHANGES or COUNT_LOW_DURATION
+Tracked_time tracked_time[total_ports]; // for tracking the time
+Pulse_counter pulse_counter[total_ports]; // for counting pulses
+volatile unsigned long change_counter[total_ports]; // for counting changes
+volatile uint32_t buffer[total_ports]; // to store the calculated values for transmission
+
+// for encoders
+typedef struct {
+  volatile uint8_t LOW_PIN, HIGH_PIN;
+  volatile int32_t value;
+  volatile uint8_t MAX_VAL = 32;
+} GroveEncoder; 
+GroveEncoder ge[total_ports];
 
 volatile int run_once;
 unsigned char dta[21];
@@ -53,74 +90,37 @@ byte accFlag = 0, clkFlag = 0;
 int8_t accv[3];
 byte rgb[] = {0, 0, 0};
 
-// Dust sensor variables:
-volatile uint16_t lowpulseoccupancy = 0;
-unsigned long latest_dust_val = 0;
-volatile unsigned long t, pulse_end, pulse_start, duration;
-volatile int dust_latest = 0;
-unsigned long starttime;
-unsigned long sampletime_ms = 30000; // sample 30s ;
-int dust_run_bk = 0;
-int l_status;
-
-// Pins used for interrupt routines
-volatile uint8_t dust_sensor_pin = 2;
-uint8_t flow_sensor_pin = 2;
-
-// Encoder variable
-int index_LED;
-volatile byte enc_val[3];
-// Given it's own I2C buffer so that it does not corrupt the
-// data from other sensors when running in background
-int enc_run_bk = 0; // Flag for first time setup
-
-// Flow sensor variables
-volatile int NbTopsFan; // measuring the rising edges of the signal
-volatile byte
-    flow_val[3]; // Given it's own I2C buffer so that it does not corrupt the
-                 // data from other sensors when running in background
-int Calc;
-int hallsensor = 2; // The pin location of the sensor
-int flow_run_bk = 0;
-long flow_read_start;
-int pin;
-int j;
-
 // all user-defined functions
 void processIO();
 void flushI2C();
 void receiveData();
 void sendData();
-void rpm();
-void readPulseDust();
+void detachISRPin(const uint8_t);
+void isr_buffer_filler();
+void isr_handler(uint8_t, bool);
 
 void setup() {
-  Serial.begin(38400); // start serial for output
+  // Start serial
+  Serial.begin(38400);
+  
+  // Start I2C
   Wire.begin(SLAVE_ADDRESS);
-
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
 
+  // Set port 4 to output and set it to LOW
   DDRD |= 0x10;
   PORTD &= ~0x10;
+
+  // initialize the pins array with the ports itself
+  for(int i = 0; i < total_ports; i++) {
+    pins[i] = i;
+  }
+  
+  Timer1.attachInterrupt(isr_buffer_filler, 1000);
 }
 
 void processIO() {
-  long dur, RangeCm;
-  // Dust sensor can run in background so has a dedicated if condition
-  if (dust_run_bk) {
-    float this_time = millis();
-    float current_time = this_time - starttime;
-    if (current_time > sampletime_ms) {
-      latest_dust_val = lowpulseoccupancy * sampletime_ms / current_time;
-      lowpulseoccupancy = 0;
-
-      starttime = this_time;
-      dust_latest = 1;
-
-      // Serial.println(latest_dust_val);
-    }
-  }
   if (index == 4 && flag == 0) {
     flag = 1;
     // Digital Read
@@ -164,8 +164,8 @@ void processIO() {
       // which is roughly the equivalent of time needed for the sound
       // to travel 10 meters from the sensor to the target
       // and backwards - where the speed of sound is 343m/s
-      dur = pulseIn(pin, HIGH, 75000);
-      RangeCm = dur / 29 / 2;
+      long dur = pulseIn(pin, HIGH, 75000);
+      long RangeCm = dur / 29 / 2;
       b[0] = cmd[0];
       b[1] = RangeCm / 256;
       b[2] = RangeCm % 256;
@@ -177,7 +177,7 @@ void processIO() {
     else if (cmd[0] == 8) {
       b[0] = cmd[0];
       b[1] = 1;
-      b[2] = 3;
+      b[2] = 4;
       b[3] = 0;
     }
 
@@ -200,9 +200,9 @@ void processIO() {
         byte *b2 = (byte *)(buffer + 1);
 
         dht_b[0] = cmd[0];
-        for (j = 1; j < 5; j++)
+        for (uint8_t j = 1; j < 5; j++)
           dht_b[j] = b1[j - 1];
-        for (j = 5; j < 9; j++)
+        for (uint8_t j = 5; j < 9; j++)
           dht_b[j] = b2[j - 5];
         run_once = 0;
       }
@@ -530,52 +530,6 @@ void processIO() {
           }
         }
       }
-    } else if (cmd[0] == dust_sensor_en_cmd) {
-      dust_sensor_pin = cmd[1];
-      attachInterrupt(digitalPinToInterrupt(dust_sensor_pin), readPulseDust, CHANGE);
-      dust_run_bk = 1;
-      lowpulseoccupancy = 0;
-      starttime = millis();
-      cmd[0] = 0;
-    } else if (cmd[0] == dust_sensor_dis_cmd) {
-      detachInterrupt(digitalPinToInterrupt(dust_sensor_pin));
-      dust_run_bk = 0;
-      cmd[0] = 0;
-    } else if (cmd[0] == dust_sensor_int_cmd) {
-      sampletime_ms = cmd[1] + (cmd[2] << 8);
-      dust_latest = 0;
-    } else if (cmd[0] == dust_sensor_read_int_cmd) {
-      b[0] = cmd[0];
-      b[1] = sampletime_ms & 0xFF;
-      b[2] = sampletime_ms >> 8;
-    } else if (cmd[0] == dust_sensor_read_cmd) {
-      if (run_once == 1) {
-        b[0] = cmd[0];
-        b[1] = dust_latest;
-        b[2] = latest_dust_val & 0xFF;
-        b[3] = (latest_dust_val >> 8) & 0xFF;
-        b[4] = (latest_dust_val >> 16) & 0xFF;
-        run_once = 0;
-      }
-    } else if (cmd[0] == encoder_en_cmd) {
-      encoder.Timer_init();
-      enc_run_bk = 1;
-      cmd[0] = 0;
-    } else if (cmd[0] == encoder_dis_cmd) {
-      encoder.Timer_disable();
-      enc_run_bk = 0;
-    } else if (cmd[0] == flow_en_cmd) {
-      flow_sensor_pin = cmd[1];
-      pinMode(digitalPinToInterrupt(flow_sensor_pin), INPUT);
-      attachInterrupt(digitalPinToInterrupt(flow_sensor_pin), rpm, RISING);
-      NbTopsFan = 0;
-      flow_read_start = millis();
-      flow_run_bk = 1;
-      cmd[0] = 0;
-    } else if (cmd[0] == flow_dis_cmd) {
-      flow_run_bk = 0;
-      detachInterrupt(digitalPinToInterrupt(flow_sensor_pin));
-      cmd[0] = 0;
     } else if (cmd[0] == ir_recv_pin_cmd) {
       Serial.print(cmd[1]);
       irrecv.setRecvpin(cmd[1]);
@@ -601,37 +555,138 @@ void processIO() {
       b[0] = cmd[0];
       b[1] = irrecv.decode(&results);
     }
-  }
-  if (enc_run_bk) {
-    if (encoder.rotate_flag == 1) {
-      if (encoder.direct == 1) {
-        index_LED++;
-        if (index_LED > 24)
-          index_LED = 0;
-        enc_val[0] = cmd[0];
-        enc_val[1] = 1;
-        enc_val[2] = index_LED;
-      } else {
-        index_LED--;
-        if (index_LED < 0)
-          index_LED = 24;
-        enc_val[0] = cmd[0];
-        enc_val[1] = 1;
-        enc_val[2] = index_LED;
-      }
-      encoder.rotate_flag = 0;
-    }
-  }
+  } else if (cmd[0] == isr_set_cmd) {
 
-  if (flow_run_bk) {
-    if (millis() - flow_read_start > 2000) {
-      Calc = (NbTopsFan * 30 / 73);
-      flow_val[0] = 1;
-      flow_val[1] = Calc % 256;
-      flow_val[2] = Calc / 256;
-      NbTopsFan = 0;
-      flow_read_start = millis();
+    if (run_once == 1) {
+      uint8_t pin = cmd[1] & 0x0f; // 1st 4 bits to determine pin (D2->D8)
+      const uint8_t ftype = (cmd[1] >> 4) & 0x03; // take 5th & 6th bits
+      const uint8_t interrupt_mode = (cmd[1] >> 6) & 0x03; // take 7th and 8th bit
+      const uint16_t period = (cmd[2] << 8) + cmd[3]; // get period in ms (maximum 65535 sms)
+
+      // detach pin if it's already set
+      if (set_pcint[pin]) {
+        detachISRPin(pin);
+      }
+
+      pinMode(pin, INPUT_PULLUP);
+      set_pcint[pin] = true;
+      func_type[pin] = ftype;
+      tracked_time[pin] = Tracked_time({period, 0});
+      if (ftype == COUNT_CHANGES) {
+        PcInt::attachInterrupt<uint8_t>(pin, isr_handler, (uint8_t*)&pins[pin], interrupt_mode, true);
+      } else if (ftype == COUNT_LOW_DURATION) {
+        pulse_counter[pin] = Pulse_counter({0, 0, 0});
+        PcInt::attachInterrupt<uint8_t>(pin, isr_handler, (uint8_t*)&pins[pin], CHANGE, false);
+      }
+      run_once = 0;
     }
+
+  } else if (cmd[0] == isr_unset_cmd) {
+    
+    if (run_once == 1) {
+      // detach pin from PCINT
+      const uint8_t pin = cmd[1];
+      detachISRPin(pin);
+      run_once = 0;
+    }
+
+  } else if (cmd[0] == isr_read_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1]; // from pin D2->D8
+      const uint32_t val = buffer[pin];
+      b[0] = cmd[0];
+      b[1] = val & 0xff;
+      b[2] = (val >> 8) & 0xff;
+      b[3] = (val >> 16) & 0xff;
+      b[4] = (val >> 24) & 0xff;
+      run_once = 0;
+    }
+
+  } else if (cmd[0] == isr_clear_cmd) {
+
+    if (run_once == 1) {
+      // detach all pins from PCINT
+      for (int idx = 0; idx < total_ports; idx++) {
+        if (set_pcint[idx]) {
+          detachISRPin(idx);
+        }
+      }
+    }
+    
+  } else if (cmd[0] == isr_active_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+
+      if (pin > total_ports) {
+        uint16_t ports = 0;
+        for (int idx = 0; idx < total_ports; idx++) {
+          ports += (set_pcint[idx] & 0x01) << idx;
+        }
+
+        b[0] = cmd[0];
+        b[1] = ports & 0xff;
+        b[2] = (ports >> 8) & 0xff;
+      } else {
+        b[0] = cmd[0];
+        b[1] = 0;
+        b[2] = (set_pcint[pin] & 0x01) << pin;
+      }
+      run_once = 0;
+    }
+  } else if (cmd[0] == encoder_en_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+      const uint8_t steps = cmd[2];
+      if (pin < total_ports - 1) {
+          // detach pin if it's already set
+        if (set_pcint[pin]) {
+          detachISRPin(pin);
+          detachISRPin(pin + 1);
+        }
+        ge[pin].LOW_PIN = pin;
+        ge[pin].HIGH_PIN = pin + 1;
+        ge[pin].value = 0;
+        ge[pin].MAX_VAL = steps;
+        pinMode(ge[pin].LOW_PIN, INPUT_PULLUP);
+        pinMode(ge[pin].HIGH_PIN, INPUT_PULLUP);
+        set_pcint[pin] = set_pcint[pin + 1] = true;
+        PcInt::attachInterrupt<GroveEncoder>(ge[pin].LOW_PIN, grove_encoder_handler, &ge[pin], FALLING, false);
+        PcInt::attachInterrupt<GroveEncoder>(ge[pin].HIGH_PIN, grove_encoder_handler, &ge[pin], FALLING, false);
+      }
+      run_once = 0;
+    }
+
+  } else if (cmd[0] == encoder_read_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+      const int value = ge[pin].value;
+      Serial.print(value);
+      Serial.print("\n");
+
+      b[0] = cmd[0];
+      b[1] = value & 0xff;
+      b[2] = (value >> 8) & 0xff;
+      b[3] = (value >> 16) & 0xff;
+      b[4] = (value >> 24) & 0xff;
+
+      run_once = 0;
+    }
+
+  } else if (cmd[0] == encoder_dis_cmd) {
+
+    if (run_once == 1) {
+      const uint8_t pin = cmd[1];
+      if (pin < total_ports - 1) {
+        detachISRPin(pin);
+        detachISRPin(pin + 1);
+      }
+      run_once = 0;
+    }
+
   }
 }
 
@@ -678,33 +733,19 @@ void sendData() {
       Wire.write((byte *)b, 9);
     if (cmd[0] == 40)
       Wire.write((byte *)dht_b, 9);
-
+    if (cmd[0] == isr_read_cmd)
+      Wire.write((byte *)b, 5);
+    if (cmd[0] == isr_active_cmd)
+      Wire.write((byte *)b, 3);
     if (cmd[0] == ir_read_cmd) {
       Wire.write((byte *)b, 8);
       b[0] = 0;
     }
-    if (cmd[0] == ir_read_isdata) {
-      Wire.write((byte *)b, 2);
-    }
-    if (cmd[0] == dust_sensor_read_cmd) {
-      Wire.write((byte *)b, 5);
-      dust_latest = 0;
-      cmd[0] = 0;
-    }
-    if (cmd[0] == dust_sensor_read_int_cmd) {
-      Wire.write((byte *)b, 3);
-      cmd[0] = 0;
-    }
     if (cmd[0] == encoder_read_cmd) {
-      Wire.write((byte *)enc_val, 3);
-      enc_val[0] = enc_val[1] = 0;
-      cmd[0] = 0;
+      Wire.write((byte *)b, 5);
     }
-    if (cmd[0] == flow_read_cmd) {
-      Wire.write((byte *)flow_val, 3);
-      flow_val[0] = 0;
-      cmd[0] = 0;
-    }
+    if (cmd[0] == ir_read_isdata)
+      Wire.write((byte *)b, 2);
   }
   // otherwise just reply the Pi telling
   // there's no data available yet
@@ -713,33 +754,105 @@ void sendData() {
   }
 }
 
-// ISR for the flow sensor
-void rpm() // This is the function that the interupt calls
-{
-  NbTopsFan++; // This function measures the rising and falling edge of the
-
-  // hall effect sensors signal
+// detaching an PCINT interrupt from a given pin
+void detachISRPin(const uint8_t pin) {
+  // detach pin from PCINT
+  if (set_pcint[pin]) {
+    PcInt::detachInterrupt(pin);
+    pinMode(pin, OUTPUT);
+    set_pcint[pin] = false;
+  }
 }
 
-void readPulseDust() {
+// repeatedly called ISR to update values on each interrupt-enabled pin
+void isr_buffer_filler() {
   // PORTD |= 0x10;
 
-  t = micros();
-  l_status = digitalRead(dust_sensor_pin); // Represents if the line is low or high.
-  if (l_status)
-    // If the line is high (1), the pulse just ended
-    pulse_end = t;
-  else
-    // If the line is low (0), the pulse just started
-    pulse_start = t;
-
-  if (pulse_end > pulse_start) {
-    duration = (pulse_end - pulse_start) / 1000;
-    lowpulseoccupancy =
-        lowpulseoccupancy + duration; // Add to the pulse length.
-    pulse_end = 0; // If you don't reset this, you'll keep adding the pulse
-                   // length over and over.
+  const unsigned long current = micros() / 1000;
+  // iterate over all possible interrupted pins
+  for (int idx = 0; idx < total_ports; idx++) {
+    // if the pin has been attached to an interrupt
+    if (set_pcint[idx]) {
+      const unsigned long elapsed_time = current - tracked_time[idx].last_update;
+      // if more time than the associated period has passed
+      if (elapsed_time >= tracked_time[idx].period) {
+          // save and reset depending on the selected function
+          switch (func_type[idx]) {
+            case COUNT_CHANGES:
+              buffer[idx] = change_counter[idx];
+              change_counter[idx] = 0;
+              break;
+            case COUNT_LOW_DURATION:
+              buffer[idx] = pulse_counter[idx].counted_duration * tracked_time[idx].period / elapsed_time;
+              pulse_counter[idx].counted_duration = 0;
+              break;
+          }
+          // update time
+          tracked_time[idx].last_update = current;
+      }
+    }
   }
+
+  // PORTD &= ~0x10;
+}
+ 
+ // interrupt handler for COUNT_CHANGES & COUNT_LOW_DURATION operations
+void isr_handler(uint8_t *userdata, bool newstate) {
+
+  // PORTD |= 0x10;
+
+  // const uint8_t pin = *((uint8_t*)userdata);
+  const uint8_t pin = *userdata;
+
+  if (func_type[pin] == COUNT_CHANGES) {
+
+    // count changes
+    change_counter[pin] ++;
+
+  } else if (func_type[pin] == COUNT_LOW_DURATION) {
+
+    // count duration
+    if (newstate == 0) {
+      pulse_counter[pin].pulse_start = micros();
+    } else {
+      pulse_counter[pin].pulse_end = micros();
+    }
+    const unsigned long pulse_end = pulse_counter[pin].pulse_end;
+    const unsigned long pulse_start = pulse_counter[pin].pulse_start;
+    if(pulse_end > pulse_start) {
+      const unsigned long duration = int((pulse_end - pulse_start) / 1000); // to get ms
+      pulse_counter[pin].counted_duration += duration;
+      pulse_counter[pin].pulse_end = 0;
+    }
+
+  }
+
+  // PORTD &= ~0x10;
+
+}
+
+// interrupt handler for grove encoders
+void grove_encoder_handler(GroveEncoder *ge) {
+  // PORTD |= 0x10;
+
+  const uint8_t valA = digitalRead(ge->LOW_PIN);
+  const uint8_t valB = digitalRead(ge->HIGH_PIN);
+
+  if (valA + valB > 0 && valA + valB < 2) {
+    if (valA < valB) {
+      ge->value += 1;
+    } else {
+      ge->value -= 1;
+    }
+  }
+
+  if (ge->value < 0)
+    ge->value = 0;
+  else if (ge->value > ge->MAX_VAL)
+    ge->value = ge->MAX_VAL;
+
+  Serial.println(ge->LOW_PIN);
+  Serial.println(ge->HIGH_PIN);
 
   // PORTD &= ~0x10;
 }

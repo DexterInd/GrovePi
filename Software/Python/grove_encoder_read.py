@@ -36,23 +36,28 @@ THE SOFTWARE.
 # USAGE
 #
 # Connect the grove encoder to D2 on the GrovePi.
-# the fist byte is 1 for a new value and 0 for old values
-# second byte is encoder positon from 1 to 24
+# The encoder values go from 0 up to 32 
+# (although these can be subsequently changed by utilizing a different parameter for the encoder_en function)
 
 import time
 import grovepi
-import atexit
 
-atexit.register(grovepi.encoder_dis)
+print("Reading from the Grove Encoder")
 
-print("Reading from the encoder")
+# default pin is 2 and default number of steps is 32
 grovepi.encoder_en()
-while True:
-    try:
-		[new_val,encoder_val] = grovepi.encoderRead()
-		if new_val:
-			print(encoder_val)
-		time.sleep(.5) 
 
-    except IOError:
-        print ("Error")
+time_to_run = 10 # 10 seconds
+start = time.time() # current time in seconds
+old_val = 0
+
+while start + time_to_run > time.time():
+
+	# defaults to pin 2
+	new_val = grovepi.encoderRead()
+	if old_val != new_val:
+		print("{:3d}/32 position".format(new_val))
+		old_val = new_val
+
+# and disable the interrupt on pin 2
+grovepi.encoder_dis()

@@ -11,6 +11,8 @@ as that will put the GrovePi into a broken state.
 
 In case you need to reset the GrovePi from your Raspberry Pi, [check this section](../fw/#resetting-the-grovepi).
 
+The functions don't verify if the input parameters are valid and therefore the parameters have to be verified/validated before that.
+Calling a function with improper parameters can result in an undefined behavior for the GrovePi.
 ---
 
 ##`grovepi.digitalRead(pin)`

@@ -1,5 +1,5 @@
 
-![GrovePi+ Ports](/img/rpi_hw.jpg)
+![GrovePi+ Ports](img/rpi_hw.jpg)
 
 ## Port Layout
 

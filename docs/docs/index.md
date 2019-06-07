@@ -11,7 +11,7 @@ how to code in your language of choice.
 Whether it's a humidity/temperature sensor, distance sensor or an IR receiver or something as basic as an LED,
 the GrovePi can be your answer to these questions.
 
-By default the language of choice for our library is Python, but support for other languages can be found too
+By default, the language of choice for our library is Python, but support for other languages can be found too
 from our contributors such as:
 
 * C/C++

@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.1">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.1.2">
     
     
       
@@ -46,12 +46,12 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.982221ab.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.3020aac5.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+      <script src="../../assets/javascripts/modernizr.01ccdecf.js"></script>
     
     
       
@@ -753,6 +753,8 @@ of Python: 2.x and 3.x.</p>
 <p>This library and the other ones too are not thread-safe. You cannot call the GrovePi from multiple threads or processes
 as that will put the GrovePi into a broken state.</p>
 <p>In case you need to reset the GrovePi from your Raspberry Pi, <a href="../fw/#resetting-the-grovepi">check this section</a>.</p>
+<p>The functions don't verify if the input parameters are valid and therefore the parameters have to be verified/validated before that.
+Calling a function with improper parameters can result in an undefined behavior for the GrovePi.</p>
 <hr />
 <h2 id="grovepiledbar_initpin-orientation"><code>grovepi.ledBar_init(pin, orientation)</code><a class="headerlink" href="#grovepiledbar_initpin-orientation" title="Permanent link">&para;</a></h2>
 <p>Initialize an <a href="http://wiki.seeedstudio.com/Grove-LED_Bar/">LED bar</a>.</p>
@@ -1053,7 +1055,7 @@ To the left and right values, leading zeros are added and the colon is lit up</p
       
     </div>
     
-      <script src="../../assets/javascripts/application.b806dc00.js"></script>
+      <script src="../../assets/javascripts/application.267712eb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
