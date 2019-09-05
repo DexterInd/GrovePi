@@ -1,5 +1,5 @@
 
-## **DI GrovePi** [![Generic badge](https://img.shields.io/badge/Docs-available-electric.svg)](https://dexterind.github.io/GrovePi) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+## **Dexter Indutries GrovePi** [![Generic badge](https://img.shields.io/badge/Docs-available-electric.svg)](https://dexterind.github.io/GrovePi) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 <!-- Remember to add https://mit-license.org/ of our own -->
 
