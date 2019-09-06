@@ -79,7 +79,7 @@ typedef struct {
   volatile uint8_t LOW_PIN, HIGH_PIN;
   volatile int32_t value;
   volatile uint8_t MAX_VAL = 32;
-} GroveEncoder; 
+} GroveEncoder;
 GroveEncoder ge[total_ports];
 
 volatile int run_once;
@@ -102,7 +102,7 @@ void isr_handler(uint8_t, bool);
 void setup() {
   // Start serial
   Serial.begin(38400);
-  
+
   // Start I2C
   Wire.begin(SLAVE_ADDRESS);
   Wire.onReceive(receiveData);
@@ -116,11 +116,15 @@ void setup() {
   for(int i = 0; i < total_ports; i++) {
     pins[i] = i;
   }
-  
-  Timer1.attachInterrupt(isr_buffer_filler, 1000);
+
+  Timer1.attachInterrupt(isr_buffer_filler, 1000);  // Buffer maintenance.
 }
 
 void processIO() {
+  // Handles incoming data.
+  // Updates sensors.
+  // Sets output pins.
+
   if (index == 4 && flag == 0) {
     flag = 1;
     // Digital Read
@@ -582,7 +586,7 @@ void processIO() {
     }
 
   } else if (cmd[0] == isr_unset_cmd) {
-    
+
     if (run_once == 1) {
       // detach pin from PCINT
       const uint8_t pin = cmd[1];
@@ -613,7 +617,7 @@ void processIO() {
         }
       }
     }
-    
+
   } else if (cmd[0] == isr_active_cmd) {
 
     if (run_once == 1) {
@@ -720,7 +724,7 @@ void flushI2C() {
     Wire.read();
 }
 
-// callback for sending data
+// Callback for sending data
 void sendData() {
     if (need_extra_loop == false) {
     if (cmd[0] == 1)
@@ -795,7 +799,7 @@ void isr_buffer_filler() {
 
   // PORTD &= ~0x10;
 }
- 
+
  // interrupt handler for COUNT_CHANGES & COUNT_LOW_DURATION operations
 void isr_handler(uint8_t *userdata, bool newstate) {
 
