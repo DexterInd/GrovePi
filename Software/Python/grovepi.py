@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # GrovePi Python library
-# v1.2.2
+# v1.4
 #
 # This file provides the basic functions for using the GrovePi
 #
@@ -66,7 +66,7 @@ else:
 
 # Earliest version of the firmware to work with
 works_with_firmware = [
-	"1.3.0"
+	"1.4.0"
 ]
 
 # interrupt operations

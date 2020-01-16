@@ -56,7 +56,7 @@ def set_bus(bus):
 	global i2c
 	i2c = di_i2c.DI_I2C(bus = bus, address = address)
 
-address = 0x03
+address = 0x09
 max_recv_size = 10
 set_bus("RPI_1SW")
 
