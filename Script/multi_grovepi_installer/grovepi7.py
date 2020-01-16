@@ -42,6 +42,7 @@ THE SOFTWARE.
 # Karan		13 Feb 2014  	Initial Authoring
 # 			11 Nov 2016		I2C retries added for faster IO
 #							DHT function updated to look for nan's
+# Nicole	16 Jan 2019		Bring to v1.4
 
 import sys
 import time
