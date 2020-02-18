@@ -43,6 +43,8 @@ THE SOFTWARE.
 # 			11 Nov 2016		I2C retries added for faster IO
 #							DHT function updated to look for nan's
 
+__version__ = '1.4.0'
+
 import sys
 import time
 import math
