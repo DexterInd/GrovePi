@@ -20,7 +20,17 @@ check_root_user() {
         exit 1
     fi
 }
-
+compatible_with_pi4() {
+	BOARDVERSION=$(cat /proc/device-tree/model | awk '{ print $3 }')
+	BOOT_CONFIG="/boot/config.txt"
+	if [ "${BOARDVERSION}" -eq '4' ]; then
+		if grep -q "gpio=8=op,dh" ${BOOT_CONFIG}; then
+			echo "Pi4 already configured"
+		else
+			echo "gpio=8=op,dh" >> /boot/config.txt
+		fi
+	fi
+}
 install_spi_i2c() {
 	RASPI_BL="/etc/modprobe.d/raspi-blacklist.conf.bak"
 	MODS="i2c spi"
@@ -83,5 +93,6 @@ install_avr() {
 
 display_welcome_msg
 check_root_user
+compatible_with_pi4
 install_spi_i2c
 install_avr
