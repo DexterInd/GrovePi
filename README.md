@@ -12,13 +12,18 @@ Its official API is written in Python, but it can also be interfaced with in oth
 ## Getting Started
 
 In order to quick install the `GrovePi` repository, open up a terminal and type the following command:
+
 ```bash
 curl -kL dexterindustries.com/update_grovepi | bash
 ```
+
 The same command can be used for updating the `GrovePi` to the latest version. For more details on how you can install/update your `GrovePi`, please check this [README](Script/README.md).
 
 To install into a virtual environment, first active your virtualenv and type the following command:
-```curl -kL dexterindustries.com/update_gopigo3 | bash -s -- --user-local --bypass-gui-installation```
+
+```bash
+curl -kL dexterindustries.com/update_grovepi | bash -s -- --user-local --bypass-gui-installation
+```
 
 To flash the latest firmware to the GrovePi, run
 ```bash
