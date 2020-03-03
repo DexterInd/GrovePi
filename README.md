@@ -17,9 +17,12 @@ curl -kL dexterindustries.com/update_grovepi | bash
 ```
 The same command can be used for updating the `GrovePi` to the latest version. For more details on how you can install/update your `GrovePi`, please check this [README](Script/README.md).
 
+To install into a virtual environment, first active your virtualenv and type the following command:
+```curl -kL dexterindustries.com/update_grovepi | bash -s -- --bypass-gui-installation --env-local --install-python-package```
+
 To flash the latest firmware to the GrovePi, run
 ```bash
-cd Firmware
+cd /home/pi/Dexter/GrovePi/Firmware
 bash firmware_update.sh
 ```
 
