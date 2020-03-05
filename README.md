@@ -12,7 +12,9 @@ Its official API is written in Python, but it can also be interfaced with in oth
 ## Getting Started
 
 In order to quick install the `GrovePi` repository, open up a terminal and type the following command:
-
+```
+git clone https://github.com/DexterInd/GrovePi
+```
 ```bash
 curl -kL dexterindustries.com/update_grovepi | bash
 ```
