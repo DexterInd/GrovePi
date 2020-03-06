@@ -30,7 +30,7 @@ echo " "
 echo "Installing Dependencies"
 echo "======================="
 sudo apt-get update
-sudo apt-get install lirc python-lirc
+sudo apt-get install lirc python-lirc -y
 
 echo " "
 echo "Copying Config Files"
