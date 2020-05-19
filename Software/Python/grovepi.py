@@ -43,7 +43,7 @@ THE SOFTWARE.
 # 			11 Nov 2016		I2C retries added for faster IO
 #							DHT function updated to look for nan's
 
-__version__ = '1.4.0'
+__version__ = '1.4.1'
 
 import sys
 import time
@@ -197,6 +197,9 @@ encoder_dis_cmd = [15]
 
 # Write I2C block to the GrovePi
 def write_i2c_block(block, custom_timing = None):
+	'''
+	Now catches and raises Keyboard Interrupt that the user is responsible to catch.
+	'''
 	counter = 0
 	reg = block[0]
 	data = block[1:]
@@ -205,6 +208,8 @@ def write_i2c_block(block, custom_timing = None):
 			i2c.write_reg_list(reg, data)
 			time.sleep(0.002 + additional_waiting)
 			return
+		except KeyboardInterrupt:
+			raise KeyboardInterrupt
 		except:
 			counter += 1
 			time.sleep(0.003)
@@ -212,6 +217,9 @@ def write_i2c_block(block, custom_timing = None):
 
 # Read I2C block from the GrovePi
 def read_i2c_block(no_bytes = max_recv_size):
+	'''
+	Now catches and raises Keyboard Interrupt that the user is responsible to catch.
+	'''
 	data = data_not_available_cmd
 	counter = 0
 	while data[0] in [data_not_available_cmd[0], 255] and counter < 3:
@@ -220,6 +228,8 @@ def read_i2c_block(no_bytes = max_recv_size):
 			time.sleep(0.002 + additional_waiting)
 			if counter > 0:
 				counter = 0
+		except KeyboardInterrupt:
+			raise KeyboardInterrupt
 		except:
 			counter += 1
 			time.sleep(0.003)
