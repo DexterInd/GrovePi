@@ -1,3 +1,7 @@
+# Code contributed by Alessandro Graps a.graps@joulehub.com
+# May 2020
+# Many thanks !!! 
+
 from datetime import datetime
 
 from datetime import timedelta
