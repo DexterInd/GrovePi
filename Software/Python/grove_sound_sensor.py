@@ -44,14 +44,14 @@ import grovepi
 # SIG,NC,VCC,GND
 sound_sensor = 0
 
-# Connect the Grove LED to digital port D5
+# Connect the Grove LED to digital port D4
 # SIG,NC,VCC,GND
-led = 5
+led = 4
 
 grovepi.pinMode(sound_sensor,"INPUT")
 grovepi.pinMode(led,"OUTPUT")
 
-# The threshold to turn the led on 400.00 * 5 / 1024 = 1.95v
+# The threshold to turn the led on 400.00 * 4 / 1024 = 1.95v
 threshold_value = 400
 
 while True:
@@ -66,7 +66,7 @@ while True:
             grovepi.digitalWrite(led,0)
 
         print("sensor_value = %d" %sensor_value)
-        time.sleep(.5)
+        time.sleep(.4)
 
     except IOError:
         print ("Error")
