@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # GrovePi Example for using the Grove Temperature & Humidity Sensor Pro 
-# (http://www.seeedstudio.com/wiki/Grove_-_Temperature_and_Humidity_Sensor_Pro)
+# (http://www.seeedstudio.com/wiki/Grove-Temperature_and_Humidity_Sensor_Pro)
 #
 # The GrovePi connects the Raspberry Pi and Grove sensors.  
 # You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
