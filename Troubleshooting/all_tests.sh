@@ -7,7 +7,7 @@ cd $REPO_PATH/Troubleshooting
 echo ""
 
 sudo bash ./software_status.sh 2>&1 | sudo tee log.txt
-bash ./avrdude_test.sh 2>&1 | sudo tee -a log.txt
+# bash ./avrdude_test.sh 2>&1 | sudo tee -a log.txt
 bash ./i2c_test1.sh 2>&1 | sudo tee -a log.txt
 bash ./firmware_version_test.sh 2>&1 | sudo tee -a log.txt
 
