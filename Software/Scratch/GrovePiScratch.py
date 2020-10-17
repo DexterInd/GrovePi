@@ -352,11 +352,11 @@ while True:
             if en_debug:        # If Debug is enabled, print the value of msg.
                 print msg
 
-        elif (msg[:5].lower()=="SPEAK".lower()):
+        elif (msg[:5].lower()=="SPEAK".lower()  or msg[:3].lower()=="SAY".lower() ):
             try:
                 if en_grovepi:
                     from subprocess import call
-                    cmd_beg = "espeak -ven+f1 "
+                    cmd_beg = "espeak-ng -ven+f1 "
                     in_text = msg[len("SPEAK"):]
                     cmd_end = " 2>/dev/null"
 
