@@ -42,9 +42,9 @@ led = 4
 pinMode(led,"OUTPUT")
 time.sleep(1)
 
-print ("This example will blink a Grove LED connected to the GrovePi+ on the port labeled D4.\nIf you're having trouble seeing the LED blink, be sure to check the LED connection and the port number.\nYou may also try reversing the direction of the LED on the sensor.")
+print ("This example will blink a Grove LED connected to the GrovePi+ on the port D{}.\nIf you're having trouble seeing the LED blink, be sure to check the LED connection and the port number.\nYou may also try reversing the direction of the LED on the sensor.".format(led))
 print (" ")
-print ("Connect the LED to the port labele D4!" )
+print ("Connect the LED to the D{} port !".format(led))
 
 while True:
     try:
