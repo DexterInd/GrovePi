@@ -34,25 +34,66 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-import grovepi
-import math
-# Connect the Grove Temperature & Humidity Sensor Pro to digital port D4
-# This example uses the blue colored sensor.
-# SIG,NC,VCC,GND
-sensor = 4  # The Sensor goes on digital port 4.
+import json
+from grovepi import *
+from grove_rgb_lcd import *
+from time import sleep
+from math import isnan
 
-# temp_humidity_sensor_type
-# Grove Base Kit comes with the blue sensor.
-blue = 0    # The Blue colored sensor.
-white = 1   # The White colored sensor.
+with open('temp_hum.json','w') as my_json:
+
+
+json.dump(temp_hum_details,my_json)
+
+dht_sensor_port = 7 # connect the DHt sensor to port 7
+dht_sensor_type = 0 # use 0 for the blue-colored sensor and 1 for the white-colored sensor
+
+# set green as backlight color
+# we need to do it just once
+# setting the backlight color once reduces the amount of data transfer over the I2C line
+setRGB(0,255,0)
 
 while True:
-    try:
-        # This example uses the blue colored sensor. 
-        # The first parameter is the port, the second parameter is the type of sensor.
-        [temp,humidity] = grovepi.dht(sensor,blue)  
-        if math.isnan(temp) == False and math.isnan(humidity) == False:
-            print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
+try:
+# get the temperature and Humidity from the DHT sensor
+[ temp,hum ] = dht(dht_sensor_port,dht_sensor_type)
 
-    except IOError:
-        print ("Error")
+# change temp reading from celsius to fahrenheit
+temp = ((temp/5.0)*9)+32
+
+# round the temp to 2 decimal places so it will read on the LCD screen
+new_temp = round(temp, 2)
+
+print("temp =", temp , "F\thumidity =", hum,"%")
+
+# check if we have nans
+# if so, then raise a type error exception
+if isnan(new_temp) is True or isnan(hum) is True:
+raise TypeError('nan error')
+
+t = str(new_temp)
+h = str(hum)
+
+# instead of inserting a bunch of whitespace, we can just insert a \n
+# we're ensuring that if we get some strange strings on one line, the 2nd one won't be affected
+setText_norefresh("Temp:" + t + "F\n" + "Humidity :" + h + "%")
+
+except (IOError, TypeError) as e:
+print(str(e))
+# and since we got a type error
+# then reset the LCD's text
+setText("")
+temp_hum_details= {
+
+'temp' : temp,
+
+'humidity' : hum
+
+}
+
+except KeyboardInterrupt as e:
+print(str(e))
+# since we're exiting the program
+# it's better to leave the LCD with a blank text
+setText("")
+break
