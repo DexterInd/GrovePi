@@ -618,7 +618,7 @@ to the latest version:</p>
 <p>By default, the GrovePi library is set to use the <code>RPI_1SW</code> bus, which is a software implementation of the I2C specifically built to circumvent
 the issues with the hardware I2C of the Raspberry Pi. It's very fast and it doesn't use much CPU time at all. We recommend using this bus, thus,
 when importing the <code>grovepi</code> module, you don't have to do anything.</p>
-<p>There's also the <code>RPI_1</code>, the classic HW I2C of the Raspberry Pi, which is buggy and unreliable. We don't see any reason in using this one in any scenario. Period.</p>
+<p>There's also the <code>RPI_1</code>, the classic HW I2C of the Raspberry Pi, which is buggy and unreliable. Reasons to use RPI_1 are rare.</p>
 <p>In order to change the bus, presumably to <code>RPI_1</code> bus, call <code>grovepi.set_bus("RPI_1")</code> or <code>grovepi.set_bus("RPI_1SW")</code> in case you've changed the default one.</p>
 <h2 id="scratch-support">Scratch Support<a class="headerlink" href="#scratch-support" title="Permanent link">&para;</a></h2>
 <p>Scratch support comes by default with our flavored image, Raspbian For Robots, but if you find yourself to be using the classic Raspbian then
