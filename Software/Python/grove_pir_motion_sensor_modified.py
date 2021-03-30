@@ -63,8 +63,18 @@ grovepi.pinMode(pir_sensor,"INPUT")
 grovepi.pinMode(led,"OUTPUT")
 # script, duration = argv
 
-print("Use selected duration settings \n \t 1. High \n \t 2. Medium \n \t 3. Low")
+# duration = input("Select a duration setting  from [1 - 3] \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
 # print(duration)
+while True:
+	duration = input("Select a duration setting from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+	if duration.isdigit():
+		duration = int(duration)
+		if duration > 3 or duration < 1:
+			print("Invalid number, please select from [1 - 3]")
+		else:
+			break
+	else:
+		print("Not a number, please select from [1 - 3]")
 
 
 while True:
@@ -81,13 +91,15 @@ while True:
 				print ('-')
 
 			# if your hold time is less than this, you might not see as many detections
-		# if duration == 1:	
+		if duration == 1:	
 		time.sleep(1.2)
-		# 	print(duration)
-		# elif duration == 2:
-		# 	time.sleep(.8)
-		# else: # duration == '3':
-		# 	time.sleep(1.2)
+			print(duration)
+		elif duration == 2:
+			time.sleep(.8)
+		elif duration == '3':
+			time.sleep(1.2)
+		else:
+			print("Invalid option")
 	
 	except IOError:
 		grovepi.digitalWrite(led,0)
