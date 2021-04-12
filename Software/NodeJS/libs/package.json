@@ -5,7 +5,6 @@
     "keywords": ["grovepi", "robot", "gpio", "i2c"],
     "dependencies": {
         "async": "1.*",
-        "buffertools": "2.1.*",
         "i2c-bus": "1.*",
         "npmlog": "2.*",
         "sleep": "3.*",

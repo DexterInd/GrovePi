@@ -4,7 +4,6 @@ var async       = require('async')
 var log         = require('npmlog')
 var sleep       = require('sleep')
 var fs          = require('fs')
-var bufferTools = require('buffertools').extend()
 var commands    = require('./commands')
 
 var I2CCMD    = 1
