@@ -40,6 +40,9 @@ The old guide on getting started with the GrovePi can be found [here](http://www
 ### Raspberry Pi Compatibility
 The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, 2, and B3, B3+, A3+, and 4B.
 
+### Documentation
+There is [extensive documentation](https://dexterind.github.io/GrovePi) available
+
 ### Scratch Support
 Once you've done the above command, you can install Scratch support if you want it. This step is optional.
 ```
