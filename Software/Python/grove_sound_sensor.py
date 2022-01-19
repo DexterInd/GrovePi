@@ -52,7 +52,7 @@ grovepi.pinMode(sound_sensor,"INPUT")
 grovepi.pinMode(led,"OUTPUT")
 
 # The threshold to turn the led on 400.00 * 5 / 1024 = 1.95v
-threshold_value = 400
+threshold_value = 600
 
 while True:
     try:
