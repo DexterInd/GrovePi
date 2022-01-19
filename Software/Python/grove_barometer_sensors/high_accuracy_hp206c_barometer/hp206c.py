@@ -91,6 +91,8 @@ class hp206c:
 		t=t_raw[0]<<16|t_raw[1]<<8|t_raw[2]
 		if t&0x800000:
 			t|=0xff000000;
+			us = (1<<32)
+			t = -1 * (us - t)
 		return t/100.0
 
 	def ReadPressure(self):
@@ -109,6 +111,8 @@ class hp206c:
 		a=a_raw[0]<<16|a_raw[1]<<8|a_raw[2]
 		if a&0x800000:
 			a|=0xff000000;
+			us = (1<<32)
+			a = -1 * (us - a)
 		return a/100.0
 
 	def HP20X_IIC_WriteCmd(self,uCmd):
