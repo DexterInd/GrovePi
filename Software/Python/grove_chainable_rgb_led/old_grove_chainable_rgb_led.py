@@ -32,9 +32,9 @@ time.sleep(1)
 # grovepi.chainableRgbLed_pattern(pin, pattern, whichLed)
 # grovepi.chainableRgbLed_modulo(pin, offset, divisor)
 # grovepi.chainableRgbLed_setLevel(pin, level, reverse)
-
+ 
 # test colors used in grovepi.chainableRgbLed_test()
-testColorBlack = 0   # 0b000 #000000
+testColorBlack = 0   # 0b000 #000000   
 testColorBlue = 1    # 0b001 #0000FF
 testColorGreen = 2   # 0b010 #00FF00
 testColorCyan = 3    # 0b011 #00FFFF
